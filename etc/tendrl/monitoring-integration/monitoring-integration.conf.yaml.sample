@@ -1,0 +1,19 @@
+dashboards:
+    - tendrl-gluster-at-a-glance
+    - tendrl-gluster-hosts
+    - tendrl-gluster-volumes
+    - tendrl-gluster-bricks
+
+home_dashboard: tendrl-gluster-at-a-glance
+
+credentials:
+  user: admin
+  password: admin
+
+datasource_name: 'Graphite'
+
+access: direct
+
+isDefault: true
+
+
