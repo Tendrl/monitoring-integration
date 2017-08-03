@@ -121,7 +121,8 @@ setup(
     install_requires=[
         "ruamel.yaml",
         "maps",
-        "requests"
+        "requests",
+        "urllib3"
         ],
     include_package_data=True,
     cmdclass={'bumpversion': BumpVersionCommand, 'release': ReleaseCommand}
