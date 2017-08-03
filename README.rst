@@ -3,59 +3,11 @@
 Monitoring-Integration
 =======================
 
-
 Functionalities
 ----------------
 
 - Create a new dashboard in Grafana
 
-
-Environment Setup
------------------
-
-#. Clone the monitoring-integration repository
-
-    ::
-
-        $ git clone https://github.com/Tendrl/monitoring-integration.git
-	$ cd monitoring-integration
-
-
-**Note :**
-
-      All the commands mentioned below are run as a regular user that has ``sudo``
-      privileges.
-      These commands are assumed to be run from a single directory, which
-      contains the code of monitoring-integration.
-
-#. Install python pip
-
-
-   https://pip.pypa.io/en/stable/installing/
-
-
-#. Install python dependencies
-
-    ::
-
-        $ python setup.py install
-
-
-#. Install Grafana
-
-
-    http://docs.grafana.org/installation/
-
-
-#. Configure grafana for anonymous login.
-
-    ::
-
-        $ cp etc/grafana/grafana.ini /etc/grafana/.
-
-    .. note::
-
-       	  This will overwrite present grafana.ini.
 
 Prerequisites
 --------------
@@ -76,27 +28,10 @@ Usage Details
   is present under
  
   ' /etc/tendrl/monitoring-integration/'
+ 
+ Default dashboards that are to be created in grafana are present under
 
-  If configuration file is not present.
-
-    ::
-
-        $ cp etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample
-          /etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml
-	  
-  Default dashboards that are to be created in grafana are present under
-
-  ' /etc/tendrl/monitoring-integration/grafana/dashboards/ '
-
-  If the dashboards are not present.
-
-    ::
-
-        $ mkdir /etc/tendrl/monitoring-integration/grafana
-        $ mkdir /etc/tendrl/monitoring-integration/grafana/dashboards
-        $ cp etc/tendrl/monitoring-integration/grafana/dashboards/* 
-          /etc/tendrl/monitoring-integration/grafana/dashboards/.
-	  
+  ' /etc/tendrl/monitoring-integration/grafana/dashboards/ '	  
 
 * **Restart server to load new configurations**
 
@@ -124,8 +59,8 @@ Usage Details
     monitoring-integration.conf.yaml file
     
     **Note**
-        Please provide the ip of the host machine where graphite is installed. Do not provide
-	localost or 127.0.0.1 even if the graphite is installed on the local server.
+        Please provide the ip of the server node where graphite is installed.
+	[ Do not provide localhost or 127.0.0.1 ]
 
   * Make sure a datasource with same name as given in monitoring-integration.conf.yaml file
     doesnot exist in grafana.
