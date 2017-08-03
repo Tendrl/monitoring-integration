@@ -15,6 +15,7 @@ Requires: python-whisper
 Requires: python-requests
 Requires: python-maps
 Requires: python-ruamel-yaml
+Requires: python-setuptools
 
 BuildRequires: python-setuptools
 
