@@ -16,6 +16,7 @@ Requires: python-requests
 Requires: python-maps
 Requires: python-ruamel-yaml
 Requires: python-setuptools
+Requires: python-urllib3
 
 BuildRequires: python-setuptools
 
