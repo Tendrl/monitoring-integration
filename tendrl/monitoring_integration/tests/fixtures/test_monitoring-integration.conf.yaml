@@ -1,0 +1,16 @@
+dashboards:
+    - test_dashboard
+
+home_dashboard: test_dashboard
+
+credentials:
+  user: admin
+  password: admin
+
+datasource_name: 'Graphite'
+
+access: direct
+
+isDefault: true
+
+
