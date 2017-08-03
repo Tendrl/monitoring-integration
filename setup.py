@@ -96,7 +96,7 @@ class ReleaseCommand(Command):
         # print(' '.join(cmd))
         # subprocess.check_call(cmd)
 setup(
-    name="monitoring-integration",
+    name="tendrl-monitoring-integration",
     version="1.0.0",
     author="Rishubh Jain",
     author_email="risjain@redhat.com",
@@ -106,6 +106,11 @@ setup(
     keywords="",
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*",
                                     "tests"]),
+    entry_points={
+        'console_scripts': [
+            'tendrl-monitoring-integration = tendrl.monitoring_integration.__init__:main',
+        ],
+    },
     url="http://www.redhat.com",
     namespace_packages=['tendrl'],
     long_description="",
