@@ -12,6 +12,9 @@ Requires: grafana
 Requires: graphite-web
 Requires: python-carbon
 Requires: python-whisper
+Requires: python-requests
+Requires: python-maps
+Requires: python-ruamel-yaml
 
 BuildRequires: python-setuptools
 
