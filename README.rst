@@ -96,6 +96,13 @@ Usage Details
         $ mkdir /etc/tendrl/monitoring-integration/grafana/dashboards
         $ cp etc/tendrl/monitoring-integration/grafana/dashboards/* 
           /etc/tendrl/monitoring-integration/grafana/dashboards/.
+	  
+
+* **Restart server to load new configurations**
+
+  * service grafana-server restart
+  
+  * service httpd restart
 
 
 * **Development setup**
@@ -112,6 +119,13 @@ Usage Details
 
   * Provide name of datasource to be created in grafana under "datasource_name" in
     monitoring-integration.conf.yaml file
+    
+  * Provide host ip-address of datasource to be created in grafana under "datasource_host" in
+    monitoring-integration.conf.yaml file
+    
+    **Note**
+        Please provide the ip of the host machine where graphite is installed. Do not provide
+	localost or 127.0.0.1 even if the graphite is installed on the local server.
 
   * Make sure a datasource with same name as given in monitoring-integration.conf.yaml file
     doesnot exist in grafana.
@@ -119,10 +133,8 @@ Usage Details
   * By default true is passed under "isDefault" in monitoring-integration.conf.yaml
     to set the datasource as the default datasource in grafana.
 
-  * Follow the commands provided below to run __init__.py file to create dashboards and datasource
-    in grafana.
+  * Run monitoring-integration
 
     ::
 
-        $ cd tendrl/monitoring_integration/
-        $ python __init__.py	
+        $ tendrl-monitoring-integration
