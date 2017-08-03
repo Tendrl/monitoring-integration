@@ -13,7 +13,8 @@ Functionalities
 Prerequisites
 -----------------
 
-#. Install Grafana
+#. Install Grafana. 
+   Follow the steps provided in below mentioned doc to install grafana.
 
     http://docs.grafana.org/installation/rpm/
 
@@ -33,6 +34,7 @@ Usage Details
   Default dashboards that are to be created in grafana are present under
 
   ' /etc/tendrl/monitoring-integration/grafana/dashboards/ '
+
 
 
 * **Restart server to load new configurations**
@@ -56,7 +58,7 @@ Usage Details
         $ yum install tendrl-monitoring-integration
 	
    **Note**
-        Make sure the repositories are enabled
+        Make sure tendrl repositories are enabled.
 	https://github.com/Tendrl/documentation/wiki/Tendrl-Package-Installation-Reference
 
 * **Running Monitoring-Integration**
