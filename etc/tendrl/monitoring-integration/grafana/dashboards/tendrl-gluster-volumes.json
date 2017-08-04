@@ -9,7 +9,7 @@
   "hideControls": false,
   "id": null,
   "links": [],
-  "refresh": false,
+  "refresh": "1m",
   "rows": [
     {
       "collapse": false,
@@ -24,8 +24,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -101,7 +102,7 @@
               "value": "2"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -112,8 +113,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -174,7 +176,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -185,7 +187,8 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
+          "datasource": "Graphite",
+          "decimals": 0,
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -247,7 +250,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         }
       ],
       "repeat": null,
@@ -266,7 +269,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "Graphite",
           "fill": 1,
           "id": 1,
           "legend": {
@@ -349,10 +352,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "text": "No Data Found",
-          "value": "No Data Found"
-        },
+        "current": {},
         "datasource": "Graphite",
         "hide": 0,
         "includeAll": false,
@@ -372,10 +372,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "text": "No Data Found",
-          "value": "No Data Found"
-        },
+        "current": {},
         "datasource": "Graphite",
         "hide": 0,
         "includeAll": false,
@@ -426,6 +423,6 @@
   },
   "timezone": "browser",
   "title": "Tendrl - Gluster - Volumes",
-  "version": 30
+  "version": 6
 }
 }
