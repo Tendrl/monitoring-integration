@@ -82,7 +82,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
-%config(noreplace) %{_sysconfdir}/grafana/grafana.ini
+%config %{_sysconfdir}/grafana/grafana.ini
 #%{_unitdir}//monitoring-integration.service
 
 %changelog
