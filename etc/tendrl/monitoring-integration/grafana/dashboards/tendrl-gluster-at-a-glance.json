@@ -1,6 +1,6 @@
 {
-   "dashboard":{
- "annotations": {
+ "dashboard":{
+  "annotations": {
     "list": []
   },
   "editable": false,
@@ -381,7 +381,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
+          "datasource": "Graphite",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -449,7 +449,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
+          "datasource": "Graphite",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -522,7 +522,8 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
+          "datasource": "Graphite",
+          "decimals": 0,
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -584,7 +585,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -595,8 +596,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -657,7 +659,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -668,8 +670,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -730,7 +733,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         }
       ],
       "repeat": null,
@@ -825,8 +828,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -887,7 +891,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -898,8 +902,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -960,7 +965,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -971,8 +976,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -1033,7 +1039,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -1044,8 +1050,9 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
-          "format": "none",
+          "datasource": "Graphite",
+          "decimals": 0,
+          "format": "short",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -1106,7 +1113,7 @@
               "value": "null"
             }
           ],
-          "valueName": "avg"
+          "valueName": "current"
         },
         {
           "cacheTimeout": null,
@@ -1117,7 +1124,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
+          "datasource": "Graphite",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1185,7 +1192,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": null,
+          "datasource": "Graphite",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1333,7 +1340,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "Graphite",
           "fill": 1,
           "id": 20,
           "legend": {
@@ -1488,10 +1495,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "text": "No Data Found",
-          "value": "No Data Found"
-        },
+        "current": {},
         "datasource": "Graphite",
         "hide": 0,
         "includeAll": false,
@@ -1542,6 +1546,6 @@
   },
   "timezone": "browser",
   "title": "Tendrl - Gluster - At - A - Glance",
-  "version": 188
+  "version": 9
 }
 }
