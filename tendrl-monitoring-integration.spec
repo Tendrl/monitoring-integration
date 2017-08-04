@@ -54,6 +54,7 @@ if [ $1 -eq 1 ] ; then
     mv /etc/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf.%{name}
     ln -s /etc/tendrl/monitoring-integration/carbon.conf /etc/carbon/carbon.conf
     ln -s /etc/tendrl/monitoring-integration/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
+    mv /etc/grafana/grafana.ini.rpmnew /etc/grafana/grafana.ini
 fi
 
 %pre
