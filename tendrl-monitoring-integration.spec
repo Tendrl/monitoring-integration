@@ -54,6 +54,7 @@ if [ $1 -eq 1 ] ; then
     mv /etc/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf.%{name}
     ln -s /etc/tendrl/monitoring-integration/carbon.conf /etc/carbon/carbon.conf
     ln -s /etc/tendrl/monitoring-integration/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
+    mv /etc/grafana/grafana.ini.rpmnew /etc/grafana/grafana.ini
 fi
 
 %pre
@@ -82,7 +83,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
-%config %{_sysconfdir}/grafana/grafana.ini
+%config(noreplace) %{_sysconfdir}/grafana/grafana.ini
 #%{_unitdir}//monitoring-integration.service
 
 %changelog
