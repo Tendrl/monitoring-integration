@@ -56,11 +56,17 @@ if [ $1 -eq 1 ] ; then
     ln -s /etc/tendrl/monitoring-integration/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
 fi
 
+%pre
+if [ $1 -eq 1 ] ; then
+    mv /etc/grafana/grafana.ini /etc/grafana/grafana.ini.orig
+fi
+
 %preun
 if [ "$1" = 0 ] ; then
     rm -fr etc/carbon/carbon.conf /etc/httpd/conf.d/graphite-web.conf > /dev/null 2>&1
     mv /etc/carbon/carbon.conf.%{name} /etc/carbon/carbon.conf
     mv /etc/httpd/conf.d/graphite-web.conf.%{name} /etc/httpd/conf.d/graphite-web.conf
+    mv /etc/grafana/grafana.ini.orig /etc/grafana/grafana.ini
 fi
 
 %postun
