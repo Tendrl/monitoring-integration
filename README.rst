@@ -72,11 +72,11 @@ The following steps outlines the procedure to install monitoring-intregration co
    
       $ vi /etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml 
 
-* Update datasource_host with IP of graphite server:
+* Update datasource_host with IP of server:
 
   ::
   
-      datasource_host = <IP of graphite server>
+      datasource_host = <IP of server>
 
   **Note** :
     
