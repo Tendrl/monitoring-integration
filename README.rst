@@ -4,25 +4,14 @@ Monitoring-Integration
 Installation Details
 --------------------
 
-The following steps outlines the procedure to install monitoring-intregration component.
+The following steps outline the procedure to install monitoring-integration component.
 
 **Note :**
 
   All the commands mentioned below are run as a regular user that has ``sudo``
   privileges.
 
-
-1) **Conifgure Graphite**
-
-
-   ::
-
-     $ /usr/lib/python2.7/site-packages/graphite/manage.py syncdb 
-       --noinput chown apache:apache /var/lib/graphite-web/graphite.db
-
-
-
-2) **Installing Monitoring-Integration**
+1) **Installing Monitoring-Integration**
 
 
    **Note**
@@ -33,6 +22,16 @@ The following steps outlines the procedure to install monitoring-intregration co
    ::
     
          $ yum install tendrl-monitoring-integration
+
+
+
+2) **Configure Graphite**
+
+
+   ::
+
+     $ /usr/lib/python2.7/site-packages/graphite/manage.py syncdb 
+       --noinput chown apache:apache /var/lib/graphite-web/graphite.db
 
 
 
