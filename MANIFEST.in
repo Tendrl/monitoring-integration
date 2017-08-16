@@ -2,6 +2,7 @@ include LICENSE
 include AUTHORS
 include README.rst
 include ChangeLog
+include tendrl-monitoring-integration.service
 include version.py
 exclude .gitignore
 exclude .gitreview
