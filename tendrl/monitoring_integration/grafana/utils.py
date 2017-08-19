@@ -57,21 +57,6 @@ def port_open(port, host='localhost'):
         return False
 
 
-def _load_config(yaml_cfg_file_path):
-
-    if not os.path.exists(yaml_cfg_file_path):
-        err = exceptions.ConfigNotFoundException(
-            "Configuration not found at %s" %
-            (yaml_cfg_file_path)
-        )
-        logger.log("info", NS.get("publisher_id", None),
-                   {'message': str(err)})
-        raise err
-
-    with open(yaml_cfg_file_path, 'r') as ymlfile:
-        return yaml.safe_load(ymlfile)
-
-
 def fread(file_name):
     with open(file_name) as f:
         f_data = f.read()
