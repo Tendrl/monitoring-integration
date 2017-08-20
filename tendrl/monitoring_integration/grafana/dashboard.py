@@ -5,9 +5,12 @@ import traceback
 
 
 from requests import get, post, put
+import maps
+
 
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.grafana import exceptions
+
 
 HEADERS = {"Accept": "application/json",
            "Content-Type": "application/json"
@@ -18,7 +21,7 @@ HEADERS = {"Accept": "application/json",
 
 
 def _post_dashboard(dashboard_json):
-    config = NS.conf
+    config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         upload_str = json.dumps(dashboard_json)
         resp = post("http://{}:{}/api/dashboards/"
@@ -34,7 +37,7 @@ def _post_dashboard(dashboard_json):
 
 
 def get_dashboard(dashboard_name):
-    config = NS.conf
+    config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get("http://{}:{}/api/dashboards/"
                    "db/{}".format(config.grafana_host,
@@ -47,7 +50,7 @@ def get_dashboard(dashboard_name):
 
 
 def get_all_dashboards():
-    config = NS.conf
+    config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get("http://{}:{}/api/search/"
                    .format(config.grafana_host,
@@ -59,7 +62,7 @@ def get_all_dashboards():
 
 
 def set_home_dashboard(dash_id):
-    config = NS.conf
+    config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = put('http://{}:{}/api/org/'
                    'preferences'.format(config.grafana_host,

@@ -1,0 +1,4 @@
+# use latest version from master branch on github
+git+https://github.com/Tendrl/commons.git@master
+-e .
+

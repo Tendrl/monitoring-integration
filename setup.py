@@ -108,7 +108,7 @@ setup(
                                     "tests"]),
     entry_points={
         'console_scripts': [
-            'tendrl-monitoring-integration = tendrl.monitoring_integration.__init__:main',
+            'tendrl-monitoring-integration = tendrl.monitoring_integration.manager:main',
         ],
     },
     url="http://www.redhat.com",

@@ -1,6 +1,6 @@
+import __builtin__
 import os
 import socket
-import sys
 
 
 from ruamel import yaml
@@ -8,49 +8,35 @@ from ruamel import yaml
 
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import config
+from tendrl.commons.utils import log_utils as logger
 
 
-def get_conf(file_name):
+def get_conf():
 
     try:
-        yaml_config = _load_config(file_name)
 
-        conf = config.Config()
         # Graphite and Grafana will be running on localhost
-        conf.grafana_host = yaml_config.get('grafana_host', "localhost")
-        conf.grafana_port = yaml_config.get('grafana_port', 3000)
-        conf.datasource_host = yaml_config.get('datasource_host', "localhost")
-        conf.datasource_port = yaml_config.get('datasource_port', 10080)
-
-        # Datasource name in Grafana
-        conf.datasource_name = yaml_config.get('datasource_name', "Graphite")
+        NS.config.data["grafana_host"] = "localhost"
+        NS.config.data["grafana_port"] = 3000
+        NS.config.data["datasource_port"] = 10080
 
         # Default values for graphite datasource
-        conf.datasource_type = yaml_config.get('datasource_type', "graphite")
-        conf.basicAuth = yaml_config.get('basicAuth', False)
-
-        # Datasource configs
-        conf.access = yaml_config.get('access', "direct")
-        conf.isDefault = yaml_config.get('isDefault', True)
+        NS.config.data["datasource_type"] = "graphite"
+        NS.config.data["basicAuth"] = False
 
         # Grafana related configs
-        conf.dashboards = yaml_config.get('dashboards', [])
-        conf.datasource = yaml_config.get('datasource', [])
-        conf.auth = yaml_config.get('credentials', None)
-        if conf.auth:
-            conf.credentials = (conf.auth.get('user'),
-                                conf.auth.get('password'))
-        conf.home_dashboard = yaml_config.get('home_dashboard',
-                                              'home_dashboard')
-        conf.yaml = yaml_config
+        NS.config.data["datasource"] = []
+        NS.config.data["credentials"] = (NS.config.data["credentials"]["user"],
+                                         NS.config.data["credentials"]["password"])
+
     except exceptions.InvalidConfigurationException:
         err = exceptions.InvalidConfigurationException(
             "Error in configuration %s" % (file_name)
         )
-        sys.stderr.write(str(err))
-        raise err
+        logger.log("info", NS.get("publisher_id", None),
+                   {'message': str(err)})
 
-    return conf
+        raise err
 
 
 def port_open(port, host='localhost'):
@@ -69,20 +55,6 @@ def port_open(port, host='localhost'):
         return True
     except socket.error:
         return False
-
-
-def _load_config(yaml_cfg_file_path):
-
-    if not os.path.exists(yaml_cfg_file_path):
-        err = exceptions.ConfigNotFoundException(
-            "Configuration not found at %s" %
-            (yaml_cfg_file_path)
-        )
-        sys.stderr.write(str(err))
-        raise err
-
-    with open(yaml_cfg_file_path, 'r') as ymlfile:
-        return yaml.safe_load(ymlfile)
 
 
 def fread(file_name):

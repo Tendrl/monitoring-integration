@@ -4,10 +4,12 @@ import traceback
 
 
 from requests import post
+import maps
 
 
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.grafana import exceptions
+from tendrl.commons.utils import log_utils as logger
 
 HEADERS = {"Accept": "application/json",
            "Content-Type": "application/json"
@@ -18,13 +20,13 @@ HEADERS = {"Accept": "application/json",
 
 
 def _post_datasource(datasource_json):
-
-    if utils.port_open(NS.conf.grafana_port, NS.conf.grafana_host):
+    config = maps.NamedDict(NS.config.data)
+    if utils.port_open(config.grafana_port, config.grafana_host):
         resp = post("http://{}:{}/api/datasources"
-                    .format(NS.conf.grafana_host,
-                            NS.conf.grafana_port),
+                    .format(config.grafana_host,
+                            config.grafana_port),
                     headers=HEADERS,
-                    auth=NS.conf.credentials,
+                    auth=config.credentials,
                     data=datasource_json)
 
     else:
@@ -36,7 +38,7 @@ def _post_datasource(datasource_json):
 def create_datasource():
 
     try:
-        config = NS.conf
+        config = maps.NamedDict(NS.config.data)
         url = "http://" + str(config.datasource_host) + ":" \
             + str(config.datasource_port)
         datasource_json = {'name': config.datasource_name,
@@ -49,5 +51,6 @@ def create_datasource():
         return response
 
     except exceptions.ConnectionFailedException:
-        traceback.print_stack()
+        logger.log("info", NS.get("publisher_id", None),
+                   {'message': str(traceback.print_stack())})
         raise exceptions.ConnectionFailedException

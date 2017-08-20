@@ -1,0 +1,12 @@
+---
+namespace.monitoring:
+  flows:
+    CreateAlertDashboards:
+      tags:
+        - tendrl/integrations/monitoring
+      help: Create Alert Dashboards
+      enabled: true
+      run: tendrl.monitoring.flows.CreateAlertDashboards
+      type: Create
+      version: 1
+tendrl_schema_version: 0.3
