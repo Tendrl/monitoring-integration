@@ -5,7 +5,7 @@ def application(env, start_response):
     if env['PATH_INFO'] == '/grafana_callback':
         start_response('200 OK', [('Content-Type', 'text/html')])
 
-        # TODO(Rishubh) Receive Data and call parsing functions 
+        # TODO(Rishubh) Receive Data and call parsing functions with alert json from grafana
         # data = env['wsgi.input'].read()
 
         return [b"<b>Recieved</b>"]
