@@ -1,8 +1,9 @@
 import gevent
 
 from tendrl.commons import sds_sync
+from tendrl.monitoring_integration.grafana import webhook_receiver
 
-# TODO(Rishubh) Add grafana webhook to this greenlet
+
 class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
 
     def __init__(self):
@@ -10,5 +11,6 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
         self._complete = gevent.event.Event()
 
     def _run(self):
-        pass
+        while not self._complete.is_set():
+            webhook_receiver.start_server()
 

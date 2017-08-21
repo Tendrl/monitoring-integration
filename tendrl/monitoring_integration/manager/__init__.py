@@ -2,16 +2,20 @@ import __builtin__
 import traceback
 import json
 
+
 import signal
 import maps
 import gevent
 import os
 
+
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import datasource
+from tendrl.monitoring_integration.grafana import create_new_notification_channel
 from tendrl.commons import manager as common_manager
+from tendrl.monitoring_integration.grafana.create_alert_dashboard import CreateAlertDashboard
 from tendrl import monitoring_integration
 from tendrl.monitoring_integration import sync
 from tendrl.commons import TendrlNS
@@ -27,13 +31,25 @@ class MonitoringIntegrationManager(common_manager.Manager):
             MonitoringIntegrationManager,
             self
         ).__init__(
-            sync.MonitoringIntegrationSdsSyncThread()
+            NS.sync_thread
         )
 
     def start(self):
 
         super(MonitoringIntegrationManager, self).start()
         _upload_default_dashboards()
+        response = create_new_notification_channel.create_notification_channel()
+        if response.status_code == 200:
+            msg = "Notification created successfully"
+            logger.log("info", NS.get("publisher_id", None),
+                       {'message': msg})
+        else:
+            message = str(json.loads(response._content)["message"])
+            logger.log("info", NS.get("publisher_id", None),
+                       {'message': message})
+        create_alert_dashboard = CreateAlertDashboard()
+
+
 
 
 def _upload_default_dashboards():
@@ -121,6 +137,7 @@ def main():
     NS.publisher_id = "monitoring_integration"
     NS.monitoring.config.save()
     NS.monitoring.definitions.save()
+    NS.sync_thread = sync.MonitoringIntegrationSdsSyncThread()
 
     monitoring_integration_manager = MonitoringIntegrationManager()
     monitoring_integration_manager.start()
