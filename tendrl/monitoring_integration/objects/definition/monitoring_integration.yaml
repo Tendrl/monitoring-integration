@@ -3,7 +3,7 @@ namespace.monitoring:
   flows:
     CreateAlertDashboards:
       tags:
-        - tendrl/integrations/monitoring
+        - tendrl/integration/monitoring
       help: Create Alert Dashboards
       enabled: true
       run: tendrl.monitoring.flows.CreateAlertDashboards
