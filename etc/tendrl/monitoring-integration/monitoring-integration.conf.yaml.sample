@@ -11,7 +11,7 @@ logging_socket_path: /var/run/tendrl/message.sock
 with_internal_profiling: False
 
 tags:
-    - tendrl/integrations/monitoring
+    - tendrl/integration/monitoring
 
 dashboards:
     - tendrl-gluster-at-a-glance
