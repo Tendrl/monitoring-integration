@@ -7,8 +7,7 @@ import etcd
 import maps
 
 
-from tendrl.monitoring_integration.grafana import cluster_details
-from cluster_details import ClusterDetails
+from tendrl.monitoring_integration.grafana import cluster_detail
 from tendrl.commons.utils import etcd_utils
 
 # TODO(Rishubh) Fetch alert details like threshold from config file
@@ -24,9 +23,9 @@ def get_cluster_details():
     try:
         result = etcd_utils.read('/clusters')
         for item in result.leaves:
-            cluster_obj = ClusterDetails()
-            cluster_obj.cluster_id =  item.key.split('/')[-1]
-            client_str = '/clusters/' + str(cluster_obj.cluster_id)
+            cluster_obj = cluster_detail.ClusterDetail()
+            cluster_obj.integration_id =  item.key.split('/')[-1]
+            client_str = '/clusters/' + str(cluster_obj.integration_id)
             cluster_details = etcd_utils.read(client_str)
             for cluster in cluster_details.leaves:
                 if 'Volumes' in cluster.key:
@@ -110,7 +109,7 @@ def create_volume_dashboard(cluster_details_list):
                     for target in targets:
                         target["target"] = target["target"].replace('$interval','1m')
                         target["target"] = target["target"].replace('$my_app','tendrl')
-                        target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.cluster_id))
+                        target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
                         target["target"] = target["target"].replace('$volume_name',str(volume.volume_name))
                         if "alias" in target["target"]:
                             target["target"] = target["target"].split('(',1)[-1].split(',')[0]
@@ -132,6 +131,7 @@ def create_volume_dashboard(cluster_details_list):
 
     volume_json["dashboard"]["rows"] = all_volume_rows
     volume_json["dashboard"]["templating"] = {}
+    volume_file.close()
     return json.dumps(volume_json)
 
 
@@ -173,7 +173,7 @@ def create_host_dashboard(cluster_details_list):
                     for target in targets:
                         target["target"] = target["target"].replace('$interval','1m')
                         target["target"] = target["target"].replace('$my_app','tendrl')
-                        target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.cluster_id))
+                        target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
                         target["target"]= target["target"].replace('$host_name',str(host).replace('.','_'))
                         if "alias" in target["target"]:
                             target["target"] = target["target"].split('(',1)[-1].split(',')[0]
@@ -196,6 +196,7 @@ def create_host_dashboard(cluster_details_list):
     host_json["dashboard"]["rows"] = []
     host_json["dashboard"]["rows"] = all_host_rows
     host_json["dashboard"]["templating"] = {}
+    host_file.close()
     return json.dumps(host_json)
 
 
@@ -239,7 +240,7 @@ def create_brick_dashboard(cluster_details_list):
                         for target in targets:
                             target["target"] = target["target"].replace('$interval','1m')
                             target["target"] = target["target"].replace('$my_app','tendrl')
-                            target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.cluster_id))
+                            target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
                             target["target"]= target["target"].replace('$volume_name',str(volume.volume_name))
                             target["target"]= target["target"].replace('$brick_name',str(brick).split(':')[-1].replace('_','|',2))
                             if "alias" in target["target"]:
@@ -262,6 +263,7 @@ def create_brick_dashboard(cluster_details_list):
     brick_json["dashboard"]["rows"] = []
     brick_json["dashboard"]["rows"] = all_brick_rows
     brick_json["dashboard"]["templating"] = {}
+    brick_file.close()
     return json.dumps(brick_json)
 
 
@@ -302,12 +304,12 @@ def create_gluster_at_a_glance_dashboard(cluster_details_list):
                 for target in targets:
                     target["target"] = target["target"].replace('$interval','1m')
                     target["target"] = target["target"].replace('$my_app','tendrl')
-                    target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.cluster_id))
+                    target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
                     if "alias" in target["target"]:
                         target["target"] = target["target"].split('(',1)[-1].split(',')[0]
                 set_alert(panel)
                 panel["id"] = count
-                panel["title"] = panel["title"] + " - " + str(cluster_detail.cluster_id)
+                panel["title"] = panel["title"] + " - " + str(cluster_detail.integration_id)
                 panel["legend"]["show"] = False
                 count = count + 1
                 panel_count = panel_count + 1
@@ -323,4 +325,5 @@ def create_gluster_at_a_glance_dashboard(cluster_details_list):
     cluster_json["dashboard"]["rows"] = []
     cluster_json["dashboard"]["rows"] = all_cluster_rows
     cluster_json["dashboard"]["templating"] = {}
+    cluster_file.close()
     return json.dumps(cluster_json)

@@ -1,4 +1,3 @@
-from tendrl.monitoring_integration.grafana import cluster_details
 from tendrl.monitoring_integration.grafana import create_dashboards
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.commons.utils import log_utils as logger

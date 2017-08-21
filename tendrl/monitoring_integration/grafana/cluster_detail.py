@@ -1,6 +1,6 @@
-class ClusterDetails:
+class ClusterDetail:
 
     def __init__(self):
-        self.cluster_id = ""
+        self.integration_id = ""
         self.volumes = []
         self.hosts = []

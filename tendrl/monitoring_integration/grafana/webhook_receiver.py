@@ -1,52 +1,19 @@
-import sys
+from gevent.pywsgi import WSGIServer
 
 
-from gevent import socket
+def application(env, start_response):
+    if env['PATH_INFO'] == '/grafana_callback':
+        start_response('200 OK', [('Content-Type', 'text/html')])
 
+        # TODO(Rishubh) Receive Data and call parsing functions 
+        # data = env['wsgi.input'].read()
 
-from tendrl.commons.utils import log_utils as logger
- 
-HOST = '127.0.0.1'
-PORT = 999
+        return [b"<b>Recieved</b>"]
 
-
-def server():
-    try:
-        request = client_connection.recv(1024)
-
-        http_response = """\
-            HTTP/1.1 200 OK
-            """
-        client_connection.sendall(http_response)
-
-    except Exception, ex:
-        logger.log("info", NS.get("publisher_id", None),
-                       {'message': str(ex)})
-        raise ex
-    finally:
-        sys.stdout.flush()
-        s.close()
+    start_response('404 Not Found', [('Content-Type', 'text/html')])
+    return [b'<h1>Not Found</h1>']
 
 
 def start_server():
+    WSGIServer(('', 8789), application).serve_forever()
 
-    listen_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    try:
-        listen_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        listen_socket.bind((HOST, PORT))
-    except socket.error as msg:
-        msg =  'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
-        logger.log("info", NS.get("publisher_id", None),
-                       {'message': msg})
-        sys.exit()
-
-    logger.log("info", NS.get("publisher_id", None),
-                       {'message': "Socket Bind Complete"})
-
-    #Start listening on socket
-    listen_socket.listen(1)
-
-    while True:
-        client_connection, client_address = listen_socket.accept()
-        server()
