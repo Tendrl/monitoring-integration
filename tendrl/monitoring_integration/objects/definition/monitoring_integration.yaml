@@ -9,4 +9,18 @@ namespace.monitoring:
       run: tendrl.monitoring.flows.CreateAlertDashboards
       type: Create
       version: 1
+    UpdateDashboard:
+      tags:
+        - tendrl/integration/monitoring
+      help: Update Dashboards
+      enabled: true
+      inputs:
+        mandatory:
+          -  TendrlContext.integration_id
+          -  resource_name
+          -  resource_type
+          -  operation
+      run: tendrl.monitoring.flows.UpdateDashboard
+      type: Create
+      version: 1
 tendrl_schema_version: 0.3
