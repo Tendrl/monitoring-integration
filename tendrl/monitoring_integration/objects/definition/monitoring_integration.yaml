@@ -37,4 +37,43 @@ namespace.monitoring:
           type: str
       enabled: true
       help: Resource details to trigger flow
+  graphite_data:
+    GlobalDetails:
+      attrs:
+        status:
+      value: clusters/$integration_id/GlobalDetails
+      metric: [clusters.$integration_id]
+    Brick:
+      attrs:
+        name:
+        status:
+      value: clusters/$integration_id/Bricks/all/$Brick.brick_name
+      metric: [clusters.$integration_id.nodes.$node_name.bricks.$brick_name]
+    Volume:
+      attrs:
+        name:
+        subvol_count:
+        status:
+        pcnt_used:
+        usable_capacity:
+        used_capacity:
+        rebal_status:
+        geo_rep_session:
+          attrs:
+            session_status:
+          count:
+            total:
+            up:
+              session_status: [active]
+            down:
+              session_status: [partial,faulty]
+          value: clusters/$integration_id/Volumes/$Volume.vol_id/GeoRepSessions
+      value: clusters/$integration_id/Volumes/$Volume.vol_id
+      metric: [clusters.$integration_id.volumes.$volume_name]
+    Node:
+      attrs:
+        fqdn:
+        status:
+      value: clusters/$integration_id/nodes/$node_id
+      metric: [clusters.$integration_id.nodes.$node_name]
 tendrl_schema_version: 0.3

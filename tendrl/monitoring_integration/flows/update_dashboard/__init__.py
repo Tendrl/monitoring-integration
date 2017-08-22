@@ -2,8 +2,7 @@ import json
 import copy
 
 
-from tendrl.monitoring_integration.flows.update_dashboard.alert_utils import \
-    get_alert_dashboard
+from tendrl.monitoring_integration.flows.update_dashboard.alert_utils import get_alert_dashboard
 from tendrl.monitoring_integration.flows.update_dashboard import alert_utils
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.commons import flows
@@ -16,10 +15,8 @@ class UpdateDashboard(flows.BaseFlow):
 
     def run(self):
         super(UpdateDashboard, self).run()
-        resource_name = str(self.parameters.get("Trigger." +
-                            "resource_name")).lower()
-        resource_type = str(self.parameters.get("Trigger." +
-                            "resource_type")).lower()
+        resource_name = str(self.parameters.get("Trigger.resource_name")).lower()
+        resource_type = str(self.parameters.get("Trigger.resource_type")).lower()
         operation = str(self.parameters.get("Trigger.action")).lower()
         cluster_id = self.parameters.get("TendrlContext.integration_id")
         if operation.lower() == "add":

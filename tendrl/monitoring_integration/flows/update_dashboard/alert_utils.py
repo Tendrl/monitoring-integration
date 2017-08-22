@@ -135,6 +135,5 @@ def remove_cluster_rows(cluster_id, dashboard_name):
 
 
 def create_updated_dashboard(dashboard_json, alert_rows):
-    dashboard_json["dashboard"]["rows"] = dashboard_json["dashboard"]["rows"] \
-                                          + alert_rows
+    dashboard_json["dashboard"]["rows"] = dashboard_json["dashboard"]["rows"] + alert_rows
     return dashboard_json

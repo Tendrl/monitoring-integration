@@ -16,9 +16,8 @@ def get_conf():
     try:
 
         # Graphite and Grafana will be running on localhost
-        NS.config.data["grafana_host"] = "localhost"
+        NS.config.data["grafana_host"] = "127.0.0.1"
         NS.config.data["grafana_port"] = 3000
-        NS.config.data["datasource_port"] = 10080
 
         # Default values for graphite datasource
         NS.config.data["datasource_type"] = "graphite"
