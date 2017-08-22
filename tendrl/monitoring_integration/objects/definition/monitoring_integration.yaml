@@ -9,4 +9,32 @@ namespace.monitoring:
       run: tendrl.monitoring.flows.CreateAlertDashboards
       type: Create
       version: 1
+    UpdateDashboard:
+      tags:
+        - tendrl/integration/monitoring
+      help: Update Dashboards
+      enabled: true
+      inputs:
+        mandatory:
+          -  TendrlContext.integration_id
+          -  Trigger.resource_name
+          -  Trigger.resource_type
+          -  Trigger.action
+      run: tendrl.monitoring.flows.UpdateDashboard
+      type: Create
+      version: 1
+  objects:
+    Trigger:
+      attr:
+        resource_name:
+          help: Name of resource
+          type: str
+        resource_type:
+          help: Type of resource (volume, brick, node, cluster)
+          type: str
+        action:
+          help: Action to be performed on resource (add/delete)
+          type: str
+      enabled: true
+      help: Resource details to trigger flow
 tendrl_schema_version: 0.3

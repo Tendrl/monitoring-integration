@@ -32,5 +32,3 @@ datasource_host: 127.0.0.1
 access: direct
 
 isDefault: true
-
-
