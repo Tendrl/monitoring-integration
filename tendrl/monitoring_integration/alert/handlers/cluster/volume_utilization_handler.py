@@ -32,10 +32,10 @@ class VolumeHandler(AlertHandler):
             alert['tags']['alert_catagory'] = constants.CLUSTER
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
-            """alert['tags']['volume_id'] = utils.find_volume_id(
+            alert['tags']['volume_id'] = utils.find_volume_id(
                  alert['tags']['volume_name'],
                  alert['tags']['integration_id']
-            )"""
+            )
             if alert['severity'] == "WARNING":
                 alert['tags']['message']  = (
                     "Volume utilization of %s in "\
@@ -90,10 +90,10 @@ class VolumeHandler(AlertHandler):
             alert_json['EvalData'])
         target = utils.find_alert_target(
             alert_json['Settings']['conditions'])
+        alert['tags']['plugin_instance'] = target
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         metric = target.split(",")[0].split(".")
-        alert['tags']['plugin_instance'] = metric
         for i in range(0, len(metric)):
             if  metric[i] == "clusters":
                 alert['tags']['integration_id'] = metric[i + 1]

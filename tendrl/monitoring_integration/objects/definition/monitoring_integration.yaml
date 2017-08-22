@@ -1,15 +1,5 @@
 ---
 namespace.monitoring:
-  objects:
-    AlertTypes:
-      enabled: True
-      attrs:
-        types:
-          help: "A Dict of integration to types of alerts the integration handles"
-          type: Dict
-      value: alerting/alert_types
-      list: alerting/alert_types
-      help: "Alert types"
   flows:
     CreateAlertDashboards:
       tags:
@@ -86,4 +76,13 @@ namespace.monitoring:
         status:
       value: clusters/$integration_id/nodes/$node_id
       metric: [clusters.$integration_id.nodes.$node_name]
+    AlertTypes:
+      enabled: True
+      attrs:
+        types:
+          help: "A Dict of integration to types of alerts the integration handles"
+          type: Dict
+      value: alerting/alert_types
+      list: alerting/alert_types
+      help: "Alert types"
 tendrl_schema_version: 0.3

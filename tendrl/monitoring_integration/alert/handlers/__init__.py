@@ -6,7 +6,6 @@ import six
 
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
-from tendrl.commons.message import Message
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
@@ -41,14 +40,12 @@ class AlertHandler(object):
 
     def handle(self, alert_json):
         alert = self.format_alert(alert_json)
-        Event(
-            Message(
-                "notice",
-                NS.publisher_id,
-                {
-                    "message" : json.dumps(alert)
-                }
-            )
+        logger.log( 
+            "notice",
+            NS.publisher_id,
+            {
+                "message" : json.dumps(alert)
+            }
         )
 
 
