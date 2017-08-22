@@ -9,5 +9,3 @@ ALERT_SOURCE = 'grafana'
 CLUSTER = 'cluster'
 NODE = 'node'
 ALERT_TYPE = 'utilization'
-NOT_AVAILABLE = "N/A"
-

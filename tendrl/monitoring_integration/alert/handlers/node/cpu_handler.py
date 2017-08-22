@@ -21,7 +21,7 @@ class CpuHandler(AlertHandler):
         try:
             alert["alert_id"] = None
             alert["node_id"] = utils.find_node_id(
-                alert['tags']['cluster_id'],
+                alert['tags']['integration_id'],
                 alert['tags']['fqdn']
             )
             alert["time_stamp"] = alert_json['NewStateDate']
@@ -83,7 +83,7 @@ class CpuHandler(AlertHandler):
         metric = target.split(",")[0].split(".")
         for i in range(0, len(metric)):
             if  metric[i] == "clusters":
-                alert['tags']['cluster_id'] = metric[i + 1]
+                alert['tags']['integration_id'] = metric[i + 1]
             elif metric[i] == "nodes":
                 alert["tags"]["fqdn"] = metric[i + 1].replace("_", ".")
         return alert

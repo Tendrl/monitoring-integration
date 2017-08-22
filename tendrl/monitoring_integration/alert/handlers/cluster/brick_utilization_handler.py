@@ -8,10 +8,10 @@ from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
-class SwapHandler(AlertHandler):
+class BrickHandler(AlertHandler):
 
-    handles = 'swap'
-    representive_name = 'swap_alert'
+    handles = 'bricks'
+    representive_name = 'bricks_utilization_alert'
 
     def __init__(self):
         AlertHandler.__init__(self)
@@ -20,10 +20,7 @@ class SwapHandler(AlertHandler):
         alert  = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
-            alert["node_id"] = utils.find_node_id(
-                alert['tags']['integration_id'],
-                alert['tags']['fqdn']
-            )
+            alert["node_id"] = None
             alert["time_stamp"] = alert_json['NewStateDate']
             alert["resource"] = self.representive_name
             alert['alert_type'] = constants.ALERT_TYPE 
@@ -32,26 +29,39 @@ class SwapHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['tags']['fqdn'] = alert['tags']['fqdn']
-            alert['tags']['alert_catagory'] = constants.NODE
+            alert['tags']['alert_catagory'] = constants.CLUSTER
+            alert['tags']['cluster_name'] = utils.find_cluster_name(
+                alert['tags']['integration_id'])
             if alert['severity'] == "WARNING":
-                alert['tags']['message'] = ("Swap utilization of node %s is" \
-                " %s which is above the %s threshold (%s)." % (
-                    alert['tags']['fqdn'],
-                    alert['current_value'],
-                    alert['severity'],
-                    alert['tags']['warning_max']
-                ))
+                alert['tags']['message']  = (
+                    "Brick utilization of %s in "\
+                    "cluster %s is %s which is above %s"\
+                    " threshold %s" % (
+                        alert['tags']['brick_path'],
+                        alert['tags']['cluster_name'],
+                        alert['current_value'],
+                        alert['severity'],
+                        alert['tags']['warning_max']
+                    )
+                )
+                     
             elif alert['severity'] == "INFO":
-                alert['tags']['message'] = ("Swap utilization of node %s is"\
-                " back to normal" % (
-                    alert['tags']['fqdn']
-                ))
+                alert['tags']['message'] = (
+                    "Brick utilization of %s in "\
+                    "cluster %s is back normal" % (
+                        alert['tags']['brick_path'],
+                        alert['tags']['cluster_name']
+                    )
+                )
             elif  alert['severity'] == "UNKNOWN":
-                alert['tags']['message'] = ("Swap utilization of node %s "\
-                "contains no data, unable to find state" % (
-                    alert['tags']['fqdn']
-                ))
+                alert['tags']['message'] = (
+                    "Brick utilization of %s "\
+                    "in cluster %s contians no data" % (
+                        alert['tags']['brick_path'],
+                        alert['tags']['cluster_name']
+                    )
+                )
+              
             return alert
         except (KeyError,
                 CalledProcessError,
@@ -78,12 +88,11 @@ class SwapHandler(AlertHandler):
             alert_json['Settings']['conditions'])
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
-        # identifying cluster_id and node_id from any one
-        # alert metric (all have same)
         metric = target.split(",")[0].split(".")
+        alert['tags']['plugin_instance'] = metric
         for i in range(0, len(metric)):
             if  metric[i] == "clusters":
                 alert['tags']['integration_id'] = metric[i + 1]
-            elif metric[i] == "nodes":
-                alert["tags"]["fqdn"] = metric[i + 1].replace("_", ".")
+            elif metric[i] == "bricks":
+                alert['tags']['brick_path'] = metric[i+1]
         return alert

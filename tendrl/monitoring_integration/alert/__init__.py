@@ -16,7 +16,7 @@ class AlertReceiver(gevent.greenlet.Greenlet):
     def __init__(self):
         super(AlertReceiver, self).__init__()
         self.server = StreamServer(
-            ("localhost", 10007),
+            ("10.70.43.167", 10007),
             self.read_socket
         )
         self.alert_handler = AlertHandlerManager()

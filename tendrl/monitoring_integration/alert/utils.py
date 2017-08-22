@@ -61,7 +61,7 @@ def get_alert_info(alert_id):
 
 def find_current_value(eval_data):
     # ok alert not have cur_value
-    cur_value = constants.NOT_AVAILABLE
+    cur_value = None
     if 'evalMatches' in eval_data:
         # Getting current value
         cur_value = eval_data['evalMatches'][0]['value']
@@ -96,10 +96,10 @@ def find_grafana_pid():
         raise ex
 
 
-def find_node_id(cluster_id, fqdn):
+def find_node_id(integration_id, fqdn):
     try:
         nodes = etcd_utils.read(
-            "clusters/%s/nodes" % cluster_id
+            "clusters/%s/nodes" % integration_id
         )
         for node in nodes.leaves:
             key = node.key + "/NodeContext/fqdn"
@@ -107,13 +107,13 @@ def find_node_id(cluster_id, fqdn):
                 return node.key.split('/')[-1]
         raise NodeNotFound
     except (EtcdKeyNotFound, NodeNotFound) as ex:
-        if type(ex) != etcd.EtcdKeyNotFound:
+        if type(ex) != EtcdKeyNotFound:
             logger.log(
                 "error",
                 NS.publisher_id,
                 {
                     "message": "Failed to fetch fqdn for node %s" %
-                    node_id
+                    fqdn
                 }
             )
         else:
@@ -125,4 +125,43 @@ def find_node_id(cluster_id, fqdn):
                 "in cluster %s" % (fqdn, cluster_id)
             }
         )   
+        raise ex
+
+
+def find_cluster_name(integration_id):
+    try:
+        cluster_name = etcd_utils.read(
+            "clusters/%s/TendrlContext/cluster_name" % integration_id
+        ).value
+        return cluster_name
+    except (EtcdKeyNotFound) as ex:
+        logger.log(
+            "error",
+            NS.publisher_id,
+            {
+                "message": "Failed to fetch cluster name for id %s" %
+                integration_id
+            }
+        )
+        raise ex
+
+def find_volume_id(vol_name, integration_id):
+    try:
+        volumes = etcd_utils.read(
+            "clusters/%s/Volumes" % integration_id
+        )
+        for volume in volumes.leaves:
+            key = volume.key +  "/name"
+            name = etcd_utils.read(key).value
+            if vol_name == name:
+                return name
+    except (EtcdKeyNotFound) as ex:
+        logger.log(
+            "error",
+            NS.publisher_id,
+            {
+                "message": "Failed to fetch volume id for volume name %s" %
+                vol_name
+            }
+        )
         raise ex
