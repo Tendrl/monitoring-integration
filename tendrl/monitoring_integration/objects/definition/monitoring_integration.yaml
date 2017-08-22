@@ -1,5 +1,15 @@
 ---
 namespace.monitoring:
+  objects:
+    AlertTypes:
+      enabled: True
+      attrs:
+        types:
+          help: "A Dict of integration to types of alerts the integration handles"
+          type: Dict
+      value: alerting/alert_types
+      list: alerting/alert_types
+      help: "Alert types"
   flows:
     CreateAlertDashboards:
       tags:
