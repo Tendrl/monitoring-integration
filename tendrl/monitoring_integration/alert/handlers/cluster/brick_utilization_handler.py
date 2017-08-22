@@ -80,6 +80,8 @@ class BrickHandler(AlertHandler):
             )
     
     def parse_alert_metrics(self, alert_json):
+        # (TODO) (gowtham)When query cahnges node wise need to find
+        # hostname also from query. For now it for all nodes(*)
         alert = {}
         alert['tags'] = {}
         alert['current_value'] = utils.find_current_value(

@@ -18,7 +18,7 @@ from tendrl import monitoring_integration
 from tendrl.monitoring_integration import sync
 from tendrl.commons import TendrlNS
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.alert import AlertReceiver
+
 
 class MonitoringIntegrationManager(common_manager.Manager):
 
@@ -31,12 +31,13 @@ class MonitoringIntegrationManager(common_manager.Manager):
         ).__init__(
             NS.sync_thread
         )
-        self.alert_receiver = AlertReceiver()
 
     def start(self):
+
         super(MonitoringIntegrationManager, self).start()
         # Creating Default Dashboards
         _upload_default_dashboards()
+
 
 
 def _upload_default_dashboards():
