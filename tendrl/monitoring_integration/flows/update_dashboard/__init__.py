@@ -15,9 +15,9 @@ class UpdateDashboard(flows.BaseFlow):
 
     def run(self):
         super(UpdateDashboard, self).run()
-        resource_name = str(self.parameters.get("resource_name")).lower()
-        resource_type = str(self.parameters.get("resource_type")).lower()
-        operation = str(self.parameters.get("operation")).lower()
+        resource_name = str(self.parameters.get("Trigger.resource_name")).lower()
+        resource_type = str(self.parameters.get("Trigger.resource_type")).lower()
+        operation = str(self.parameters.get("Trigger.action")).lower()
         cluster_id = self.parameters.get("TendrlContext.integration_id")
         if operation.lower() == "add":
             self._add_panels(cluster_id, resource_type, resource_name)
