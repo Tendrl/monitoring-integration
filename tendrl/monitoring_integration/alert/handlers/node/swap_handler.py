@@ -5,6 +5,7 @@ from tendrl.commons.message import ExceptionMessage
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.handlers import AlertHandler
 from tendrl.monitoring_integration.alert import utils
+from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
@@ -47,16 +48,22 @@ class SwapHandler(AlertHandler):
                 " back to normal" % (
                     alert['tags']['fqdn']
                 ))
-            elif  alert['severity'] == "UNKNOWN":
-                alert['tags']['message'] = ("Swap utilization of node %s "\
-                "contains no data, unable to find state" % (
-                    alert['tags']['fqdn']
-                ))
+            else:
+                logger.log(
+                    "error",
+                    NS.publisher_id,
+                    {
+                        "message": "Alert %s have unsupported alert"
+                        "severity" % alert_json
+                    }
+                )
+                raise InvalidAlertSeverity
             return alert
         except (KeyError,
                 CalledProcessError,
                 EtcdKeyNotFound,
-                NodeNotFound) as ex:
+                NodeNotFound,
+                InvalidAlertSeverity) as ex:
             Event(
                 ExceptionMessage(
                     "error",
@@ -70,6 +77,32 @@ class SwapHandler(AlertHandler):
             )
     
     def parse_alert_metrics(self, alert_json):
+        """
+        {
+          "EvalData": {
+            "evalMatches": [{
+              "metric": "tendrl.clusters.ab3b125e-4769-4071-a349-e82b380c11f4.
+                        nodes.dhcp42-208_lab_eng_blr_redhat_com.swap.percent-used",
+              "tags": null,
+              "value": 5.19512226135829
+            }]
+          },
+          "Settings": {
+            "conditions": [{
+              "evaluator": {
+                "params": [4],
+                 "type": "gt"
+              },
+              "query": {
+                "model": {
+                  "target": "tendrl.clusters.ab3b125e-4769-4071-a349-e82b380c11f4.
+                            nodes.dhcp42-208_lab_eng_blr_redhat_com.swap.percent-used"
+                }
+              }
+            }],
+          }
+        }
+        """
         alert = {}
         alert['tags'] = {}
         alert['current_value'] = utils.find_current_value(
@@ -80,6 +113,7 @@ class SwapHandler(AlertHandler):
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         # identifying cluster_id and node_id from any one
         # alert metric (all have same)
+        # if alias used then need to split by (,)
         metric = target.split(",")[0].split(".")
         for i in range(0, len(metric)):
             if  metric[i] == "clusters":

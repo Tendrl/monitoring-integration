@@ -5,6 +5,7 @@ from tendrl.commons.message import ExceptionMessage
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.handlers import AlertHandler
 from tendrl.monitoring_integration.alert import utils
+from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
@@ -57,20 +58,22 @@ class VolumeHandler(AlertHandler):
                         alert['tags']['cluster_name']
                     )
                 )
-            elif  alert['severity'] == "UNKNOWN":
-                alert['tags']['message'] = (
-                    "Volume utilization of %s "\
-                    "in cluster %s contians no data" % (
-                        alert['tags']['volume_name'],
-                        alert['tags']['cluster_name']
-                    )
+            else:
+                logger.log(
+                    "error",
+                    NS.publisher_id,
+                    {
+                        "message": "Alert %s have unsupported alert"
+                        "severity" % alert_json
+                    }
                 )
-              
+                raise InvalidAlertSeverity 
             return alert
         except (KeyError,
                 CalledProcessError,
                 EtcdKeyNotFound,
-                NodeNotFound) as ex:
+                NodeNotFound,
+                InvalidAlertSeverity) as ex:
             Event(
                 ExceptionMessage(
                     "error",
@@ -84,6 +87,34 @@ class VolumeHandler(AlertHandler):
             )
     
     def parse_alert_metrics(self, alert_json):
+        """
+        {
+          EvalData: {
+            evalMatches: - [{
+              metric: "averageSeries(tendrl.clusters.ab3b125e-
+                      4769-4071-a349-e82b380c11f4.volumes.vol1.
+                      nodes.*.bricks.*.utilization.gauge-total)",
+              tags: null,
+              value: 13407092736
+            }]
+          },
+          Settings: {
+            conditions: - [{
+              evaluator: - {
+                params: - [12138888889],
+                type: "gt"
+              },
+              query: - {
+                model: - {
+                  target: "averageSeries(tendrl.clusters.ab3b125e-
+                          4769-4071-a349-e82b380c11f4.volumes.vol1.
+                          nodes.*.bricks.*.utilization.gauge-total)"
+                },
+              }
+            }]
+          }   
+        }
+        """
         alert = {}
         alert['tags'] = {}
         alert['current_value'] = utils.find_current_value(

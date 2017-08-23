@@ -10,8 +10,8 @@ def get_alert(alert_id):
         config.grafana_port,
         config.grafana_host
     ):
-        resp = get("http://{}:{}/api/alerts/"
-                   "{}".format(config.grafana_host,
+        resp = get("http://{0}:{1}/api/alerts/"
+                   "{2}".format(config.grafana_host,
                                   config.grafana_port,
                                   alert_id),
                    auth=config.credentials)

@@ -5,6 +5,7 @@ from tendrl.commons.message import ExceptionMessage
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.handlers import AlertHandler
 from tendrl.monitoring_integration.alert import utils
+from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
@@ -53,20 +54,22 @@ class BrickHandler(AlertHandler):
                         alert['tags']['cluster_name']
                     )
                 )
-            elif  alert['severity'] == "UNKNOWN":
-                alert['tags']['message'] = (
-                    "Brick utilization of %s "\
-                    "in cluster %s contians no data" % (
-                        alert['tags']['brick_path'],
-                        alert['tags']['cluster_name']
-                    )
+            else:
+                logger.log(
+                    "error",
+                    NS.publisher_id,
+                    {
+                        "message": "Alert %s have unsupported alert"
+                        "severity" % alert_json
+                    }
                 )
-              
+                raise InvalidAlertSeverity 
             return alert
         except (KeyError,
                 CalledProcessError,
                 EtcdKeyNotFound,
-                NodeNotFound) as ex:
+                NodeNotFound,
+                InvalidAlertSeverity) as ex:
             Event(
                 ExceptionMessage(
                     "error",
@@ -80,7 +83,36 @@ class BrickHandler(AlertHandler):
             )
     
     def parse_alert_metrics(self, alert_json):
-        # (TODO) (gowtham)When query cahnges node wise need to find
+        """
+        {
+          EvalData: {
+            evalMatches:[{
+              metric: "averageSeries(tendrl.clusters.ab3b125e-4769-4071-
+                      a349-e82b380c11f4.nodes.*.bricks.|root|gluster_bricks
+                      |vol1_b2.utilization.percent-percent_bytes)",
+              tags: null,
+              value: 15.614466017499998
+            }]
+          },
+          Settings: {
+            conditions: - [{
+              evaluator: - {
+                params: - [15],
+                type: "gt"
+              },
+              query : {
+                model : {
+                  target: "averageSeries(tendrl.clusters.ab3b125e-4769-
+                          4071-a349-e82b380c11f4.nodes.*.bricks.|root|
+                          gluster_bricks|vol1_b2.utilization.percent-
+                          percent_bytes)"
+                }
+              }
+            }]
+          }
+        }
+        """
+        # (TODO) (gowtham)When query cahnge node wise need to find
         # hostname also from query. For now it for all nodes(*)
         alert = {}
         alert['tags'] = {}

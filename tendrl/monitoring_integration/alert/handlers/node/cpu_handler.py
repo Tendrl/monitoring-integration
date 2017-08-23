@@ -2,9 +2,11 @@ from etcd import EtcdKeyNotFound
 from subprocess import CalledProcessError
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
+from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.handlers import AlertHandler
 from tendrl.monitoring_integration.alert import utils
+from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
@@ -47,16 +49,22 @@ class CpuHandler(AlertHandler):
                 " back to normal" % (
                     alert['tags']['fqdn']
                 ))
-            elif  alert['severity'] == "UNKNOWN":
-                alert['tags']['message'] = ("Cpu utilization of node %s "\
-                "contains no data, unable to find state" % (
-                    alert['tags']['fqdn']
-                ))
+            else:
+                logger.log(
+                    "error",
+                    NS.publisher_id,
+                    {
+                        "message": "Alert %s have unsupported alert"
+                        "severity" % alert_json
+                    }    
+                )
+                raise InvalidAlertSeverity
             return alert
         except (KeyError,
                 CalledProcessError,
                 EtcdKeyNotFound,
-                NodeNotFound) as ex:
+                NodeNotFound,
+                InvalidAlertSeverity) as ex:
             Event(
                 ExceptionMessage(
                     "error",
@@ -70,6 +78,38 @@ class CpuHandler(AlertHandler):
             )
     
     def parse_alert_metrics(self, alert_json):
+        """
+        {
+         "EvalData": {
+             "evalMatches": [{
+                 "metric": "sumSeries(sumSeries(tendrl.clusters.ab3b125e-4769
+                           -4071-a349-e82b380c11f4.nodes.dhcp43-200_lab_eng_blr_redhat_com.
+                           cpu.percent-system),sumSeries(tendrl.clusters.ab3b125e-4769-4071
+                           -a349-e82b380c11f4.nodes.dhcp42-208_lab_eng_blr_redhat_com.cpu.
+                           percent-user))",
+                 "tags": null,
+                 "value": 31.97861830493573
+              }]},
+         "Settings": { 
+             "conditions": [{
+                "evaluator": {
+                   "params": [29],
+                   "type": "gt"},
+                query": {
+                  "model": {
+                    "target"    : "sumSeries(#A, #B).select metric",
+                    "targetFull": "sumSeries(sumSeries(tendrl.clusters.
+                                   ab3b125e-4769-4071-a349-e82b380c11f4.nodes.
+                                   dhcp43-200_lab_eng_blr_redhat_com.cpu.percent-system), 
+                                   sumSeries(tendrl.clusters.ab3b125e-4769-4071-a349-e82b
+                                   380c11f4.nodes.dhcp42-208_lab_eng_blr_redhat_com.cpu.
+                                   percent-user)).select metric"
+                   }
+                }
+             }]
+         }
+        }
+        """
         alert = {}
         alert['tags'] = {}
         alert['current_value'] = utils.find_current_value(

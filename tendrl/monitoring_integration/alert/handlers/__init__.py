@@ -50,7 +50,7 @@ class AlertHandler(object):
 
 
 class AlertHandlerManager(object):
-    def load_handlers(self):
+    def _load_handlers(self):
         path = os.path.dirname(os.path.abspath(__file__))
         pkg = 'tendrl.monitoring_integration.alert.handlers'
         handlers = utils.list_modules_in_package_path(path, pkg)
@@ -63,10 +63,10 @@ class AlertHandlerManager(object):
 
     def __init__(self):
         self.alert_handlers = []
-        self.load_handlers()
-        self.save_alert_types()
+        self._load_handlers()
+        self._save_alert_types()
 
-    def save_alert_types(self):
+    def _save_alert_types(self):
         alert_types = {}
         for handler in AlertHandler.handlers:
             alert_types[handler.representive_name] = "true"

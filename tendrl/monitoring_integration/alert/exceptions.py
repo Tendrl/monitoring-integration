@@ -5,5 +5,10 @@ class AlertNotFound(Exception):
 class Unauthorized(Exception):
     pass
 
+
 class NodeNotFound(Exception):
+    pass
+
+
+class InvalidAlertSeverity(Exception):
     pass
