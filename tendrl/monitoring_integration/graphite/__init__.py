@@ -4,7 +4,7 @@ import copy
 
 import etcd
 import time
-import socket
+from gevent import socket
 
 
 from tendrl.commons.utils import etcd_utils
@@ -32,6 +32,15 @@ class GraphitePlugin():
                        {'message': "Cannot connect to graphite socket" + str(ex)})
             raise ex
             
+    def _resend(self, message):
+
+        try:
+            self._connect()
+            response = self.graphite_sock.sendall(message)
+        except socket.error as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Cannot send data to graphite socket" + str(ex)})
+            raise ex
 
     def push_metrics(self, metric_name, metric_value):
 
@@ -42,12 +51,14 @@ class GraphitePlugin():
             str(metric_value),
             int(time.time())
         )
-        
-        response = self.graphite_sock.sendall(message)
+        try:
+            response = self.graphite_sock.sendall(message)
+        except socket.error as ex:
+            response = self._resend(message)
         return response
             
 
-    def get_count(self,resource_details, obj_attr):
+    def get_resource_count(self, resource_details, obj_attr):
         total = 0 
         up = 0
         down = 0
@@ -67,7 +78,7 @@ class GraphitePlugin():
         resource_details["up"] = up
         resource_details["down"] = down
 
-    def read_data(self, resource_key, obj_attr):
+    def get_object_from_central_store(self, resource_key, obj_attr):
         attr_details = etcd_utils.read(resource_key)
         resource_details = {"details" : []}
         for attr_detail in attr_details.leaves:
@@ -79,13 +90,13 @@ class GraphitePlugin():
              resource_details["details"].append(resource_detail)
         try:
             if obj_attr["count"]:
-                self.get_count(resource_details, obj_attr)
+                self.get_resource_count(resource_details, obj_attr)
         except KeyError:
             pass
         return resource_details
                  
 
-    def get_data(self, objects):
+    def get_central_store_data(self, objects):
         try:
             clusters = etcd_utils.read('clusters')
             cluster_data = []
@@ -107,7 +118,7 @@ class GraphitePlugin():
                                     attr_key = obj_attrs[key]["value"]
                                     status_key = os.path.join(obj_key,resource.key.rsplit("/", 1)[1], attr_key.rsplit('/', 1)[1])
                                     try:
-                                        resp_data = self.read_data(status_key, obj_attrs[key])
+                                        resp_data = self.get_object_from_central_store(status_key, obj_attrs[key])
                                         resource_detail[key] = resp_data
                                     except etcd.EtcdKeyNotFound:
                                         resource_detail[key] = {"total": 0, "up": 0, "down": 0}
@@ -138,7 +149,8 @@ class GraphitePlugin():
         return cluster_data
 
     def resource_status_mapper(self, status):
-        status_map = {"created":3, "stopped":2, "started":0, "degraded": 1, "up": 0, "down": 1}
+        status_map = {"created" : 3, "stopped" : 2, "started" : 0, "degraded" : 8, "up" : 0, "down" : 1, "completed" : 11, "not_started" : 12, "in progress" : 13, "in_progress" : 13, "not started" : 12, "failed" : 4 }
+
         try:
             return status_map[status]
         except KeyError:

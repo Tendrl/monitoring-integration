@@ -47,8 +47,8 @@ def create_metrics(objects, cluster_details):
                     if "$brick_name" in local_metric and "$node_name" in local_metric:
                         for brick in cluster_detail.details["Brick"]:
                             brick_metric = copy.deepcopy(local_metric)
-                            brick_metric = brick_metric.replace("$brick_name", brick["name"].split(":")[1].replace("_", "|"))
-                            brick_metric = brick_metric.replace("$node_name", brick["name"].split(":")[0].replace(".", "_"))
+                            brick_metric = brick_metric.replace("$brick_name", brick["brick_path"].split(":")[1].replace("/", "|"))
+                            brick_metric = brick_metric.replace("$node_name", brick["brick_path"].split(":")[0].replace(".", "_"))
                             brick_metric = _add_metrics(objects, obj, brick_metric, brick)
                             metrics = metrics + copy.deepcopy(brick_metric)
                     elif "$node_name" in metric:

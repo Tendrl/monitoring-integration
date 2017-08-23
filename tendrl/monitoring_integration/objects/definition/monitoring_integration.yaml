@@ -45,7 +45,7 @@ namespace.monitoring:
       metric: [clusters.$integration_id]
     Brick:
       attrs:
-        name:
+        brick_path:
         status:
       value: clusters/$integration_id/Bricks/all/$Brick.brick_name
       metric: [clusters.$integration_id.nodes.$node_name.bricks.$brick_name]

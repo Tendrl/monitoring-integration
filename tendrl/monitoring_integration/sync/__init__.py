@@ -14,6 +14,7 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
     def __init__(self):
         super(MonitoringIntegrationSdsSyncThread, self).__init__()
         self._complete = gevent.event.Event()
+        self.plugin_obj = GraphitePlugin()
 
     def _run(self):
         interval = etcd_utils.read("_NS/gluster/config/data/sync_interval")
@@ -25,19 +26,20 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                        {'message': str(ex)})
             raise ex
 
-        
-        plugin_obj = GraphitePlugin()
-        objects  = NS.monitoring.definitions.get_parsed_defs()["namespace.monitoring"]["graphite_data"]
+        aggregate_gluster_objects  = NS.monitoring.definitions.get_parsed_defs()["namespace.monitoring"]["graphite_data"]
 
         while not self._complete.is_set():
             try:
                 gevent.sleep(interval)
-                cluster_details = plugin_obj.get_data(objects)
-                metrics = graphite_utils.create_metrics(objects, cluster_details)
+                cluster_details = self.plugin_obj.get_central_store_data(aggregate_gluster_objects)
+                metrics = graphite_utils.create_metrics(aggregate_gluster_objects, cluster_details)
                 for metric in metrics:
                    for key, value in metric.items():
                        if value:
-                           respose = plugin_obj.push_metrics(key, value)       
+                           respose = self.plugin_obj.push_metrics(key, value)       
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),
                           {'message': str(ex)})
+
+    def stop(self):
+        self.plugin_obj.graphite_sock.close()

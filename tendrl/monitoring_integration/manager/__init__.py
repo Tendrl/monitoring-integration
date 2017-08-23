@@ -132,6 +132,7 @@ def main():
   
     def shutdown():
         complete.set()
+        NS.sync_thread.stop()
 
     gevent.signal(signal.SIGTERM, shutdown)
     gevent.signal(signal.SIGINT, shutdown)
