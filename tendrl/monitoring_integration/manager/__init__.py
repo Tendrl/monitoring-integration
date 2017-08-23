@@ -13,9 +13,7 @@ from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import datasource
-from tendrl.monitoring_integration.grafana import create_new_notification_channel
 from tendrl.commons import manager as common_manager
-from tendrl.monitoring_integration.grafana.create_alert_dashboard import CreateAlertDashboard
 from tendrl import monitoring_integration
 from tendrl.monitoring_integration import sync
 from tendrl.commons import TendrlNS
@@ -37,18 +35,8 @@ class MonitoringIntegrationManager(common_manager.Manager):
     def start(self):
 
         super(MonitoringIntegrationManager, self).start()
+        # Creating Default Dashboards
         _upload_default_dashboards()
-        response = create_new_notification_channel.create_notification_channel()
-        if response.status_code == 200:
-            msg = "Notification created successfully"
-            logger.log("info", NS.get("publisher_id", None),
-                       {'message': msg})
-        else:
-            message = str(json.loads(response._content)["message"])
-            logger.log("info", NS.get("publisher_id", None),
-                       {'message': message})
-        create_alert_dashboard = CreateAlertDashboard()
-
 
 
 
@@ -56,7 +44,6 @@ def _upload_default_dashboards():
 
         monitoring_integration_manager = MonitoringIntegrationManager()
 
-        # Creating Default Dashboards
         dashboards = []
         utils.get_conf()
         dashboards = dashboard.get_all_dashboards()
@@ -145,6 +132,7 @@ def main():
   
     def shutdown():
         complete.set()
+        NS.sync_thread.stop()
 
     gevent.signal(signal.SIGTERM, shutdown)
     gevent.signal(signal.SIGINT, shutdown)

@@ -4,3 +4,4 @@ class ClusterDetail:
         self.integration_id = ""
         self.volumes = []
         self.hosts = []
+        self.details = {"Volume" : [], "Brick" : [], "GlobalDetails" :[], "Node": []}

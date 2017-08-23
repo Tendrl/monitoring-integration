@@ -56,17 +56,18 @@ def get_cluster_details():
 
             cluster_details_list.append(cluster_obj)
         return cluster_details_list
-    except etcd.EtcdKeyNotFound as ex:
-        sys.stdout.write("Etcd Key Not Found" + str(ex))
-    return None
+    except (etcd.EtcdKeyNotFound, KeyError) as ex:
+        logger.log("error", NS.get("publisher_id", None),
+                  {'message': str(ex)})
+        return None
 
-def set_alert():
+def set_alert(panel):
 
     panel["thresholds"] = [{"colorMode": "critical","fill": True,"line": True,"op": "gt","value": 1}]
     panel["alert"] = {"conditions": [{"evaluator": {"params": [2],"type": "gt"},
-                                      "operator": {"type": "and"},"query": {"params": ["A","5m","now"] },
+                                      "operator": {"type": "and"},"query": {"params": [panel["targets"][-1]["refId"],"5m","now"] },
                                       "reducer": {"params": [],"type": "avg" },"type": "query"}],
-                                      "executionErrorState": "alerting","frequency": "6s","handler": 1,
+                                      "executionErrorState": "alerting","frequency": "60s","handler": 1,
                                       "name": str(panel["title"]) + " Alert","noDataState": "no_data","notifications": []}
 
 def create_volume_dashboard(cluster_details_list):

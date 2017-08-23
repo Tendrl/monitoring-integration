@@ -8,11 +8,13 @@ log_cfg_path: /etc/tendrl/monitoring-integration/monitoring_integration_logging.
 
 logging_socket_path: /var/run/tendrl/message.sock
 
+# To activate internal profiling
 with_internal_profiling: False
 
 tags:
     - tendrl/integration/monitoring
 
+# List of dashboards to be uploaded
 dashboards:
     - tendrl-gluster-at-a-glance
     - tendrl-gluster-hosts
@@ -21,14 +23,27 @@ dashboards:
 
 home_dashboard: tendrl-gluster-at-a-glance
 
+# Grafana credentials
 credentials:
   user: admin
   password: admin
 
+# Name of datasource to be configured in grafana
 datasource_name: 'Graphite'
 
+# Host address of datasource to be configured in grafana
 datasource_host: 127.0.0.1
 
-access: direct
+# Port of datasource to be configured in grafana
+datasource_port: 10080
 
+# Caron port required to insert data into graphite.
+carbon_port: 2003
+
+# Access method required to configure datasource in grafana
+# Possible values proxy or direct
+access: proxy
+
+# Whether the datasource is to be set as default datasource in grafana
+# Possible values true or false
 isDefault: true
