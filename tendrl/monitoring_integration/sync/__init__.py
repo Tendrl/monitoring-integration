@@ -18,6 +18,8 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
         self.sync_interval = None
 
     def _run(self):
+        aggregate_gluster_objects  = NS.monitoring.definitions.get_parsed_defs()["namespace.monitoring"]["graphite_data"]
+        
         while not self._complete.is_set():
             if self.sync_interval is None:
                 try:
@@ -30,8 +32,6 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                         raise ex
                 except etcd.EtcdKeyNotFound as ex:
                     continue
-
-            aggregate_gluster_objects  = NS.monitoring.definitions.get_parsed_defs()["namespace.monitoring"]["graphite_data"]
 
             try:
                 gevent.sleep(self.sync_interval)
