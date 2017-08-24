@@ -239,7 +239,7 @@
             "targets": [
               {
                 "refId": "A",
-                "target": "countSeries(groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.utilization.percent-percent_bytes, 8, 'sum'))"
+                "target": "countSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.status)"
               }
             ],
             "thresholds": "",
