@@ -68,9 +68,11 @@ def _upload_default_dashboards():
                 logger.log("info", NS.get("publisher_id", None),
                            {'message': msg})
             else:
-                msg = '\n' + "Dashboard " + str(dashboard_json) + \
-                   " upload failed with error code " + str(response.status_code) + \
-                   '\n'
+                msg = "Dashboard {0} upload failed. Error code: {1} ," + \
+                      "Error message: " + \
+                      "{2} ".format(str(dashboard_json),
+                                    str(response.status_code),
+                                    str(get_message_from_response(response)))
                 logger.log("info", NS.get("publisher_id", None),
                            {'message': msg})
         try:
@@ -91,8 +93,10 @@ def _upload_default_dashboards():
                 msg = '\n' + str(dashboard_json.get('message')) + '\n'
                 logger.log("info", NS.get("publisher_id", None),
                            {'message': msg})
-        except exceptions.ConnectionFailedException:
+        except exceptions.ConnectionFailedException as ex:
             traceback.print_exc()
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': str(ex)})
             raise exceptions.ConnectionFailedException
 
         # Creating datasource
@@ -104,16 +108,25 @@ def _upload_default_dashboards():
                        {'message': msg})
 
         else:
-            if isinstance(json.loads(response._content), list):
-                message = str(json.loads(response._content)[0]["message"])
-            else:
-                message = str(json.loads(response._content)["message"])
-            msg = '\n' + "Datasource " + " upload failed with" + '\n' + "Message \"" + \
-                  message + "\"" + \
-                  " and Error code " + str(response.status_code) + '\n'
+            msg = "Datasource upload failed. Error code: {0} ," + \
+                  "Error message: " + \
+                  "{1} ".format(response.status_code,
+                                str(get_message_from_response(response)))
             logger.log("info", NS.get("publisher_id", None),
                        {'message': msg})
 
+def get_message_from_response(response_data):
+
+    message = ""
+    try :
+        if isinstance(json.loads(response_data._content), list):
+            message = str(json.loads(response._content)[0]["message"])
+        else:
+            message = str(json.loads(response_data._content)["message"])
+    except (AttributeError, KeyError):
+        pass
+
+    return message
 
 def main():
 
