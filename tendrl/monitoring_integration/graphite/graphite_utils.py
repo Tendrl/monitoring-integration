@@ -70,6 +70,5 @@ def create_metrics(objects, cluster_details):
         except (AttributeError,KeyError) as ex:
             logger.log("error", NS.get("publisher_id", None),
                      {'message': str(ex)})
-            raise ex
     return metrics
 
