@@ -47,5 +47,5 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
 
     def stop(self):
         super(MonitoringIntegrationSdsSyncThread, self).stop()
-        self.plugin_obj.graphite_sock.shutdown()
+        self.plugin_obj.graphite_sock.shutdown(1)
         self.plugin_obj.graphite_sock.close()
