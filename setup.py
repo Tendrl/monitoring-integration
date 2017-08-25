@@ -97,7 +97,7 @@ class ReleaseCommand(Command):
         # subprocess.check_call(cmd)
 setup(
     name="tendrl-monitoring-integration",
-    version="1.0.0",
+    version=version,
     author="Rishubh Jain",
     author_email="risjain@redhat.com",
     description=("Integration of tendrl with grafana and"
