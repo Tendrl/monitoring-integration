@@ -9,10 +9,10 @@ from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
-class BrickHandler(AlertHandler):
+class VolumeHandler(AlertHandler):
 
-    handles = 'bricks'
-    representive_name = 'bricks_utilization_alert'
+    handles = 'volume'
+    representive_name = 'volume_utilization_alert'
 
     def __init__(self):
         AlertHandler.__init__(self)
@@ -30,15 +30,19 @@ class BrickHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['tags']['alert_catagory'] = constants.CLUSTER
+            alert['classification'] = VolumeHandler.classification
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
+            alert['tags']['volume_id'] = utils.find_volume_id(
+                 alert['tags']['volume_name'],
+                 alert['tags']['integration_id']
+            )
             if alert['severity'] == "WARNING":
                 alert['tags']['message']  = (
-                    "Brick utilization of %s in "\
+                    "Volume utilization of %s in "\
                     "cluster %s is %s which is above %s"\
                     " threshold %s" % (
-                        alert['tags']['brick_path'],
+                        alert['tags']['volume_name'],
                         alert['tags']['cluster_name'],
                         alert['current_value'],
                         alert['severity'],
@@ -48,9 +52,9 @@ class BrickHandler(AlertHandler):
                      
             elif alert['severity'] == "INFO":
                 alert['tags']['message'] = (
-                    "Brick utilization of %s in "\
+                    "Volume utilization of %s in "\
                     "cluster %s is back normal" % (
-                        alert['tags']['brick_path'],
+                        alert['tags']['volume_name'],
                         alert['tags']['cluster_name']
                     )
                 )
@@ -86,34 +90,31 @@ class BrickHandler(AlertHandler):
         """
         {
           EvalData: {
-            evalMatches:[{
-              metric: "averageSeries(tendrl.clusters.ab3b125e-4769-4071-
-                      a349-e82b380c11f4.nodes.*.bricks.|root|gluster_bricks
-                      |vol1_b2.utilization.percent-percent_bytes)",
+            evalMatches: - [{
+              metric: "tendrl.clusters.ab3b125e-
+                      4769-4071-a349-e82b380c11f4.volumes.vol1.
+                      nodes.*.bricks.*.utilization.percent-percent_bytes",
               tags: null,
-              value: 15.614466017499998
+              value: 13407092736
             }]
           },
           Settings: {
             conditions: - [{
               evaluator: - {
-                params: - [15],
+                params: - [12138888889],
                 type: "gt"
               },
-              query : {
-                model : {
-                  target: "averageSeries(tendrl.clusters.ab3b125e-4769-
-                          4071-a349-e82b380c11f4.nodes.*.bricks.|root|
-                          gluster_bricks|vol1_b2.utilization.percent-
-                          percent_bytes)"
-                }
+              query: - {
+                model: - {
+                  target: "tendrl.clusters.ab3b125e-
+                          4769-4071-a349-e82b380c11f4.volumes.vol1.
+                          nodes.*.bricks.*.utilization.percent-percent_bytes"
+                },
               }
             }]
-          }
+          }   
         }
         """
-        # (TODO) (gowtham)When query cahnge node wise need to find
-        # hostname also from query. For now it for all nodes(*)
         alert = {}
         alert['tags'] = {}
         alert['current_value'] = utils.find_current_value(
@@ -127,6 +128,6 @@ class BrickHandler(AlertHandler):
         for i in range(0, len(metric)):
             if  metric[i] == "clusters":
                 alert['tags']['integration_id'] = metric[i + 1]
-            elif metric[i] == "bricks":
-                alert['tags']['brick_path'] = metric[i+1]
+            elif metric[i] == "volumes":
+                alert['tags']['volume_name'] = metric[i+1]
         return alert

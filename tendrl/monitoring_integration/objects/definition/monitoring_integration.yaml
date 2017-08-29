@@ -24,6 +24,18 @@ namespace.monitoring:
       type: Create
       version: 1
   objects:
+    AlertTypes:
+      enabled: True
+      attrs:
+        types:
+          help: "A Dict of integration to types of alerts the integration handles"
+          type: List
+        classification:
+          help: "Classification of the alert"
+          type: String
+      value: alerting/alert_types
+      help: "alert types"
+      metric: [alerting.alert_types.$classification]
     Trigger:
       attr:
         resource_name:
@@ -76,13 +88,4 @@ namespace.monitoring:
         status:
       value: clusters/$integration_id/nodes/$node_id
       metric: [clusters.$integration_id.nodes.$node_name]
-    AlertTypes:
-      enabled: True
-      attrs:
-        types:
-          help: "A Dict of integration to types of alerts the integration handles"
-          type: Dict
-      value: alerting/alert_types
-      list: alerting/alert_types
-      help: "Alert types"
 tendrl_schema_version: 0.3

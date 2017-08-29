@@ -4,6 +4,8 @@ import json
 import os
 import six
 
+from requests.exceptions import ConnectionError
+from requests.exceptions import RequestException
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
 from tendrl.commons.utils import log_utils as logger
@@ -11,7 +13,6 @@ from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.grafana.exceptions import ConnectionFailedException
-from tendrl.monitoring_integration.objects.alert_types import AlertTypes
 
 class NoHandlerException(Exception):
     pass
@@ -34,6 +35,7 @@ class HandlerMount(type):
 class AlertHandler(object):
     handles = ''
     representive_name = ''
+    classification = ''
 
     def __init__(self):
         self.alert = None
@@ -51,6 +53,7 @@ class AlertHandler(object):
 
 class AlertHandlerManager(object):
     def _load_handlers(self):
+        self.alert_types = {}
         path = os.path.dirname(os.path.abspath(__file__))
         pkg = 'tendrl.monitoring_integration.alert.handlers'
         handlers = utils.list_modules_in_package_path(path, pkg)
@@ -60,18 +63,29 @@ class AlertHandlerManager(object):
             for name, cls in clsmembers:
                 if issubclass(cls, AlertHandler) and cls.handles:
                     self.alert_handlers.append(cls.handles)
-
+                    alert_handlers = handler_fqdn.split(pkg + ".")[-1]
+                    # node.cpu_utilization
+                    # cluster.gluster.cluster_utilization
+                    alert_classification = alert_handlers.rsplit(".", 1)[0]
+                    cls.classification = alert_classification.split(".")[0]
+                    alert_classification = alert_classification.replace(".", "/")
+                    if alert_classification in self.alert_types:
+                        self.alert_types[alert_classification].append(
+                            cls.representive_name
+                        )
+                    else:
+                        self.alert_types[alert_classification] = [
+                            cls.representive_name]
+                   
     def __init__(self):
         self.alert_handlers = []
         self._load_handlers()
         self._save_alert_types()
 
     def _save_alert_types(self):
-        alert_types = {}
-        for handler in AlertHandler.handlers:
-            alert_types[handler.representive_name] = "true"
-        AlertTypes(types=alert_types).save()
-
+        utils.find_alert_types(
+            self.alert_types
+        )
         
     def handle_alert(self, alert_id):
         try:
@@ -93,7 +107,11 @@ class AlertHandlerManager(object):
                         )
                     }
                 )
-        except(AlertNotFound, Unauthorized, ConnectionFailedException) as ex:
+        except(AlertNotFound,
+               Unauthorized,
+               ConnectionFailedException,
+               ConnectionError,
+               RequestException) as ex:
             Event(
                 ExceptionMessage(
                     priority="error",

@@ -34,7 +34,7 @@ class MemoryHandler(AlertHandler):
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
             alert['tags']['fqdn'] = alert['tags']['fqdn']
-            alert['tags']['alert_catagory'] = constants.NODE
+            alert['classification'] = MemoryHandler.classification
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = ("Memory utilization of node %s is" \
                 " %s which is above the %s threshold (%s)." % (
@@ -83,7 +83,7 @@ class MemoryHandler(AlertHandler):
             "evalMatches": [{
               "metric": "tendrl.clusters.ab3b125e-4769-4071-a349-
                         e82b380c11f4.nodes.dhcp43-213_lab_eng_blr_
-                        redhat_com.memory.memory-buffered",
+                        redhat_com.memory.percent-used",
               "tags": null,
               "value": 4096
             }]
@@ -98,7 +98,7 @@ class MemoryHandler(AlertHandler):
               "model": {
                 "target": "tendrl.clusters.ab3b125e-4769-4071-
                           a349-e82b380c11f4.nodes.dhcp43-213_lab_eng_
-                          blr_redhat_com.memory.memory-buffered"
+                          blr_redhat_com.memory.percent-used"
               },
             }
           }

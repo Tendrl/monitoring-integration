@@ -9,10 +9,10 @@ from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
-class VolumeHandler(AlertHandler):
+class ClusterHandler(AlertHandler):
 
-    handles = 'volume'
-    representive_name = 'volume_utilization_alert'
+    handles = 'cluster'
+    representive_name = 'cluster_utilization_alert'
 
     def __init__(self):
         AlertHandler.__init__(self)
@@ -21,7 +21,7 @@ class VolumeHandler(AlertHandler):
         alert  = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
-            alert["node_id"] = None
+            alert["node_id"] = None 
             alert["time_stamp"] = alert_json['NewStateDate']
             alert["resource"] = self.representive_name
             alert['alert_type'] = constants.ALERT_TYPE 
@@ -30,34 +30,22 @@ class VolumeHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['tags']['alert_catagory'] = constants.CLUSTER
+            alert['classification'] = ClusterHandler.classification
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
-            alert['tags']['volume_id'] = utils.find_volume_id(
-                 alert['tags']['volume_name'],
-                 alert['tags']['integration_id']
-            )
             if alert['severity'] == "WARNING":
-                alert['tags']['message']  = (
-                    "Volume utilization of %s in "\
-                    "cluster %s is %s which is above %s"\
-                    " threshold %s" % (
-                        alert['tags']['volume_name'],
-                        alert['tags']['cluster_name'],
-                        alert['current_value'],
-                        alert['severity'],
-                        alert['tags']['warning_max']
-                    )
-                )
-                     
+                alert['tags']['message'] = ("Cluster utilization of cluster %s is" \
+                " %s which is above the %s threshold (%s)." % (
+                    alert['tags']['cluster_name'],
+                    alert['current_value'],
+                    alert['severity'],
+                    alert['tags']['warning_max']
+                ))
             elif alert['severity'] == "INFO":
-                alert['tags']['message'] = (
-                    "Volume utilization of %s in "\
-                    "cluster %s is back normal" % (
-                        alert['tags']['volume_name'],
-                        alert['tags']['cluster_name']
-                    )
-                )
+                alert['tags']['message'] = ("Cluster utilization of cluster %s is"\
+                " back to normal" % (
+                    alert['tags']['cluster_name']
+                ))
             else:
                 logger.log(
                     "error",
@@ -67,7 +55,7 @@ class VolumeHandler(AlertHandler):
                         "severity" % alert_json
                     }
                 )
-                raise InvalidAlertSeverity 
+                raise InvalidAlertSeverity
             return alert
         except (KeyError,
                 CalledProcessError,
@@ -88,32 +76,29 @@ class VolumeHandler(AlertHandler):
     
     def parse_alert_metrics(self, alert_json):
         """
-        {
-          EvalData: {
-            evalMatches: - [{
-              metric: "averageSeries(tendrl.clusters.ab3b125e-
-                      4769-4071-a349-e82b380c11f4.volumes.vol1.
-                      nodes.*.bricks.*.utilization.gauge-total)",
-              tags: null,
-              value: 13407092736
-            }]
-          },
-          Settings: {
-            conditions: - [{
-              evaluator: - {
-                params: - [12138888889],
-                type: "gt"
+            {
+              "EvalData": {
+                "evalMatches": [{
+                  "metric": "tendrl.clusters.ab3b125e-4769-4071-a349-e82b380c11f4.
+                            volumes.*.nodes.*.bricks.*.utilization.percent-percent_bytes",
+                  "tags": null,
+                  "value": 16.020626197595
+                }]
               },
-              query: - {
-                model: - {
-                  target: "averageSeries(tendrl.clusters.ab3b125e-
-                          4769-4071-a349-e82b380c11f4.volumes.vol1.
-                          nodes.*.bricks.*.utilization.gauge-total)"
-                },
-              }
-            }]
-          }   
-        }
+              Settings: - {
+                conditions: - [{
+                  evaluator: {
+                    params: [29],
+                    type: "gt"
+                  }
+                  query: {
+                    model: - {
+                      target: "tendrl.clusters.ab3b125e-4769-4071-a349-e82b380c11f4.
+                               volumes.*.nodes.*.bricks.*.utilization.percent-percent_bytes"
+                    },
+                  }
+              },
+            }
         """
         alert = {}
         alert['tags'] = {}
@@ -121,13 +106,10 @@ class VolumeHandler(AlertHandler):
             alert_json['EvalData'])
         target = utils.find_alert_target(
             alert_json['Settings']['conditions'])
-        alert['tags']['plugin_instance'] = target
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         metric = target.split(",")[0].split(".")
         for i in range(0, len(metric)):
             if  metric[i] == "clusters":
                 alert['tags']['integration_id'] = metric[i + 1]
-            elif metric[i] == "volumes":
-                alert['tags']['volume_name'] = metric[i+1]
         return alert

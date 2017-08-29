@@ -34,7 +34,7 @@ class SwapHandler(AlertHandler):
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
             alert['tags']['fqdn'] = alert['tags']['fqdn']
-            alert['tags']['alert_catagory'] = constants.NODE
+            alert['classification'] = SwapHandler.classification
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = ("Swap utilization of node %s is" \
                 " %s which is above the %s threshold (%s)." % (

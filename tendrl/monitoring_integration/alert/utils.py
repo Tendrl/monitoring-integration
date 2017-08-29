@@ -11,6 +11,7 @@ from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.grafana import alert
+from tendrl.monitoring_integration.objects.alert_types import AlertTypes
 
 
 def list_modules_in_package_path(package_path, prefix):
@@ -162,6 +163,31 @@ def find_volume_id(vol_name, integration_id):
             {
                 "message": "Failed to fetch volume id for volume name %s" %
                 vol_name
+            }
+        )
+        raise ex
+
+def find_alert_types(new_alert_types):
+    try: 
+        for alert_classification in new_alert_types:
+            types = new_alert_types[alert_classification]
+            alert_types = AlertTypes(
+                classification=alert_classification
+            ).load()
+            if alert_types.types:
+                types = list(set().union(
+                    types, alert_types.types))
+            AlertTypes(
+                classification=alert_classification,
+                types=types
+            ).save()
+    except (EtcdKeyNotFound) as ex:
+        logger.log(
+            "error",
+            NS.publisher_id,
+            {
+                "message": "Failed to fetch alert types %s" %
+                new_alert_types[alert_classification]
             }
         )
         raise ex

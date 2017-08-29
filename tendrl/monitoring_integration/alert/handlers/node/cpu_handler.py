@@ -35,7 +35,7 @@ class CpuHandler(AlertHandler):
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
             alert['tags']['fqdn'] = alert['tags']['fqdn']
-            alert['tags']['alert_catagory'] = constants.NODE
+            alert['classification'] = CpuHandler.classification
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = ("Cpu utilization of node %s is" \
                 " %s which is above the %s threshold (%s)." % (

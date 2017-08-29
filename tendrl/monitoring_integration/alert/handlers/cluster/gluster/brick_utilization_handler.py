@@ -9,10 +9,10 @@ from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 
 
-class ClusterHandler(AlertHandler):
+class BrickHandler(AlertHandler):
 
-    handles = 'cluster'
-    representive_name = 'cluster_utilization_alert'
+    handles = 'brick'
+    representive_name = 'bricks_utilization_alert'
 
     def __init__(self):
         AlertHandler.__init__(self)
@@ -21,7 +21,6 @@ class ClusterHandler(AlertHandler):
         alert  = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
-            alert["node_id"] = None 
             alert["time_stamp"] = alert_json['NewStateDate']
             alert["resource"] = self.representive_name
             alert['alert_type'] = constants.ALERT_TYPE 
@@ -30,22 +29,32 @@ class ClusterHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['tags']['alert_catagory'] = constants.CLUSTER
+            alert['classification'] = BrickHandler.classification
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
             if alert['severity'] == "WARNING":
-                alert['tags']['message'] = ("Cluster utilization of cluster %s is" \
-                " %s which is above the %s threshold (%s)." % (
-                    alert['tags']['cluster_name'],
-                    alert['current_value'],
-                    alert['severity'],
-                    alert['tags']['warning_max']
-                ))
+                alert['tags']['message']  = (
+                    "Brick utilization of %s in node %s in "\
+                    "cluster %s is %s which is above %s"\
+                    " threshold %s" % (
+                        alert['tags']['brick_path'],
+                        alert['node_id'],
+                        alert['tags']['cluster_name'],
+                        alert['current_value'],
+                        alert['severity'],
+                        alert['tags']['warning_max']
+                    )
+                )
+                     
             elif alert['severity'] == "INFO":
-                alert['tags']['message'] = ("Cluster utilization of cluster %s is"\
-                " back to normal" % (
-                    alert['tags']['cluster_name']
-                ))
+                alert['tags']['message'] = (
+                    "Brick utilization of %s in node %s in "\
+                    "cluster %s is back normal" % (
+                        alert['tags']['brick_path'],
+                        alert['node_id'],
+                        alert['tags']['cluster_name']
+                    )
+                )
             else:
                 logger.log(
                     "error",
@@ -55,7 +64,7 @@ class ClusterHandler(AlertHandler):
                         "severity" % alert_json
                     }
                 )
-                raise InvalidAlertSeverity
+                raise InvalidAlertSeverity 
             return alert
         except (KeyError,
                 CalledProcessError,
@@ -76,34 +85,35 @@ class ClusterHandler(AlertHandler):
     
     def parse_alert_metrics(self, alert_json):
         """
-            {
-              "EvalData": {
-                "evalMatches": [{
-                  "metric": "averageSeries(tendrl.clusters.ab3b125e-4769-4071-a349-e82b380c11f4.
-                            volumes.*.nodes.*.bricks.*.utilization.percent-percent_bytes)",
-                  "tags": null,
-                  "value": 16.020626197595
-                }]
+        {
+          EvalData: {
+            evalMatches:[{
+              metric: "tendrl.clusters.ab3b125e-4769-4071-
+                      a349-e82b380c11f4.nodes.dhcp42-208_lab_eng_blr_
+                      redhat_com.bricks.|root|gluster_bricks
+                      |vol1_b2.utilization.percent-percent_bytes",
+              tags: null,
+              value: 15.614466017499998
+            }]
+          },
+          Settings: {
+            conditions: - [{
+              evaluator: - {
+                params: - [15],
+                type: "gt"
               },
-              Settings: - {
-                conditions: - [{
-                  evaluator: {
-                    params: [29],
-                    type: "gt"
-                  }
-                  query: {
-                    model: - {
-                      target:     "sumSeries(#A, #B).select metric",
-                      targetFull: "sumSeries(sumSeries(tendrl.clusters.
-                                  ab3b125e-4769-4071-a349-e82b380c11f4.
-                                  nodes.dhcp43-200_lab_eng_blr_redhat_com.cpu.
-                                  percent-system), sumSeries(tendrl.clusters.ab3b125e-47
-                                  69-4071-a349-e82b380c11f4.nodes.dhcp42-208_lab_eng_blr_r
-                                  edhat_com.cpu.percent-user)).select metric"
-                    },
-                  }
-              },
-            }
+              query : {
+                model : {
+                  target: "tendrl.clusters.ab3b125e-4769-
+                          4071-a349-e82b380c11f4.nodes.dhcp42-208_lab_eng_blr_
+                          redhat_com.bricks.|root|
+                          gluster_bricks|vol1_b2.utilization.percent-
+                          percent_bytes"
+                }
+              }
+            }]
+          }
+        }
         """
         alert = {}
         alert['tags'] = {}
@@ -111,10 +121,15 @@ class ClusterHandler(AlertHandler):
             alert_json['EvalData'])
         target = utils.find_alert_target(
             alert_json['Settings']['conditions'])
+        alert['tags']['plugin_instance'] = target
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         metric = target.split(",")[0].split(".")
         for i in range(0, len(metric)):
             if  metric[i] == "clusters":
                 alert['tags']['integration_id'] = metric[i + 1]
+            elif metric[i] == "bricks":
+                alert['tags']['brick_path'] = metric[i+1]
+            elif metric[i] == "nodes":
+                alert['node_id'] = metric[i+1]
         return alert
