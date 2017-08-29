@@ -154,7 +154,7 @@ def find_volume_id(vol_name, integration_id):
             key = volume.key +  "/name"
             name = etcd_utils.read(key).value
             if vol_name == name:
-                return name
+                return volume.key.split("/")[-1]
     except (EtcdKeyNotFound) as ex:
         logger.log(
             "error",
