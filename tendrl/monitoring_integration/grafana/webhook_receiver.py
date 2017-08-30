@@ -8,12 +8,15 @@ from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
 from tendrl.monitoring_integration.alert.handlers import AlertHandlerManager
 
+HOST = "127.0.0.1"
+PORT = "8789"
+
 
 class WebhookReceiver(gevent.greenlet.Greenlet):
     def __init__(self):
         super(WebhookReceiver, self).__init__()
         self.server = WSGIServer(
-            ('127.0.0.1', 8789),
+            (HOST, PORT),
             self.application
         )
         self.alert_handler = AlertHandlerManager()
