@@ -83,9 +83,9 @@ class CpuHandler(AlertHandler):
          "EvalData": {
              "evalMatches": [{
                  "metric": "sumSeries(sumSeries(tendrl.clusters.ab3b125e-4769
-                           -4071-a349-e82b380c11f4.nodes.dhcp43-200_lab_eng_blr_redhat_com.
+                           -4071-a349-e82b380c11f4.nodes.{host_name}.
                            cpu.percent-system),sumSeries(tendrl.clusters.ab3b125e-4769-4071
-                           -a349-e82b380c11f4.nodes.dhcp42-208_lab_eng_blr_redhat_com.cpu.
+                           -a349-e82b380c11f4.nodes.{host_name}.cpu.
                            percent-user))",
                  "tags": null,
                  "value": 31.97861830493573
@@ -100,9 +100,9 @@ class CpuHandler(AlertHandler):
                     "target"    : "sumSeries(#A, #B).select metric",
                     "targetFull": "sumSeries(sumSeries(tendrl.clusters.
                                    ab3b125e-4769-4071-a349-e82b380c11f4.nodes.
-                                   dhcp43-200_lab_eng_blr_redhat_com.cpu.percent-system), 
+                                   {host_name}.cpu.percent-system), 
                                    sumSeries(tendrl.clusters.ab3b125e-4769-4071-a349-e82b
-                                   380c11f4.nodes.dhcp42-208_lab_eng_blr_redhat_com.cpu.
+                                   380c11f4.nodes.{host_name}.cpu.
                                    percent-user)).select metric"
                    }
                 }

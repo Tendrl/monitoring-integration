@@ -82,7 +82,7 @@ class SwapHandler(AlertHandler):
           "EvalData": {
             "evalMatches": [{
               "metric": "tendrl.clusters.ab3b125e-4769-4071-a349-e82b380c11f4.
-                        nodes.dhcp42-208_lab_eng_blr_redhat_com.swap.percent-used",
+                        nodes.{host_name}.swap.percent-used",
               "tags": null,
               "value": 5.19512226135829
             }]
@@ -96,7 +96,7 @@ class SwapHandler(AlertHandler):
               "query": {
                 "model": {
                   "target": "tendrl.clusters.ab3b125e-4769-4071-a349-e82b380c11f4.
-                            nodes.dhcp42-208_lab_eng_blr_redhat_com.swap.percent-used"
+                            nodes.{host_name}.swap.percent-used"
                 }
               }
             }],

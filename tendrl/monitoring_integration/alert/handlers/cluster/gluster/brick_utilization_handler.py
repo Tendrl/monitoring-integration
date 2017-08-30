@@ -93,8 +93,8 @@ class BrickHandler(AlertHandler):
           EvalData: {
             evalMatches:[{
               metric: "tendrl.clusters.ab3b125e-4769-4071-
-                      a349-e82b380c11f4.nodes.dhcp42-208_lab_eng_blr_
-                      redhat_com.bricks.|root|gluster_bricks
+                      a349-e82b380c11f4.nodes.{host_name}.
+                      bricks.|root|gluster_bricks
                       |vol1_b2.utilization.percent-percent_bytes",
               tags: null,
               value: 15.614466017499998

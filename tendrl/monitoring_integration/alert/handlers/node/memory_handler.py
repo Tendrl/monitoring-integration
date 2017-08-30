@@ -82,8 +82,8 @@ class MemoryHandler(AlertHandler):
           "EvalData": {
             "evalMatches": [{
               "metric": "tendrl.clusters.ab3b125e-4769-4071-a349-
-                        e82b380c11f4.nodes.dhcp43-213_lab_eng_blr_
-                        redhat_com.memory.percent-used",
+                        e82b380c11f4.nodes.{host_name}
+                        .memory.percent-used",
               "tags": null,
               "value": 4096
             }]
@@ -97,8 +97,8 @@ class MemoryHandler(AlertHandler):
             "query": {
               "model": {
                 "target": "tendrl.clusters.ab3b125e-4769-4071-
-                          a349-e82b380c11f4.nodes.dhcp43-213_lab_eng_
-                          blr_redhat_com.memory.percent-used"
+                          a349-e82b380c11f4.nodes.{host_name}
+                          .memory.percent-used"
               },
             }
           }
