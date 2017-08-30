@@ -30,7 +30,7 @@ class VolumeHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['classification'] = VolumeHandler.classification
+            alert['classification'] = alert_json["classification"]
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
             alert['tags']['volume_id'] = utils.find_volume_id(

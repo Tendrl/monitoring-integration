@@ -93,6 +93,7 @@ class AlertHandlerManager(object):
             handled_alert = False
             for handler in AlertHandler.handlers:
                 if handler.handles in alert_json['Name'].lower():
+                    alert_json["classification"] = handler.classification
                     handler.handle(alert_json)
                     handled_alert = True
             if not handled_alert:

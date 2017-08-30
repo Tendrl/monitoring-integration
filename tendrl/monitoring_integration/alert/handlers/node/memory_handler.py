@@ -34,7 +34,7 @@ class MemoryHandler(AlertHandler):
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
             alert['tags']['fqdn'] = alert['tags']['fqdn']
-            alert['classification'] = MemoryHandler.classification
+            alert['classification'] = alert_json["classification"]
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = ("Memory utilization of node %s is" \
                 " %s which is above the %s threshold (%s)." % (
