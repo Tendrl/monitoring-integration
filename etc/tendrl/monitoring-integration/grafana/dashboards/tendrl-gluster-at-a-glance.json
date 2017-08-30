@@ -2123,7 +2123,7 @@
 	          "targets": [
 	            {
 	              "refId": "A",
-	              "target": "limit(groupByNode(tendrl.clusters.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes, -3, 'maxSeries'), 5)"
+	              "target": "aliasSub(aliasSub(substr(limit(tendrl.clusters.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes, 5), 4, -2), '(\\.bricks\\.)', ' : '), '\\|', '/')"
 	            }
 	          ],
 	          "title": "Top 5 Utilization By Bricks",
