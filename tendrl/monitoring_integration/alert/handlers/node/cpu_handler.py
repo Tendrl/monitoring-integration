@@ -17,6 +17,7 @@ class CpuHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
+        self.template = "tendrl.clusters.{cluster_id}.nodes.{host_name}.cpu"
 
     def format_alert(self, alert_json):
         alert  = self.parse_alert_metrics(alert_json)
@@ -118,12 +119,10 @@ class CpuHandler(AlertHandler):
             alert_json['Settings']['conditions'])
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
-        # identifying cluster_id and node_id from any one
-        # alert metric (all have same)
-        metric = target.split(",")[0].split(".")
-        for i in range(0, len(metric)):
-            if  metric[i] == "clusters":
-                alert['tags']['integration_id'] = metric[i + 1]
-            elif metric[i] == "nodes":
-                alert["tags"]["fqdn"] = metric[i + 1].replace("_", ".")
+        # identifying cluster_id and node_id from target
+        # Cpu target is an aggregation, So spliting and giving [0]
+        # Because both have same cluster and node ids
+        result = utils.parse_target(target, self.template)
+        alert['tags']['integration_id'] = result["cluster_id"]
+        alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
         return alert

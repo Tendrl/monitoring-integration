@@ -16,6 +16,8 @@ class ClusterHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
+        self.template = "tendrl.clusters.{cluster_id}.volumes.*."\
+            "nodes.*.bricks.*.utilization.percent-percent_bytes"
 
     def format_alert(self, alert_json):
         alert  = self.parse_alert_metrics(alert_json)
@@ -108,8 +110,6 @@ class ClusterHandler(AlertHandler):
             alert_json['Settings']['conditions'])
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
-        metric = target.split(",")[0].split(".")
-        for i in range(0, len(metric)):
-            if  metric[i] == "clusters":
-                alert['tags']['integration_id'] = metric[i + 1]
+        result = utils.parse_target(target, self.template)
+        alert['tags']['integration_id'] = result["cluster_id"]
         return alert

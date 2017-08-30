@@ -1,4 +1,5 @@
 import pkgutil
+import re
 
 from etcd import EtcdKeyNotFound
 from subprocess import CalledProcessError
@@ -63,7 +64,7 @@ def get_alert_info(alert_id):
 def find_current_value(eval_data):
     # ok alert not have cur_value
     cur_value = None
-    if 'evalMatches' in eval_data:
+    if 'evalMatches' in eval_data and eval_data['evalMatches']:
         # Getting current value
         cur_value = str(eval_data['evalMatches'][0]['value'])
     return cur_value
@@ -146,6 +147,7 @@ def find_cluster_name(integration_id):
         )
         raise ex
 
+
 def find_volume_id(vol_name, integration_id):
     try:
         volumes = etcd_utils.read(
@@ -166,6 +168,7 @@ def find_volume_id(vol_name, integration_id):
             }
         )
         raise ex
+
 
 def find_alert_types(new_alert_types):
     try: 
@@ -191,3 +194,11 @@ def find_alert_types(new_alert_types):
             }
         )
         raise ex
+
+
+def parse_target(target, template):
+    regex = re.sub(r'{(.+?)}', r'(?P<\1>.+?)', template)
+    values = list(re.search(regex, target).groups())
+    keys = re.findall(r'{(.+?)}', template)
+    _dict = dict(zip(keys, values))
+    return _dict

@@ -4,7 +4,7 @@ TENDRL_GRAFANA_SEVERITY_MAP = {
     'ok': 'INFO',
 }
 TENDRL = 'Tendrl'
-ALERT_SOURCE = 'grafana'
+ALERT_SOURCE = 'GRAFANA'
 CLUSTER = 'cluster'
 NODE = 'node'
-ALERT_TYPE = 'utilization'
+ALERT_TYPE = 'UTILIZATION'
