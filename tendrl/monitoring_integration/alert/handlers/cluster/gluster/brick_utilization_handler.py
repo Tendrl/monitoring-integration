@@ -21,6 +21,10 @@ class BrickHandler(AlertHandler):
         alert  = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
+            alert["node_id"] = utils.find_node_id(
+                alert['tags']['integration_id'],
+                alert['tags']['fqdn']
+            )
             alert["time_stamp"] = alert_json['NewStateDate']
             alert["resource"] = self.representive_name
             alert['alert_type'] = constants.ALERT_TYPE 
@@ -38,7 +42,7 @@ class BrickHandler(AlertHandler):
                     "cluster %s is %s which is above %s"\
                     " threshold %s" % (
                         alert['tags']['brick_path'],
-                        alert['node_id'],
+                        alert['tags']['fqdn'],
                         alert['tags']['cluster_name'],
                         alert['current_value'],
                         alert['severity'],
@@ -51,7 +55,7 @@ class BrickHandler(AlertHandler):
                     "Brick utilization of %s in node %s in "\
                     "cluster %s is back normal" % (
                         alert['tags']['brick_path'],
-                        alert['node_id'],
+                        alert['tags']['fqdn'],
                         alert['tags']['cluster_name']
                     )
                 )
@@ -131,5 +135,5 @@ class BrickHandler(AlertHandler):
             elif metric[i] == "bricks":
                 alert['tags']['brick_path'] = metric[i+1]
             elif metric[i] == "nodes":
-                alert['node_id'] = metric[i+1]
+                alert["tags"]["fqdn"] = metric[i + 1].replace("_", ".")
         return alert
