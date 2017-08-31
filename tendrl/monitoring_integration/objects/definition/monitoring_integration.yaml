@@ -6,9 +6,10 @@ namespace.monitoring:
         - tendrl/integration/monitoring
       help: Create Alert Dashboards
       enabled: true
-      run: tendrl.monitoring.flows.CreateAlertDashboards
+      run: monitoring.flows.CreateAlertDashboards
       type: Create
       version: 1
+      uuid: 1951e821-7aa9-4a91-8183-e73bc8275bce
     UpdateDashboard:
       tags:
         - tendrl/integration/monitoring
@@ -20,9 +21,10 @@ namespace.monitoring:
           -  Trigger.resource_name
           -  Trigger.resource_type
           -  Trigger.action
-      run: tendrl.monitoring.flows.UpdateDashboard
+      run: monitoring.flows.UpdateDashboard
       type: Create
       version: 1
+      uuid: 1951e821-7aa9-4a91-8183-e73bc8275bde
   objects:
     Trigger:
       attr:

@@ -143,6 +143,12 @@ def main():
     monitoring_integration_manager.start()
     complete = gevent.event.Event()
   
+    nc = NS.tendrl.objects.NodeContext().load()
+    current_tags = list(nc.tags)
+    current_tags += ["tendrl/integration/monitoring"]
+    nc.tags = list(set(current_tags))
+    nc.save()
+
     def shutdown():
         complete.set()
         NS.sync_thread.stop()

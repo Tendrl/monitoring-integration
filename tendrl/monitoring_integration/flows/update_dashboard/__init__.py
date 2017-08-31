@@ -9,10 +9,6 @@ from tendrl.commons import flows
 
 
 class UpdateDashboard(flows.BaseFlow):
-
-    def __init__(self):
-        pass
-
     def run(self):
         super(UpdateDashboard, self).run()
         resource_name = str(self.parameters.get("Trigger.resource_name")).lower()
@@ -20,7 +16,7 @@ class UpdateDashboard(flows.BaseFlow):
         operation = str(self.parameters.get("Trigger.action")).lower()
         cluster_id = self.parameters.get("TendrlContext.integration_id")
         if operation.lower() == "add":
-            self._add_panels(cluster_id, resource_type, resource_name)
+            self._add_panel(cluster_id, resource_type, resource_name)
         elif operation.lower() == "delete":
             self._delete_panel(cluster_id, resource_type, resource_name=None)
 
