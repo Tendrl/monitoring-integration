@@ -9,7 +9,7 @@ from tendrl.commons.message import ExceptionMessage
 from tendrl.monitoring_integration.alert.handlers import AlertHandlerManager
 
 HOST = "127.0.0.1"
-PORT = "8789"
+PORT = 8789
 
 
 class WebhookReceiver(gevent.greenlet.Greenlet):
