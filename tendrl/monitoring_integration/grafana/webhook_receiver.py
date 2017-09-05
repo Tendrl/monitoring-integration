@@ -17,11 +17,11 @@ class WebhookReceiver(gevent.greenlet.Greenlet):
         super(WebhookReceiver, self).__init__()
         self.server = WSGIServer(
             (HOST, PORT),
-            self.application
+            self._application
         )
         self.alert_handler = AlertHandlerManager()
         
-    def application(self, env, start_response):
+    def _application(self, env, start_response):
         try:
             if env['PATH_INFO'] != '/grafana_callback':
                 start_response(
