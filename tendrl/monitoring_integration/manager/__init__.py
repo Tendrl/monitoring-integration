@@ -13,6 +13,7 @@ from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import datasource
+from tendrl.monitoring_integration.grafana import webhook_receiver 
 from tendrl.commons import manager as common_manager
 from tendrl import monitoring_integration
 from tendrl.monitoring_integration import sync
@@ -31,12 +32,14 @@ class MonitoringIntegrationManager(common_manager.Manager):
         ).__init__(
             NS.sync_thread
         )
+        self.webhook_receiver = webhook_receiver.WebhookReceiver()
 
     def start(self):
 
         super(MonitoringIntegrationManager, self).start()
         # Creating Default Dashboards
         _upload_default_dashboards()
+        self.webhook_receiver.start()
 
 
 
