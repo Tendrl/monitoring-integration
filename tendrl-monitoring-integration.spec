@@ -14,7 +14,6 @@ Requires: python-carbon
 Requires: python-whisper
 Requires: python-requests
 Requires: python-maps
-Requires: python2-ruamel-yaml
 Requires: python-setuptools
 Requires: python-urllib3
 
