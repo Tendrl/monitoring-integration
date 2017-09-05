@@ -26,6 +26,18 @@ namespace.monitoring:
       version: 1
       uuid: 1951e821-7aa9-4a91-8183-e73bc8275bde
   objects:
+    AlertTypes:
+      enabled: True
+      attrs:
+        types:
+          help: "A Dict of integration to types of alerts the integration handles"
+          type: List
+        classification:
+          help: "Classification of the alert"
+          type: String
+      value: alerting/alert_types
+      help: "alert types"
+      metric: [alerting.alert_types.$classification]
     Trigger:
       attr:
         resource_name:
