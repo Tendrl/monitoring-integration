@@ -70,6 +70,28 @@ def find_current_value(eval_data):
     return cur_value
 
 
+def find_volume_id(vol_name, integration_id):
+    try:
+        volumes = etcd_utils.read(
+            "clusters/%s/Volumes" % integration_id
+        )
+        for volume in volumes.leaves:
+            key = volume.key +  "/name"
+            name = etcd_utils.read(key).value
+            if vol_name == name:
+                return volume.key.split("/")[-1]
+    except (EtcdKeyNotFound) as ex:
+        logger.log(
+            "error",
+            NS.publisher_id,
+            {
+                "message": "Failed to fetch volume id for volume name %s" %
+                vol_name
+            }
+        )
+        raise ex
+
+
 def find_alert_target(conditions):
     target = None
     if "targetFull" in conditions[0]['query']['model']:
@@ -104,9 +126,15 @@ def find_node_id(integration_id, fqdn):
             "clusters/%s/nodes" % integration_id
         )
         for node in nodes.leaves:
-            key = node.key + "/NodeContext/fqdn"
-            if fqdn == etcd_utils.read(key).value:
-                return node.key.split('/')[-1]
+            node_id = node.key.split('/')[-1]
+            node_context = NS.tendrl.objects.ClusterNodeContext()
+            # formating value here because render populate integration_id
+            # from namespace
+            node_context.value = node_context.value.format(
+                integration_id, node_id
+            )
+            if fqdn == node_context.load().fqdn:
+                return node_id
         raise NodeNotFound
     except (EtcdKeyNotFound, NodeNotFound) as ex:
         if type(ex) != EtcdKeyNotFound:
@@ -132,9 +160,8 @@ def find_node_id(integration_id, fqdn):
 
 def find_cluster_name(integration_id):
     try:
-        cluster_name = etcd_utils.read(
-            "clusters/%s/TendrlContext/cluster_name" % integration_id
-        ).value
+        cluster_name = NS.tendrl.objects.ClusterTendrlContext(
+            integration_id=integration_id).load().cluster_name
         return cluster_name
     except (EtcdKeyNotFound) as ex:
         logger.log(
@@ -143,28 +170,6 @@ def find_cluster_name(integration_id):
             {
                 "message": "Failed to fetch cluster name for id %s" %
                 integration_id
-            }
-        )
-        raise ex
-
-
-def find_volume_id(vol_name, integration_id):
-    try:
-        volumes = etcd_utils.read(
-            "clusters/%s/Volumes" % integration_id
-        )
-        for volume in volumes.leaves:
-            key = volume.key +  "/name"
-            name = etcd_utils.read(key).value
-            if vol_name == name:
-                return volume.key.split("/")[-1]
-    except (EtcdKeyNotFound) as ex:
-        logger.log(
-            "error",
-            NS.publisher_id,
-            {
-                "message": "Failed to fetch volume id for volume name %s" %
-                vol_name
             }
         )
         raise ex
