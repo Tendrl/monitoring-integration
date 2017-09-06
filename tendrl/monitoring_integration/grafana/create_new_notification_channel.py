@@ -16,7 +16,7 @@ HEADERS = {"Accept": "application/json",
 
 
 def create_notification_channel(channel_name = "test_notification_channel",
-                                host="127.0.0.1", port="8789"):
+                                host=NS.config.data["grafana_host"], port="8789"):
 
     url = "http://" + str(host)+ ":" + str(port) + "/grafana_callback"
     channel_details = json.dumps({"name": channel_name,
@@ -41,4 +41,3 @@ def create_notification_channel(channel_name = "test_notification_channel",
         return response
     else:
         raise exceptions.ConnectionFailedException
-

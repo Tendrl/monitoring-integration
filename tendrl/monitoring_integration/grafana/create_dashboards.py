@@ -1,19 +1,54 @@
 import copy
 import json
-import sys
+import os
 
 
 import etcd
-import maps
 
 
 from tendrl.monitoring_integration.grafana import cluster_detail
 from tendrl.commons.utils import etcd_utils
+from tendrl.monitoring_integration.grafana import utils
+from tendrl.commons.utils import log_utils as logger
 
-# TODO(Rishubh) Fetch alert details like threshold from config file
 
+def get_resource_keys(key, resource_name):
+
+    resource_list = []
+    try:
+        resource_details = etcd_utils.read(key + "/" + str(resource_name))
+        for resource in resource_details.leaves:
+            resource_list.append(resource.key.split('/')[-1])
+    except (KeyError, etcd.EtcdKeyNotFound) as ex:
+        logger.log("error", NS.get("publisher_id", None),
+                   {'message': "Error while fetching " +
+                                str(resource_name).split('/')[0] + str(ex)})
+
+    return resource_list
+
+
+def get_subvolume_details(key):
+    subvolume_brick_details = []
+    try:
+        subvolumes = get_resource_keys(key, "Bricks")
+        for subvolume in subvolumes:
+            subvolume_details = {}
+            subvolume_details["subvolume"] = ""
+            subvolume_details["bricks"] = []
+            subvolume_details["subvolume"] = subvolume
+            brick_list = get_resource_keys(key + "/" + "Bricks", subvolume)
+            subvolume_details["bricks"] = brick_list
+            subvolume_brick_details.append(copy.deepcopy(subvolume_details))
+    except (KeyError, etcd.EtcdKeyNotFound) as ex:
+        logger.log("error", NS.get("publisher_id", None),
+                   {'message': "Error while fetching subvolumes" + str(ex)})
+
+    return subvolume_brick_details
+
+# TODO The brick detail path might change in future
 def get_cluster_details():
-
+    attrs = {"bricks" : ["brick_path","hostname","vol_id"],
+             "nodes" : ["fqdn"], "volumes" : ["name","vol_id"]}
     ''' 
         To get details of glusters from etcd
         TODO: Optimize the code, reduce number of etcd calls 
@@ -21,39 +56,54 @@ def get_cluster_details():
 
     cluster_details_list = []
     try:
-        result = etcd_utils.read('/clusters')
-        for item in result.leaves:
+        cluster_list = get_resource_keys("", "clusters")
+        for cluster_id in cluster_list:
             cluster_obj = cluster_detail.ClusterDetail()
-            cluster_obj.integration_id =  item.key.split('/')[-1]
-            client_str = '/clusters/' + str(cluster_obj.integration_id)
-            cluster_details = etcd_utils.read(client_str)
-            for cluster in cluster_details.leaves:
-                if 'Volumes' in cluster.key:
-                    volumes = etcd_utils.read(client_str + "/Volumes")
-                    for volume in volumes.leaves:
-                        volume_id =  volume.key.split('/')[-1]
-                        volume_details = etcd_utils.read(client_str + "/Volumes/" + str(volume_id))
-                        vol_dict = maps.NamedDict()
-                        for vol in volume_details.leaves:
-                            if "name" in vol.key:
-                                vol_dict.volume_name = vol.value
-                            if "Bricks" in vol.key:
-                                subvolume_details = etcd_utils.read(client_str + "/Volumes/" + str(volume_id)+ "/Bricks")
-                                vol_dict.bricks = []
-                                for subvolume in subvolume_details.leaves:
-                                   brick_details = etcd_utils.read(client_str + "/Volumes/" + str(volume_id)+ "/Bricks/" + str(subvolume.key.split('/')[-1]))
-                                   for brick in brick_details.leaves:
-                                       vol_dict.bricks.append(brick.key.split('/')[-1])
-                        cluster_obj.volumes.append(vol_dict)
-                if 'nodes' in cluster.key:
-                   nodes = etcd_utils.read(client_str + "/nodes")
-                   for node in nodes.leaves:
-                        node_id = node.key.split('/')[-1]
-                        node_details = etcd_utils.read(client_str + "/nodes/" + str(node_id) + "/NodeContext")
-                        for row in node_details.leaves:
-                            if "fqdn" in row.key:
-                                cluster_obj.hosts.append(row.value)
-
+            cluster_obj.integration_id =  cluster_id
+            cluster_key = '/clusters/' + str(cluster_obj.integration_id)
+            brick_list = get_resource_keys(cluster_key, "Bricks/all")
+            for brick_id in brick_list:
+                brick_details = etcd_utils.read(cluster_key + "/Bricks/all/" +
+                                                str(brick_id))
+                brick = {}
+                for brick_detail in brick_details.leaves:
+                    if brick_detail.key.rsplit('/')[-1] in attrs["bricks"]:
+                        if brick_detail.key.rsplit('/')[-1] == "brick_path":
+                            brick[brick_detail.key.rsplit('/')[-1]] = \
+                            brick_detail.value.split(":")[1].replace('/','|')
+                        else:
+                            brick[brick_detail.key.rsplit('/')[-1]] = \
+                                brick_detail.value
+                cluster_obj.bricks.append(copy.deepcopy(brick))
+            node_list = get_resource_keys(cluster_key, "nodes")
+            for node_id in node_list:
+                node_details = etcd_utils.read(cluster_key + 
+                                               "/nodes/" + 
+                                               str(node_id) +
+                                               "/NodeContext")
+                nodes = {}
+                for node_detail in node_details.leaves:
+                    if node_detail.key.rsplit('/')[-1] in attrs["nodes"]:
+                        nodes[node_detail.key.rsplit('/')[-1]] = \
+                            node_detail.value
+                cluster_obj.hosts.append(copy.deepcopy(nodes))
+            volume_list = get_resource_keys(cluster_key, "Volumes")
+            for volume_id in volume_list:
+                volume_data = {}
+                volume_details = etcd_utils.read(cluster_key +
+                                                 "/Volumes/" + 
+                                                 str(volume_id))
+                subvolume_key = cluster_key + "/Volumes/" + str(volume_id)
+                subvolume_details = get_subvolume_details(subvolume_key)
+                for volume in volume_details.leaves:
+	            if volume.key.rsplit('/')[-1] in attrs["volumes"]:
+                        volume_data[volume.key.rsplit('/')[-1]] = volume.value
+                volume_data["subvolume"] = subvolume_details
+                cluster_obj.volumes.append(volume_data)
+            for bricks in cluster_obj.bricks:
+                for volume in cluster_obj.volumes:
+                    if volume["vol_id"] == bricks["vol_id"]:
+                        bricks["vol_name"] = volume["name"]
             cluster_details_list.append(cluster_obj)
         return cluster_details_list
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
@@ -61,270 +111,161 @@ def get_cluster_details():
                   {'message': str(ex)})
         return None
 
-def set_alert(panel):
 
-    panel["thresholds"] = [{"colorMode": "critical","fill": True,"line": True,"op": "gt","value": 1}]
-    panel["alert"] = {"conditions": [{"evaluator": {"params": [2],"type": "gt"},
-                                      "operator": {"type": "and"},"query": {"params": [panel["targets"][-1]["refId"],"5m","now"] },
-                                      "reducer": {"params": [],"type": "avg" },"type": "query"}],
-                                      "executionErrorState": "alerting","frequency": "60s","handler": 1,
-                                      "name": str(panel["title"]) + " Alert","noDataState": "no_data","notifications": []}
+def set_alert(panel, alert_thresholds, panel_title):
+    panel["thresholds"] = [{"colorMode": "critical", "fill": True, "line": True,
+                            "op": "gt", "value": alert_thresholds[panel_title]["Warning"]}]
 
-def create_volume_dashboard(cluster_details_list):
+    panel["alert"] = {"conditions": [{"evaluator": {"params": [alert_thresholds[panel_title]["Warning"]], "type": "gt"},
+                                      "operator": {"type": "and"},
+                                      "query": {"params": [panel["targets"][-1]["refId"],"5m","now"]},
+                                      "reducer": {"params": [], "type": "avg" },
+                                      "type": "query"}],
+                                      "executionErrorState": "alerting", "frequency": "60s", "handler": 1,
+                                      "name": str(panel["title"]) + " Alert", "noDataState": "no_data",
+                                      "notifications": []}
 
-    volume_file =  open('/etc/tendrl/monitoring-integration/grafana/dashboards/tendrl-gluster-volumes.json')
-    volume_json = json.load(volume_file)
-    volume_json["dashboard"]["title"] = "Alerts - " + str(volume_json["dashboard"]["title"])
-    volume_rows = volume_json["dashboard"]["rows"]
-    new_volume_rows = []
-    for row in volume_rows:
-        panels = row["panels"]
-        for panel in panels:
-            if panel["type"] == "graph":
-               row["panels"] = [panel]
-               new_volume_rows.append(copy.deepcopy(row))
 
-    global_row = { "collapse":False,
-                   "height":250,
-                   "panels":[],
-                   "repeat":"null",
-                   "repeatIteration":"null",
-                   "repeatRowId":"null",
-                   "showTitle":False,
-                   "title":"Dashboard Row",
-                   "titleSize":"h6"
-                 }
 
-    all_volume_rows = []
+def get_resource_list(cluster_detail, resource_type):
 
-    count = 1
-    for cluster_detail in cluster_details_list:
+    resource = []
+    if resource_type == "volumes":
         for volume in cluster_detail.volumes:
-            global_row["panels"] = []
-            panel_count = 1
-            for row in new_volume_rows:
-                new_row = copy.deepcopy(row)
-                panels = new_row["panels"]
-                for panel in panels:
-                    targets  = panel["targets"]
-                    for target in targets:
-                        target["target"] = target["target"].replace('$interval','1m')
-                        target["target"] = target["target"].replace('$my_app','tendrl')
-                        target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
-                        target["target"] = target["target"].replace('$volume_name',str(volume.volume_name))
-                        if "alias" in target["target"]:
-                            target["target"] = target["target"].split('(',1)[-1].split(',')[0]
-                    set_alert(panel)
-                    panel["id"] = count
-                    panel["title"] = panel["title"] + " - " + str(volume.volume_name)
-                    panel["span"] = 2
-                    panel["legend"]["show"] = False
-                    count = count + 1
-                    panel_count = panel_count + 1
-                    if panel_count < 7:
-                        global_row["panels"].append(panel)
-                    else:
-                        global_row["panels"].append(panel)
-                        all_host_rows.append(copy.deepcopy(global_row))
-                        global_row["panels"] = []
-                        panel_count = 1
-            all_volume_rows.append(copy.deepcopy(global_row))
-
-    volume_json["dashboard"]["rows"] = all_volume_rows
-    volume_json["dashboard"]["templating"] = {}
-    volume_file.close()
-    return json.dumps(volume_json)
-
-
-def create_host_dashboard(cluster_details_list):
-
-    host_file =  open('/etc/tendrl/monitoring-integration/grafana/dashboards/tendrl-gluster-hosts.json')
-    host_json = json.load(host_file)
-    host_json["dashboard"]["title"] = "Alerts - " + str(host_json["dashboard"]["title"])
-    host_rows = host_json["dashboard"]["rows"]
-    global_row = { "collapse":False,
-                   "height":250,
-                   "panels":[],
-                   "repeat":"null",
-                   "repeatIteration":"null",
-                   "repeatRowId":"null",
-                   "showTitle":False,
-                   "title":"Dashboard Row",
-                   "titleSize":"h6"
-                 }
-    new_host_rows = []
-    for row in host_rows:
-        panels = copy.deepcopy(row["panels"])
-        for panel in panels:
-            if panel["type"] == "graph":
-               row["panels"] = [panel]
-               new_host_rows.append(copy.deepcopy(row))
-
-    all_host_rows = []
-    count = 1
-    for cluster_detail in cluster_details_list:
+            resource.append(volume)
+        return resource
+    if resource_type == "hosts":
         for host in cluster_detail.hosts:
-            global_row["panels"] = []
-            panel_count = 1
-            for row in new_host_rows:
-                new_row = copy.deepcopy(row)
-                panels = new_row["panels"]
-                for panel in panels:
-                    targets  = panel["targets"]
-                    for target in targets:
-                        target["target"] = target["target"].replace('$interval','1m')
-                        target["target"] = target["target"].replace('$my_app','tendrl')
-                        target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
-                        target["target"]= target["target"].replace('$host_name',str(host).replace('.','_'))
-                        if "alias" in target["target"]:
-                            target["target"] = target["target"].split('(',1)[-1].split(',')[0]
-                    set_alert(panel)
-                    panel["id"] = count
-                    panel["title"] = panel["title"] + " - " + str(host).replace('.','_')
-                    panel["span"] = 2
-                    panel["legend"]["show"] = False
-                    count = count + 1
-                    panel_count = panel_count + 1
-                    if panel_count < 7:
-                        global_row["panels"].append(panel)
-                    else:
-                        global_row["panels"].append(panel)
-                        all_host_rows.append(copy.deepcopy(global_row))
-                        global_row["panels"] = []
-                        panel_count = 1
-            all_host_rows.append(copy.deepcopy(global_row))
-
-    host_json["dashboard"]["rows"] = []
-    host_json["dashboard"]["rows"] = all_host_rows
-    host_json["dashboard"]["templating"] = {}
-    host_file.close()
-    return json.dumps(host_json)
+            resource.append(host)
+        return resource
+    if resource_type == "bricks":
+        for brick in cluster_detail.bricks:
+            resource.append(brick)
+        return resource
+    if resource_type == "clusters":
+        resource.append(cluster_detail.integration_id)
+        return resource
+    return None
 
 
-def create_brick_dashboard(cluster_details_list):
+def get_rows(resource_rows):
 
-
-    brick_file =  open('/etc/tendrl/monitoring-integration/grafana/dashboards/tendrl-gluster-bricks.json')
-    brick_json = json.load(brick_file)
-    brick_json["dashboard"]["title"] = "Alerts - " + str(brick_json["dashboard"]["title"])
-    brick_rows = brick_json["dashboard"]["rows"]
-    global_row = { "collapse":False,
-                   "height":250,
-                   "panels":[],
-                   "repeat":"null",
-                   "repeatIteration":"null",
-                   "repeatRowId":"null",
-                   "showTitle":False,
-                   "title":"Dashboard Row",
-                   "titleSize":"h6"
-                 }
-    new_brick_rows = []
-    for row in brick_rows:
-        panels = row["panels"]
-        for panel in panels:
-            if panel["type"] == "graph":
-                row["panels"] = [panel]
-                new_brick_rows.append(copy.deepcopy(row))
-
-    all_brick_rows = []
-    count = 1
-    for cluster_detail in cluster_details_list:
-        for volume in cluster_detail.volumes:
-            for brick in volume.bricks:
-                global_row["panels"] = []
-                panel_count = 1
-                for row in new_brick_rows:
-                    new_row = copy.deepcopy(row)
-                    panels = new_row["panels"]
-                    for panel in panels:
-                        targets  = panel["targets"]
-                        for target in targets:
-                            target["target"] = target["target"].replace('$interval','1m')
-                            target["target"] = target["target"].replace('$my_app','tendrl')
-                            target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
-                            target["target"]= target["target"].replace('$volume_name',str(volume.volume_name))
-                            target["target"]= target["target"].replace('$brick_name',str(brick).split(':')[-1].replace('_','|',2))
-                            if "alias" in target["target"]:
-                                target["target"] = target["target"].split('(',1)[-1].split(',')[0]
-                        set_alert(panel)
-                        panel["id"] = count
-                        panel["legend"]["show"] = False
-                        panel["title"] = panel["title"] + " - " + str(brick).replace('.','_')
-                        count = count + 1
-                        panel_count = panel_count + 1
-                        if panel_count < 7:
-                            global_row["panels"].append(panel)
-                        else:
-                            global_row["panels"].append(panel)
-                            all_brick_rows.append(copy.deepcopy(global_row))
-                            global_row["panels"] = []
-                            panel_count = 1
-                all_brick_rows.append(copy.deepcopy(global_row))
-
-    brick_json["dashboard"]["rows"] = []
-    brick_json["dashboard"]["rows"] = all_brick_rows
-    brick_json["dashboard"]["templating"] = {}
-    brick_file.close()
-    return json.dumps(brick_json)
-
-
-def create_gluster_at_a_glance_dashboard(cluster_details_list):
-
-    cluster_file =  open('/etc/tendrl/monitoring-integration/grafana/dashboards/tendrl-gluster-at-a-glance.json')
-    cluster_json = json.load(cluster_file)
-    cluster_json["dashboard"]["title"] = "Alerts - " + str(cluster_json["dashboard"]["title"])
-    cluster_rows = cluster_json["dashboard"]["rows"]
-    global_row = { "collapse":False,
-                   "height":250,
-                   "panels":[],
-                   "repeat":"null",
-                   "repeatIteration":"null",
-                   "repeatRowId":"null",
-                   "showTitle":False,
-                   "title":"Dashboard Row",
-                   "titleSize":"h6"
-                 }
-    new_cluster_rows = []
-    for row in cluster_rows:
-        panels = row["panels"]
-        for panel in panels:
-            if panel["type"] == "graph":
-                row["panels"] = [panel]
-                new_cluster_rows.append(copy.deepcopy(row))
-
-    all_cluster_rows = []
-    count = 1
-    for cluster_detail in cluster_details_list:
-        global_row["panels"] = []
-        panel_count = 1
-        for row in new_brick_rows:
-            new_row = copy.deepcopy(row)
-            panels = new_row["panels"]
+    new_resource_rows = []
+    try:
+        for row in resource_rows:
+            panels = row["panels"]
             for panel in panels:
-                targets  = panel["targets"]
-                for target in targets:
-                    target["target"] = target["target"].replace('$interval','1m')
-                    target["target"] = target["target"].replace('$my_app','tendrl')
-                    target["target"] = target["target"].replace('$cluster_id',str(cluster_detail.integration_id))
-                    if "alias" in target["target"]:
-                        target["target"] = target["target"].split('(',1)[-1].split(',')[0]
-                set_alert(panel)
-                panel["id"] = count
-                panel["title"] = panel["title"] + " - " + str(cluster_detail.integration_id)
-                panel["legend"]["show"] = False
-                count = count + 1
-                panel_count = panel_count + 1
-                if panel_count < 7:
-                    global_row["panels"].append(panel)
-                else:
-                    global_row["panels"].append(panel)
-                    all_cluster_rows.append(copy.deepcopy(global_row))
+                if panel["type"] == "graph":
+                    row["panels"] = [panel]
+                    new_resource_rows.append(copy.deepcopy(row))
+    except (KeyError, AttributeError) as ex:
+        logger.log("error", NS.get("publisher_id", None),
+                  {'message': "Error in retrieving resource rows (get_rows) " +
+                   str(ex)})
+    return new_resource_rows
+
+
+def set_target(target, cluster_detail, resource, resource_name):
+
+    target["target"] = target["target"].replace('$interval', '1m')
+    target["target"] = target["target"].replace('$my_app', 'tendrl')
+    target["target"] = target["target"].replace('$cluster_id',
+                                                str(cluster_detail.integration_id))
+    if resource_name == "volumes":
+        target["target"]= target["target"].replace('$volume_name',
+                                                   str(resource["name"]))
+        new_title = str(resource["name"])
+    elif resource_name == "hosts":
+        target["target"]= target["target"].replace('$host_name',
+                                                   str(resource["fq" + \
+                                                   "dn"].replace(".", "_")))
+        new_title = str(resource["fqdn"].replace(".", "_"))
+    elif resource_name == "bricks":
+        target["target"]= target["target"].replace('$host_name',
+                                                   str(resource["host" + \
+                                                   "name"].replace(".", "_")))
+        target["target"]= target["target"].replace('$brick_name',
+                                                   str(resource["brick_path"]))
+        new_title = str(resource["hostname"].replace(".", "_")) + \
+                    "-" + str(resource["brick_path"])
+    if "alias" in target["target"] and "aliasByNode" not in target["target"] :
+        target["target"] = target["target"].split('(',1)[-1].rsplit(',', 1)[0]
+    return new_title
+
+
+def create_resource_dashboard(cluster_details_list, resource_name):
+
+    if resource_name == "clusters":
+        dashboard_path = '/etc/tendrl/monitoring-integration' + \
+                         '/grafana/dashboards/' + \
+                         'tendrl-gluster-at-a-glance.json'
+    else:
+        dashboard_path = '/etc/tendrl/monitoring-integration' + \
+                         '/grafana/dashboards/' + \
+                         'tendrl-gluster-' + str(resource_name) +'.json'
+
+    if os.path.exists(dashboard_path):
+        resource_file = utils.fread(dashboard_path)
+        try:
+            resource_json = json.loads(resource_file)
+            resource_json["dashboard"]["title"] = "Alerts - " + \
+                str(resource_json["dashboard"]["title"])
+            resource_rows = resource_json["dashboard"]["rows"]
+            global_row = { "collapse":False,
+                           "height":250,
+                           "panels":[],
+                           "repeat":"null",
+                           "repeatIteration":"null",
+                           "repeatRowId":"null",
+                           "showTitle":False,
+                           "title":"Dashboard Row",
+                           "titleSize":"h6"
+                         }
+            new_resource_rows = get_rows(resource_rows)
+            alert_thresholds = NS.monitoring.definitions.get_parsed_defs()["namespace.monitoring"]["thresholds"][resource_name]
+            all_resource_rows = []
+            count = 1
+            for cluster_detail in cluster_details_list:
+                resources = get_resource_list(cluster_detail, resource_name)
+                for resource in resources:
                     global_row["panels"] = []
                     panel_count = 1
-        all_cluster_rows.append(copy.deepcopy(global_row))
+                    for row in new_resource_rows:
+                        new_row = copy.deepcopy(row)
+                        panels = new_row["panels"]
+                        new_title = ""
+                        for panel in panels:
+                            try:
+                                flag = False
+                                for panel_title in alert_thresholds:
+                                    if not panel["title"].lower().find(panel_title.replace("_", " ")):
+                                        targets  = panel["targets"]
+                                        for target in targets:
+                                            new_title = set_target(target, cluster_detail, resource, resource_name)
+                                        set_alert(panel, alert_thresholds, panel_title)
+                                        panel["id"] = count
+                                        panel["legend"]["show"] = False
+                                        panel["title"] = panel["title"] + " - " + str(new_title)
+                                        count = count + 1
+                                        panel_count = panel_count + 1
+                                        if panel_count < 7:
+                                            global_row["panels"].append(panel)
+                                        else:
+                                            global_row["panels"].append(panel)
+                                            all_resource_rows.append(copy.deepcopy(global_row))
+                                            global_row["panels"] = []
+                                            panel_count = 1
+                            except KeyError as ex:
+                                logger.log("error", NS.get("publisher_id", None),
+                                           {'message': str(panel["title"]) + "failed" + str(ex)})
+                    all_resource_rows.append(copy.deepcopy(global_row))
 
-    cluster_json["dashboard"]["rows"] = []
-    cluster_json["dashboard"]["rows"] = all_cluster_rows
-    cluster_json["dashboard"]["templating"] = {}
-    cluster_file.close()
-    return json.dumps(cluster_json)
+            resource_json["dashboard"]["rows"] = []
+            resource_json["dashboard"]["rows"] = all_resource_rows
+            resource_json["dashboard"]["templating"] = {}
+            return resource_json
+        except Exception as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                      {'message': str(ex)})
+            return None
+

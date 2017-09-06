@@ -6,9 +6,10 @@ namespace.monitoring:
         - tendrl/integration/monitoring
       help: Create Alert Dashboards
       enabled: true
-      run: tendrl.monitoring.flows.CreateAlertDashboards
+      run: monitoring.flows.CreateAlertDashboards
       type: Create
       version: 1
+      uuid: 1951e821-7aa9-4a91-8183-e73bc8275bce
     UpdateDashboard:
       tags:
         - tendrl/integration/monitoring
@@ -20,10 +21,23 @@ namespace.monitoring:
           -  Trigger.resource_name
           -  Trigger.resource_type
           -  Trigger.action
-      run: tendrl.monitoring.flows.UpdateDashboard
+      run: monitoring.flows.UpdateDashboard
       type: Create
       version: 1
+      uuid: 1951e821-7aa9-4a91-8183-e73bc8275bde
   objects:
+    AlertTypes:
+      enabled: True
+      attrs:
+        types:
+          help: "A Dict of integration to types of alerts the integration handles"
+          type: List
+        classification:
+          help: "Classification of the alert"
+          type: String
+      value: alerting/alert_types
+      help: "alert types"
+      metric: [alerting.alert_types.$classification]
     Trigger:
       attr:
         resource_name:
@@ -76,4 +90,22 @@ namespace.monitoring:
         status:
       value: clusters/$integration_id/nodes/$node_id
       metric: [clusters.$integration_id.nodes.$node_name]
+  thresholds:
+    hosts:
+      cpu:
+        Warning: 80
+      mount_point:
+        Warning: 80
+      memory:
+        Warning: 80
+      swap:
+        Warning: 50
+      capacity_utilization:
+        Warning: 75
+    volumes:
+      capacity_utilization:
+        Warning: 75
+    bricks:
+      capacity_utilization:
+        Warning: 75
 tendrl_schema_version: 0.3
