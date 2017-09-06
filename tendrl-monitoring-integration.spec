@@ -1,5 +1,5 @@
 Name: tendrl-monitoring-integration
-Version: 1.0.0
+Version: 1.5.1
 Release: 1%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
@@ -13,8 +13,6 @@ Requires: graphite-web
 Requires: python-carbon
 Requires: python-whisper
 Requires: python-requests
-Requires: python-maps
-Requires: python-ruamel-yaml
 Requires: python-setuptools
 Requires: python-urllib3
 
@@ -99,5 +97,8 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
+* Fri Aug 25 2017 Timothy Asir Jeyasingh <tjeyasin@redhat.com> - 1.5.1-1
+- Release tendrl-monitoring-integration 1.5.1
+
 * Wed Aug 02 2017 Timothy Asir Jeyasingh <tjeyasin@redhat.com> - 0.0.1-1
 - Initial build.

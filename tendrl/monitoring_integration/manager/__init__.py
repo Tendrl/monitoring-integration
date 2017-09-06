@@ -14,6 +14,7 @@ from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import create_alert_dashboard
 from tendrl.monitoring_integration.grafana import datasource
+
 from tendrl.monitoring_integration.grafana import webhook_receiver
 from tendrl.monitoring_integration.grafana import create_new_notification_channel
 from tendrl.commons import manager as common_manager
@@ -42,7 +43,9 @@ class MonitoringIntegrationManager(common_manager.Manager):
         # Creating Default Dashboards
         _upload_default_dashboards()
         alert_dash_obj = create_alert_dashboard.CreateAlertDashboard()
-        create_new_notification_channel.create_notification_channel()
+        create_new_notification_channel.create_notification_channel("tendrl_notification_channel",
+                                                                    NS.config.data["grafana_host"],
+                                                                    8789)
         self.webhook_receiver.start()
 
 

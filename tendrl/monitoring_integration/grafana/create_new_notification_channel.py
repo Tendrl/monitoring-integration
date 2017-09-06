@@ -16,27 +16,25 @@ HEADERS = {"Accept": "application/json",
 
 
 def create_notification_channel(channel_name = "test_notification_channel",
-                                host=NS.config.data["grafana_host"], port="8789"):
+                                host="127.0.0.1", port="8789"):
 
-    url = "http://" + str(host)+ ":" + str(port) + "/grafana_callback"
+    url = "http://" + str(host) + ":" + str(port) + "/grafana_callback"
     channel_details = json.dumps({"name": channel_name,
-     "type":  "webhook",
-     "isDefault": True,
-     "settings": {
-        "httpMethod": "POST",
-        "uploadImage": "False",
-        "url": url
-       }
-    })
+                                  "type":  "webhook",
+                                  "isDefault": True,
+                                  "settings": {"httpMethod": "POST",
+                                               "uploadImage": "False",
+                                               "url": url}
+                                  })
 
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         response = post("http://{}:{}/api/alert-notifications"
-                       .format(config.grafana_host,
-                               config.grafana_port),
-                       headers=HEADERS,
-                       auth=config.credentials,
-                       data=channel_details)
+                        .format(config.grafana_host,
+                                config.grafana_port),
+                        headers=HEADERS,
+                        auth=config.credentials,
+                        data=channel_details)
 
         return response
     else:

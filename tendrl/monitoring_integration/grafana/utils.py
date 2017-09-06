@@ -30,7 +30,7 @@ def get_conf():
 
     except exceptions.InvalidConfigurationException:
         err = exceptions.InvalidConfigurationException(
-            "Error in configuration %s" % (file_name)
+            "Error in loading configuration"
         )
         logger.log("info", NS.get("publisher_id", None),
                    {'message': str(err)})
