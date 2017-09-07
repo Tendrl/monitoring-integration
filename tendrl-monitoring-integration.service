@@ -1,6 +1,6 @@
 [Unit]
 Description= Monitoring Integration
-Requires=tendrl-node-agent.service
+Requires=tendrl-node-agent.service grafana-server.service
 
 [Service]
 Type=simple
