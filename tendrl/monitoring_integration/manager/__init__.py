@@ -138,6 +138,9 @@ def main():
     TendrlNS()
     NS.type = "monitoring"
     NS.publisher_id = "monitoring_integration"
+    if NS.config.data.get("with_internal_profiling", False):
+        from tendrl.commons import profiler
+        profiler.start()
     NS.monitoring.config.save()
     NS.monitoring.definitions.save()
     NS.sync_thread = sync.MonitoringIntegrationSdsSyncThread()
@@ -145,7 +148,6 @@ def main():
     monitoring_integration_manager = MonitoringIntegrationManager()
     monitoring_integration_manager.start()
     complete = gevent.event.Event()
-  
     NS.node_context = NS.node_context.load()
     current_tags = list(NS.node_context.tags)
     current_tags += ["tendrl/integration/monitoring"]
