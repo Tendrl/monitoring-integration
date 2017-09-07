@@ -22,8 +22,9 @@ def create_org(org_name):
     config = maps.NamedDict(NS.config.data)
     upload_str = {"name":org_name}
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post("http://{}:{}/api/orgs".format(config.grafana_host,
-                                                       config.grafana_port),
+        response = post("http://{}:{}/api"
+                        "/orgs".format(config.grafana_host,
+                                       config.grafana_port),
                         headers=HEADERS,
                         auth=config.credentials,
                         data=json.dumps(upload_str))
@@ -41,9 +42,10 @@ def switch_context(org_id):
     config = maps.NamedDict(NS.config.data)
     upload_str = ''
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post("http://{}:{}/api/user/using/{}".format(config.grafana_host,
-                                                                config.grafana_port,
-                                                                org_id),
+        response = post("http://{}:{}/api/user/using"
+                        "/{}".format(config.grafana_host,
+                                     config.grafana_port,
+                                     org_id),
                         headers=HEADERS,
                         auth=config.credentials,
                         data=upload_str)
@@ -63,8 +65,9 @@ def create_api_token(key_name, role):
     config = maps.NamedDict(NS.config.data)
     request_body = {"name": key_name, "role": role}
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post("http://{}:{}/api/auth/keys".format(config.grafana_host,
-                                                            config.grafana_port),
+        response = post("http://{}:{}/api/auth/"
+                        "keys".format(config.grafana_host,
+                                      config.grafana_port),
                         headers=HEADERS,
                         auth=config.credentials,
                         data=json.dumps(request_body))
