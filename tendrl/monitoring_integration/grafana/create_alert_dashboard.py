@@ -10,45 +10,16 @@ class CreateAlertDashboard():
         cluster_detail_list = create_dashboards.get_cluster_details()
 
         if cluster_detail_list:
-
-            # Uploading Alert Dashboard for Volume
-            volume_dashboard = create_dashboards.create_volume_dashboard(cluster_detail_list)
-            response = dashboard._post_dashboard(volume_dashboard)
-            if response.status_code == 200:
-
-                msg = '\n' + "Volume Dashboard uploaded successfully" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            else:
-                msg = '\n' + "Volume Dashboard uploaded failed" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-
-
-            # Uploading Alert Dashboard for Brick
-            brick_dashboard = create_dashboards.create_brick_dashboard(cluster_detail_list)
-            response = dashboard._post_dashboard(brick_dashboard)
-            if response.status_code == 200:
-
-                msg = '\n' + "Brick Dashboard uploaded successfully" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            else:
-                msg = '\n' + "Brick Dashboard uploaded failed" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-
-
-            # Uploading Alert Dashboard for Host
-            host_dashboard = create_dashboards.create_host_dashboard(cluster_detail_list)
-            response = dashboard._post_dashboard(host_dashboard)
-            if response.status_code == 200:
-
-                msg = '\n' + "Host Dashboard uploaded successfully" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            else:
-                msg = '\n' + "Host Dashboard uploaded failed" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-
+            resource_name = ["volumes", "hosts", "bricks", "clusters"]
+            for resource in resource_name:
+                # Uploading Alert Dashboards
+                resource_dashboard = create_dashboards.create_resource_dashboard(cluster_detail_list, resource)
+                response = dashboard._post_dashboard(resource_dashboard)
+                if response.status_code == 200:
+                    msg = '\n' + "{} dashboard uploaded successfully".format(str(resource)) + '\n'
+                    logger.log("info", NS.get("publisher_id", None),
+                               {'message': msg})
+                else:
+                    msg = '\n' + "{} dashboard upload failed".format(str(resource)) + '\n'
+                    logger.log("info", NS.get("publisher_id", None),
+                               {'message': msg})

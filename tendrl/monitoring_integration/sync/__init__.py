@@ -28,7 +28,8 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                         self.sync_interval = float(interval.value)
                     except ValueError as ex:
                         logger.log("error", NS.get("publisher_id", None),
-                               {'message': "Unable to parse tendrl-gluster-integration config 'sync_interval' (value: %s)" % interval.value})
+                               {'message': "Unable to parse tendrl-gluster-" + \
+                                "integration config 'sync_interval' (value: %s)" % interval.value})
                         raise ex
                 except etcd.EtcdKeyNotFound as ex:
                     continue
@@ -40,7 +41,7 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                 for metric in metrics:
                    for key, value in metric.items():
                        if value:
-                           respose = self.plugin_obj.push_metrics(key, value)       
+                           respose = self.plugin_obj.push_metrics(key, value)
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),
                           {'message': str(ex)})

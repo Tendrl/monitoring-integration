@@ -12,8 +12,11 @@ import os
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import dashboard
+from tendrl.monitoring_integration.grafana import create_alert_dashboard
 from tendrl.monitoring_integration.grafana import datasource
-from tendrl.monitoring_integration.grafana import webhook_receiver 
+
+from tendrl.monitoring_integration.grafana import webhook_receiver
+from tendrl.monitoring_integration.grafana import create_new_notification_channel
 from tendrl.commons import manager as common_manager
 from tendrl import monitoring_integration
 from tendrl.monitoring_integration import sync
@@ -39,6 +42,10 @@ class MonitoringIntegrationManager(common_manager.Manager):
         super(MonitoringIntegrationManager, self).start()
         # Creating Default Dashboards
         _upload_default_dashboards()
+        alert_dash_obj = create_alert_dashboard.CreateAlertDashboard()
+        create_new_notification_channel.create_notification_channel("tendrl_notification_channel",
+                                                                    NS.config.data["grafana_host"],
+                                                                    8789)
         self.webhook_receiver.start()
 
 
@@ -138,6 +145,9 @@ def main():
     TendrlNS()
     NS.type = "monitoring"
     NS.publisher_id = "monitoring_integration"
+    if NS.config.data.get("with_internal_profiling", False):
+        from tendrl.commons import profiler
+        profiler.start()
     NS.monitoring.config.save()
     NS.monitoring.definitions.save()
     NS.sync_thread = sync.MonitoringIntegrationSdsSyncThread()
@@ -145,7 +155,6 @@ def main():
     monitoring_integration_manager = MonitoringIntegrationManager()
     monitoring_integration_manager.start()
     complete = gevent.event.Event()
-  
     NS.node_context = NS.node_context.load()
     current_tags = list(NS.node_context.tags)
     current_tags += ["tendrl/integration/monitoring"]
