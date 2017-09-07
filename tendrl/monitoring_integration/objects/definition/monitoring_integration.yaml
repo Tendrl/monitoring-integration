@@ -90,4 +90,22 @@ namespace.monitoring:
         status:
       value: clusters/$integration_id/nodes/$node_id
       metric: [clusters.$integration_id.nodes.$node_name]
+  thresholds:
+    hosts:
+      cpu:
+        Warning: 80
+      mount_point:
+        Warning: 80
+      memory:
+        Warning: 80
+      swap:
+        Warning: 50
+      capacity_utilization:
+        Warning: 75
+    volumes:
+      capacity_utilization:
+        Warning: 75
+    bricks:
+      capacity_utilization:
+        Warning: 75
 tendrl_schema_version: 0.3
