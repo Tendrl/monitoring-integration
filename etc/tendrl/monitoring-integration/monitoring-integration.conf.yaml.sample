@@ -9,7 +9,7 @@ log_cfg_path: /etc/tendrl/monitoring-integration/monitoring_integration_logging.
 logging_socket_path: /var/run/tendrl/message.sock
 
 # To activate internal profiling
-with_internal_profiling: True
+with_internal_profiling: False
 
 tags:
     - tendrl/integration/monitoring
