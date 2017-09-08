@@ -18,6 +18,7 @@ namespace.monitoring:
       inputs:
         mandatory:
           -  TendrlContext.integration_id
+          -  TendrlContext.cluster_name
           -  Trigger.resource_name
           -  Trigger.resource_type
           -  Trigger.action
