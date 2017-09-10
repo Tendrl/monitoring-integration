@@ -20,20 +20,28 @@ HEADERS = {"Accept": "application/json",
 '''Create Dashboard'''
 
 
-def _post_dashboard(dashboard_json):
+def _post_dashboard(dashboard_json, authorization_key = None):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         upload_str = json.dumps(dashboard_json)
-        resp = post("http://{}:{}/api/dashboards/"
-                    "db".format(config.grafana_host,
-                                config.grafana_port),
-                    headers=HEADERS,
-                    auth=config.credentials,
-                    data=upload_str)
+        if authorization_key:
+            new_header = HEADERS
+            new_header["Authorization"] = "Bearer " + str(authorization_key)
+            response = post("http://{}:{}/api/dashboards/"
+                            "db".format(config.grafana_host,
+                                        config.grafana_port),
+                            headers=new_header,
+                            data=upload_str)
+        else:
+            response = post("http://{}:{}/api/dashboards/"
+                            "db".format(config.grafana_host,
+                                       config.grafana_port),
+                            headers=HEADERS,
+                            auth=config.credentials,
+                            data=upload_str)
+        return response
     else:
         raise exceptions.ConnectionFailedException
-
-    return resp
 
 
 def get_dashboard(dashboard_name):
