@@ -152,7 +152,7 @@ def find_node_id(integration_id, fqdn):
             NS.publisher_id,
             {
                 "message": "Node with fqdn %s not found "
-                "in cluster %s" % (fqdn, cluster_id)
+                "in cluster %s" % (fqdn, integration_id)
             }
         )   
         raise ex
