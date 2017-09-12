@@ -9,6 +9,7 @@ from requests.exceptions import RequestException
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.alert import utils
@@ -42,11 +43,18 @@ class AlertHandler(object):
 
     def handle(self, alert_json):
         alert = self.format_alert(alert_json)
+        unset = False
+        if alert["severity"] == constants.TENDRL_GRAFANA_SEVERITY_MAP[
+            "ok"]:
+            unset = True
         logger.log( 
             "notice",
             NS.publisher_id,
             {
-                "message" : json.dumps(alert)
+                "message" : json.dumps(alert),
+                "alert_condition_status": alert["resource"],
+                "alert_condition_state": alert["severity"],
+                "alert_condition_unset": unset
             }
         )
 
