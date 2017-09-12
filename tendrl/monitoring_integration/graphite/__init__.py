@@ -272,7 +272,7 @@ class GraphitePlugin():
 
 
     def resource_status_mapper(self, status):
-        status_map = {"created" : 3, "stopped" : 2, "started" : 0,
+        status_map = {"created" : 0.5, "stopped" : 2, "started" : 0,
                        "degraded" : 8, "up" : 0, "down" : 1,
                       "completed" : 11, "not_started" : 12,
                       "in progress" : 13, "in_progress" : 13,

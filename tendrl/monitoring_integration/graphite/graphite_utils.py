@@ -122,6 +122,19 @@ def miscellaneous_metrics(cluster_details):
             except (AttributeError,KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),
                            {'message': "Failed to create brick metric {0} for Brick :{1}".format(metric, brick) + str(ex)})
+    metric = "clusters.$integration_id.nodes.$node_name.bricks.$brick_name.status.$status"
+    for cluster_detail in cluster_details:
+        for brick in cluster_detail.details["Brick"]:
+            try:
+                local_metric = metric.replace("$integration_id", str(cluster_detail.integration_id))
+                local_metric = local_metric.replace("$node_name", brick["host_name"])
+                local_metric = local_metric.replace("$brick_name", brick["brick_name"].replace("/", "|"))
+                local_metric = local_metric.replace(local_metric.rsplit(".", 1)[1],
+                                        str(brick[str(local_metric.rsplit(".", 1)[1].replace("$", ""))]))
+                metrics.append(copy.deepcopy(local_metric))
+            except (AttributeError,KeyError) as ex:
+                logger.log("error", NS.get("publisher_id", None),
+                           {'message': "Failed to create brick metric {0} for Brick :{1}".format(metric, brick) + str(ex)})
     local_metrics = ["clusters.$integration_id.status.$status"]
     for cluster_detail in cluster_details:
         for metric in local_metrics:
