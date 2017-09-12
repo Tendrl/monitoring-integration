@@ -42,7 +42,7 @@ install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-in
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
 install -Dm 0644 etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
-install -Dm 0644 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
+install -Dm 0644 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/grafana/grafana.ini
 install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir}/tendrl-monitoring-integration.service
 install -Dm 0644 etc/tendrl/monitoring-integration/logging.yaml.timedrotation.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/graphite-web.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
@@ -55,11 +55,15 @@ if [ $1 -eq 1 ] ; then
     mv /etc/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf.%{name}
     ln -s /etc/tendrl/monitoring-integration/carbon.conf /etc/carbon/carbon.conf
     ln -s /etc/tendrl/monitoring-integration/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
-    chgrp grafana /etc/tendrl/monitoring-integration/grafana/grafana.ini
+    mv /etc/grafana/grafana.ini.rpmnew /etc/grafana/grafana.ini
 fi
 systemctl enable tendrl-monitoring-integration
 %systemd_post tendrl-monitoring-integration.service
 
+%pre
+if [ $1 -eq 1 ] ; then
+    mv /etc/grafana/grafana.ini /etc/grafana/grafana.ini.orig
+fi
 
 %preun
 if [ "$1" = 0 ] ; then
@@ -68,6 +72,12 @@ if [ "$1" = 0 ] ; then
     mv /etc/httpd/conf.d/graphite-web.conf.%{name} /etc/httpd/conf.d/graphite-web.conf
 fi
 %systemd_preun tendrl-monitoring-integration.service
+
+%postun
+if [ "$1" = 0 ] ; then
+    mv /etc/grafana/grafana.ini.orig /etc/grafana/grafana.ini
+fi
+%systemd_postun_with_restart tendrl-monitoring-integration.service
 
 %check
 py.test -v tendrl/monitoring_integration/tests || :
@@ -81,7 +91,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
-%config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
+%config(noreplace) %{_sysconfdir}/grafana/grafana.ini
 %config %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 %{_unitdir}/tendrl-monitoring-integration.service
 
