@@ -1,1841 +1,1754 @@
 {
-  "dashboard": {
-    "annotations": {
-      "list": []
-    },
-    "editable": false,
-    "gnetId": null,
-    "graphTooltip": 0,
-    "hideControls": true,
-    "id": null,
-    "links": [],
-    "refresh": "1m",
-    "rows": [
-      {
-        "collapse": false,
-        "height": 182,
-        "panels": [
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": false,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 12,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "refId": "A",
-                "target": "$my_app.clusters.$cluster_id.nodes.$host_name.status"
-              }
-            ],
-            "thresholds": "",
-            "title": "Health",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              },
-              {
-                "op": "=",
-                "text": "UP",
-                "value": "0"
-              },
-              {
-                "op": "=",
-                "text": "DOWN",
-                "value": "1"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "decimals": 1,
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": true,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 16,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "%",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "refId": "A",
-                "target": "$my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-free"
-              }
-            ],
-            "thresholds": "10,20",
-            "title": "Memory Free",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 2,
-            "legend": {
-              "alignAsTable": false,
-              "avg": false,
-              "current": false,
-              "hideEmpty": false,
-              "hideZero": false,
-              "max": false,
-              "min": false,
-              "rightSide": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "connected",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 3,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "aliasByNode($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-used, 4)"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Memory",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "percent",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "decimals": 1,
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": true,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 15,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "%",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "refId": "A",
-                "target": "$my_app.clusters.$cluster_id.nodes.$host_name.swap.percent-free"
-              }
-            ],
-            "thresholds": "10,20",
-            "title": "Swap Free",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "decimals": 1,
-            "fill": 1,
-            "id": 3,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "connected",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 3,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "aliasByNode($my_app.clusters.$cluster_id.nodes.$host_name.swap.percent-used, 4)"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Swap",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "percent",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 14,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "connected",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-read), 8)"
-              },
-              {
-                "refId": "B",
-                "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-write), 8)"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "IOPS",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 1,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "connected",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}, 4, 'sum')",
-                "textEditor": true
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "CPU",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "percent",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": false,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 13,
-            "interval": null,
-            "links": [
-              {
-                "dashUri": "db/tendrl-gluster-bricks",
-                "dashboard": "Tendrl - Gluster - Bricks",
-                "includeVars": true,
-                "keepTime": true,
-                "targetBlank": false,
-                "title": "Bricks Overview",
-                "type": "dashboard"
-              }
-            ],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "refId": "A",
-                "target": "countSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.percent-percent_bytes)"
-              }
-            ],
-            "thresholds": "",
-            "title": "Bricks",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              }
-            ],
-            "valueName": "avg"
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": false,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 17,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 1,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "refId": "A",
-                "target": "countSeries(currentBelow(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.status, 1))"
-              }
-            ],
-            "thresholds": "",
-            "title": "Bricks Up",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "0",
-                "value": "null"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": false,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 18,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 1,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "refId": "A",
-                "target": "countSeries(currentAbove($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.status, 1))"
-              }
-            ],
-            "thresholds": "",
-            "title": "Bricks Down",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "0",
-                "value": "null"
-              }
-            ],
-            "valueName": "current"
-          }
-        ],
-        "repeat": null,
-        "repeatIteration": null,
-        "repeatRowId": null,
-        "showTitle": true,
-        "title": "At-a-Glance",
-        "titleSize": "h5"
-      },
-      {
-        "collapse": false,
-        "height": 192,
-        "panels": [
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(50, 172, 45, 0.97)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(245, 54, 54, 0.9)"
-            ],
-            "datasource": "",
-            "decimals": 1,
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": true,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 19,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "%",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "hide": true,
-                "refId": "B",
-                "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
-              },
-              {
-                "hide": true,
-                "refId": "C",
-                "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
-              },
-              {
-                "refId": "A",
-                "target": "asPercent(#C, #B)",
-                "targetFull": "asPercent(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total))"
-              }
-            ],
-            "thresholds": "80, 90",
-            "title": "Capacity Utilization",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "80%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "decimals": 1,
-            "fill": 1,
-            "id": 28,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": false,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "connected",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "hide": true,
-                "refId": "A",
-                "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
-              },
-              {
-                "hide": true,
-                "refId": "B",
-                "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
-              },
-              {
-                "refId": "C",
-                "target": "alias(asPercent(#B, #A), 'Utilization')",
-                "targetFull": "alias(asPercent(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)), 'Utilization')"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Capacity Utilization Trend",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "percent",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": "",
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "decimals": 1,
-            "format": "decbytes",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": false,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 20,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "hide": true,
-                "refId": "A",
-                "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
-              },
-              {
-                "hide": true,
-                "refId": "B",
-                "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
-              },
-              {
-                "refId": "C",
-                "target": "diffSeries(#A, #B)",
-                "targetFull": "diffSeries(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))"
-              }
-            ],
-            "thresholds": "",
-            "title": "Capacity Available",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "50%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "decimals": 1,
-            "format": "decbytes",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": false,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 22,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "hide": true,
-                "refId": "A",
-                "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
-                "textEditor": true
-              },
-              {
-                "hide": true,
-                "refId": "B",
-                "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
-                "textEditor": true
-              },
-              {
-                "hide": false,
-                "refId": "C",
-                "target": "diffSeries(#B, #A)",
-                "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))",
-                "textEditor": true
-              }
-            ],
-            "thresholds": "",
-            "title": "Weekly Growth Rate",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "50%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              },
-              {
-                "op": "=",
-                "text": "0",
-                "value": "-99999"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "cacheTimeout": null,
-            "colorBackground": false,
-            "colorValue": false,
-            "colors": [
-              "rgba(245, 54, 54, 0.9)",
-              "rgba(237, 129, 40, 0.89)",
-              "rgba(50, 172, 45, 0.97)"
-            ],
-            "datasource": "",
-            "decimals": null,
-            "format": "none",
-            "gauge": {
-              "maxValue": 100,
-              "minValue": 0,
-              "show": false,
-              "thresholdLabels": false,
-              "thresholdMarkers": true
-            },
-            "id": 21,
-            "interval": null,
-            "links": [],
-            "mappingType": 1,
-            "mappingTypes": [
-              {
-                "name": "value to text",
-                "value": 1
-              },
-              {
-                "name": "range to text",
-                "value": 2
-              }
-            ],
-            "maxDataPoints": 100,
-            "nullPointMode": "connected",
-            "nullText": null,
-            "postfix": "",
-            "postfixFontSize": "50%",
-            "prefix": "",
-            "prefixFontSize": "50%",
-            "rangeMaps": [
-              {
-                "from": "null",
-                "text": "N/A",
-                "to": "null"
-              }
-            ],
-            "span": 2,
-            "sparkline": {
-              "fillColor": "rgba(31, 118, 189, 0.18)",
-              "full": false,
-              "lineColor": "rgb(31, 120, 193)",
-              "show": false
-            },
-            "tableColumn": "",
-            "targets": [
-              {
-                "hide": true,
-                "refId": "A",
-                "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
-                "textEditor": true
-              },
-              {
-                "hide": true,
-                "refId": "B",
-                "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
-                "textEditor": true
-              },
-              {
-                "hide": true,
-                "refId": "C",
-                "target": "keepLastValue(diffSeries(#B, #A))",
-                "targetFull": "keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')))",
-                "textEditor": true
-              },
-              {
-                "hide": true,
-                "refId": "D",
-                "target": "sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)",
-                "textEditor": true
-              },
-              {
-                "hide": true,
-                "refId": "E",
-                "target": "sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)",
-                "textEditor": true
-              },
-              {
-                "hide": true,
-                "refId": "F",
-                "target": "diffSeries(#D, #E)",
-                "targetFull": "diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))",
-                "textEditor": true
-              },
-              {
-                "hide": true,
-                "refId": "G",
-                "target": "consolidateBy(minSeries(#F), \"min\")",
-                "targetFull": "consolidateBy(minSeries(diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\")",
-                "textEditor": true
-              },
-              {
-                "hide": false,
-                "refId": "H",
-                "target": "divideSeries(#F, #C)",
-                "targetFull": "divideSeries(diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)), keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))))",
-                "textEditor": true
-              }
-            ],
-            "thresholds": "",
-            "title": "Weeks Remaining",
-            "transparent": true,
-            "type": "singlestat",
-            "valueFontSize": "50%",
-            "valueMaps": [
-              {
-                "op": "=",
-                "text": "N/A",
-                "value": "null"
-              }
-            ],
-            "valueName": "current"
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 23,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_octets.read), 7)"
-              },
-              {
-                "refId": "B",
-                "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_octets.write), 7)"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Disk Load",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 24,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_ops.read), 7)"
-              },
-              {
-                "refId": "B",
-                "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_ops.write), 7)"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Disk Operation",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 25,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": false,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_io_time.io_time), 7)"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Disk IO",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          }
-        ],
-        "repeat": null,
-        "repeatIteration": null,
-        "repeatRowId": null,
-        "showTitle": true,
-        "title": "Capacity & Disk Load",
-        "titleSize": "h5"
-      },
-      {
-        "collapse": false,
-        "height": 250,
-        "panels": [
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 11,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "connected",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "B",
-                "target": "groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.interface-*.if_octets.*, 7, 'maxSeries')",
-                "textEditor": false
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Throughput",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": "",
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 26,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.interface-*.if_dropped.*, 7, 'maxSeries')"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Dropped Packets",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "pps",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          },
-          {
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "",
-            "fill": 1,
-            "id": 27,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "links": [],
-            "nullPointMode": "null",
-            "percentage": false,
-            "pointradius": 5,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "span": 4,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "refId": "A",
-                "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.interface-*.if_errors.*, 7, 'maxSeries')"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Errors",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "transparent": true,
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ]
-          }
-        ],
-        "repeat": null,
-        "repeatIteration": null,
-        "repeatRowId": null,
-        "showTitle": true,
-        "title": "Network",
-        "titleSize": "h5"
-      }
-    ],
-    "schemaVersion": 14,
-    "style": "dark",
-    "tags": [],
-    "templating": {
-      "list": [
-        {
-          "allValue": null,
-          "current": {},
-          "datasource": "",
-          "hide": 2,
-          "includeAll": false,
-          "label": "My App",
-          "multi": false,
-          "name": "my_app",
-          "options": [],
-          "query": "tendrl",
-          "refresh": 1,
-          "regex": "",
-          "sort": 0,
-          "tagValuesQuery": "",
-          "tags": [],
-          "tagsQuery": "",
-          "type": "query",
-          "useTags": false
+    "dashboard": {
+        "annotations": {
+            "list": []
         },
-        {
-          "allValue": null,
-          "current": {},
-          "datasource": "",
-          "hide": 0,
-          "includeAll": false,
-          "label": "Cluster Id",
-          "multi": false,
-          "name": "cluster_id",
-          "options": [],
-          "query": "tendrl.clusters.*",
-          "refresh": 1,
-          "regex": "",
-          "sort": 0,
-          "tagValuesQuery": "",
-          "tags": [],
-          "tagsQuery": "",
-          "type": "query",
-          "useTags": false
+        "editable": false,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "hideControls": true,
+        "id": null,
+        "links": [],
+        "refresh": "10s",
+        "rows": [{
+            "collapse": false,
+            "height": 222,
+            "panels": [{
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 12,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.status"
+                }],
+                "thresholds": "",
+                "title": "Health",
+                "transparent": true,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }, {
+                    "op": "=",
+                    "text": "Up",
+                    "value": "0"
+                }, {
+                    "op": "=",
+                    "text": "Down",
+                    "value": "1"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": true,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 16,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "%",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-free"
+                }],
+                "thresholds": "10,20",
+                "title": "Memory Free",
+                "transparent": true,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "decimals": null,
+                "fill": 1,
+                "id": 2,
+                "legend": {
+                    "alignAsTable": false,
+                    "avg": false,
+                    "current": false,
+                    "hideEmpty": false,
+                    "hideZero": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "sideWidth": 120,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 3,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "hide": false,
+                    "refId": "A",
+                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-buffered, 'Buffered')",
+                    "textEditor": false
+                }, {
+                    "hide": false,
+                    "refId": "B",
+                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-cached, 'cached')",
+                    "textEditor": false
+                }, {
+                    "hide": false,
+                    "refId": "C",
+                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_recl, 'Slab Recl')",
+                    "textEditor": false
+                }, {
+                    "hide": false,
+                    "refId": "D",
+                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_unrecl, 'Slab Unrecl')",
+                    "textEditor": false
+                }, {
+                    "hide": false,
+                    "refId": "E",
+                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-used, 'Used')",
+                    "textEditor": false
+                }, {
+                    "refId": "F",
+                    "target": "alias(sumSeries(#A, #B, #C, #D, #E), 'Total Used')",
+                    "targetFull": "alias(sumSeries(alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-buffered, 'Buffered'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-cached, 'cached'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_recl, 'Slab Recl'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_unrecl, 'Slab Unrecl'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-used, 'Used')), 'Total Used')"
+                }],
+                "thresholds": [{
+                    "colorMode": "warning",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 80
+                }],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Memory",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "percent",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": true,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 15,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "%",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.swap.percent-free"
+                }],
+                "thresholds": "10,20",
+                "title": "Swap Free",
+                "transparent": true,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "decimals": 1,
+                "fill": 1,
+                "id": 3,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 2,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.swap.percent-used, '$host_name')"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Swap",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "percent",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "clusterName": "Bricks",
+                "colorMode": "Panel",
+                "colors": {
+                    "crit": "rgba(245, 54, 54, 0.9)",
+                    "disable": "rgba(128, 128, 128, 0.9)",
+                    "ok": "rgba(50, 128, 45, 0.9)",
+                    "warn": "rgba(237, 129, 40, 0.9)"
+                },
+                "displayName": "Bricks",
+                "flipCard": false,
+                "flipTime": "10",
+                "id": 33,
+                "isGrayOnNoData": true,
+                "isHideAlertsOnDisable": false,
+                "isIgnoreOKColors": false,
+                "links": [{
+                    "dashUri": "db/tendrl-gluster-bricks",
+                    "dashboard": "Tendrl - Gluster - Bricks",
+                    "includeVars": true,
+                    "keepTime": true,
+                    "params": "var-cluster_id=$cluster_id&var-host_name=$host_name",
+                    "title": "Bricks Dashboard",
+                    "type": "dashboard"
+                }],
+                "span": 1,
+                "targets": [{
+                    "aggregation": "Last",
+                    "alias": "Total",
+                    "displayType": "Regular",
+                    "refId": "A",
+                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.total, 'Total')",
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Up",
+                    "displayType": "Regular",
+                    "refId": "B",
+                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.up, 'Up')",
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Down",
+                    "crit": 1,
+                    "decimals": null,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "C",
+                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.down, 'Down')",
+                    "units": "none",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }],
+                "title": "",
+                "type": "vonage-status-panel"
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 14,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-read), 8)"
+                }, {
+                    "refId": "B",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-write), 8)"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "IOPS",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 1,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias(averageSeries($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}), '$host_name')",
+                    "textEditor": false
+                }],
+                "thresholds": [{
+                    "colorMode": "warning",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 80
+                }],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "CPU",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "percent",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "fontSize": "100%",
+                "id": 29,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 4,
+                "styles": [{
+                    "alias": "Time",
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "pattern": "Time",
+                    "type": "date"
+                }, {
+                    "alias": "Status",
+                    "colorMode": "row",
+                    "colors": [
+                        "rgba(50, 172, 45, 0.97)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(245, 54, 54, 0.9)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 0,
+                    "pattern": "Current",
+                    "thresholds": [
+                        "2"
+                    ],
+                    "type": "number",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasSub(groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.status, 6, 'maxSeries'), '\\|', '/')"
+                }],
+                "title": "Brick Status",
+                "transform": "timeseries_aggregations",
+                "transparent": true,
+                "type": "table"
+            }],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "At-a-Glance",
+            "titleSize": "h5"
+        }, {
+            "collapse": false,
+            "height": 192,
+            "panels": [{
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(50, 172, 45, 0.97)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(245, 54, 54, 0.9)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": true,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 19,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "%",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "B",
+                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
+                }, {
+                    "hide": true,
+                    "refId": "C",
+                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
+                }, {
+                    "refId": "A",
+                    "target": "asPercent(#C, #B)",
+                    "targetFull": "asPercent(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total))"
+                }],
+                "thresholds": "80, 90",
+                "title": "Total Brick Capacity Utilization",
+                "transparent": true,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "decimals": 1,
+                "fill": 1,
+                "id": 28,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
+                }, {
+                    "refId": "C",
+                    "target": "alias(asPercent(#B, #A), 'Utilization')",
+                    "targetFull": "alias(asPercent(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)), 'Utilization')"
+                }],
+                "thresholds": [{
+                    "colorMode": "warning",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 80
+                }],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Total Brick Capacity Utilization Trend",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "percent",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "format": "decbytes",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 20,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
+                }, {
+                    "refId": "C",
+                    "target": "diffSeries(#A, #B)",
+                    "targetFull": "diffSeries(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))"
+                }],
+                "thresholds": "",
+                "title": "Total Brick Capacity Available",
+                "transparent": true,
+                "type": "singlestat",
+                "valueFontSize": "70%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "format": "decbytes",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 22,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": false,
+                    "refId": "C",
+                    "target": "diffSeries(#B, #A)",
+                    "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))",
+                    "textEditor": true
+                }],
+                "thresholds": "",
+                "title": "Weekly Growth Rate",
+                "transparent": true,
+                "type": "singlestat",
+                "valueFontSize": "70%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }, {
+                    "op": "=",
+                    "text": "0",
+                    "value": "-99999"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": null,
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 21,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "C",
+                    "target": "keepLastValue(diffSeries(#B, #A))",
+                    "targetFull": "keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')))",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "D",
+                    "target": "sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "E",
+                    "target": "sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "F",
+                    "target": "diffSeries(#D, #E)",
+                    "targetFull": "diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "G",
+                    "target": "consolidateBy(minSeries(#F), \"min\")",
+                    "targetFull": "consolidateBy(minSeries(diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\")",
+                    "textEditor": true
+                }, {
+                    "hide": false,
+                    "refId": "H",
+                    "target": "divideSeries(#G, #C)",
+                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\"), keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))))",
+                    "textEditor": true
+                }],
+                "thresholds": "",
+                "title": "Weeks Remaining",
+                "transparent": true,
+                "type": "singlestat",
+                "valueFontSize": "70%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "fontSize": "100%",
+                "id": 30,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 4,
+                "styles": [{
+                    "alias": "Utilization",
+                    "colorMode": "row",
+                    "colors": [
+                        "rgba(50, 172, 45, 0.97)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(245, 54, 54, 0.9)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Current",
+                    "thresholds": [
+                        "80",
+                        "90"
+                    ],
+                    "type": "number",
+                    "unit": "percent"
+                }, {
+                    "alias": "Brick Path",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Metric",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.percent-percent_bytes, 6, 'maxSeries'), '\\|', '/')"
+                }],
+                "title": "Brick Utilization",
+                "transform": "timeseries_aggregations",
+                "transparent": true,
+                "type": "table"
+            }, {
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "fontSize": "100%",
+                "id": 31,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 4,
+                "styles": [{
+                    "alias": "Capacity",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Current",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "bytes"
+                }, {
+                    "alias": "Brick Path",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Metric",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total, 6, 'maxSeries'), '\\|', '/')",
+                    "textEditor": false
+                }],
+                "title": "Brick Capacity",
+                "transform": "timeseries_aggregations",
+                "transparent": true,
+                "type": "table"
+            }, {
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "fontSize": "100%",
+                "id": 32,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 4,
+                "styles": [{
+                    "alias": "Capacity",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Current",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "bytes"
+                }, {
+                    "alias": "Brick Path",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Metric",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "hide": false,
+                    "refId": "B",
+                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used, 6, 'maxSeries'), '\\|', '/')",
+                    "textEditor": false
+                }],
+                "title": "Brick Capacity Used",
+                "transform": "timeseries_aggregations",
+                "transparent": true,
+                "type": "table"
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 23,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_octets.read), 7)"
+                }, {
+                    "refId": "B",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_octets.write), 7)"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Disk Load",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 24,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_ops.read), 7)"
+                }, {
+                    "refId": "B",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_ops.write), 7)"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Disk Operation",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 25,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_io_time.io_time), 7)"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Disk IO",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Capacity & Disk Load",
+            "titleSize": "h5"
+        }, {
+            "collapse": false,
+            "height": 250,
+            "panels": [{
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 11,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "B",
+                    "target": "groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.interface-*.if_octets.*, 7, 'maxSeries')",
+                    "textEditor": false
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Throughput",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": "",
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 26,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.interface-*.if_dropped.*, 7, 'maxSeries')"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Dropped Packets",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "pps",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 27,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.interface-*.if_errors.*, 7, 'maxSeries')"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Errors",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": true,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Network",
+            "titleSize": "h5"
+        }],
+        "schemaVersion": 14,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": [{
+                "allValue": null,
+                "current": {},
+                "datasource": "",
+                "hide": 2,
+                "includeAll": false,
+                "label": "My App",
+                "multi": false,
+                "name": "my_app",
+                "options": [],
+                "query": "tendrl",
+                "refresh": 1,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }, {
+                "allValue": null,
+                "current": {},
+                "datasource": "",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Cluster Id",
+                "multi": false,
+                "name": "cluster_id",
+                "options": [],
+                "query": "tendrl.clusters.*",
+                "refresh": 1,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }, {
+                "allValue": null,
+                "current": {},
+                "datasource": "",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Host Name",
+                "multi": false,
+                "name": "host_name",
+                "options": [],
+                "query": "tendrl.clusters.$cluster_id.nodes.*",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }]
         },
-        {
-          "allValue": null,
-          "current": {},
-          "datasource": "",
-          "hide": 0,
-          "includeAll": false,
-          "label": "Host Name",
-          "multi": false,
-          "name": "host_name",
-          "options": [],
-          "query": "tendrl.clusters.$cluster_id.nodes.*",
-          "refresh": 1,
-          "regex": "",
-          "sort": 0,
-          "tagValuesQuery": "",
-          "tags": [],
-          "tagsQuery": "",
-          "type": "query",
-          "useTags": false
-        }
-      ]
-    },
-    "time": {
-      "from": "now/d",
-      "to": "now"
-    },
-    "timepicker": {
-      "refresh_intervals": [
-        "5s",
-        "10s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d"
-      ],
-      "time_options": [
-        "5m",
-        "15m",
-        "1h",
-        "6h",
-        "12h",
-        "24h",
-        "2d",
-        "7d",
-        "30d"
-      ]
-    },
-    "timezone": "browser",
-    "title": "Tendrl - Gluster - Hosts",
-    "version": 2
-  }
+        "time": {
+            "from": "now-1h",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "5s",
+                "10s",
+                "30s",
+                "1m",
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "2h",
+                "1d"
+            ],
+            "time_options": [
+                "5m",
+                "15m",
+                "1h",
+                "6h",
+                "12h",
+                "24h",
+                "2d",
+                "7d",
+                "30d"
+            ]
+        },
+        "timezone": "browser",
+        "title": "Tendrl-Gluster-Hosts",
+        "version": 3
+    }
 }
+
