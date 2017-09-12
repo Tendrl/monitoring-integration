@@ -67,9 +67,9 @@ def miscellaneous_metrics(cluster_details):
             except (AttributeError,KeyError) as ex:
                     logger.log("error", NS.get("publisher_id", None),
                                {'message': "Failed to create cluster metric {0} for cluster {1}".format(metric, str(cluster_detail.integration_id)) + str(ex)})
-    local_metrics = ["clusters.$integration_id.volumes.$volume_name.brick_count.total.$brick_total_count",
-                     "clusters.$integration_id.volumes.$volume_name.brick_count.down.$brick_down_count",
-                     "clusters.$integration_id.volumes.$volume_name.brick_count.up.$brick_up_count"]
+    local_metrics = ["clusters.$integration_id.volumes.$volume_name.brick_count.total.$total",
+                     "clusters.$integration_id.volumes.$volume_name.brick_count.down.$down",
+                     "clusters.$integration_id.volumes.$volume_name.brick_count.up.$up"]
     for cluster_detail in cluster_details:
         for metric in local_metrics:
             metric = metric.replace("$integration_id", str(cluster_detail.integration_id))
@@ -77,7 +77,7 @@ def miscellaneous_metrics(cluster_details):
                 try:
                     local_metric = metric.replace("$volume_name", volume["name"])
                     local_metric = local_metric.replace(local_metric.rsplit(".", 1)[1],
-                                                        str(cluster_detail.details[str(local_metric.rsplit(".", 1)[1].replace("$", ""))]))
+                                                        str(cluster_detail.details["volume_level_brick_count"][str(volume["name"])][str(local_metric.rsplit(".", 1)[1].replace("$", ""))]))
                     metrics.append(copy.deepcopy(local_metric))
                 except (AttributeError,KeyError) as ex:
                     logger.log("error", NS.get("publisher_id", None),
@@ -97,7 +97,9 @@ def miscellaneous_metrics(cluster_details):
                                {'message': "Failed to create cluster metric {0} for cluster {1}".format(metric, str(cluster_detail.integration_id)) + str(ex)})
     local_metrics = ["clusters.$integration_id.volume_count.total.$volume_total_count",
                      "clusters.$integration_id.volume_count.down.$volume_down_count",
-                     "clusters.$integration_id.volume_count.up.$volume_up_count"]
+                     "clusters.$integration_id.volume_count.up.$volume_up_count",
+                     "clusters.$integration_id.volume_count.partial.$volume_partial_count",
+                     "clusters.$integration_id.volume_count.degraded.$volume_degraded_count"]
     for cluster_detail in cluster_details:
         for metric in local_metrics:
             try:
@@ -142,6 +144,18 @@ def miscellaneous_metrics(cluster_details):
                 local_metric = metric.replace("$integration_id", str(cluster_detail.integration_id))
                 local_metric = local_metric.replace(local_metric.rsplit(".", 1)[1],
                                             str(cluster_detail.details["Cluster"][0]["GlobalDetails"]["status"]))
+                metrics.append(copy.deepcopy(local_metric))
+            except (AttributeError,KeyError) as ex:
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Failed to create cluster metric {0} for cluster {1}".format(metric, str(cluster_detail.integration_id)) + str(ex)})
+    local_metrics = ["clusters.$integration_id.georep.total.$total", "clusters.$integration_id.georep.up.$up",
+                     "clusters.$integration_id.georep.down.$down", "clusters.$integration_id.georep.partial.$partial"]
+    for cluster_detail in cluster_details:
+        for metric in local_metrics:
+            try:
+                local_metric = metric.replace("$integration_id", str(cluster_detail.integration_id))
+                local_metric = local_metric.replace(local_metric.rsplit(".", 1)[1],
+                                            str(cluster_detail.details["geo_rep"][str(local_metric.rsplit(".", 1)[1].replace("$", ""))]))
                 metrics.append(copy.deepcopy(local_metric))
             except (AttributeError,KeyError) as ex:
                     logger.log("error", NS.get("publisher_id", None),
