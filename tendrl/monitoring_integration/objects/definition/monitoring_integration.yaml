@@ -53,16 +53,20 @@ namespace.monitoring:
       enabled: true
       help: Resource details to trigger flow
   graphite_data:
-    GlobalDetails:
-      attrs:
-        status:
-      value: clusters/$integration_id/GlobalDetails
+    Cluster:
+      GlobalDetails:
+        attrs:
+          status:
+      value: clusters/$integration_id
       metric: [clusters.$integration_id]
     Brick:
       attrs:
         brick_path:
+        vol_name:
+        vol_id:
+        name:
         status:
-      value: clusters/$integration_id/Bricks/all/$Brick.brick_name
+      value: clusters/$integration_id/Bricks/all/$brick_id
       metric: [clusters.$integration_id.nodes.$node_name.bricks.$brick_name]
     Volume:
       attrs:
@@ -81,15 +85,17 @@ namespace.monitoring:
             up:
               session_status: [active]
             down:
-              session_status: [partial,faulty]
-          value: clusters/$integration_id/Volumes/$Volume.vol_id/GeoRepSessions
-      value: clusters/$integration_id/Volumes/$Volume.vol_id
+              session_status: [faulty]
+            partial:
+              session_status: [partial]
+          value: clusters/$integration_id/Volumes/$volume_id/GeoRepSessions
+      value: clusters/$integration_id/Volumes/$volume_id
       metric: [clusters.$integration_id.volumes.$volume_name]
     Node:
       attrs:
         fqdn:
         status:
-      value: clusters/$integration_id/nodes/$node_id
+      value: clusters/$integration_id/nodes/$node_id/NodeContext
       metric: [clusters.$integration_id.nodes.$node_name]
   thresholds:
     hosts:
