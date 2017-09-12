@@ -118,10 +118,10 @@ def set_alert(panel, alert_thresholds, panel_title):
 
     panel["alert"] = {"conditions": [{"evaluator": {"params": [alert_thresholds[panel_title]["Warning"]], "type": "gt"},
                                       "operator": {"type": "and"},
-                                      "query": {"params": [panel["targets"][-1]["refId"],"5m","now"]},
+                                      "query": {"params": [panel["targets"][-1]["refId"],"3m","now"]},
                                       "reducer": {"params": [], "type": "avg" },
                                       "type": "query"}],
-                                      "executionErrorState": "alerting", "frequency": "60s", "handler": 1,
+                                      "executionErrorState": "no_data", "frequency": "60s", "handler": 1,
                                       "name": str(panel["title"]) + " Alert", "noDataState": "no_data",
                                       "notifications": []}
 
