@@ -62,6 +62,7 @@ class GraphitePlugin():
         total = 0 
         up = 0
         down = 0
+        partial = 0
         for key, value in obj_attr["count"].items():
             for resource_detail in resource_details["details"]:
                 if key == "total":
@@ -74,9 +75,15 @@ class GraphitePlugin():
                    for attr_key, attr_values in obj_attr["count"]["down"].items():
                        if resource_detail[attr_key] in attr_values:
                            down = down + 1
+                if key == "partial":
+                   for attr_key, attr_values in obj_attr["count"]["partial"].items():
+                       if resource_detail[attr_key] in attr_values:
+                           partial = partial + 1
         resource_details["total"] = total
         resource_details["up"] = up
         resource_details["down"] = down
+        resource_details["partial"] = partial
+        return resource_details
 
     def get_object_from_central_store(self, resource_key, obj_attr):
         attr_details = etcd_utils.read(resource_key)
@@ -90,66 +97,186 @@ class GraphitePlugin():
              resource_details["details"].append(resource_detail)
         try:
             if obj_attr["count"]:
-                self.get_resource_count(resource_details, obj_attr)
+                resource_details = self.get_resource_count(resource_details, obj_attr)
         except KeyError:
             pass
         return resource_details
-                 
+
+    def get_resource_keys(self, key, resource_name):
+
+        resource_list = []
+        try:
+            resource_details = etcd_utils.read(key + "/" + str(resource_name))
+            for resource in resource_details.leaves:
+                resource_list.append(resource.key.split('/')[-1])
+        except (KeyError, etcd.EtcdKeyNotFound) as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Error while fetching " +
+                         str(resource_name).split('/')[0] + str(ex)})
+
+        return resource_list
 
     def get_central_store_data(self, objects):
         try:
-            clusters = etcd_utils.read('clusters')
+            cluster_list = self.get_resource_keys("", "clusters")
             cluster_data = []
-            for cluster in clusters.leaves:
+            for cluster_id in cluster_list:
                 cluster_details = cluster_detail.ClusterDetail()
-                cluster_details.integration_id = cluster.key.split('/')[-1]
-
-                for obj in objects:
+                cluster_details.integration_id = cluster_id
+                cluster_key = objects["Cluster"]["value"].replace("$integration_id",
+                                                                  cluster_details.integration_id)
+                for obj in objects["Cluster"]:
+                    if obj in ["metric", "value"]:
+                        continue
                     resource_detail = {}
-                    obj_details = objects[str(obj)]
-                    cluster_key = obj_details["value"].replace("$integration_id", cluster_details.integration_id)
+                    resource_detail[str(obj)] = {}
+                    obj_details = objects["Cluster"][str(obj)]
+                    obj_key = os.path.join(cluster_key, str(obj))
                     obj_attrs = obj_details["attrs"]
-                    if str(obj_details["value"]).count("$") > 1:
-                        obj_key = cluster_key.rsplit("/", 1)[0]
-                        resources = etcd_utils.read(obj_key)
-                        for resource in resources.leaves:
-                            for key, value in obj_attrs.items():
-                                if value is not None:
-                                    attr_key = obj_attrs[key]["value"]
-                                    status_key = os.path.join(obj_key,resource.key.rsplit("/", 1)[1], attr_key.rsplit('/', 1)[1])
-                                    try:
-                                        resp_data = self.get_object_from_central_store(status_key, obj_attrs[key])
-                                        resource_detail[key] = resp_data
-                                    except etcd.EtcdKeyNotFound:
-                                        resource_detail[key] = {"total": 0, "up": 0, "down": 0}
-                                else:
-                                    if obj == "Node":
-                                        temp_resource_key = resource.key + "/NodeContext"
-                                        status_key = os.path.join(obj_key, temp_resource_key, key)
-                                    else:
-                                        status_key = os.path.join(obj_key, resource.key.rsplit("/", 1)[1], key)
-                                    resp_data = etcd_utils.read(status_key)
-                                    status = self.resource_status_mapper(str(resp_data.value).lower())
-                                    resource_detail[key] = status
-                            cluster_details.details[obj].append(copy.deepcopy(resource_detail))
-                    else:
-                        for key, value in obj_attrs.items():
-                            obj_key = os.path.join(cluster_key, key)
-                            resp_data = etcd_utils.read(obj_key)
-                            status = self.cluster_status_mapper(str(resp_data.value).lower())
-                            resource_detail[key] = status
-                                
-                        cluster_details.details[obj].append(copy.deepcopy(resource_detail))
+                    for key, value in obj_attrs.items():
+                        try:
+                            attr_key = os.path.join(obj_key, key)
+                            attr_data = etcd_utils.read(attr_key)
+                            attr_value = self.cluster_status_mapper(str(attr_data.value).lower())
+                            resource_detail[str(obj)][key] = copy.deepcopy(attr_value)
+                        except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                            logger.log("error", NS.get("publisher_id", None),
+                                       {'message': "Cannot Find {0} in Cluster {1}".format(key, cluster_id) + str(ex)})
+                    cluster_details.details["Cluster"].append(copy.deepcopy(resource_detail))
+                host_list = self.get_resource_keys(cluster_key, "Bricks/all")
+                for host in host_list:
+                    resource_detail = {}
+                    attr_key = os.path.join(cluster_key, "Bricks/all", host)
+                    resource_detail["host_name"] = host.replace(".", "_")
+	            brick_list = self.get_resource_keys("", attr_key)
+                    for brick in brick_list:
+                        for key, value in objects["Brick"]["attrs"].items():
+                            try:
+                                brick_attr_key = os.path.join(cluster_key, "Bricks/all",
+                                                              host, brick, key)
+                                brick_attr_data = etcd_utils.read(brick_attr_key)
+                                brick_attr_value = self.resource_status_mapper(str(brick_attr_data.value).lower())
+                                resource_detail[key] = brick_attr_value
+                            except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                                logger.log("error", NS.get("publisher_id", None),
+                                           {'message': "Cannot Find {0} in brick {1}".format(key, brick) + str(ex)})
+                        cluster_details.details["Brick"].append(copy.deepcopy(resource_detail))
+                volume_list = self.get_resource_keys(cluster_key, "Volumes")
+                for volume in volume_list:
+                    resource_detail = {}
+                    volume_key = os.path.join(cluster_key, "Volumes", volume)
+                    for key, value in objects["Volume"]["attrs"].items():
+                        if value is None:
+                            try:
+                                attr_key = os.path.join(volume_key, key)
+                                attr_data = etcd_utils.read(attr_key)
+                                attr_value = self.resource_status_mapper(str(attr_data.value).lower())
+                                resource_detail[key] = attr_value
+                            except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                                logger.log("error", NS.get("publisher_id", None),
+                                           {'message': "Cannot Find {0} in volume {1}".format(key, volume) + str(ex)})
+                        else:
+                            try:
+                                new_key = os.path.join(volume_key, objects["Volume"]["attrs"][key]["value"].rsplit("/", 1)[1])
+                                resp_data = self.get_object_from_central_store(new_key,
+                                                                               objects["Volume"]["attrs"][key])
+                                resource_detail[key] = resp_data
+                            except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
+                               logger.log("error", NS.get("publisher_id", None),
+                                          {'message': "Error in retreiving geo_replication data for volume" + str(volume) + str(ex)})
+                               resource_detail[key] = {"total": 0, "up": 0, "down": 0, "partial": 0}
+                    cluster_details.details["Volume"].append(copy.deepcopy(resource_detail))
+                node_list = self.get_resource_keys(cluster_key, "nodes")
+                for node in node_list:
+                    resource_detail = {}
+                    node_key = objects["Node"]["value"].replace("$integration_id",
+                                                                cluster_details.integration_id).replace("$node_id",
+                                                                                                        node)
+                    for key, value in objects["Node"]["attrs"].items():
+                        if value is None:
+                            try:
+                                attr_key = os.path.join(node_key, key)
+                                attr_data = etcd_utils.read(attr_key)
+                                attr_value = self.resource_status_mapper(str(attr_data.value).lower())
+                                resource_detail[key] = attr_value
+                            except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
+                               logger.log("error", NS.get("publisher_id", None),
+                                       {'message': "Cannot Find {0} in Node {1}".format(key, node) + str(ex)})
+                    cluster_details.details["Node"].append(copy.deepcopy(resource_detail))
                 cluster_data.append(copy.deepcopy(cluster_details))
-
+            try:
+                cluster_data = self.set_resource_count(cluster_data, "Volume")
+                cluster_data = self.set_resource_count(cluster_data, "Node")
+                cluster_data = self.set_resource_count(cluster_data, "Brick")
+                cluster_data = self.set_brick_count(cluster_data)
+                cluster_data = self.set_brick_path(cluster_data)
+            except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
+                logger.log("error", NS.get("publisher_id", None),
+                           {'message': "Failed to set resource details" + str(ex)})
+            return cluster_data
         except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': str(ex)})
             raise ex
+
+
+    def set_brick_count(self, cluster_data):
+        try:
+            for cluster in cluster_data:
+                for node in cluster.details["Node"]:
+                    total = 0
+                    up = 0
+                    down = 0
+                    for brick in cluster.details["Brick"]:
+                        if brick["host_name"] == node["fqdn"].replace(".", "_"):
+                            if brick["status"] == 0:
+                                total = total + 1
+                                up = up + 1
+                            else:
+                                total = total + 1
+                                down = down + 1
+                    node["brick_total_count"]  = total
+                    node["brick_up_count"] = up
+                    node["brick_down_count"] = down
+        except KeyError as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Failed to set brick count" + str(ex)})
         return cluster_data
 
+
+    def set_brick_path(self, cluster_data):
+        for cluster in cluster_data:
+            for brick in cluster.details["Brick"]:
+                brick["brick_name"] = brick["brick_path"].split(":")[1]
+        return cluster_data
+
+
+    def set_resource_count(self, cluster_data, resource_name):
+        try:
+            for cluster in cluster_data:
+                resources = cluster.details[str(resource_name)]
+                cluster.details[str(resource_name.lower()) + "_total_count"] = len(resources)
+                up = 0
+                down = 0
+                for resource in resources:
+                    if resource["status"] == 0:
+                        up = up + 1
+                    else:
+                        down = down + 1
+                cluster.details[str(resource_name.lower()) + "_up_count"] = up
+                cluster.details[str(resource_name.lower()) + "_down_count"] = down
+        except KeyError as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Failed to set resource count for {0}".format(resource_name) + str(ex)})
+        return cluster_data
+
+
     def resource_status_mapper(self, status):
-        status_map = {"created" : 3, "stopped" : 2, "started" : 0, "degraded" : 8, "up" : 0, "down" : 1, "completed" : 11, "not_started" : 12, "in progress" : 13, "in_progress" : 13, "not started" : 12, "failed" : 4 }
+        status_map = {"created" : 3, "stopped" : 2, "started" : 0,
+                       "degraded" : 8, "up" : 0, "down" : 1,
+                      "completed" : 11, "not_started" : 12,
+                      "in progress" : 13, "in_progress" : 13,
+                      "not started" : 12, "failed" : 4}
 
         try:
             return status_map[status]
