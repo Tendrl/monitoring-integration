@@ -205,11 +205,13 @@ class GraphitePlugin():
                     cluster_details.details["Node"].append(copy.deepcopy(resource_detail))
                 cluster_data.append(copy.deepcopy(cluster_details))
             try:
-                cluster_data = self.set_resource_count(cluster_data, "Volume")
+                cluster_data = self.set_volume_count(cluster_data, "Volume")
                 cluster_data = self.set_resource_count(cluster_data, "Node")
                 cluster_data = self.set_resource_count(cluster_data, "Brick")
                 cluster_data = self.set_brick_count(cluster_data)
                 cluster_data = self.set_brick_path(cluster_data)
+                cluster_data = self.set_geo_rep_session(cluster_data)
+                cluster_data = self.set_volume_level_brick_count(cluster_data)
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),
                            {'message': "Failed to set resource details" + str(ex)})
@@ -219,11 +221,61 @@ class GraphitePlugin():
                        {'message': str(ex)})
             raise ex
 
+    def set_geo_rep_session(self, cluster_data):
+        total = 0
+        partial = 0
+        up = 0
+        down = 0
+        geo_rep_mapper = {"total": total, "partial": partial, "up": up,
+                          "down" : down}
+        for cluster in cluster_data:
+            for volume in cluster.details["Volume"]:
+                try:
+                    for key, value in volume["geo_rep_session"].items():
+                        try:
+                            geo_rep_mapper[key] = geo_rep_mapper[key] + value
+                        except (AttributeError, KeyError) as ex:
+                            logger.log("error", NS.get("publisher_id", None),
+                                       {'message': "Failed to extract georep details for {0}".format(key) + str(ex)})
+                except (AttributeError, KeyError) as ex:
+                        logger.log("error", NS.get("publisher_id", None),
+                                   {'message': "Failed to extract georep details for volume" + str(ex)})
+            cluster.details["geo_rep"] = {}
+            cluster.details["geo_rep"]["total"] = geo_rep_mapper["total"]
+            cluster.details["geo_rep"]["up"] = geo_rep_mapper["up"]
+            cluster.details["geo_rep"]["down"] = geo_rep_mapper["down"]
+            cluster.details["geo_rep"]["partial"] = geo_rep_mapper["partial"]
+        return cluster_data
+   
+
+
+    def set_volume_level_brick_count(self,cluster_data):
+        volume_detail = {}
+        for cluster in cluster_data:
+            for volume in cluster.details["Volume"]:
+                try:
+                    volume_detail[volume["name"]] = {"total":0, "up":0, "down":0}
+                except (AttributeError,KeyError):
+                    pass
+        for cluster in cluster_data:
+            for brick in cluster.details["Brick"]:
+                try:
+                    volume_detail[str(brick["vol_name"])]["total"] = volume_detail[str(brick["vol_name"])]["total"] + 1
+                    if brick["status"] == 0:
+                        volume_detail[str(brick["vol_name"])]["up"] = volume_detail[str(brick["vol_name"])]["up"] + 1
+                    else:
+                        volume_detail[str(brick["vol_name"])]["down"] = volume_detail[str(brick["vol_name"])]["down"] + 1
+                except (AttributeError, KeyError) as ex:
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Failed to set volume level brick count" + str(ex)})
+            cluster.details["volume_level_brick_count"] = volume_detail
+        return cluster_data
+
 
     def set_brick_count(self, cluster_data):
-        try:
-            for cluster in cluster_data:
-                for node in cluster.details["Node"]:
+        for cluster in cluster_data:
+            for node in cluster.details["Node"]:
+                try:
                     total = 0
                     up = 0
                     down = 0
@@ -238,36 +290,71 @@ class GraphitePlugin():
                     node["brick_total_count"]  = total
                     node["brick_up_count"] = up
                     node["brick_down_count"] = down
-        except KeyError as ex:
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': "Failed to set brick count" + str(ex)})
+                except (AttributeError, KeyError) as ex:
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Failed to set brick count" + str(ex)})
         return cluster_data
 
 
     def set_brick_path(self, cluster_data):
         for cluster in cluster_data:
             for brick in cluster.details["Brick"]:
-                brick["brick_name"] = brick["brick_path"].split(":")[1]
+                try:
+                    brick["brick_name"] = brick["brick_path"].split(":")[1]
+                except (AttributeError, KeyError) as ex:
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Failed to set brick path" + str(ex)})
         return cluster_data
 
 
     def set_resource_count(self, cluster_data, resource_name):
-        try:
-            for cluster in cluster_data:
-                resources = cluster.details[str(resource_name)]
-                cluster.details[str(resource_name.lower()) + "_total_count"] = len(resources)
-                up = 0
-                down = 0
-                for resource in resources:
+        for cluster in cluster_data:
+            resources = cluster.details[str(resource_name)]
+            cluster.details[str(resource_name.lower()) + "_total_count"] = len(resources)
+            up = 0
+            down = 0
+            for resource in resources:
+                try:
                     if resource["status"] == 0:
                         up = up + 1
                     else:
                         down = down + 1
-                cluster.details[str(resource_name.lower()) + "_up_count"] = up
-                cluster.details[str(resource_name.lower()) + "_down_count"] = down
-        except KeyError as ex:
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': "Failed to set resource count for {0}".format(resource_name) + str(ex)})
+                except KeyError as ex:
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Failed to set resource count for {0}".format(resource_name) + str(ex)})
+            cluster.details[str(resource_name.lower()) + "_up_count"] = up
+            cluster.details[str(resource_name.lower()) + "_down_count"] = down
+        
+        return cluster_data
+
+
+    def set_volume_count(self, cluster_data, resource_name):
+        
+        for cluster in cluster_data:
+            resources = cluster.details[str(resource_name)]
+            cluster.details[str(resource_name.lower()) + "_total_count"] = len(resources)
+            up = 0
+            down = 0
+            partial = 0
+            degraded = 0
+            for resource in resources:
+                try:
+                    if resource["state"] == 0:
+                        up = up + 1
+                    elif resource["state"] == 5:
+                        partial = partial + 1
+                    elif resource["state"] == 6:
+                        degraded = degraded + 1
+                    else:
+                        down = down + 1
+                except KeyError as ex:
+                    logger.log("error", NS.get("publisher_id", None),
+                                {'message': "Failed to set resource count for {0}".format(resource_name) + str(ex)})
+            cluster.details[str(resource_name.lower()) + "_up_count"] = up
+            cluster.details[str(resource_name.lower()) + "_down_count"] = down
+            cluster.details[str(resource_name.lower()) + "_partial_count"] = partial
+            cluster.details[str(resource_name.lower()) + "_degraded_count"] = degraded
+        
         return cluster_data
 
 
@@ -276,7 +363,7 @@ class GraphitePlugin():
                        "degraded" : 8, "up" : 0, "down" : 1,
                       "completed" : 11, "not_started" : 12,
                       "in progress" : 13, "in_progress" : 13,
-                      "not started" : 12, "failed" : 4}
+                      "not started" : 12, "failed" : 4, "(partial)":5, "(degraded)": 6}
 
         try:
             return status_map[status]
