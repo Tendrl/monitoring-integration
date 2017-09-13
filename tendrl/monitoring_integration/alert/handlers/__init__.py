@@ -44,19 +44,20 @@ class AlertHandler(object):
     def handle(self, alert_json):
         alert = self.format_alert(alert_json)
         unset = False
-        if alert["severity"] == constants.TENDRL_GRAFANA_SEVERITY_MAP[
-            "ok"]:
-            unset = True
-        logger.log( 
-            "notice",
-            NS.publisher_id,
-            {
-                "message" : json.dumps(alert),
-                "alert_condition_status": alert["resource"],
-                "alert_condition_state": alert["severity"],
-                "alert_condition_unset": unset
-            }
-        )
+        if alert:
+            if alert["severity"] == \
+                constants.TENDRL_GRAFANA_SEVERITY_MAP["ok"]:
+                unset = True
+            logger.log( 
+                "notice",
+                NS.publisher_id,
+                {
+                    "message" : json.dumps(alert),
+                    "alert_condition_status": alert["resource"],
+                    "alert_condition_state": alert["severity"],
+                    "alert_condition_unset": unset
+                }
+            )
 
 
 class AlertHandlerManager(object):
