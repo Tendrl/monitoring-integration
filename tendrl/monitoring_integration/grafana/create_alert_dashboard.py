@@ -50,7 +50,7 @@ class CreateAlertDashboard():
             logger.log("error", NS.get("publisher_id", None),
                                    {'message': msg})
 
-    def get_message_from_response(response_data):
+    def get_message_from_response(self, response_data):
 
         message = ""
         try :
