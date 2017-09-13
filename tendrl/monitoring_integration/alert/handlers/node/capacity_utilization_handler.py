@@ -37,7 +37,7 @@ class CapacityUtilizationHandler(AlertHandler):
             alert['tags']['fqdn'] = alert['tags']['fqdn']
             alert['classification'] = alert_json["classification"]
             if alert['severity'] == "WARNING":
-                alert['tags']['message'] = ("Capacity utilization trend of node %s is" \
+                alert['tags']['message'] = ("Storage utilization of node %s is" \
                 " %s which is above the %s threshold (%s)." % (
                     alert['tags']['fqdn'],
                     alert['current_value'],
@@ -45,7 +45,7 @@ class CapacityUtilizationHandler(AlertHandler):
                     alert['tags']['warning_max']
                 ))
             elif alert['severity'] == "INFO":
-                alert['tags']['message'] = ("Capacity utilization trend of node %s is"\
+                alert['tags']['message'] = ("Storage utilization of node %s is"\
                 " back to normal" % (
                     alert['tags']['fqdn']
                 ))
