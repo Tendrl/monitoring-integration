@@ -29,9 +29,9 @@ def get_resource_keys(key, resource_name):
 
 def get_subvolume_details(key):
     subvolume_brick_details = []
-    try:
-        subvolumes = get_resource_keys(key, "Bricks")
-        for subvolume in subvolumes:
+    subvolumes = get_resource_keys(key, "Bricks")
+    for subvolume in subvolumes:
+        try:
             subvolume_details = {}
             subvolume_details["subvolume"] = ""
             subvolume_details["bricks"] = []
@@ -39,21 +39,22 @@ def get_subvolume_details(key):
             brick_list = get_resource_keys(key + "/" + "Bricks", subvolume)
             subvolume_details["bricks"] = brick_list
             subvolume_brick_details.append(copy.deepcopy(subvolume_details))
-    except (KeyError, etcd.EtcdKeyNotFound) as ex:
-        logger.log("error", NS.get("publisher_id", None),
-                   {'message': "Error while fetching subvolumes" + str(ex)})
+        except (KeyError, etcd.EtcdKeyNotFound) as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Error while fetching subvolumes" + str(ex)})
 
     return subvolume_brick_details
 
-# TODO The brick detail path might change in future
+
 def get_cluster_details():
-    attrs = {"bricks" : ["brick_path","hostname","vol_id"],
-             "nodes" : ["fqdn"], "volumes" : ["name","vol_id"]}
     ''' 
         To get details of glusters from etcd
         TODO: Optimize the code, reduce number of etcd calls 
         TODO: Extract etcd host and port from configuration file '''
 
+    
+    attrs = {"bricks" : ["brick_path", "hostname", "vol_id", "vol_name"],
+             "nodes" : ["fqdn"], "volumes" : ["name","vol_id"]}
     cluster_details_list = []
     try:
         cluster_list = get_resource_keys("", "clusters")
@@ -61,49 +62,81 @@ def get_cluster_details():
             cluster_obj = cluster_detail.ClusterDetail()
             cluster_obj.integration_id =  cluster_id
             cluster_key = '/clusters/' + str(cluster_obj.integration_id)
-            brick_list = get_resource_keys(cluster_key, "Bricks/all")
-            for brick_id in brick_list:
-                brick_details = etcd_utils.read(cluster_key + "/Bricks/all/" +
-                                                str(brick_id))
-                brick = {}
-                for brick_detail in brick_details.leaves:
-                    if brick_detail.key.rsplit('/')[-1] in attrs["bricks"]:
-                        if brick_detail.key.rsplit('/')[-1] == "brick_path":
-                            brick[brick_detail.key.rsplit('/')[-1]] = \
-                            brick_detail.value.split(":")[1].replace('/','|')
-                        else:
-                            brick[brick_detail.key.rsplit('/')[-1]] = \
-                                brick_detail.value
-                cluster_obj.bricks.append(copy.deepcopy(brick))
+            node_list = get_resource_keys(cluster_key, "Bricks/all")
+            for node_id in node_list:
+                node_key = os.path.join(cluster_key + "/Bricks/all/")
+                brick_list = get_resource_keys(node_key, str(node_id))
+                for brick_id in brick_list:
+                    brick_key = os.path.join(node_key, str(node_id), brick_id)
+                    try:
+                        brick_details = etcd_utils.read(brick_key)
+                        brick = {}
+                        for brick_detail in brick_details.leaves:
+                            try:
+                                if brick_detail.key.rsplit('/')[-1] in attrs["bricks"]:
+                                    if brick_detail.key.rsplit('/')[-1] == "brick_path":
+                                        brick[brick_detail.key.rsplit('/')[-1]] = \
+                                        brick_detail.value.split(":")[1].replace('/','|')
+                                    else:
+                                        brick[brick_detail.key.rsplit('/')[-1]] = \
+                                            brick_detail.value
+                            except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                                logger.log("error", NS.get("publisher_id", None),
+                                          {'message': "Error while fetching brick_details" + str(ex)})
+                        cluster_obj.bricks.append(copy.deepcopy(brick))
+                    except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                        logger.log("error", NS.get("publisher_id", None),
+                                   {'message': "Error while fetching brick id" + str(ex)})
             node_list = get_resource_keys(cluster_key, "nodes")
             for node_id in node_list:
-                node_details = etcd_utils.read(cluster_key + 
-                                               "/nodes/" + 
-                                               str(node_id) +
-                                               "/NodeContext")
-                nodes = {}
-                for node_detail in node_details.leaves:
-                    if node_detail.key.rsplit('/')[-1] in attrs["nodes"]:
-                        nodes[node_detail.key.rsplit('/')[-1]] = \
-                            node_detail.value
-                cluster_obj.hosts.append(copy.deepcopy(nodes))
+                try:
+                    node_details = etcd_utils.read(cluster_key + 
+                                                   "/nodes/" + 
+                                                   str(node_id) +
+                                                   "/NodeContext")
+                    nodes = {}
+                    for node_detail in node_details.leaves:
+                        try:
+                            if node_detail.key.rsplit('/')[-1] in attrs["nodes"]:
+                                nodes[node_detail.key.rsplit('/')[-1]] = \
+                                    node_detail.value
+                        except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                                logger.log("error", NS.get("publisher_id", None),
+                                          {'message': "Error while fetching node_details" + str(ex)})
+                  
+                    cluster_obj.hosts.append(copy.deepcopy(nodes))
+                except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                        logger.log("error", NS.get("publisher_id", None),
+                                   {'message': "Error while fetching node id {}".format(node_id) + str(ex)})
             volume_list = get_resource_keys(cluster_key, "Volumes")
             for volume_id in volume_list:
-                volume_data = {}
-                volume_details = etcd_utils.read(cluster_key +
-                                                 "/Volumes/" + 
-                                                 str(volume_id))
-                subvolume_key = cluster_key + "/Volumes/" + str(volume_id)
-                subvolume_details = get_subvolume_details(subvolume_key)
-                for volume in volume_details.leaves:
-	            if volume.key.rsplit('/')[-1] in attrs["volumes"]:
-                        volume_data[volume.key.rsplit('/')[-1]] = volume.value
-                volume_data["subvolume"] = subvolume_details
-                cluster_obj.volumes.append(volume_data)
+                try:
+                    volume_data = {}
+                    volume_details = etcd_utils.read(cluster_key +
+                                                     "/Volumes/" + 
+                                                     str(volume_id))
+                    subvolume_key = cluster_key + "/Volumes/" + str(volume_id)
+                    subvolume_details = get_subvolume_details(subvolume_key)
+                    for volume in volume_details.leaves:
+                        try:
+	                    if volume.key.rsplit('/')[-1] in attrs["volumes"]:
+                                volume_data[volume.key.rsplit('/')[-1]] = volume.value
+                        except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                                logger.log("error", NS.get("publisher_id", None),
+                                          {'message': "Error while fetching volume_details" + str(ex)})
+                    volume_data["subvolume"] = subvolume_details
+                    cluster_obj.volumes.append(volume_data)
+                except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                        logger.log("error", NS.get("publisher_id", None),
+                                   {'message': "Error while fetching volume id {}".format(volume_id) + str(ex)})
             for bricks in cluster_obj.bricks:
                 for volume in cluster_obj.volumes:
-                    if volume["vol_id"] == bricks["vol_id"]:
-                        bricks["vol_name"] = volume["name"]
+                    try:
+                        if volume["vol_id"] == bricks["vol_id"]:
+                            bricks["vol_name"] = volume["name"]
+                    except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                        logger.log("error", NS.get("publisher_id", None),
+                                   {'message': "Error while getting volumelevel brick details" + str(ex)})
             cluster_details_list.append(cluster_obj)
         return cluster_details_list
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
@@ -184,9 +217,11 @@ def set_target(target, cluster_detail, resource, resource_name):
         target["target"]= target["target"].replace('$host_name',
                                                    str(resource["host" + \
                                                    "name"].replace(".", "_")))
-        target["target"]= target["target"].replace('$brick_name',
+        target["target"]= target["target"].replace('$brick_path',
                                                    str(resource["brick_path"]))
-        new_title = str(resource["hostname"].replace(".", "_")) + \
+        target["target"]= target["target"].replace('$volume_name',
+                                                   str(resource["vol_name"]))
+        new_title = str(resource["vol_name"] + "-" + resource["hostname"].replace(".", "_")) + \
                     "-" + str(resource["brick_path"])
     if "alias" in target["target"] and "aliasByNode" not in target["target"] :
         target["target"] = target["target"].split('(',1)[-1].rsplit(',', 1)[0]
