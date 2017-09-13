@@ -16,13 +16,20 @@ Requires: python-whisper
 Requires: python-requests
 Requires: python-setuptools
 Requires: python-urllib3
+Requires: tendrl-grafana-plugins
 
 BuildRequires: python-setuptools
 BuildRequires: systemd
 
-
 %description
 Python module for Tendrl to create a new dashboard in Grafana
+
+%package -n tendrl-grafana-plugins
+Summary:	Vonage plugin for tendrl-graphana
+Requires:	grafana
+License:        ASL 2.0
+%description -n tendrl-grafana-plugins
+The vonage status panel for grafana web server.
 
 %prep
 %setup
@@ -34,6 +41,9 @@ rm -rf %{name}.egg-info
 
 %build
 %{__python} setup.py build
+
+# Support light mode better
+sed -i -e 's/green/rgb(1,167,1)/g' Vonage-Grafana_Status_panel/dist/css/status_panel.css
 
 # remove the sphinx-build leftovers
 rm -rf html/.{doctrees,buildinfo}
@@ -77,6 +87,9 @@ fi
 %check
 py.test -v tendrl/monitoring_integration/tests || :
 
+%files -n tendrl-grafana-plugins
+%{_localstatedir}/lib/grafana/plugins/Vonage-Grafana_Status_panel
+
 %files -f INSTALLED_FILES
 %dir %{_var}/log/tendrl/monitoring-integration
 %dir %{_sysconfdir}/tendrl/monitoring-integration
@@ -89,7 +102,6 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 %config %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 %{_unitdir}/tendrl-monitoring-integration.service
-%{_localstatedir}/lib/grafana/plugins/Vonage-Grafana_Status_panel
 
 
 %changelog
