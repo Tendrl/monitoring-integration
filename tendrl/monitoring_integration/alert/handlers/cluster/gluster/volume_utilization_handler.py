@@ -45,7 +45,7 @@ class VolumeHandler(AlertHandler):
                     "cluster %s is %s which is above %s"\
                     " threshold %s" % (
                         alert['tags']['volume_name'],
-                        alert['tags']['cluster_name'],
+                        alert['tags']['integration_id'],
                         alert['current_value'],
                         alert['severity'],
                         alert['tags']['warning_max']
@@ -57,7 +57,7 @@ class VolumeHandler(AlertHandler):
                     "Volume utilization of %s in "\
                     "cluster %s is back normal" % (
                         alert['tags']['volume_name'],
-                        alert['tags']['cluster_name']
+                        alert['tags']['integration_id']
                     )
                 )
             else:

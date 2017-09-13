@@ -46,7 +46,7 @@ class BrickHandler(AlertHandler):
                     " threshold %s" % (
                         alert['tags']['brick_path'],
                         alert['tags']['fqdn'],
-                        alert['tags']['cluster_name'],
+                        alert['tags']['integration_id'],
                         alert['current_value'],
                         alert['severity'],
                         alert['tags']['warning_max']
@@ -59,7 +59,7 @@ class BrickHandler(AlertHandler):
                     "cluster %s is back normal" % (
                         alert['tags']['brick_path'],
                         alert['tags']['fqdn'],
-                        alert['tags']['cluster_name']
+                        alert['tags']['integration_id']
                     )
                 )
             else:
