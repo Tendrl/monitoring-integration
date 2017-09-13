@@ -4,6 +4,7 @@ Release: 1%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
 Source0: %{name}-%{version}.tar.gz
+Source1: vonage-status-panel-1.0.5-0-g4ecb061.zip
 License: LGPLv2+
 URL: https://github.com/Tendrl/monitoring-integration
 
@@ -25,6 +26,8 @@ Python module for Tendrl to create a new dashboard in Grafana
 
 %prep
 %setup
+unzip %SOURCE1
+mv -f Vonage* Vonage-Grafana_Status_panel
 
 # Remove bundled egg-info
 rm -rf %{name}.egg-info
@@ -41,6 +44,7 @@ install -m  0755  --directory $RPM_BUILD_ROOT%{_var}/log/tendrl/monitoring-integ
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
+install -d %{buildroot}%{_localstatedir}/lib/grafana/plugins/
 install -Dm 0644 etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 install -Dm 0644 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir}/tendrl-monitoring-integration.service
@@ -48,6 +52,7 @@ install -Dm 0644 etc/tendrl/monitoring-integration/logging.yaml.timedrotation.sa
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/graphite-web.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/carbon.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
 cp -a etc/tendrl/monitoring-integration/grafana/dashboards/*.json $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards/
+cp -r Vonage-Grafana_Status_panel %{buildroot}%{_localstatedir}/lib/grafana/plugins/
 
 %post
 if [ $1 -eq 1 ] ; then
@@ -84,6 +89,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 %config %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 %{_unitdir}/tendrl-monitoring-integration.service
+%{_localstatedir}/lib/grafana/plugins/Vonage-Grafana_Status_panel
 
 
 %changelog
