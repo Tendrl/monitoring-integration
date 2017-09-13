@@ -154,7 +154,7 @@ def set_alert(panel, alert_thresholds, panel_title):
                                       "query": {"params": [panel["targets"][-1]["refId"],"3m","now"]},
                                       "reducer": {"params": [], "type": "avg" },
                                       "type": "query"}],
-                                      "executionErrorState": "no_data", "frequency": "60s", "handler": 1,
+                                      "executionErrorState": "keep_state", "frequency": "60s", "handler": 1,
                                       "name": str(panel["title"]) + " Alert", "noDataState": "no_data",
                                       "notifications": []}
 
