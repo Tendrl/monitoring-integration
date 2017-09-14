@@ -139,7 +139,7 @@ def get_cluster_details():
                                    {'message': "Error while getting volumelevel brick details" + str(ex)})
             cluster_details_list.append(cluster_obj)
         return cluster_details_list
-    except (etcd.EtcdKeyNotFound, KeyError) as ex:
+    except (etcd.EtcdException, etcd.EtcdKeyNotFound, KeyError) as ex:
         logger.log("error", NS.get("publisher_id", None),
                   {'message': str(ex)})
         return None
