@@ -46,7 +46,7 @@ def get_subvolume_details(key):
     return subvolume_brick_details
 
 
-def get_cluster_details():
+def get_cluster_details(integration_id=None):
     ''' 
         To get details of glusters from etcd
         TODO: Optimize the code, reduce number of etcd calls 
@@ -57,8 +57,13 @@ def get_cluster_details():
              "nodes" : ["fqdn"], "volumes" : ["name","vol_id"]}
     cluster_details_list = []
     try:
-        cluster_list = get_resource_keys("", "clusters")
+        cluster_list = []
+        if integration_id:
+             cluster_list.append(integration_id)
+        else:
+             cluster_list = get_resource_keys("", "clusters")
         for cluster_id in cluster_list:
+            
             cluster_obj = cluster_detail.ClusterDetail()
             cluster_obj.integration_id =  cluster_id
             cluster_key = '/clusters/' + str(cluster_obj.integration_id)
