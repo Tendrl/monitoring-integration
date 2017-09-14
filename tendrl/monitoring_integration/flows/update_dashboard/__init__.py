@@ -27,7 +27,8 @@ class UpdateDashboard(flows.BaseFlow):
                        {'message': "Wrong action"})
 
     def _add_panel(self, cluster_id, resource_type, resource_name=None):
-
+        if resource_type == "nodes":
+            resource_name = resource_name.replace(".", "_")
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
         if alert_dashboard:
             alert_row = alert_utils.fetch_row(alert_dashboard)
@@ -35,7 +36,7 @@ class UpdateDashboard(flows.BaseFlow):
             dash_json = alert_utils.create_updated_dashboard(alert_dashboard,
                                                              alert_row)
             resp = dashboard._post_dashboard(dash_json)
-            return resp._content
+            return resp
         else:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Dashboard not found"})

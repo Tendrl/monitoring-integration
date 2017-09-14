@@ -1,12 +1,15 @@
 ---
 namespace.monitoring:
   flows:
-    CreateAlertDashboards:
+    NewClusterDashboard:
       tags:
         - tendrl/integration/monitoring
-      help: Create Alert Dashboards
+      help: Create Dashboards when Cluster is Imported
       enabled: true
-      run: monitoring.flows.CreateAlertDashboards
+      inputs:
+        mandatory:
+          -  TendrlContext.integration_id
+      run: monitoring.flows.NewClusterDashboard
       type: Create
       version: 1
       uuid: 1951e821-7aa9-4a91-8183-e73bc8275bce
