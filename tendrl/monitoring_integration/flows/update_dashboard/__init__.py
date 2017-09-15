@@ -45,16 +45,17 @@ class UpdateDashboard(flows.BaseFlow):
 
         if resource_type == "volumes":
             cluster_key = "/clusters/" + str(cluster_id)
-            volume_list = create_dashboards.get_resource_keys(cluster_key, "Volumes")
             vol_id = None
             try_count = 0
             while try_count < 18 and not vol_id:
                 time.sleep(10)
                 if vol_id is not None:
                     break
-                for volume_id in volume_list:
+                volumes = etcd_utils.read(cluster_key + "/Volumes")
+                for volume in volumes.leaves:
+                    volume_id = volume.key.rsplit("/")[-1]
                     try:
-                        vol_name_key = cluster_key + "/" + volume_id + "/name"
+                        vol_name_key = cluster_key + "/Volumes/" + volume_id + "/name"
                         vol_name = etcd_utils.read(vol_name_key).value
                         if vol_name == resource_name:
                             vol_id = volume_id
@@ -64,30 +65,29 @@ class UpdateDashboard(flows.BaseFlow):
                         pass
             if try_count == 18:
                 return
-            try_count = 0
-            while try_count < 18:
-                time.sleep(10)
-                brick_list = []
-                volume_key = "/clusters/" + str(cluster_id) + "/Volumes/" + str(vol_id)
-                subvolume_list = create_dashboards.get_resource_keys(volume_key, "Bricks")
-                for subvolume in subvolume_list:
-                    try:
-                        subvolume_key = volume_key + "/Bricks/" + subvolume
-                        brick_details = etcd_utils.read(subvolume_key)
-                        for entry in brick_details.leaves:
-                            try:
-                                brick_name = entry.key.rsplit("/", 1)[1]
-                                brick_key = cluster_key + "/Bricks/all/" + brick_name.split(":", 1)[0] + \
-                                     "/" + brick_name.split(":_", 1)[1] + "/" + brick_path
-                                brick_name = etcd_utils.read(brick_key).value
-                                brick_list.append(copy.deepcopy(brick_name))
-                            except(KeyError, etcd.EtcdKeyNotFound) as ex:
-                                pass
-                    except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                        try_count = try_count + 1
-                        pass
-            if try_count == 18:
-                return
+
+            time.sleep(10)
+            volume_key = "/clusters/" + str(cluster_id) + "/Volumes/" + str(vol_id)
+            subvols = etcd_utils.read(volume_key + "/Bricks")
+            brick_list = []
+            for subvol in subvols.leaves:
+                subvol_name = subvol.key.rsplit("/")[-1]
+                try:
+                    subvolume_key = volume_key + "/Bricks/" + subvol_name
+                    brick_details = etcd_utils.read(subvolume_key)
+                    for entry in brick_details.leaves:
+                        try:
+                            brick_name = entry.key.rsplit("/", 1)[1]
+                            brick_key = cluster_key + "/Bricks/all/" + brick_name.split(":", 1)[0] + \
+                                 "/" + brick_name.split(":_", 1)[1] + "/brick_path"
+                            brick_name = etcd_utils.read(brick_key).value
+                            brick_list.append(copy.deepcopy(brick_name))
+                        except(KeyError, etcd.EtcdKeyNotFound) as ex:
+                            pass
+                except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                    # This should not happen as the bricks would be added by this time
+                    pass
+
             for brick in brick_list:
                 self._add_panel(cluster_id, "bricks", brick)
 
