@@ -9,7 +9,6 @@ from tendrl.monitoring_integration.grafana import create_dashboards
 from tendrl.commons.utils import log_utils as logger
 
 
-
 class NewClusterDashboard(flows.BaseFlow):
 
     def run(self):
@@ -29,7 +28,7 @@ class NewClusterDashboard(flows.BaseFlow):
         if alert_host_dashboard:
             try:
                 if alert_host_dashboard["message"] == "Dashboard not found":
-                    falg = False
+                    flag = False
                 else:
                     flag = True
             except Exception as ex:

@@ -1,3 +1,4 @@
+import etcd
 import json
 
 
@@ -6,17 +7,39 @@ from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import grafana_org_utils
 from tendrl.monitoring_integration.grafana import datasource
 from tendrl.commons.utils import log_utils as logger
+from tendrl.commons.utils import etcd_utils
 
 
 class CreateAlertDashboard():
 
     def __init__(self):
-
+        org_key = "_NS/monitoring/grafana_org_id"
+        auth_key = "_NS/monitoring/grafana_auth_key"
         cluster_detail_list = create_dashboards.get_cluster_details()
-        org_id  = grafana_org_utils.create_org("Alert_dashboard")
+        org_id = NS.config.data.get("org_id", None)
+        if not org_id:
+            try:
+                org_id  = etcd_utils.read(org_key).value
+            except etcd.EtcdKeyNotFound:
+                org_id  = grafana_org_utils.create_org("Alert_dashboard")
+                try:
+                    etcd_utils.write(org_key, org_id)
+                except etcd.EtcdKeyNotFound:
+                    pass
+                NS.config.data["org_id"] = org_id
         key = ""
         if grafana_org_utils.switch_context(org_id):
-            key = grafana_org_utils.create_api_token("Tendrl_auth_key", "Admin")
+            key = NS.config.data.get("grafana_auth_key", None)
+            if not key:
+                try:
+                    key  = etcd_utils.read(auth_key).value
+                except etcd.EtcdKeyNotFound:
+                    key = grafana_org_utils.create_api_token("grafana_auth_key", "Admin")
+                    try:
+                        etcd_utils.write(auth_key, key)
+                    except etcd.EtcdKeyNotFound:
+                        pass
+                    NS.config.data["grafana_auth_key"] = key
             response = datasource.create_datasource()
             if response.status_code == 200:
                 msg = '\n' + "Datasource " + \

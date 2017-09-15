@@ -76,6 +76,7 @@ namespace.monitoring:
         name:
         subvol_count:
         status:
+        state:
         pcnt_used:
         usable_capacity:
         used_capacity:

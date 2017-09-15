@@ -63,7 +63,13 @@ def get_cluster_details(integration_id=None):
         else:
              cluster_list = get_resource_keys("", "clusters")
         for cluster_id in cluster_list:
-            
+            try:
+                cluster_key = "/clusters/" + str(cluster_id) + "/is_managed"
+                cluster_is_managed = etcd_utils.read(cluster_key).value 
+                if cluster_is_managed.lower() == "no":
+                    continue
+            except etcd.EtcdKeyNotFound: 
+                continue 
             cluster_obj = cluster_detail.ClusterDetail()
             cluster_obj.integration_id =  cluster_id
             cluster_key = '/clusters/' + str(cluster_obj.integration_id)
