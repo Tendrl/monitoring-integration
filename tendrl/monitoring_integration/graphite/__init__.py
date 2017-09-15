@@ -216,7 +216,7 @@ class GraphitePlugin():
                 logger.log("error", NS.get("publisher_id", None),
                            {'message': "Failed to set resource details" + str(ex)})
             return cluster_data
-        except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
+        except (etcd.EtcdException, AttributeError, KeyError) as ex:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': str(ex)})
             raise ex
