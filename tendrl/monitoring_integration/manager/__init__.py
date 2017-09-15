@@ -1,7 +1,7 @@
 import __builtin__
 import traceback
 import json
-
+import time
 
 import signal
 import maps
@@ -143,6 +143,17 @@ def main():
     monitoring_integration.MonitoringIntegrationNS()
 
     TendrlNS()
+    grafana_conn_count = 0
+    while grafana_conn_count < 10:
+        if not utils.port_open(NS.config.data["grafana_port"], NS.config.data["grafana_host"]):
+            grafana_conn_count = grafana_conn_count  + 1
+            time.sleep(10)
+        else:
+            break
+    if grafana_conn_count == 10:
+        logger.log("info", NS.get("publisher_id", None),
+                   {'message': "Cannot connect to Grafana"})
+        return
     NS.type = "monitoring"
     NS.publisher_id = "monitoring_integration"
     if NS.config.data.get("with_internal_profiling", False):
