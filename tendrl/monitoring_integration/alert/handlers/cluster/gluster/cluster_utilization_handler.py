@@ -38,7 +38,7 @@ class ClusterHandler(AlertHandler):
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = ("Cluster utilization of cluster %s is" \
                 " %s which is above the %s threshold (%s)." % (
-                    alert['tags']['cluster_name'],
+                    alert['tags']['integration_id'],
                     alert['current_value'],
                     alert['severity'],
                     alert['tags']['warning_max']
@@ -46,7 +46,7 @@ class ClusterHandler(AlertHandler):
             elif alert['severity'] == "INFO":
                 alert['tags']['message'] = ("Cluster utilization of cluster %s is"\
                 " back to normal" % (
-                    alert['tags']['cluster_name']
+                    alert['tags']['integration_id']
                 ))
             else:
                 logger.log(
