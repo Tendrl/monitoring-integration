@@ -363,7 +363,8 @@ class GraphitePlugin():
                        "degraded" : 8, "up" : 0, "down" : 1,
                       "completed" : 11, "not_started" : 12,
                       "in progress" : 13, "in_progress" : 13,
-                      "not started" : 12, "failed" : 4, "(partial)":5, "(degraded)": 6}
+                      "not started" : 12, "failed" : 4, "(partial)":5, "(degraded)": 6,
+                      "unknown": 15}
 
         try:
             return status_map[status]
