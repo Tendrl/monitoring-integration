@@ -4,11 +4,9 @@ etcd_port: 2379
 # Central store etcd host/ip
 etcd_connection: 0.0.0.0
 
-# Etcd default user "root"
-etcd_username: root
-
-# Password for etcd user "root"
-etcd_password: replace_your_password_here
+# Enable etcd username/password based auth, disable if using CA Cert/Client cert based TLS auth options
+#etcd_username: root
+#etcd_password: replace_your_password_here
 
 log_cfg_path: /etc/tendrl/monitoring-integration/monitoring_integration_logging.yaml
 
