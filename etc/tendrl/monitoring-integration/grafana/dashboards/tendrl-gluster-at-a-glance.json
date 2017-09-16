@@ -468,6 +468,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Hosts",
                 "flipCard": false,
                 "flipTime": "10",
@@ -530,6 +531,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Volumes",
                 "flipCard": false,
                 "flipTime": "60",
@@ -552,16 +554,16 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(tendrl.clusters.$cluster_id.volume_count.total, 'Total')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.total), \"max\")),\"Total\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Up",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(tendrl.clusters.$cluster_id.volume_count.up, 'Up')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.up), \"max\")),\"Up\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
@@ -571,8 +573,8 @@
                     "display": true,
                     "displayType": "Regular",
                     "refId": "D",
-                    "target": "alias(tendrl.clusters.$cluster_id.volume_count.partial, 'Partial')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.partial), \"max\")),\"Partial\")",
+                    "textEditor": true,
                     "units": "none",
                     "valueHandler": "Text Only",
                     "warn": 1
@@ -584,8 +586,8 @@
                     "display": true,
                     "displayType": "Regular",
                     "refId": "E",
-                    "target": "alias(tendrl.clusters.$cluster_id.volume_count.degraded, 'Degraded')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.degraded), \"max\")),\"Degraded\")",
+                    "textEditor": true,
                     "units": "none",
                     "valueHandler": "Text Only",
                     "warn": 1
@@ -593,12 +595,12 @@
                     "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
-                    "decimals": null,
+                    "decimals": 2,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(tendrl.clusters.$cluster_id.volume_count.down, 'Down')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.down), \"max\")),\"Down\")",
+                    "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
                     "warn": 1
@@ -614,6 +616,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Bricks",
                 "flipCard": false,
                 "flipTime": "60",
@@ -628,16 +631,16 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(tendrl.clusters.$cluster_id.brick_count.total, 'Total')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.brick_count.total), \"max\")),\"Total\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Up",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(tendrl.clusters.$cluster_id.brick_count.up, 'Up')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.brick_count.up), \"max\")),\"Up\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
@@ -647,8 +650,8 @@
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(tendrl.clusters.$cluster_id.brick_count.down, 'Down')",
-                    "textEditor": false,
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.brick_count.down), \"max\")),\"Down\")",
+                    "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
                     "warn": 1
@@ -664,6 +667,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Geo-Replication Session",
                 "flipCard": false,
                 "flipTime": "60",
@@ -678,28 +682,32 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(tendrl.clusters.$cluster_id.georep.total, 'Total')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.total), \"max\")),\"Total\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Partial",
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(tendrl.clusters.$cluster_id.georep.up, 'Up')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.up), \"max\")),\"Up\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Up",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(tendrl.clusters.$cluster_id.georep.partial, 'Partial')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.partial), \"max\")),\"Partial\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Down",
                     "displayType": "Regular",
                     "refId": "D",
-                    "target": "alias(tendrl.clusters.$cluster_id.georep.down, 'Down')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.down), \"max\")),\"Down\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }],
                 "title": "",
