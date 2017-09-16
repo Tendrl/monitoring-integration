@@ -166,7 +166,7 @@ def set_alert(panel, alert_thresholds, panel_title, resource_name):
                                       "reducer": {"params": [], "type": "avg" },
                                       "type": "query"}],
                                       "executionErrorState": "keep_state", "frequency": "60s", "handler": 1,
-                                      "name": str(resource_name) + " " + str(panel["title"]) + " Alert", "noDataState": "no_data",
+                                      "name": str(resource_name) + " " + str(panel["title"]) + " Alert", "noDataState": "keep_state",
                                       "notifications": []}
 
 
