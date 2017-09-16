@@ -397,6 +397,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Bricks",
                 "flipCard": false,
                 "flipTime": "10",
@@ -419,14 +420,16 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.total, 'Total')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.total), \"max\")),\"Total\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Up",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.up, 'Up')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.up), \"max\")),\"Up\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
@@ -436,7 +439,8 @@
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.down, 'Down')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Down\")",
+                    "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
                     "warn": 1
