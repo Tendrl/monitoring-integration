@@ -156,7 +156,7 @@ def get_cluster_details(integration_id=None):
         return None
 
 
-def set_alert(panel, alert_thresholds, panel_title):
+def set_alert(panel, alert_thresholds, panel_title, resource_name):
     panel["thresholds"] = [{"colorMode": "critical", "fill": True, "line": True,
                             "op": "gt", "value": alert_thresholds[panel_title]["Warning"]}]
 
@@ -166,7 +166,7 @@ def set_alert(panel, alert_thresholds, panel_title):
                                       "reducer": {"params": [], "type": "avg" },
                                       "type": "query"}],
                                       "executionErrorState": "keep_state", "frequency": "60s", "handler": 1,
-                                      "name": str(panel["title"]) + " Alert", "noDataState": "no_data",
+                                      "name": str(resource_name) + " " + str(panel["title"]) + " Alert", "noDataState": "keep_state",
                                       "notifications": []}
 
 
@@ -288,7 +288,7 @@ def create_resource_dashboard(cluster_details_list, resource_name):
                                         targets  = panel["targets"]
                                         for target in targets:
                                             new_title = set_target(target, cluster_detail, resource, resource_name)
-                                        set_alert(panel, alert_thresholds, panel_title)
+                                        set_alert(panel, alert_thresholds, panel_title, resource_name)
                                         panel["id"] = count
                                         panel["legend"]["show"] = False
                                         panel["title"] = panel["title"] + " - " + str(new_title)
