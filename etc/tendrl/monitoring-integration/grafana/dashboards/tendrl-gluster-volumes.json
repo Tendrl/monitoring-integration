@@ -176,6 +176,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Bricks",
                 "flipCard": false,
                 "flipTime": "10",
@@ -198,7 +199,8 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.total, 'Total')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.total), \"max\")),\"Total\")",
+                    "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
@@ -206,7 +208,8 @@
                     "decimals": 2,
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.up, 'Up')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.up), \"max\")),\"Up\")",
+                    "textEditor": true,
                     "units": "none",
                     "valueHandler": "Text Only"
                 }, {
@@ -217,7 +220,8 @@
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.down, 'Down')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.down), \"max\")),\"Down\")",
+                    "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
                     "warn": 1
@@ -233,6 +237,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Subvolume",
                 "flipCard": false,
                 "flipTime": 5,
@@ -262,6 +267,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Geo-Replication Sessions",
                 "flipCard": false,
                 "flipTime": 5,
@@ -325,6 +331,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Healing",
                 "flipCard": false,
                 "flipTime": 5,
@@ -370,6 +377,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "datasource": "",
                 "displayName": "Rebalance",
                 "flipCard": false,
                 "flipTime": 5,
@@ -385,7 +393,7 @@
                     "displayType": "Regular",
                     "refId": "A",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.rebalance_files), 'max')), 'Rebalanced Files')",
-                    "textEditor": true,
+                    "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
