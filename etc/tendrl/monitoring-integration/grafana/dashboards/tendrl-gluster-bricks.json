@@ -864,7 +864,7 @@
             "title": "At-a-Glance",
             "titleSize": "h5"
         }, {
-            "collapse": false,
+            "collapse": true,
             "height": 250,
             "panels": [{
                 "aliasColors": {},

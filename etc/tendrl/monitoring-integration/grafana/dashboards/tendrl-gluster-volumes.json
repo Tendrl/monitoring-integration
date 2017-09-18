@@ -345,24 +345,27 @@
                     "aggregation": "Last",
                     "alias": "Healed",
                     "displayType": "Regular",
+                    "hide": false,
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(countSeries(groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.healed_cnt, 8, 'maxSeries')) , 'max')), 'Healed')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.healed_cnt)), \"max\")),\"Healed\")",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Split Brain",
                     "displayType": "Regular",
+                    "hide": false,
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(countSeries(groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.split_brain_cnt, 8, 'maxSeries')) , 'max')), 'Split Brain')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.split_brain_cnt)), \"max\")),\"Split Brain\")",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
                     "alias": "Heal Failed",
                     "displayType": "Regular",
+                    "hide": false,
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(countSeries(groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.split_brain_cnt, 8, 'maxSeries')) , 'max')), 'Heal Failed')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.heal_failed_cnt)), 'max')), 'Heal Failed')",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }],
@@ -708,7 +711,7 @@
                 "title": "Capacity Available",
                 "transparent": true,
                 "type": "singlestat",
-                "valueFontSize": "50%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -1138,7 +1141,7 @@
             "title": "Capacity",
             "titleSize": "h5"
         }, {
-            "collapse": false,
+            "collapse": true,
             "height": 250,
             "panels": [{
                 "cacheTimeout": null,
@@ -1359,7 +1362,7 @@
             "title": "Performance",
             "titleSize": "h5"
         }, {
-            "collapse": false,
+            "collapse": true,
             "height": 250,
             "panels": [{
                 "columns": [{
