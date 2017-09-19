@@ -121,6 +121,13 @@ class GraphitePlugin():
             cluster_list = self.get_resource_keys("", "clusters")
             cluster_data = []
             for cluster_id in cluster_list:
+		try:
+                    cluster_key = "/clusters/" + str(cluster_id) + "/is_managed"
+                    cluster_is_managed = etcd_utils.read(cluster_key).value
+                    if cluster_is_managed.lower() == "no":
+                        continue
+                except etcd.EtcdKeyNotFound:
+                    continue
                 cluster_details = cluster_detail.ClusterDetail()
                 cluster_details.integration_id = cluster_id
                 cluster_key = objects["Cluster"]["value"].replace("$integration_id",
@@ -200,8 +207,8 @@ class GraphitePlugin():
                                 attr_value = self.resource_status_mapper(str(attr_data.value).lower())
                                 resource_detail[key] = attr_value
                             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
-                               logger.log("error", NS.get("publisher_id", None),
-                                       {'message': "Cannot Find {0} in Node {1}".format(key, node) + str(ex)})
+                                logger.log("error", NS.get("publisher_id", None),
+                                           {'message': "Cannot Find {0} in Node {1}".format(key, node) + str(ex)})
                     cluster_details.details["Node"].append(copy.deepcopy(resource_detail))
                 cluster_data.append(copy.deepcopy(cluster_details))
             try:
