@@ -207,8 +207,6 @@ class GraphitePlugin():
                                 attr_value = self.resource_status_mapper(str(attr_data.value).lower())
                                 resource_detail[key] = attr_value
                             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
-				if key == "status":
-                                    resource_detail[key] = 1
                                 logger.log("error", NS.get("publisher_id", None),
                                            {'message': "Cannot Find {0} in Node {1}".format(key, node) + str(ex)})
                     cluster_details.details["Node"].append(copy.deepcopy(resource_detail))
