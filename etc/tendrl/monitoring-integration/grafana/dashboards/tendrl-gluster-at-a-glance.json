@@ -1196,7 +1196,7 @@
                 "lines": true,
                 "linewidth": 1,
                 "links": [],
-                "nullPointMode": "null",
+                "nullPointMode": "connected",
                 "percentage": false,
                 "pointradius": 5,
                 "points": false,
@@ -1251,7 +1251,7 @@
             "title": "At-a-glance",
             "titleSize": "h5"
         }, {
-            "collapse": false,
+            "collapse": true,
             "height": 256,
             "panels": [{
                 "columns": [{
@@ -1516,7 +1516,7 @@
                 "lines": true,
                 "linewidth": 1,
                 "links": [],
-                "nullPointMode": "null",
+                "nullPointMode": "connected",
                 "percentage": false,
                 "pointradius": 5,
                 "points": false,
@@ -1571,7 +1571,7 @@
             "title": "Top Consumers",
             "titleSize": "h5"
         }, {
-            "collapse": false,
+            "collapse": true,
             "height": 215,
             "panels": [{
                 "columns": [{
