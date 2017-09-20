@@ -40,7 +40,7 @@ class WebhookReceiver(gevent.greenlet.Greenlet):
                     [('Content-Type', 'text/html')]
                 )
                 response = [b'<h1>Alert Received</h1>']
-        except (IOError, AssertionError) as ex:
+        except (IOError, AssertionError, KeyError) as ex:
             Event(
                 ExceptionMessage(
                     priority="error",

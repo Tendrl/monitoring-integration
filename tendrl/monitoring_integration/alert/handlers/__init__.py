@@ -121,6 +121,7 @@ class AlertHandlerManager(object):
                Unauthorized,
                ConnectionFailedException,
                ConnectionError,
+               KeyError,
                RequestException) as ex:
             Event(
                 ExceptionMessage(
