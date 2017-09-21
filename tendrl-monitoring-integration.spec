@@ -61,6 +61,7 @@ install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir
 install -Dm 0644 etc/tendrl/monitoring-integration/logging.yaml.timedrotation.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/graphite-web.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/carbon.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
+install -Dm 0644 etc/tendrl/monitoring-integration/graphite/storage-schemas.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/storage-schemas.conf
 cp -a etc/tendrl/monitoring-integration/grafana/dashboards/*.json $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards/
 cp -r Vonage-Grafana_Status_panel %{buildroot}%{_localstatedir}/lib/grafana/plugins/
 
@@ -68,7 +69,9 @@ cp -r Vonage-Grafana_Status_panel %{buildroot}%{_localstatedir}/lib/grafana/plug
 if [ $1 -eq 1 ] ; then
     mv /etc/carbon/carbon.conf /etc/carbon/carbon.conf.%{name}
     mv /etc/httpd/conf.d/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf.%{name}
+    mv /etc/carbon/storage-schemas.conf /etc/carbon/storage-schemas.conf.%{name}
     ln -s /etc/tendrl/monitoring-integration/carbon.conf /etc/carbon/carbon.conf
+    ln -s /etc/tendrl/monitoring-integration/storage-schemas.conf /etc/carbon/storage-schemas.conf
     ln -s /etc/tendrl/monitoring-integration/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
     chgrp grafana /etc/tendrl/monitoring-integration/grafana/grafana.ini
 fi
@@ -78,9 +81,10 @@ systemctl enable tendrl-monitoring-integration
 
 %preun
 if [ "$1" = 0 ] ; then
-    rm -fr etc/carbon/carbon.conf /etc/httpd/conf.d/graphite-web.conf > /dev/null 2>&1
+    rm -fr etc/carbon/carbon.conf /etc/httpd/conf.d/graphite-web.conf /etc/carbon/storage-schemas.conf > /dev/null 2>&1
     mv /etc/carbon/carbon.conf.%{name} /etc/carbon/carbon.conf
     mv /etc/httpd/conf.d/graphite-web.conf.%{name} /etc/httpd/conf.d/graphite-web.conf
+    mv /etc/carbon/storage-schemas.conf.%{name} /etc/carbon/storage-schemas.conf
 fi
 %systemd_preun tendrl-monitoring-integration.service
 
@@ -99,6 +103,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
+%config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/storage-schemas.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 %config %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 %{_unitdir}/tendrl-monitoring-integration.service
