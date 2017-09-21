@@ -728,7 +728,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
-                "format": "none",
+                "format": "decbytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
