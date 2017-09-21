@@ -22,6 +22,7 @@ from tendrl import monitoring_integration
 from tendrl.monitoring_integration import sync
 from tendrl.commons import TendrlNS
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import grafana_org_utils
 
 
 class MonitoringIntegrationManager(common_manager.Manager):
@@ -52,87 +53,92 @@ class MonitoringIntegrationManager(common_manager.Manager):
 
 def _upload_default_dashboards():
 
-        monitoring_integration_manager = MonitoringIntegrationManager()
+    monitoring_integration_manager = MonitoringIntegrationManager()
 
-        dashboards = []
-        utils.get_conf()
-        dashboards = dashboard.get_all_dashboards()
+    dashboards = []
+    utils.get_conf()
+    dashboards = dashboard.get_all_dashboards()
+    try:
+        main_org_id = grafana_org_utils.get_org_id("Main Org.")
+        if main_org_id:
+            grafana_org_utils.switch_context(json.loads(main_org_id)["id"])
+    except exceptions.ConnectionFailedException as ex:
+        pass
+    title = []
 
-        title = []
+    for dashboard_json in dashboards:
+        title.append(dashboard_json["uri"].split('/')[1])
 
-        for dashboard_json in dashboards:
-            title.append(dashboard_json["uri"].split('/')[1])
+    for dashboard_json in NS.config.data["dashboards"]:
+        if dashboard_json in title:
+            msg = '\n' + "Dashboard " + str(dashboard_json) + \
+                  " already exists" + '\n'
+            logger.log("info", NS.get("publisher_id", None),
+                       {'message': msg})
+            continue
+        response = dashboard.create_dashboard(dashboard_json)
 
-        for dashboard_json in NS.config.data["dashboards"]:
-            if dashboard_json in title:
-                msg = '\n' + "Dashboard " + str(dashboard_json) + \
-                      " already exists" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-                continue
-            response = dashboard.create_dashboard(dashboard_json)
-
-            if response.status_code == 200:
-                msg = '\n' + "Dashboard " + str(dashboard_json)+ \
-                      " uploaded successfully" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            else:
-                msg = "Dashboard {0} upload failed. Error code: {1} ," + \
-                      "Error message: " + \
-                      "{2} ".format(str(dashboard_json),
-                                    str(response.status_code),
-                                    str(get_message_from_response(response)))
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-        try:
-            dashboard_json = dashboard.get_dashboard(NS.config.data["home_dashboard"])
-
-            if 'dashboard' in dashboard_json:
-                dashboard_id = dashboard_json.get('dashboard').get('id')
-                response = dashboard.set_home_dashboard(dashboard_id)
-
-                response = dashboard.set_home_dashboard(dashboard_id)
-                if response.status_code == 200:
-                    msg = '\n' + "Dashboard " + \
-                          str(NS.config.data["home_dashboard"]) + \
-                          " is set as home dashboard" + '\n'
-                    logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            else:
-                msg = '\n' + str(dashboard_json.get('message')) + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-        except exceptions.ConnectionFailedException as ex:
-            traceback.print_exc()
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': str(ex)})
-            raise exceptions.ConnectionFailedException
-
-        # Creating datasource
-        response = datasource.create_datasource()
         if response.status_code == 200:
-            msg = '\n' + "Datasource " + \
+            msg = '\n' + "Dashboard " + str(dashboard_json)+ \
                   " uploaded successfully" + '\n'
             logger.log("info", NS.get("publisher_id", None),
                        {'message': msg})
-
         else:
-            msg = "Datasource upload failed. Error code: {0} ," + \
+            msg = "Dashboard {0} upload failed. Error code: {1} ," + \
                   "Error message: " + \
-                  "{1} ".format(response.status_code,
+                  "{2} ".format(str(dashboard_json),
+                                str(response.status_code),
                                 str(get_message_from_response(response)))
             logger.log("info", NS.get("publisher_id", None),
                        {'message': msg})
+    try:
+        dashboard_json = dashboard.get_dashboard(NS.config.data["home_dashboard"])
+
+        if 'dashboard' in dashboard_json:
+            dashboard_id = dashboard_json.get('dashboard').get('id')
+            response = dashboard.set_home_dashboard(dashboard_id)
+
+            response = dashboard.set_home_dashboard(dashboard_id)
+            if response.status_code == 200:
+                msg = '\n' + "Dashboard " + \
+                      str(NS.config.data["home_dashboard"]) + \
+                      " is set as home dashboard" + '\n'
+                logger.log("info", NS.get("publisher_id", None),
+                          {'message': msg})
+        else:
+            msg = '\n' + str(dashboard_json.get('message')) + '\n'
+            logger.log("info", NS.get("publisher_id", None),
+                       {'message': msg})
+    except exceptions.ConnectionFailedException as ex:
+        traceback.print_exc()
+        logger.log("error", NS.get("publisher_id", None),
+                   {'message': str(ex)})
+        raise exceptions.ConnectionFailedException
+
+    # Creating datasource
+    response = datasource.create_datasource()
+    if response.status_code == 200:
+        msg = '\n' + "Datasource " + \
+              " uploaded successfully" + '\n'
+        logger.log("info", NS.get("publisher_id", None),
+                   {'message': msg})
+
+    else:
+        msg = "Datasource upload failed. Error code: {0} ," + \
+              "Error message: " + \
+              "{1} ".format(response.status_code,
+                            str(get_message_from_response(response)))
+        logger.log("info", NS.get("publisher_id", None),
+                   {'message': msg})
 
 def get_message_from_response(response_data):
 
     message = ""
     try :
-        if isinstance(json.loads(response_data._content), list):
-            message = str(json.loads(response._content)[0]["message"])
+        if isinstance(json.loads(response_data.content), list):
+            message = str(json.loads(response.content)[0]["message"])
         else:
-            message = str(json.loads(response_data._content)["message"])
+            message = str(json.loads(response_data.content)["message"])
     except (AttributeError, KeyError):
         pass
 
