@@ -490,7 +490,7 @@
                 "targets": [{
                     "aggregation": "Last",
                     "alias": "Total",
-                    "decimals": 2,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "A",
@@ -510,7 +510,7 @@
                     "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
-                    "decimals": 2,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
@@ -569,7 +569,7 @@
                     "aggregation": "Last",
                     "alias": "Partial",
                     "crit": 1,
-                    "decimals": 2,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "D",
@@ -582,7 +582,7 @@
                     "aggregation": "Last",
                     "alias": "Degraded",
                     "crit": 1,
-                    "decimals": 2,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "E",
@@ -595,7 +595,7 @@
                     "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
-                    "decimals": 2,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
@@ -646,7 +646,7 @@
                     "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
-                    "decimals": null,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
@@ -1320,7 +1320,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(aliasSub(substr(limit(tendrl.clusters.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes, 5), 4, -2), '(\\.bricks\\.)', ' : '), '\\|', '/')"
+                    "target": "aliasSub(aliasSub(substr(limit(tendrl.clusters.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes, 5), 4, -2), '(\\.bricks\\.)', ':'), '\\|', '/')"
                 }],
                 "title": "Top 5 Utilization By Bricks",
                 "transform": "timeseries_aggregations",
@@ -1434,7 +1434,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(transformNull(tendrl.clusters.$cluster_id.nodes.*.cpu.{percent-user,percent-system}, 0), 4, 'maxSeries')"
+                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.*.cpu.{percent-user,percent-system}, 4, 'maxSeries')"
                 }],
                 "title": "CPU Utilization by Host",
                 "transform": "timeseries_aggregations",
@@ -1490,7 +1490,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(transformNull(tendrl.clusters.$cluster_id.nodes.*.memory.percent-used, 0), 4, 'maxSeries')"
+                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.*.memory.percent-used, 4, 'maxSeries')"
                 }],
                 "title": "Memory Utilization By Host",
                 "transform": "timeseries_aggregations",
