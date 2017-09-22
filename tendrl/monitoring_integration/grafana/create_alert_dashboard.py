@@ -77,10 +77,10 @@ class CreateAlertDashboard():
 
         message = ""
         try :
-            if isinstance(json.loads(response_data._content), list):
-                message = str(json.loads(response._content)[0]["message"])
+            if isinstance(json.loads(response_data.content), list):
+                message = str(json.loads(response.content)[0]["message"])
             else:
-                message = str(json.loads(response_data._content)["message"])
+                message = str(json.loads(response_data.content)["message"])
         except (AttributeError, KeyError):
             pass
 

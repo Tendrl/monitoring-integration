@@ -2,7 +2,7 @@ import __builtin__
 import json
 
 
-from requests import post
+from requests import post, get
 import maps
 
 
@@ -29,8 +29,27 @@ def create_org(org_name):
                         auth=config.credentials,
                         data=json.dumps(upload_str))
         try:
-            return json.loads(response._content)["orgId"] 
+            return json.loads(response.content)["orgId"] 
         except KeyError as ex:
+            return None
+    else:
+        raise exceptions.ConnectionFailedException
+
+
+''' Get particular organisation by name '''
+
+def get_org_id(org_name):
+
+    config = maps.NamedDict(NS.config.data)
+    if utils.port_open(config.grafana_port, config.grafana_host):
+        resp = get("http://{}:{}/api/orgs/name/"
+                      "{}".format(config.grafana_host,
+                                  config.grafana_port,
+                                  org_name),
+                   auth=config.credentials)
+        try:
+            return resp.content
+        except (KeyError, AttributeError) as ex:
             return None
     else:
         raise exceptions.ConnectionFailedException
@@ -51,7 +70,7 @@ def switch_context(org_id):
                         data=upload_str)
   
         try:
-            if "changed" in json.loads(response._content)["message"]:
+            if "changed" in json.loads(response.content)["message"]:
                 return True
             else:
                 return False
@@ -72,6 +91,6 @@ def create_api_token(key_name, role):
                         auth=config.credentials,
                         data=json.dumps(request_body))
         try:
-            return json.loads(response._content)["key"]
+            return json.loads(response.content)["key"]
         except KeyError as ex:
             return None
