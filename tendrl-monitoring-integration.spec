@@ -50,7 +50,6 @@ rm -rf html/.{doctrees,buildinfo}
 
 %install
 %{__python} setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
-install -m  0755  --directory $RPM_BUILD_ROOT%{_var}/log/tendrl/monitoring-integration
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
@@ -58,7 +57,6 @@ install -d %{buildroot}%{_localstatedir}/lib/grafana/plugins/
 install -Dm 0640 etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 install -Dm 0640 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir}/tendrl-monitoring-integration.service
-install -Dm 0644 etc/tendrl/monitoring-integration/logging.yaml.timedrotation.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/graphite-web.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/carbon.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
 cp -a etc/tendrl/monitoring-integration/grafana/dashboards/*.json $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards/
@@ -91,7 +89,6 @@ py.test -v tendrl/monitoring_integration/tests || :
 %{_localstatedir}/lib/grafana/plugins/Vonage-Grafana_Status_panel
 
 %files -f INSTALLED_FILES
-%dir %{_var}/log/tendrl/monitoring-integration
 %dir %{_sysconfdir}/tendrl/monitoring-integration
 %doc README.rst
 %license LICENSE
@@ -100,7 +97,6 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
-%config %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration_logging.yaml
 %{_unitdir}/tendrl-monitoring-integration.service
 
 
