@@ -36,7 +36,7 @@ def list_modules_in_package_path(package_path, prefix):
 
 
 def get_alert_info(alert_id):
-    alert_json  = alert.get_alert(alert_id)
+    alert_json = alert.get_alert(alert_id)
     if "message" in alert_json:
         if alert_json["message"] == "Alert not found":
             logger.log(
@@ -76,7 +76,7 @@ def find_volume_id(vol_name, integration_id):
             "clusters/%s/Volumes" % integration_id
         )
         for volume in volumes.leaves:
-            key = volume.key +  "/name"
+            key = volume.key + "/name"
             name = etcd_utils.read(key).value
             if vol_name == name:
                 return volume.key.split("/")[-1]
@@ -95,9 +95,9 @@ def find_volume_id(vol_name, integration_id):
 def find_alert_target(conditions):
     target = None
     if "targetFull" in conditions[0]['query']['model']:
-        target  = conditions[0]['query']['model']["targetFull"]
+        target = conditions[0]['query']['model']["targetFull"]
     else:
-        target  = conditions[0]['query']['model']["target"]
+        target = conditions[0]['query']['model']["target"]
     return target
 
 
@@ -114,7 +114,7 @@ def find_grafana_pid():
             "error",
             NS.publisher_id,
             {
-                "message": "unable to find grafana pid" 
+                "message": "unable to find grafana pid"
             }
         )
         raise ex
@@ -148,13 +148,13 @@ def find_node_id(integration_id, fqdn):
             )
         else:
             logger.log(
-            "error",
-            NS.publisher_id,
-            {
-                "message": "Node with fqdn %s not found "
-                "in cluster %s" % (fqdn, integration_id)
-            }
-        )   
+                "error",
+                NS.publisher_id,
+                {
+                    "message": "Node with fqdn %s not found "
+                    "in cluster %s" % (fqdn, integration_id)
+                }
+            )
         raise ex
 
 
@@ -176,7 +176,7 @@ def find_cluster_name(integration_id):
 
 
 def find_alert_types(new_alert_types):
-    try: 
+    try:
         for alert_classification in new_alert_types:
             types = new_alert_types[alert_classification]
             alert_types = AlertTypes(

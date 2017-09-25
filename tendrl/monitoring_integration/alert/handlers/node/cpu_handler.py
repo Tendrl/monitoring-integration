@@ -20,7 +20,7 @@ class CpuHandler(AlertHandler):
         self.template = "tendrl.clusters.{cluster_id}.nodes.{host_name}.cpu"
 
     def format_alert(self, alert_json):
-        alert  = self.parse_alert_metrics(alert_json)
+        alert = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
             alert["node_id"] = utils.find_node_id(
@@ -29,7 +29,7 @@ class CpuHandler(AlertHandler):
             )
             alert["time_stamp"] = alert_json['NewStateDate']
             alert["resource"] = self.representive_name
-            alert['alert_type'] = constants.ALERT_TYPE 
+            alert['alert_type'] = constants.ALERT_TYPE
             alert['severity'] = constants.TENDRL_GRAFANA_SEVERITY_MAP[
                 alert_json['State']]
             alert['significance'] = constants.SIGNIFICANCE_HIGH
@@ -38,18 +38,17 @@ class CpuHandler(AlertHandler):
             alert['tags']['fqdn'] = alert['tags']['fqdn']
             alert['classification'] = alert_json["classification"]
             if alert['severity'] == "WARNING":
-                alert['tags']['message'] = ("Cpu utilization of node %s is" \
-                " %s which is above the %s threshold (%s)." % (
-                    alert['tags']['fqdn'],
-                    alert['current_value'],
-                    alert['severity'],
-                    alert['tags']['warning_max']
-                ))
+                alert['tags']['message'] = (
+                    "Cpu utilization of node %s is"
+                    " %s which is above the %s threshold (%s)." % (
+                        alert['tags']['fqdn'],
+                        alert['current_value'],
+                        alert['severity'],
+                        alert['tags']['warning_max']))
             elif alert['severity'] == "INFO":
-                alert['tags']['message'] = ("Cpu utilization of node %s is"\
-                " back to normal" % (
-                    alert['tags']['fqdn']
-                ))
+                alert['tags']['message'] = ("Cpu utilization of node %s is"
+                                            " back to normal" % (
+                                                alert['tags']['fqdn']))
             else:
                 logger.log(
                     "error",
@@ -57,7 +56,7 @@ class CpuHandler(AlertHandler):
                     {
                         "message": "Alert %s have unsupported alert"
                         "severity" % alert_json
-                    }    
+                    }
                 )
                 raise InvalidAlertSeverity
             return alert
@@ -69,7 +68,7 @@ class CpuHandler(AlertHandler):
             Event(
                 ExceptionMessage(
                     "error",
-                    NS.publisher_id, 
+                    NS.publisher_id,
                     {
                         "message": "Error in converting grafana"
                         "alert into tendrl alert %s" % alert_json,
@@ -77,7 +76,7 @@ class CpuHandler(AlertHandler):
                     }
                 )
             )
-    
+
     def parse_alert_metrics(self, alert_json):
         """
         {
@@ -91,7 +90,7 @@ class CpuHandler(AlertHandler):
                  "tags": null,
                  "value": 31.97861830493573
               }]},
-         "Settings": { 
+         "Settings": {
              "conditions": [{
                 "evaluator": {
                    "params": [29],
@@ -101,7 +100,7 @@ class CpuHandler(AlertHandler):
                     "target"    : "sumSeries(#A, #B).select metric",
                     "targetFull": "sumSeries(sumSeries(tendrl.clusters.
                                    ab3b125e-4769-4071-a349-e82b380c11f4.nodes.
-                                   {host_name}.cpu.percent-system), 
+                                   {host_name}.cpu.percent-system),
                                    sumSeries(tendrl.clusters.ab3b125e-4769-4071-a349-e82b
                                    380c11f4.nodes.{host_name}.cpu.
                                    percent-user)).select metric"

@@ -16,7 +16,8 @@ from tendrl.monitoring_integration.grafana import create_alert_dashboard
 from tendrl.monitoring_integration.grafana import datasource
 
 from tendrl.monitoring_integration.grafana import webhook_receiver
-from tendrl.monitoring_integration.grafana import create_new_notification_channel
+from tendrl.monitoring_integration.grafana import \
+    create_new_notification_channel
 from tendrl.commons import manager as common_manager
 from tendrl import monitoring_integration
 from tendrl.monitoring_integration import sync
@@ -43,18 +44,16 @@ class MonitoringIntegrationManager(common_manager.Manager):
         super(MonitoringIntegrationManager, self).start()
         # Creating Default Dashboards
         _upload_default_dashboards()
-        alert_dash_obj = create_alert_dashboard.CreateAlertDashboard()
-        create_new_notification_channel.create_notification_channel("tendrl_notification_channel",
-                                                                    NS.config.data["grafana_host"],
-                                                                    8789)
+        create_alert_dashboard.CreateAlertDashboard()
+        create_new_notification_channel.create_notification_channel(
+            "tendrl_notification_channel",
+            NS.config.data["grafana_host"],
+            8789
+        )
         self.webhook_receiver.start()
 
 
-
 def _upload_default_dashboards():
-
-    monitoring_integration_manager = MonitoringIntegrationManager()
-
     dashboards = []
     utils.get_conf()
     dashboards = dashboard.get_all_dashboards()
@@ -79,7 +78,7 @@ def _upload_default_dashboards():
         response = dashboard.create_dashboard(dashboard_json)
 
         if response.status_code == 200:
-            msg = '\n' + "Dashboard " + str(dashboard_json)+ \
+            msg = '\n' + "Dashboard " + str(dashboard_json) + \
                   " uploaded successfully" + '\n'
             logger.log("info", NS.get("publisher_id", None),
                        {'message': msg})
@@ -92,7 +91,8 @@ def _upload_default_dashboards():
             logger.log("info", NS.get("publisher_id", None),
                        {'message': msg})
     try:
-        dashboard_json = dashboard.get_dashboard(NS.config.data["home_dashboard"])
+        dashboard_json = dashboard.get_dashboard(
+            NS.config.data["home_dashboard"])
 
         if 'dashboard' in dashboard_json:
             dashboard_id = dashboard_json.get('dashboard').get('id')
@@ -104,7 +104,7 @@ def _upload_default_dashboards():
                       str(NS.config.data["home_dashboard"]) + \
                       " is set as home dashboard" + '\n'
                 logger.log("info", NS.get("publisher_id", None),
-                          {'message': msg})
+                           {'message': msg})
         else:
             msg = '\n' + str(dashboard_json.get('message')) + '\n'
             logger.log("info", NS.get("publisher_id", None),
@@ -131,18 +131,20 @@ def _upload_default_dashboards():
         logger.log("info", NS.get("publisher_id", None),
                    {'message': msg})
 
+
 def get_message_from_response(response_data):
 
     message = ""
-    try :
+    try:
         if isinstance(json.loads(response_data.content), list):
-            message = str(json.loads(response.content)[0]["message"])
+            message = str(json.loads(response_data.content)[0]["message"])
         else:
             message = str(json.loads(response_data.content)["message"])
     except (AttributeError, KeyError):
         pass
 
     return message
+
 
 def main():
 
@@ -152,7 +154,7 @@ def main():
     grafana_conn_count = 0
     while grafana_conn_count < 10:
         if not utils.port_open(3000, "127.0.0.1"):
-            grafana_conn_count = grafana_conn_count  + 1
+            grafana_conn_count = grafana_conn_count + 1
             time.sleep(10)
         else:
             break

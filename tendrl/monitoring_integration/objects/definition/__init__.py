@@ -11,7 +11,10 @@ class Definition(objects.BaseObject):
         self._defs = {}
         super(Definition, self).__init__(*args, **kwargs)
 
-        self.data = pkg_resources.resource_string(__name__, "monitoring_integration.yaml")
+        self.data = pkg_resources.resource_string(
+            __name__,
+            "monitoring_integration.yaml"
+        )
         self._parsed_defs = yaml.safe_load(self.data)
         self.value = "_NS/monitoring/definitions"
 

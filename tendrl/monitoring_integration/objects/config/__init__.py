@@ -11,6 +11,7 @@ class Config(objects.BaseObject):
 
         self.data = config or cmn_config.load_config(
             'monitoring-integration',
-            "/etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml"
+            "/etc/tendrl/monitoring-integration/" +
+            "monitoring-integration.conf.yaml"
         )
         self.value = "_NS/monitoring/config"

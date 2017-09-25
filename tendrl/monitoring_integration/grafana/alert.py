@@ -25,7 +25,7 @@ def get_alert(alert_id):
                 "error",
                 NS.publisher_id,
                 {
-                    "message": 'Unable to fetch alert from grafana ' + \
+                    "message": 'Unable to fetch alert from grafana ' +
                     'rule id: %s' % alert_id
                 }
             )

@@ -20,7 +20,7 @@ HEADERS = {"Accept": "application/json",
 '''Create Dashboard'''
 
 
-def _post_dashboard(dashboard_json, authorization_key = None):
+def _post_dashboard(dashboard_json, authorization_key=None):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         upload_str = json.dumps(dashboard_json)
@@ -35,7 +35,7 @@ def _post_dashboard(dashboard_json, authorization_key = None):
         else:
             response = post("http://{}:{}/api/dashboards/"
                             "db".format(config.grafana_host,
-                                       config.grafana_port),
+                                        config.grafana_port),
                             headers=HEADERS,
                             auth=config.credentials,
                             data=upload_str)
