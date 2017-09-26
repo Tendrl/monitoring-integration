@@ -20,7 +20,7 @@ class WebhookReceiver(gevent.greenlet.Greenlet):
             self._application
         )
         self.alert_handler = AlertHandlerManager()
-        
+
     def _application(self, env, start_response):
         try:
             if env['PATH_INFO'] != '/grafana_callback':
@@ -69,7 +69,7 @@ class WebhookReceiver(gevent.greenlet.Greenlet):
                         "exception": ex
                     }
                 )
-            )            
+            )
 
     def stop(self):
-        pass   
+        pass

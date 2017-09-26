@@ -13,7 +13,9 @@ from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.alert import utils
-from tendrl.monitoring_integration.grafana.exceptions import ConnectionFailedException
+from tendrl.monitoring_integration.grafana.exceptions import \
+    ConnectionFailedException
+
 
 class NoHandlerException(Exception):
     pass
@@ -46,13 +48,13 @@ class AlertHandler(object):
         unset = False
         if alert:
             if alert["severity"] == \
-                constants.TENDRL_GRAFANA_SEVERITY_MAP["ok"]:
+                    constants.TENDRL_GRAFANA_SEVERITY_MAP["ok"]:
                 unset = True
-            logger.log( 
+            logger.log(
                 "notice",
                 NS.publisher_id,
                 {
-                    "message" : json.dumps(alert),
+                    "message": json.dumps(alert),
                     "alert_condition_status": alert["resource"],
                     "alert_condition_state": alert["severity"],
                     "alert_condition_unset": unset
@@ -77,7 +79,8 @@ class AlertHandlerManager(object):
                     # cluster.gluster.cluster_utilization
                     alert_classification = alert_handlers.rsplit(".", 1)[0]
                     cls.classification = alert_classification.split(".")[0]
-                    alert_classification = alert_classification.replace(".", "/")
+                    alert_classification = alert_classification.replace(
+                        ".", "/")
                     if alert_classification in self.alert_types:
                         self.alert_types[alert_classification].append(
                             cls.representive_name
@@ -85,7 +88,7 @@ class AlertHandlerManager(object):
                     else:
                         self.alert_types[alert_classification] = [
                             cls.representive_name]
-                   
+
     def __init__(self):
         self.alert_handlers = []
         self._load_handlers()
@@ -95,7 +98,7 @@ class AlertHandlerManager(object):
         utils.find_alert_types(
             self.alert_types
         )
-        
+
     def handle_alert(self, alert_id):
         try:
             alert_json = utils.get_alert_info(alert_id)

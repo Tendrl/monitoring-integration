@@ -18,8 +18,10 @@ def fetch_row(dashboard_json):
     rows = dashboard_json["dashboard"]["rows"]
     if len(rows) > 1:
         for count in xrange(1, len(rows)):
-            if rows[0]["panels"][0]["title"].split("-", 1)[0] == rows[count]["panels"][0]["title"].split("-", 1)[0]:
-                alert_row = copy.deepcopy(dashboard_json["dashboard"]["rows"][-count:])
+            if rows[0]["panels"][0]["title"].split("-", 1)[0] == \
+                    rows[count]["panels"][0]["title"].split("-", 1)[0]:
+                alert_row = copy.deepcopy(
+                    dashboard_json["dashboard"]["rows"][-count:])
                 break
     else:
         alert_row = [copy.deepcopy(dashboard_json["dashboard"]["rows"][-1])]
@@ -35,31 +37,50 @@ def add_resource_panel(alert_rows, cluster_id, resource_type, resource_name):
             for target in targets:
                 try:
                     if resource_type == "bricks":
-                        panel_target = ("tendrl" + target["target"].split("tendrl")[1].split(")")[0]).split(".")
-                        old_cluster_id = panel_target[panel_target.index("clusters") + 1]
-                        target["target"] = target["target"].replace(old_cluster_id, str(cluster_id))
+                        panel_target = ("tendrl" + target["target"].split(
+                            "tendrl")[1].split(")")[0]).split(".")
+                        old_cluster_id = panel_target[
+                            panel_target.index("clusters") + 1]
+                        target["target"] = target["target"].replace(
+                            old_cluster_id, str(cluster_id))
                         if "volumes" in panel_target:
-                            old_resource_name = panel_target[panel_target.index("volumes") + 1]
-                            target["target"] = target["target"].replace(old_resource_name, str(resource_name.split("|", 1)[0]))
+                            old_resource_name = panel_target[
+                                panel_target.index("volumes") + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name,
+                                str(resource_name.split("|", 1)[0]))
                         if "nodes" in panel_target:
-                            old_resource_name = panel_target[panel_target.index("nodes") + 1]
-                            target["target"] = target["target"].replace(old_resource_name, str(resource_name.split("|", 1)[1].split(":", 1)[0].replace(".", "_")))
+                            old_resource_name = panel_target[
+                                panel_target.index("nodes") + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name,
+                                str(resource_name.split("|", 1)[1].split(
+                                    ":", 1)[0].replace(".", "_")))
                         if "bricks" in panel_target:
-                            old_resource_name = panel_target[panel_target.index("bricks") + 1]
-                            target["target"] = target["target"].replace(old_resource_name, str(resource_name.split("|", 1)[1].split(":", 1)[1].replace("/", "|")))
-                    else:    
-                        panel_target = ("tendrl" + target["target"].split("tendrl")[1].split(")")[0]).split(".")
-                        old_cluster_id = panel_target[panel_target.index("clusters") + 1]
-                        target["target"] = target["target"].replace(old_cluster_id, str(cluster_id))
+                            old_resource_name = panel_target[
+                                panel_target.index("bricks") + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name,
+                                str(resource_name.split("|", 1)[1].split(
+                                    ":", 1)[1].replace("/", "|")))
+                    else:
+                        panel_target = ("tendrl" + target["target"].split(
+                            "tendrl")[1].split(")")[0]).split(".")
+                        old_cluster_id = panel_target[
+                            panel_target.index("clusters") + 1]
+                        target["target"] = target["target"].replace(
+                            old_cluster_id, str(cluster_id))
                         if resource_name is not None:
-                            old_resource_name = panel_target[panel_target.index(str(resource_type)) + 1]
-                            target["target"] = target["target"].replace(old_resource_name, str(resource_name))
-                except (KeyError, IndexError) as ex:
+                            old_resource_name = panel_target[
+                                panel_target.index(str(resource_type)) + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name, str(resource_name))
+                except (KeyError, IndexError):
                     pass
             panel["id"] = panel_count
             panel_count = panel_count + 1
-            panel["title"] = panel["title"].split("-", 1)[0] + "-" + str(resource_name)
-
+            panel["title"] = panel["title"].split(
+                "-", 1)[0] + "-" + str(resource_name)
 
 
 def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
@@ -70,9 +91,11 @@ def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
     for row in rows:
         for target in row["panels"][0]["targets"]:
             if resource_type == "bricks":
-                resource_name = resource_name.split(":", 1)[1].replace("/", "|")
+                resource_name = resource_name.split(
+                    ":", 1)[1].replace("/", "|")
             if resource_name is not None:
-                if str(cluster_id) in target["target"] and str(resource_name) in target["target"]:
+                if str(cluster_id) in target["target"] and str(
+                        resource_name) in target["target"]:
                     flag = False
                     break
             else:
@@ -90,7 +113,7 @@ def remove_cluster_rows(cluster_id, dashboard_name):
     alert_dashboard = get_alert_dashboard(dashboard_name)
     new_rows = []
     flag = True
-    rows  = alert_dashboard["dashboard"]["rows"]
+    rows = alert_dashboard["dashboard"]["rows"]
     for row in rows:
         for target in row["panels"][0]["targets"]:
             if str(cluster_id) in target["target"]:
@@ -104,5 +127,6 @@ def remove_cluster_rows(cluster_id, dashboard_name):
 
 
 def create_updated_dashboard(dashboard_json, alert_rows):
-    dashboard_json["dashboard"]["rows"] = dashboard_json["dashboard"]["rows"] + alert_rows
+    dashboard_json["dashboard"]["rows"] = dashboard_json[
+        "dashboard"]["rows"] + alert_rows
     return dashboard_json

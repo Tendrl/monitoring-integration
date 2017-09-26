@@ -25,8 +25,9 @@ def get_conf():
 
         # Grafana related configs
         NS.config.data["datasource"] = []
-        NS.config.data["credentials"] = (NS.config.data["credentials"]["user"],
-                                         NS.config.data["credentials"]["password"])
+        NS.config.data["credentials"] = (
+            NS.config.data["credentials"]["user"],
+            NS.config.data["credentials"]["password"])
 
     except exceptions.InvalidConfigurationException:
         err = exceptions.InvalidConfigurationException(

@@ -19,9 +19,9 @@ class CreateAlertDashboard():
         org_id = NS.config.data.get("org_id", None)
         if not org_id:
             try:
-                org_id  = etcd_utils.read(org_key).value
+                org_id = etcd_utils.read(org_key).value
             except etcd.EtcdKeyNotFound:
-                org_id  = grafana_org_utils.create_org("Alert_dashboard")
+                org_id = grafana_org_utils.create_org("Alert_dashboard")
                 try:
                     etcd_utils.write(org_key, org_id)
                 except etcd.EtcdKeyNotFound:
@@ -32,9 +32,10 @@ class CreateAlertDashboard():
             key = NS.config.data.get("grafana_auth_key", None)
             if not key:
                 try:
-                    key  = etcd_utils.read(auth_key).value
+                    key = etcd_utils.read(auth_key).value
                 except etcd.EtcdKeyNotFound:
-                    key = grafana_org_utils.create_api_token("grafana_auth_key", "Admin")
+                    key = grafana_org_utils.create_api_token(
+                        "grafana_auth_key", "Admin")
                     try:
                         etcd_utils.write(auth_key, key)
                     except etcd.EtcdKeyNotFound:
@@ -50,35 +51,41 @@ class CreateAlertDashboard():
             else:
                 msg = "Datasource upload failed. Error code: {0} ," + \
                       "Error message: " + \
-                      "{1} ".format(response.status_code,
-                                    str(self.get_message_from_response(response)))
+                      "{1} ".format(
+                          response.status_code,
+                          str(self.get_message_from_response(response)))
                 logger.log("info", NS.get("publisher_id", None),
                            {'message': msg})
             if cluster_detail_list:
                 resource_name = ["volumes", "hosts", "bricks", "clusters"]
                 for resource in resource_name:
                     # Uploading Alert Dashboards
-                    resource_dashboard = create_dashboards.create_resource_dashboard(cluster_detail_list, resource)
-                    response = dashboard._post_dashboard(resource_dashboard, key)
+                    resource_dashboard = \
+                        create_dashboards.create_resource_dashboard(
+                            cluster_detail_list, resource)
+                    response = dashboard._post_dashboard(
+                        resource_dashboard, key)
                     if response.status_code == 200:
-                        msg = '\n' + "{} dashboard uploaded successfully".format(str(resource)) + '\n'
+                        msg = '\n' + "{} dashboard uploaded successfully". \
+                            format(str(resource)) + '\n'
                         logger.log("info", NS.get("publisher_id", None),
                                    {'message': msg})
                     else:
-                        msg = '\n' + "{} dashboard upload failed".format(str(resource)) + '\n'
+                        msg = '\n' + "{} dashboard upload failed".format(
+                            str(resource)) + '\n'
                         logger.log("info", NS.get("publisher_id", None),
                                    {'message': msg})
         else:
             msg = "Could not switch context, Alert dashboard upload failed"
             logger.log("error", NS.get("publisher_id", None),
-                                   {'message': msg})
+                       {'message': msg})
 
     def get_message_from_response(self, response_data):
 
         message = ""
-        try :
+        try:
             if isinstance(json.loads(response_data.content), list):
-                message = str(json.loads(response.content)[0]["message"])
+                message = str(json.loads(response_data.content)[0]["message"])
             else:
                 message = str(json.loads(response_data.content)["message"])
         except (AttributeError, KeyError):

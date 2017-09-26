@@ -2,6 +2,7 @@ from etcd import EtcdKeyNotFound
 from subprocess import CalledProcessError
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
+from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.handlers import AlertHandler
 from tendrl.monitoring_integration.alert import utils
@@ -21,7 +22,7 @@ class BrickHandler(AlertHandler):
             "percent-percent_bytes"
 
     def format_alert(self, alert_json):
-        alert  = self.parse_alert_metrics(alert_json)
+        alert = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
             alert["node_id"] = utils.find_node_id(
@@ -30,7 +31,7 @@ class BrickHandler(AlertHandler):
             )
             alert["time_stamp"] = alert_json['NewStateDate']
             alert["resource"] = self.representive_name
-            alert['alert_type'] = constants.ALERT_TYPE 
+            alert['alert_type'] = constants.ALERT_TYPE
             alert['severity'] = constants.TENDRL_GRAFANA_SEVERITY_MAP[
                 alert_json['State']]
             alert['significance'] = constants.SIGNIFICANCE_HIGH
@@ -40,9 +41,9 @@ class BrickHandler(AlertHandler):
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
             if alert['severity'] == "WARNING":
-                alert['tags']['message']  = (
-                    "Brick utilization of %s in node %s in "\
-                    "cluster %s is %s which is above %s"\
+                alert['tags']['message'] = (
+                    "Brick utilization of %s in node %s in "
+                    "cluster %s is %s which is above %s"
                     " threshold %s" % (
                         alert['tags']['brick_path'],
                         alert['tags']['fqdn'],
@@ -52,10 +53,9 @@ class BrickHandler(AlertHandler):
                         alert['tags']['warning_max']
                     )
                 )
-                     
             elif alert['severity'] == "INFO":
                 alert['tags']['message'] = (
-                    "Brick utilization of %s in node %s in "\
+                    "Brick utilization of %s in node %s in "
                     "cluster %s is back normal" % (
                         alert['tags']['brick_path'],
                         alert['tags']['fqdn'],
@@ -71,7 +71,7 @@ class BrickHandler(AlertHandler):
                         "severity" % alert_json
                     }
                 )
-                raise InvalidAlertSeverity 
+                raise InvalidAlertSeverity
             return alert
         except (KeyError,
                 CalledProcessError,
@@ -81,7 +81,7 @@ class BrickHandler(AlertHandler):
             Event(
                 ExceptionMessage(
                     "error",
-                    NS.publisher_id, 
+                    NS.publisher_id,
                     {
                         "message": "Error in converting grafana"
                         "alert into tendrl alert %s" % alert_json,
@@ -89,7 +89,7 @@ class BrickHandler(AlertHandler):
                     }
                 )
             )
-    
+
     def parse_alert_metrics(self, alert_json):
         """
         {

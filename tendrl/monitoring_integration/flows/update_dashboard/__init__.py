@@ -4,7 +4,8 @@ import etcd
 import time
 
 
-from tendrl.monitoring_integration.flows.update_dashboard.alert_utils import get_alert_dashboard
+from tendrl.monitoring_integration.flows.update_dashboard.alert_utils import \
+    get_alert_dashboard
 from tendrl.monitoring_integration.flows.update_dashboard import alert_utils
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import create_dashboards
@@ -17,15 +18,20 @@ class UpdateDashboard(flows.BaseFlow):
 
     def run(self):
         super(UpdateDashboard, self).run()
-        self.map = {"cluster" : "at-a-glance", "host": "nodes", "volume" : "volumes", "brick" : "bricks"}
-        resource_name = str(self.parameters.get("Trigger.resource_name")).lower()
-        resource_type = str(self.parameters.get("Trigger.resource_type")).lower()
+        self.map = {"cluster": "at-a-glance", "host": "nodes",
+                    "volume": "volumes", "brick": "bricks"}
+        resource_name = str(
+            self.parameters.get("Trigger.resource_name")).lower()
+        resource_type = str(
+            self.parameters.get("Trigger.resource_type")).lower()
         operation = str(self.parameters.get("Trigger.action")).lower()
         cluster_id = self.parameters.get("TendrlContext.integration_id")
         if operation.lower() == "add":
-            self._add_panel(cluster_id, self.map[resource_type], resource_name)
+            self._add_panel(
+                cluster_id, self.map[resource_type], resource_name)
         elif operation.lower() == "delete":
-            self._delete_panel(cluster_id, self.map[resource_type], resource_name=None)
+            self._delete_panel(
+                cluster_id, self.map[resource_type], resource_name=None)
         else:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Wrong action"})
@@ -36,9 +42,11 @@ class UpdateDashboard(flows.BaseFlow):
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
         if alert_dashboard:
             alert_row = alert_utils.fetch_row(alert_dashboard)
-            alert_utils.add_resource_panel(alert_row, cluster_id, resource_type, resource_name)
-            dash_json = alert_utils.create_updated_dashboard(alert_dashboard, alert_row)
-            resp = dashboard._post_dashboard(dash_json)
+            alert_utils.add_resource_panel(
+                alert_row, cluster_id, resource_type, resource_name)
+            dash_json = alert_utils.create_updated_dashboard(
+                alert_dashboard, alert_row)
+            dashboard._post_dashboard(dash_json)
         else:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Dashboard not found"})
@@ -55,19 +63,21 @@ class UpdateDashboard(flows.BaseFlow):
                 for volume in volumes.leaves:
                     volume_id = volume.key.rsplit("/")[-1]
                     try:
-                        vol_name_key = cluster_key + "/Volumes/" + volume_id + "/name"
+                        vol_name_key = cluster_key + "/Volumes/" + \
+                            volume_id + "/name"
                         vol_name = etcd_utils.read(vol_name_key).value
                         if vol_name == resource_name:
                             vol_id = volume_id
                             break
-                    except (etcd.EtcdKeyNotFound, KeyError) as ex:
+                    except (etcd.EtcdKeyNotFound, KeyError):
                         try_count = try_count + 1
                         pass
             if try_count == 18:
                 return
 
             time.sleep(10)
-            volume_key = "/clusters/" + str(cluster_id) + "/Volumes/" + str(vol_id)
+            volume_key = "/clusters/" + str(cluster_id) + "/Volumes/" + \
+                str(vol_id)
             subvols = etcd_utils.read(volume_key + "/Bricks")
             brick_list = []
             for subvol in subvols.leaves:
@@ -78,14 +88,17 @@ class UpdateDashboard(flows.BaseFlow):
                     for entry in brick_details.leaves:
                         try:
                             brick_name = entry.key.rsplit("/", 1)[1]
-                            brick_key = cluster_key + "/Bricks/all/" + brick_name.split(":", 1)[0] + \
-                                 "/" + brick_name.split(":_", 1)[1] + "/brick_path"
+                            brick_key = cluster_key + "/Bricks/all/" + \
+                                brick_name.split(":", 1)[0] + \
+                                "/" + brick_name.split(":_", 1)[1] + \
+                                "/brick_path"
                             brick_name = etcd_utils.read(brick_key).value
                             brick_list.append(copy.deepcopy(brick_name))
-                        except(KeyError, etcd.EtcdKeyNotFound) as ex:
+                        except(KeyError, etcd.EtcdKeyNotFound):
                             pass
-                except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                    # This should not happen as the bricks would be added by this time
+                except (KeyError, etcd.EtcdKeyNotFound):
+                    # This should not happen as the bricks would be
+                    # added by this time
                     pass
 
             for brick in brick_list:
@@ -93,7 +106,10 @@ class UpdateDashboard(flows.BaseFlow):
 
     def _delete_panel(self, cluster_id, resource_type, resource_name=None):
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
-        alert_utils.remove_row(alert_dashboard, cluster_id, resource_type, resource_name)
+        alert_utils.remove_row(alert_dashboard,
+                               cluster_id,
+                               resource_type,
+                               resource_name)
         resp = dashboard._post_dashboard(alert_dashboard)
         response = []
         response.append(copy.deepcopy(resp))

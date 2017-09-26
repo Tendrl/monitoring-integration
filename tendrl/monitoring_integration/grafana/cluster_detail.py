@@ -5,4 +5,4 @@ class ClusterDetail:
         self.volumes = []
         self.hosts = []
         self.bricks = []
-        self.details = {"Volume" : [], "Brick" : [], "Cluster" :[], "Node": []}
+        self.details = {"Volume": [], "Brick": [], "Cluster": [], "Node": []}
