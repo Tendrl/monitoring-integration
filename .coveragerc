@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = tendrl.monitoring_integration
+omit = tendrl/monitoring_integration/tests/*
+
+[report]
+ignore_errors = True
