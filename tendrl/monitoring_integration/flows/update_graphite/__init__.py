@@ -20,6 +20,7 @@ class UpdateGraphite(flows.BaseFlow):
             self.parameters.get("Trigger.resource_name")).lower()
         resource_type = str(
             self.parameters.get("Trigger.resource_type")).lower()
+        import pdb; pdb.set_trace()
         self.update_graphite(cluster_id, resource_name,
                              resource_type.lower())
 
@@ -70,28 +71,43 @@ class UpdateGraphite(flows.BaseFlow):
                                          str(cluster_id), "nodes",
                                          str(host_name), "bricks",
                                          str(brick_name))
-            if os.path.exists(resource_path):
-                os.system("mv " + str(resource_path) + " " +
+            brick_path = os.path.join(
+                WHISPER_PATH,
+                "clusters",
+                str(cluster_id),
+                "nodes",
+                str(host_name),
+                "bricks",
+                resource_name.split("|", 1)[1].split(":", 1)[1].replace("/", "|")
+            )
+            if os.path.exists(brick_path):
+                ret_val = os.system("mv " + str(resource_path) + " " +
                           str(archive_path))
-            if os.path.exists(os.path.join(str(archive_path), brick_name)):
-                logger.log("info", NS.get("publisher_id", None),
-                          {'message': "Brick " + str(resource_name) + 
+                if ret_val is 0:
+                    logger.log("info", NS.get("publisher_id", None),
+                              {'message': "Brick " + str(resource_name) + 
                                        "deleted from graphite"})
-            else:
-                 logger.log("error", NS.get("publisher_id", None),
-                           {'message': "Brick " + str(resource_name) + 
+                else:
+                     logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Brick " + str(resource_name) + 
                                        "deletion from graphite failed"})
             archive_path = os.path.join(archive_path,
                                         "volumes", vol_name)
+            os.system("mkdir -p " + str(archive_path))
             resource_path = os.path.join(WHISPER_PATH, "clusters",
                                          str(cluster_id), "volumes",
                                          str(vol_name), "nodes",
                                          str(host_name), "bricks",
                                          str(brick_name))
-            if os.path.exists(resource_path):
-                flag = os.system("mv " + str(resource_path) + " " +
+            brick_path = os.path.join(WHISPER_PATH, "clusters",
+                                         str(cluster_id), "volumes",
+                                         str(vol_name), "nodes",
+                                         str(host_name), "bricks",
+                                         resource_name.split("|", 1)[1].split(":", 1)[1].replace("/", "|"))
+            if os.path.exists(brick_path):
+                ret_val = os.system("mv " + str(resource_path) + " " +
                                  str(archive_path))
-                if flag is 0:
+                if ret_val is 0:
                     logger.log("info", NS.get("publisher_id", None),
                               {'message': "Brick " + str(resource_name) + 
                                        "deleted from graphite"})
@@ -100,9 +116,9 @@ class UpdateGraphite(flows.BaseFlow):
                               {'message': "Brick " + str(resource_name) + 
                                        "deletion from graphite failed"})
         if resource_type == "host":
-            host_name = resource_name.split(":", 1)[0].replace(".", "_")
+            host_name = resource_name.replace(".", "_")
             volume_affected_list = []
-            volume_key = os.path.join("clusters", str(cluster_id), "volumes")
+            volume_key = os.path.join("clusters", str(cluster_id), "Volumes")
             volume_list = create_dashboards.get_resource_keys("", volume_key)
             for volume_id in volume_list:
                 flag = False
@@ -138,35 +154,37 @@ class UpdateGraphite(flows.BaseFlow):
             resource_folder_name = str(host_name) + "_" + \
                 str(datetime.datetime.now().isoformat())
             archive_path = os.path.join(archive_path, resource_folder_name)
+            os.system("mkdir -p " + str(archive_path))
             resource_path = os.path.join(WHISPER_PATH, "clusters",
                                          str(cluster_id), "nodes",
                                          str(host_name))
             if os.path.exists(resource_path):
-                os.system("mv " + str(resource_path) + " " +
-                          str(archive_path))
-            if os.path.exists(os.path.join(str(archive_path), brick_name)):
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': "Host " + str(resource_name) + 
+                ret_val = os.system("mv " + str(resource_path) + " " +
+                                    str(archive_path))
+                if ret_val is 0:
+                    logger.log("info", NS.get("publisher_id", None),
+                               {'message': "Host " + str(resource_name) + 
                                        "deleted from graphite"})
-            else:
-                 logger.log("error", NS.get("publisher_id", None),
-                            {'message': "Host " + str(resource_name) + 
+                else:
+                     logger.log("error", NS.get("publisher_id", None),
+                                {'message': "Host " + str(resource_name) + 
                                        "deletion from graphite failed"})
             for vol_name in volume_affected_list:
                 archive_path = os.path.join(archive_path,
                                             "volumes", vol_name)
+                os.system("mkdir -p " + str(archive_path))
                 resource_path = os.path.join(WHISPER_PATH, "clusters",
                                              str(cluster_id), "volumes",
                                              str(vol_name), "nodes",
                                              str(host_name))
                 if os.path.exists(resource_path):
-                    flag = os.system("mv " + str(resource_path) + " " +
+                    ret_val = os.system("mv " + str(resource_path) + " " +
                                      str(archive_path))
-                    if flag is 0:
+                    if ret_val is 0:
                         logger.log("info", NS.get("publisher_id", None),
                                    {'message': "Host " + str(resource_name) +
                                        "deleted from graphite"})
                     else:
                         logger.log("error", NS.get("publisher_id", None),
                                    {'message': "Host " + str(resource_name) +
-                                       "deletion from graphite failed"})
+                                    "deletion from graphite failed"})
