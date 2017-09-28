@@ -29,6 +29,20 @@ namespace.monitoring:
       type: Create
       version: 1
       uuid: 1951e821-7aa9-4a91-8183-e73bc8275bde
+    UpdateGraphite:
+      tags:
+        - tendrl/integration/monitoring
+      help: Update Graphite
+      enabled: true
+      inputs:
+        mandatory:
+          -  TendrlContext.integration_id
+          -  Trigger.resource_name
+          -  Trigger.resource_type
+      run: monitoring.flows.UpdateGraphite
+      type: Create
+      version: 1
+      uuid: 1951e821-7aa9-4a91-8183-e73bc8275bfe
   objects:
     AlertTypes:
       enabled: True
