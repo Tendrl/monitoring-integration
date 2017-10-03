@@ -9,9 +9,8 @@ from tendrl.commons.utils import etcd_utils
 from tendrl.monitoring_integration.grafana import create_dashboards
 
 
-WHISPER_PATH = "/var/lib/carbon/whisper/tendrl/"
 
-class UpdateGraphite(flows.BaseFlow):
+class DeleteResourceFromGraphite(flows.BaseFlow):
 
     def run(self):
         super(UpdateGraphite, self).run()
@@ -20,11 +19,30 @@ class UpdateGraphite(flows.BaseFlow):
             self.parameters.get("Trigger.resource_name")).lower()
         resource_type = str(
             self.parameters.get("Trigger.resource_type")).lower()
-        import pdb; pdb.set_trace()
         self.update_graphite(cluster_id, resource_name,
                              resource_type.lower())
 
+    def get_path(self):
+        carbon_path = "/etc/tendrl/monitoring-integration/carbon.conf"
+        if not os.path.exists(carbon_path):
+            return None
+        with open(carbon_path, "r") as carbon_file:
+            for each_line in carbon_file:
+                if "LOCAL_DATA_DIR" in line \
+                    and "#" not in line:
+                    whisper_path = each_line.split("=", 1)[1].replace(
+                        " ","").replace("\n","")
+                    whisper_path = os.path.join(whisper_path, "tendrl/")
+                    return whisper_path
+            return None
+
+
     def update_graphite(self, cluster_id, resource_name, resource_type):
+        whisper_path = self.get_path()
+        if not whisper_path:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Cannot retrieve whisper path"})
+            return
         if resource_type == "volume":
             resource_path = os.path.join(WHISPER_PATH, "clusters",
                                          str(cluster_id),
