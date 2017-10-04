@@ -55,7 +55,7 @@ install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-in
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
 install -d %{buildroot}%{_localstatedir}/lib/grafana/plugins/
 install -Dm 0640 etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
-install -Dm 0644 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
+install -Dm 0640 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir}/tendrl-monitoring-integration.service
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/graphite-web.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/carbon.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
@@ -102,6 +102,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/storage-schemas.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
+%attr(-, root, grafana) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 %{_unitdir}/tendrl-monitoring-integration.service
 
 
