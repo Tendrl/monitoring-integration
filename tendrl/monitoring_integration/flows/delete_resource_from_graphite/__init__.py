@@ -1,6 +1,7 @@
 import etcd
 import os
 import datetime
+import ConfigParser
 
 
 from tendrl.commons import flows
@@ -22,23 +23,22 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
         self.update_graphite(cluster_id, resource_name,
                              resource_type.lower())
 
-    def get_path(self):
+    def get_data_dir_path(self):
         carbon_path = "/etc/tendrl/monitoring-integration/carbon.conf"
         if not os.path.exists(carbon_path):
             return None
-        with open(carbon_path, "r") as carbon_file:
-            for each_line in carbon_file:
-                if "LOCAL_DATA_DIR" in line \
-                    and "#" not in line:
-                    whisper_path = each_line.split("=", 1)[1].replace(
-                        " ","").replace("\n","")
-                    whisper_path = os.path.join(whisper_path, "tendrl/")
-                    return whisper_path
+        carbon_config = ConfigParser.ConfigParser()
+        carbon_config.read(carbon_path)
+        try:
+            whisper_path = str(carbon_config.get("cache", "local_data_dir")
+            whisper_path = os.path.join(whisper_path, "tendrl/")
+            return whisper_path
+        except KeyError:
             return None
 
 
     def update_graphite(self, cluster_id, resource_name, resource_type):
-        whisper_path = self.get_path()
+        whisper_path = self.get_data_dir_path()
         if not whisper_path:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Cannot retrieve whisper path"})
