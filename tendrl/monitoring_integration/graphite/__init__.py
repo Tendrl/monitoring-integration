@@ -189,6 +189,14 @@ class GraphitePlugin():
                     resource_detail["host_name"] = host.replace(".", "_")
                     brick_list = self.get_resource_keys("", attr_key)
                     for brick in brick_list:
+                        brick_deleted_key = os.path.join(cluster_key, "Bricks/all",
+                                                         host, brick, "deleted")
+                        try:
+                            is_brick_deleted = etcd_utils.read(brick_deleted_key).value
+                            if is_brick_deleted.lower() == "true":
+                                continue
+                        except etcd.EtcdKeyNotFound:
+                            continue
                         for key, value in objects["Brick"]["attrs"].items():
                             try:
                                 brick_attr_key = os.path.join(cluster_key,
@@ -214,6 +222,13 @@ class GraphitePlugin():
                 for volume in volume_list:
                     resource_detail = {}
                     volume_key = os.path.join(cluster_key, "Volumes", volume)
+                    volume_deleted_key = os.path.join(volume_key, "deleted")
+                    try:
+                        is_volume_deleted = etcd_utils.read(volume_deleted_key).value
+                        if is_volume_deleted.lower() == "true":
+                            continue
+                    except etcd.EtcdKeyNotFound:
+                        continue
                     for key, value in objects["Volume"]["attrs"].items():
                         if value is None:
                             try:
@@ -259,6 +274,14 @@ class GraphitePlugin():
                         copy.deepcopy(resource_detail))
                 node_list = self.get_resource_keys(cluster_key, "nodes")
                 for node in node_list:
+                    node_deleted_key = os.path.join(cluster_key, "nodes", node,
+                                                    "NodeContext", "deleted")
+                    try:
+                        is_node_deleted = etcd_utils.read(node_deleted_key).value
+                        if is_node_deleted.lower() == "true":
+                            continue
+                    except etcd.EtcdKeyNotFound:
+                        pass
                     resource_detail = {}
                     node_key = objects["Node"]["value"].replace(
                         "$integration_id",
