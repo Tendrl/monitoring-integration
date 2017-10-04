@@ -281,7 +281,7 @@ class GraphitePlugin():
                         if is_node_deleted.lower() == "true":
                             continue
                     except etcd.EtcdKeyNotFound:
-                        pass
+                        continue
                     resource_detail = {}
                     node_key = objects["Node"]["value"].replace(
                         "$integration_id",
