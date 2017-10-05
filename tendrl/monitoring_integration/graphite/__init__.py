@@ -275,6 +275,21 @@ class GraphitePlugin():
                             except (etcd.EtcdKeyNotFound,
                                     AttributeError,
                                     KeyError) as ex:
+                                if key == 'status':
+                                    node_status_key = os.path.join(
+                                        "nodes",
+                                        node,
+                                        "NodeContext",
+                                        "status"
+                                    )
+                                    try:
+                                        node_status_value = etcd_utils.read(node_status_key).value
+                                        attr_value = self.resource_status_mapper(
+                                            node_status_value.lower()
+                                        )
+                                        resource_detail[key] = attr_value
+                                    except etcd.EtcdKeyNotFound:
+                                        pass
                                 logger.log(
                                     "error",
                                     NS.get("publisher_id", None),
