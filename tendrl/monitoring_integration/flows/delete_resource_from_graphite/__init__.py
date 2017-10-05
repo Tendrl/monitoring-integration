@@ -15,12 +15,12 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
 
     def run(self):
         super(UpdateGraphite, self).run()
-        cluster_id = self.parameters.get("TendrlContext.integration_id")
+        integration_id = self.parameters.get("TendrlContext.integration_id")
         resource_name = str(
             self.parameters.get("Trigger.resource_name")).lower()
         resource_type = str(
             self.parameters.get("Trigger.resource_type")).lower()
-        self.update_graphite(cluster_id, resource_name,
+        self.update_graphite(integration_id, resource_name,
                              resource_type.lower())
 
     def get_data_dir_path(self):
@@ -36,7 +36,8 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
         except KeyError:
             return None
 
-    def delete_brick_details(self, cluster_id, resource_name, whisper_path):
+    def delete_brick_details(self, integration_id, resource_name,
+                             whisper_path):
         host_name = resource_name.split("|", 1)[1].split(":",
                                                          1)[0].replace(".",
                                                                       "_")
@@ -45,7 +46,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                                                                        '\|')
         vol_name = resource_name.split("|", 1)[0]
         archive_path = os.path.join(WHISPER_PATH, "clusters",
-                                    str(cluster_id),
+                                    str(integration_id),
                                     "archive", "bricks")
         if not os.path.exists(archive_path):
             os.makedirs(str(archive_path))
@@ -53,16 +54,12 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
             str(datetime.datetime.now().isoformat())
         archive_path = os.path.join(archive_path, resource_folder_name)
         resource_path = os.path.join(WHISPER_PATH, "clusters",
-                                     str(cluster_id), "nodes",
+                                     str(integration_id), "nodes",
                                      str(host_name), "bricks",
                                      str(brick_name))
         brick_path = os.path.join(
-            WHISPER_PATH,
-            "clusters",
-            str(cluster_id),
-            "nodes",
-            str(host_name),
-            "bricks",
+            WHISPER_PATH, "clusters", str(integration_id), "nodes",
+            str(host_name), "bricks",
             resource_name.split("|", 1)[1].split(":", 1)[1].replace("/", "|")
         )
         if os.path.exists(brick_path):
@@ -80,12 +77,12 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                                     "volumes", vol_name)
         os.makedirs(str(archive_path))
         resource_path = os.path.join(WHISPER_PATH, "clusters",
-                                     str(cluster_id), "volumes",
+                                     str(integration_id), "volumes",
                                      str(vol_name), "nodes",
                                      str(host_name), "bricks",
                                      str(brick_name))
         brick_path = os.path.join(WHISPER_PATH, "clusters",
-                                  str(cluster_id), "volumes",
+                                  str(integration_id), "volumes",
                                   str(vol_name), "nodes",
                                   str(host_name), "bricks",
                                   resource_name.split("|",
@@ -103,12 +100,12 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                            {'message': "Brick " + str(resource_name) + 
                                  "deletion from graphite failed"})
 
-    def delete_volume_details(self, cluster_id, resource_name, whisper_path):
+    def delete_volume_details(self, integration_id, resource_name, whisper_path):
         resource_path = os.path.join(WHISPER_PATH, "clusters",
-                                     str(cluster_id),
+                                     str(integration_id),
                                      "volumes", resource_name)
         archive_path = os.path.join(WHISPER_PATH, "clusters",
-                                    str(cluster_id),
+                                    str(integration_id),
                                     "archive", "volumes")
         if not os.path.exists(archive_path):
             os.makedirs(str(archive_path))
@@ -127,20 +124,22 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                            {'message': "Volume " + str(resource_name) +
                                 "deletion from graphite failed"})
 
-    def delete_host_details(self, cluster_id, resource_name, whisper_path):
+    def delete_host_details(self, integration_id, resource_name, whisper_path):
         host_name = resource_name.replace(".", "_")
         volume_affected_list = []
-        volume_key = os.path.join("clusters", str(cluster_id), "Volumes")
+        volume_key = os.path.join("clusters", str(integration_id), "Volumes")
         volume_list = create_dashboards.get_resource_keys("", volume_key)
         for volume_id in volume_list:
             flag = False
             single_volume_key = os.path.join(volume_key, volume_id,
                                              "Bricks")
-            subvolume_list = create_dashboards.get_resource_keys("", single_volume_key)
+            subvolume_list = create_dashboards.get_resource_keys("",
+                                                                 single_volume_key)
             for subvolume in subvolume_list:
                 subvolume_brick_key = os.path.join(single_volume_key,
                                                    subvolume)
-                brick_list = create_dashboards.get_resource_keys("", subvolume_brick_key)
+                brick_list = create_dashboards.get_resource_keys("",
+                                                                 subvolume_brick_key)
                 if flag:
                     flag = False
                     break
@@ -159,7 +158,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                         flag = True
                         break
         archive_path = os.path.join(WHISPER_PATH, "clusters",
-                                    str(cluster_id),
+                                    str(integration_id),
                                     "archive", "nodes")
         if not os.path.exists(archive_path):
             os.makedirs(str(archive_path))
@@ -168,7 +167,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
         archive_path = os.path.join(archive_path, resource_folder_name)
         os.makedirs(str(archive_path))
         resource_path = os.path.join(WHISPER_PATH, "clusters",
-                                     str(cluster_id), "nodes",
+                                     str(integration_id), "nodes",
                                      str(host_name))
         if os.path.exists(resource_path):
             ret_val = os.system("mv " + str(resource_path) + " " +
@@ -186,7 +185,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                                         "volumes", vol_name)
             os.makedirs(str(archive_path))
             resource_path = os.path.join(WHISPER_PATH, "clusters",
-                                         str(cluster_id), "volumes",
+                                         str(integration_id), "volumes",
                                          str(vol_name), "nodes",
                                          str(host_name))
             if os.path.exists(resource_path):
@@ -201,15 +200,18 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                                {'message': "Host " + str(resource_name) +
                                      "deletion from graphite failed"})
 
-    def update_graphite(self, cluster_id, resource_name, resource_type):
+    def update_graphite(self, integration_id, resource_name, resource_type):
         whisper_path = self.get_data_dir_path()
         if not whisper_path:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Cannot retrieve whisper path"})
             return
         if resource_type == "volume":
-            self.delete_volume_details(self, cluster_id, resource_name, whisper_path)
+            self.delete_volume_details(self, integration_id,
+                                       resource_name, whisper_path)
         if resource_type == "brick":
-            self.delete_brick_details(self, cluster_id, resource_name, whisper_path)
+            self.delete_brick_details(self, integration_id,
+                                      resource_name, whisper_path)
         if resource_type == "host":
-            self.delete_host_details(self, cluster_id, resource_name, whisper_path)
+            self.delete_host_details(self, integration_id,
+                                     resource_name, whisper_path)
