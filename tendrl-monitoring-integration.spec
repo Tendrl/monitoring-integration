@@ -102,6 +102,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/storage-schemas.conf
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
+%attr(-, root, grafana) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 %{_unitdir}/tendrl-monitoring-integration.service
 
 
