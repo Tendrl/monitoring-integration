@@ -322,12 +322,12 @@
             "height": 228,
             "panels": [{
                 "cacheTimeout": null,
-                "colorBackground": false,
+                "colorBackground": true,
                 "colorValue": false,
                 "colors": [
-                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(50, 172, 45, 0.97)",
                     "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
+                    "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
                 "decimals": null,
@@ -362,7 +362,7 @@
                     "text": "N/A",
                     "to": "null"
                 }],
-                "span": 3,
+                "span": 2,
                 "sparkline": {
                     "fillColor": "rgba(31, 118, 189, 0.18)",
                     "full": false,
@@ -375,9 +375,9 @@
                     "target": "tendrl.clusters.$cluster_id.status",
                     "textEditor": true
                 }],
-                "thresholds": "",
+                "thresholds": "1,2",
                 "title": "Status",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -387,11 +387,11 @@
                 }, {
                     "op": "=",
                     "text": "Healthy",
-                    "value": "1"
+                    "value": "0"
                 }, {
                     "op": "=",
                     "text": "UnHealthy",
-                    "value": "0"
+                    "value": "2"
                 }],
                 "valueName": "current"
             }, {
@@ -450,7 +450,7 @@
                 }],
                 "thresholds": "",
                 "title": "Snapshots",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -552,44 +552,54 @@
                 "targets": [{
                     "aggregation": "Last",
                     "alias": "Total",
-                    "displayType": "Regular",
-                    "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.total), \"max\")),\"Total\")",
-                    "textEditor": true,
-                    "valueHandler": "Text Only"
-                }, {
-                    "aggregation": "Last",
-                    "alias": "Up",
-                    "displayType": "Regular",
-                    "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.up), \"max\")),\"Up\")",
-                    "textEditor": true,
-                    "valueHandler": "Text Only"
-                }, {
-                    "aggregation": "Last",
-                    "alias": "Partial",
                     "crit": 1,
                     "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
-                    "refId": "D",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.partial), \"max\")),\"Partial\")",
+                    "refId": "A",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.total), \"max\")),\"Total\")",
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Text Only",
                     "warn": 1
                 }, {
                     "aggregation": "Last",
-                    "alias": "Degraded",
+                    "alias": "Up",
                     "crit": 1,
+                    "decimals": 0,
+                    "display": false,
+                    "displayType": "Regular",
+                    "refId": "B",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.up), \"max\")),\"Up\")",
+                    "textEditor": true,
+                    "units": "none",
+                    "valueHandler": "Text Only",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Partial",
+                    "crit": 999,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "D",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.partial), \"max\")),\"Partial\")",
+                    "textEditor": true,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Degraded",
+                    "crit": 999,
                     "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "E",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volume_count.degraded), \"max\")),\"Degraded\")",
                     "textEditor": true,
-                    "units": "none",
-                    "valueHandler": "Text Only",
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
                     "warn": 1
                 }, {
                     "aggregation": "Last",
@@ -739,7 +749,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 3,
+                "span": 4,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -755,7 +765,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -836,7 +846,7 @@
                 }],
                 "thresholds": "",
                 "title": "IOPS",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -911,7 +921,7 @@
                 }],
                 "thresholds": "80,90",
                 "title": "Capacity Utilization",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -986,7 +996,7 @@
                 }],
                 "thresholds": "",
                 "title": "Capacity Available",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "70%",
                 "valueMaps": [{
@@ -1005,7 +1015,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
-                "decimals": null,
+                "decimals": 1,
                 "format": "decbytes",
                 "gauge": {
                     "maxValue": 100,
@@ -1063,9 +1073,9 @@
                 }],
                 "thresholds": "",
                 "title": "Weekly Growth Rate",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "80%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -1167,9 +1177,9 @@
                 }],
                 "thresholds": "",
                 "title": "Weeks Remaining",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "80%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -1182,14 +1192,19 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "decimals": 1,
                 "fill": 1,
                 "id": 33,
                 "legend": {
+                    "alignAsTable": false,
                     "avg": false,
                     "current": false,
+                    "hideEmpty": false,
+                    "hideZero": false,
                     "max": false,
                     "min": false,
-                    "show": true,
+                    "rightSide": false,
+                    "show": false,
                     "total": false,
                     "values": false
                 },
@@ -1219,7 +1234,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1259,7 +1274,7 @@
                     "value": "current"
                 }],
                 "datasource": "",
-                "fontSize": "90%",
+                "fontSize": "80%",
                 "id": 21,
                 "links": [],
                 "pageSize": null,
@@ -1269,7 +1284,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 3,
+                "span": 2,
                 "styles": [{
                     "alias": "Bricks",
                     "colorMode": null,
@@ -1279,12 +1294,12 @@
                         "rgba(50, 172, 45, 0.97)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 0,
                     "pattern": "Metric",
                     "thresholds": [
                         ""
                     ],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }, {
                     "alias": "Utilization",
@@ -1295,7 +1310,7 @@
                         "rgba(245, 54, 54, 0.9)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [
                         "80",
@@ -1303,20 +1318,6 @@
                     ],
                     "type": "number",
                     "unit": "percent"
-                }, {
-                    "alias": "",
-                    "colorMode": null,
-                    "colors": [
-                        "rgba(245, 54, 54, 0.9)",
-                        "rgba(237, 129, 40, 0.89)",
-                        "rgba(50, 172, 45, 0.97)"
-                    ],
-                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
-                    "pattern": "",
-                    "thresholds": [],
-                    "type": "number",
-                    "unit": "short"
                 }],
                 "targets": [{
                     "refId": "A",
@@ -1324,7 +1325,7 @@
                 }],
                 "title": "Top 5 Utilization By Bricks",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "columns": [{
@@ -1332,7 +1333,7 @@
                     "value": "current"
                 }],
                 "datasource": "",
-                "fontSize": "90%",
+                "fontSize": "80%",
                 "id": 22,
                 "links": [],
                 "pageSize": null,
@@ -1352,7 +1353,7 @@
                         "rgba(50, 172, 45, 0.97)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": null,
                     "pattern": "Metric",
                     "thresholds": [],
                     "type": "number",
@@ -1366,7 +1367,7 @@
                         "rgba(245, 54, 54, 0.9)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [
                         "80",
@@ -1377,19 +1378,19 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "limit(groupByNode(tendrl.clusters.$cluster_id.volumes.*.nodes.*.bricks.*.utilization.percent-percent_bytes, 4, 'maxSeries'), 5)",
+                    "target": "limit(groupByNode(tendrl.clusters.$cluster_id.volumes.*.pcnt_used, 4, 'maxSeries'), 5)",
                     "textEditor": false
                 }],
                 "title": "Top 5 Utilization by Volume",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "columns": [{
                     "text": "Current",
                     "value": "current"
                 }],
-                "fontSize": "90%",
+                "fontSize": "80%",
                 "id": 38,
                 "links": [],
                 "pageSize": null,
@@ -1399,7 +1400,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 3,
+                "span": 2,
                 "styles": [{
                     "alias": "Host Name",
                     "colorMode": null,
@@ -1412,7 +1413,7 @@
                     "decimals": 2,
                     "pattern": "Metric",
                     "thresholds": [],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }, {
                     "alias": "Utilization",
@@ -1438,14 +1439,14 @@
                 }],
                 "title": "CPU Utilization by Host",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "columns": [{
                     "text": "Current",
                     "value": "current"
                 }],
-                "fontSize": "90%",
+                "fontSize": "80%",
                 "id": 35,
                 "links": [],
                 "pageSize": null,
@@ -1453,7 +1454,7 @@
                 "showHeader": true,
                 "sort": {
                     "col": 1,
-                    "desc": false
+                    "desc": true
                 },
                 "span": 2,
                 "styles": [{
@@ -1468,7 +1469,7 @@
                     "decimals": 2,
                     "pattern": "Metric",
                     "thresholds": [],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }, {
                     "alias": "Utilization",
@@ -1479,7 +1480,7 @@
                         "rgba(245, 54, 54, 0.9)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [
                         "80",
@@ -1494,7 +1495,7 @@
                 }],
                 "title": "Memory Utilization By Host",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "aliasColors": {},
@@ -1502,6 +1503,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "decimals": 1,
                 "fill": 1,
                 "id": 36,
                 "legend": {
@@ -1509,7 +1511,7 @@
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": true,
+                    "show": false,
                     "total": false,
                     "values": false
                 },
@@ -1523,7 +1525,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 2,
+                "span": 4,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -1539,7 +1541,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1578,7 +1580,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "fontSize": "90%",
+                "fontSize": "80%",
                 "id": 44,
                 "links": [],
                 "pageSize": null,
@@ -1603,7 +1605,7 @@
                     "thresholds": [
                         ""
                     ],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }, {
                     "alias": "Status",
@@ -1618,25 +1620,25 @@
                     "pattern": "Current",
                     "thresholds": [
                         "2",
-                        "8"
+                        "6"
                     ],
                     "type": "number",
                     "unit": "short"
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(tendrl.clusters.$cluster_id.volumes.*.status, 4, 'maxSeries')"
+                    "target": "groupByNode(tendrl.clusters.$cluster_id.volumes.*.state, 4, 'maxSeries')"
                 }],
                 "title": "Volume Status",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "columns": [{
                     "text": "Current",
                     "value": "current"
                 }],
-                "fontSize": "90%",
+                "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 47,
                 "links": [],
@@ -1677,26 +1679,27 @@
                     "decimals": 0,
                     "pattern": "Current",
                     "thresholds": [
-                        "2"
+                        "2",
+                        "6"
                     ],
                     "type": "number",
                     "unit": "short"
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(aliasSub(substr(tendrl.clusters.$cluster_id.nodes.*.bricks.*.status, 4, -1), '(.bricks.)', ':'), '\\|', '/')",
+                    "target": "aliasSub(aliasSub(substr(tendrl.clusters.$cluster_id.nodes.*.bricks.*.status, 4, -1), '(\\.bricks\\.)', ':'), '\\|', '/')",
                     "textEditor": false
                 }],
                 "title": "Brick Status",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "columns": [{
                     "text": "Current",
                     "value": "current"
                 }],
-                "fontSize": "90%",
+                "fontSize": "80%",
                 "id": 48,
                 "links": [],
                 "pageSize": null,
@@ -1721,7 +1724,7 @@
                     "thresholds": [
                         ""
                     ],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }, {
                     "alias": "Status",
@@ -1735,7 +1738,8 @@
                     "decimals": 0,
                     "pattern": "Current",
                     "thresholds": [
-                        "1"
+                        "2",
+                        "6"
                     ],
                     "type": "number",
                     "unit": "short"
@@ -1747,7 +1751,7 @@
                 }],
                 "title": "Host Status",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }],
             "repeat": null,
@@ -1815,7 +1819,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-at-a-Glance",
-        "version": 3
+        "version": 4
     }
 }
 

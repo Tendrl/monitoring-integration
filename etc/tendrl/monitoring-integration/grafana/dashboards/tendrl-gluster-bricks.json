@@ -15,12 +15,12 @@
             "height": 211,
             "panels": [{
                 "cacheTimeout": null,
-                "colorBackground": false,
+                "colorBackground": true,
                 "colorValue": false,
                 "colors": [
-                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(50, 172, 45, 0.97)",
                     "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
+                    "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
                 "format": "none",
@@ -67,9 +67,9 @@
                     "target": "tendrl.clusters.$cluster_id.nodes.$host_name.bricks.$brick_path.status",
                     "textEditor": false
                 }],
-                "thresholds": "",
+                "thresholds": "2,6",
                 "title": "Health",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -79,11 +79,11 @@
                 }, {
                     "op": "=",
                     "text": "Started",
-                    "value": "0"
+                    "value": "1"
                 }, {
                     "op": "=",
                     "text": "Stopped",
-                    "value": "2"
+                    "value": "10"
                 }],
                 "valueName": "current"
             }, {
@@ -154,7 +154,7 @@
                 }],
                 "thresholds": "80, 90",
                 "title": "Capacity Utilization",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -231,7 +231,7 @@
                 }],
                 "thresholds": "",
                 "title": "Capacity Available",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -290,7 +290,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -383,7 +383,7 @@
                 }],
                 "thresholds": "",
                 "title": "Weekly Growth Rate",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -493,7 +493,7 @@
                 }],
                 "thresholds": "",
                 "title": "Weeks Remaining",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -572,7 +572,7 @@
                 }],
                 "thresholds": "",
                 "title": "Throughput",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -625,7 +625,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -715,7 +715,7 @@
                 }],
                 "thresholds": "",
                 "title": "Inode Available",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -781,7 +781,7 @@
                 }],
                 "thresholds": "80, 90",
                 "title": "LVM Thin Pool Meta Data %",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -847,7 +847,7 @@
                 }],
                 "thresholds": "80, 90",
                 "title": "LVM Thin Pool Data Usage %",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -914,7 +914,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -986,7 +986,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1058,7 +1058,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1126,7 +1126,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1271,7 +1271,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Bricks",
-        "version": 3
+        "version": 4
     }
 }
 
