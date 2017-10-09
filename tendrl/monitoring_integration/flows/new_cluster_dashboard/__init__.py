@@ -51,23 +51,23 @@ class NewClusterDashboard(flows.BaseFlow):
                     if len(alert_dashboard["dashboard"]["rows"]) == 0 or \
                         len(alert_dashboard["dashboard"]["rows"][0]["panels"]) == 0:
                         alert_utils.delete_alert_dashboard(dashboard_name)
-                        self.create_all_dahsboard(dashboard_name, cluster_detail_list)
+                        self.create_all_dashboard(dashboard_name, cluster_detail_list)
                     else:
                         self.create_resource(integration_id, cluster_detail_list, dashboard_name)
                 except (KeyError, AttributeError):
                     alert_utils.delete_alert_dashboard(dashboard_name)
-                    self.create_all_dahsboard(dashboard_name, cluster_detail_list)
+                    self.create_all_dashboard(dashboard_name, cluster_detail_list)
 
             else:
-                self.create_all_dahsboard(dashboard_name, cluster_detail_list
+                self.create_all_dashboard(dashboard_name, cluster_detail_list)
 
-    def create_all_dahsboard(self, dashboard_name, cluster_detail_list):
+    def create_all_dashboard(self, dashboard_name, cluster_detail_list):
         try:
             create_alert_dashboard.CreateAlertDashboard(dashboard_name, cluster_detail_list)
         except (etcd.EtcdKeyNotFound, KeyError) as error:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Failed to create dashboard"
-                           "with error {0}".format(str(error))}
+                           "with error {0}".format(str(error))})
 
     def create_resource(self, integration_id, cluster_detail_list, resource_type):
         update_dashboard = UpdateDashboard()

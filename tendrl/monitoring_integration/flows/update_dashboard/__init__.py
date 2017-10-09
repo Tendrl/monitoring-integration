@@ -55,7 +55,7 @@ class UpdateDashboard(flows.BaseFlow):
                     if len(alert_dashboard["dashboard"]["rows"]) == 0 or \
                         len(alert_dashboard["dashboard"]["rows"][0]["panels"]) == 0:
                         alert_utils.delete_alert_dashboard(resource_type)
-                        self.create_all_dahsboard(resource_type, cluster_detail_list)
+                        self.create_all_dashboard(resource_type, cluster_detail_list)
                         if recursive_call:
                             return 1
                     else:
@@ -67,11 +67,11 @@ class UpdateDashboard(flows.BaseFlow):
                         dashboard._post_dashboard(dash_json)
                 except Exception:
                     alert_utils.delete_alert_dashboard(resource_type)
-                    self.create_all_dahsboard(resource_type, cluster_detail_list)
+                    self.create_all_dashboard(resource_type, cluster_detail_list)
                     if recursive_call:
                         return 1
             else:
-                self.create_all_dahsboard(resource_type, cluster_detail_list)
+                self.create_all_dashboard(resource_type, cluster_detail_list)
                 if recursive_call:
                     return 1
             return 0
@@ -129,13 +129,13 @@ class UpdateDashboard(flows.BaseFlow):
                 if return_value == 1:
                     return
 
-    def create_all_dahsboard(self, dashboard_name, cluster_detail_list):
+    def create_all_dashboard(self, dashboard_name, cluster_detail_list):
         try:
             create_alert_dashboard.CreateAlertDashboard(dashboard_name, cluster_detail_list)
         except (etcd.EtcdKeyNotFound, KeyError) as error:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Failed to create dashboard"
-                           "with error {0}".format(str(error))}
+                           "with error {0}".format(str(error))})
 
     def _delete_panel(self, cluster_id, resource_type, resource_name=None):
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
