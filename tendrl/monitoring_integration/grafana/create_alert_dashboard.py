@@ -12,10 +12,11 @@ from tendrl.commons.utils import etcd_utils
 
 class CreateAlertDashboard():
 
-    def __init__(self):
+    def __init__(self, resource_type=None, cluster_detail_list=None):
         org_key = "_NS/monitoring/grafana_org_id"
         auth_key = "_NS/monitoring/grafana_auth_key"
-        cluster_detail_list = create_dashboards.get_cluster_details()
+        if not cluster_detail_list:
+            cluster_detail_list = create_dashboards.get_cluster_details()
         org_id = NS.config.data.get("org_id", None)
         if not org_id:
             try:
@@ -57,7 +58,11 @@ class CreateAlertDashboard():
                 logger.log("info", NS.get("publisher_id", None),
                            {'message': msg})
             if cluster_detail_list:
-                resource_name = ["volumes", "hosts", "bricks", "clusters"]
+                resource_name = []
+                if not resource_type:
+                    resource_name = ["volumes", "hosts", "bricks", "clusters"]
+                else:
+                    resource_name = [resource_type]
                 for resource in resource_name:
                     # Uploading Alert Dashboards
                     resource_dashboard = \

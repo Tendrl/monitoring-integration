@@ -4,7 +4,7 @@ import json
 import traceback
 
 
-from requests import get, post, put
+from requests import get, post, put, delete
 import maps
 
 
@@ -56,6 +56,18 @@ def get_dashboard(dashboard_name):
         raise exceptions.ConnectionFailedException
     return resp.json()
 
+
+def delete_dashboard(dashboard_name):
+    config = maps.NamedDict(NS.config.data)
+    if utils.port_open(config.grafana_port, config.grafana_host):
+        resp = delete("http://{}:{}/api/dashboards/"
+                   "db/{}".format(config.grafana_host,
+                                  config.grafana_port,
+                                  dashboard_name),
+                   auth=config.credentials)
+    else:
+        raise exceptions.ConnectionFailedException
+    return resp.json()
 
 def get_all_dashboards():
     config = maps.NamedDict(NS.config.data)

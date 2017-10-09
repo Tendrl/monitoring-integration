@@ -13,6 +13,15 @@ def get_alert_dashboard(dashboard_name):
     return dashboard_json
 
 
+def delete_alert_dashboard(dashboard_name):
+    if dashboard_name == "nodes":
+        slug = "alerts-tendrl-gluster-hosts"
+    else:
+        slug = "alerts-tendrl-gluster-" + str(dashboard_name)
+    dashboard_json = dashboard.delete_dashboard(slug)
+    return dashboard_json
+
+
 def fetch_row(dashboard_json):
 
     rows = dashboard_json["dashboard"]["rows"]
