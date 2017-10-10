@@ -45,7 +45,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                                                           1)[1].replace("/",
                                                                        '\|')
         vol_name = resource_name.split("|", 1)[0]
-        archive_path = os.path.join(WHISPER_PATH, "clusters",
+        archive_path = os.path.join(whisper_path, "clusters",
                                     str(integration_id),
                                     "archive", "bricks")
         if not os.path.exists(archive_path):
@@ -53,12 +53,12 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
         resource_folder_name = str(brick_name) + "_" + \
             str(datetime.datetime.now().isoformat())
         archive_path = os.path.join(archive_path, resource_folder_name)
-        resource_path = os.path.join(WHISPER_PATH, "clusters",
+        resource_path = os.path.join(whisper_path, "clusters",
                                      str(integration_id), "nodes",
                                      str(host_name), "bricks",
                                      str(brick_name))
         brick_path = os.path.join(
-            WHISPER_PATH, "clusters", str(integration_id), "nodes",
+            whisper_path, "clusters", str(integration_id), "nodes",
             str(host_name), "bricks",
             resource_name.split("|", 1)[1].split(":", 1)[1].replace("/", "|")
         )
@@ -76,12 +76,12 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
         archive_path = os.path.join(archive_path,
                                     "volumes", vol_name)
         os.makedirs(str(archive_path))
-        resource_path = os.path.join(WHISPER_PATH, "clusters",
+        resource_path = os.path.join(whisper_path, "clusters",
                                      str(integration_id), "volumes",
                                      str(vol_name), "nodes",
                                      str(host_name), "bricks",
                                      str(brick_name))
-        brick_path = os.path.join(WHISPER_PATH, "clusters",
+        brick_path = os.path.join(whisper_path, "clusters",
                                   str(integration_id), "volumes",
                                   str(vol_name), "nodes",
                                   str(host_name), "bricks",
@@ -101,10 +101,10 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                                  "deletion from graphite failed"})
 
     def delete_volume_details(self, integration_id, resource_name, whisper_path):
-        resource_path = os.path.join(WHISPER_PATH, "clusters",
+        resource_path = os.path.join(whisper_path, "clusters",
                                      str(integration_id),
                                      "volumes", resource_name)
-        archive_path = os.path.join(WHISPER_PATH, "clusters",
+        archive_path = os.path.join(whisper_path, "clusters",
                                     str(integration_id),
                                     "archive", "volumes")
         if not os.path.exists(archive_path):
@@ -157,7 +157,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                             pass
                         flag = True
                         break
-        archive_path = os.path.join(WHISPER_PATH, "clusters",
+        archive_path = os.path.join(whisper_path, "clusters",
                                     str(integration_id),
                                     "archive", "nodes")
         if not os.path.exists(archive_path):
@@ -166,7 +166,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
             str(datetime.datetime.now().isoformat())
         archive_path = os.path.join(archive_path, resource_folder_name)
         os.makedirs(str(archive_path))
-        resource_path = os.path.join(WHISPER_PATH, "clusters",
+        resource_path = os.path.join(whisper_path, "clusters",
                                      str(integration_id), "nodes",
                                      str(host_name))
         if os.path.exists(resource_path):
@@ -184,7 +184,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
             archive_path = os.path.join(archive_path,
                                         "volumes", vol_name)
             os.makedirs(str(archive_path))
-            resource_path = os.path.join(WHISPER_PATH, "clusters",
+            resource_path = os.path.join(whisper_path, "clusters",
                                          str(integration_id), "volumes",
                                          str(vol_name), "nodes",
                                          str(host_name))
