@@ -1,4 +1,6 @@
-import gevent
+import threading
+import time
+
 import etcd
 
 
@@ -13,7 +15,7 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
 
     def __init__(self):
         super(MonitoringIntegrationSdsSyncThread, self).__init__()
-        self._complete = gevent.event.Event()
+        self._complete = threading.Event()
         self.plugin_obj = GraphitePlugin()
         self.sync_interval = None
 
@@ -42,7 +44,7 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                     continue
 
             try:
-                gevent.sleep(self.sync_interval)
+                time.sleep(self.sync_interval)
                 cluster_details = self.plugin_obj.get_central_store_data(
                     aggregate_gluster_objects)
                 metrics = graphite_utils.create_metrics(
