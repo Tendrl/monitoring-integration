@@ -15,12 +15,12 @@
             "height": 222,
             "panels": [{
                 "cacheTimeout": null,
-                "colorBackground": false,
+                "colorBackground": true,
                 "colorValue": false,
                 "colors": [
-                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(50, 172, 45, 0.97)",
                     "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
+                    "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
                 "format": "none",
@@ -66,9 +66,9 @@
                     "refId": "A",
                     "target": "$my_app.clusters.$cluster_id.nodes.$host_name.status"
                 }],
-                "thresholds": "",
+                "thresholds": "2,6",
                 "title": "Health",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -82,9 +82,126 @@
                 }, {
                     "op": "=",
                     "text": "Down",
-                    "value": "1"
+                    "value": "8"
                 }],
                 "valueName": "current"
+            }, {
+                "clusterName": "Bricks",
+                "colorMode": "Panel",
+                "colors": {
+                    "crit": "rgba(245, 54, 54, 0.9)",
+                    "disable": "rgba(128, 128, 128, 0.9)",
+                    "ok": "rgba(50, 128, 45, 0.9)",
+                    "warn": "rgba(237, 129, 40, 0.9)"
+                },
+                "datasource": "",
+                "displayName": "Bricks",
+                "flipCard": false,
+                "flipTime": "10",
+                "id": 33,
+                "isGrayOnNoData": true,
+                "isHideAlertsOnDisable": false,
+                "isIgnoreOKColors": false,
+                "links": [{
+                    "dashUri": "db/tendrl-gluster-bricks",
+                    "dashboard": "Tendrl - Gluster - Bricks",
+                    "includeVars": true,
+                    "keepTime": true,
+                    "params": "var-cluster_id=$cluster_id&var-host_name=$host_name",
+                    "title": "Bricks Dashboard",
+                    "type": "dashboard"
+                }],
+                "span": 1,
+                "targets": [{
+                    "aggregation": "Last",
+                    "alias": "Total",
+                    "displayType": "Regular",
+                    "refId": "A",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.total), \"max\")),\"Total\")",
+                    "textEditor": true,
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Up",
+                    "displayType": "Regular",
+                    "refId": "B",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.up), \"max\")),\"Up\")",
+                    "textEditor": true,
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Down",
+                    "crit": 1,
+                    "decimals": null,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "C",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Down\")",
+                    "textEditor": true,
+                    "units": "none",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }],
+                "title": "",
+                "type": "vonage-status-panel"
+            }, {
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "fontSize": "100%",
+                "id": 29,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 3,
+                "styles": [{
+                    "alias": "Status",
+                    "colorMode": "row",
+                    "colors": [
+                        "rgba(50, 172, 45, 0.97)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(245, 54, 54, 0.9)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 0,
+                    "pattern": "Current",
+                    "thresholds": [
+                        "2",
+                        "6"
+                    ],
+                    "type": "number",
+                    "unit": "short"
+                }, {
+                    "alias": "Brick Path",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Metric",
+                    "preserveFormat": false,
+                    "sanitize": false,
+                    "thresholds": [],
+                    "type": "string",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasSub(groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.status, 6, 'maxSeries'), '\\|', '/')"
+                }],
+                "title": "Brick Status",
+                "transform": "timeseries_aggregations",
+                "transparent": false,
+                "type": "table"
             }, {
                 "cacheTimeout": null,
                 "colorBackground": false,
@@ -141,7 +258,7 @@
                 }],
                 "thresholds": "10,20",
                 "title": "Memory Free",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -183,7 +300,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 3,
+                "span": 4,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -231,7 +348,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -311,7 +428,7 @@
                 }],
                 "thresholds": "10,20",
                 "title": "Swap Free",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -364,7 +481,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -375,135 +492,6 @@
                 },
                 "yaxes": [{
                     "format": "percent",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                }, {
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                }]
-            }, {
-                "clusterName": "Bricks",
-                "colorMode": "Panel",
-                "colors": {
-                    "crit": "rgba(245, 54, 54, 0.9)",
-                    "disable": "rgba(128, 128, 128, 0.9)",
-                    "ok": "rgba(50, 128, 45, 0.9)",
-                    "warn": "rgba(237, 129, 40, 0.9)"
-                },
-                "datasource": "",
-                "displayName": "Bricks",
-                "flipCard": false,
-                "flipTime": "10",
-                "id": 33,
-                "isGrayOnNoData": true,
-                "isHideAlertsOnDisable": false,
-                "isIgnoreOKColors": false,
-                "links": [{
-                    "dashUri": "db/tendrl-gluster-bricks",
-                    "dashboard": "Tendrl - Gluster - Bricks",
-                    "includeVars": true,
-                    "keepTime": true,
-                    "params": "var-cluster_id=$cluster_id&var-host_name=$host_name",
-                    "title": "Bricks Dashboard",
-                    "type": "dashboard"
-                }],
-                "span": 1,
-                "targets": [{
-                    "aggregation": "Last",
-                    "alias": "Total",
-                    "displayType": "Regular",
-                    "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.total), \"max\")),\"Total\")",
-                    "textEditor": true,
-                    "valueHandler": "Text Only"
-                }, {
-                    "aggregation": "Last",
-                    "alias": "Up",
-                    "displayType": "Regular",
-                    "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.up), \"max\")),\"Up\")",
-                    "textEditor": true,
-                    "valueHandler": "Text Only"
-                }, {
-                    "aggregation": "Last",
-                    "alias": "Down",
-                    "crit": 1,
-                    "decimals": null,
-                    "display": true,
-                    "displayType": "Regular",
-                    "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Down\")",
-                    "textEditor": true,
-                    "units": "none",
-                    "valueHandler": "Number Threshold",
-                    "warn": 1
-                }],
-                "title": "",
-                "type": "vonage-status-panel"
-            }, {
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": "",
-                "fill": 1,
-                "id": 14,
-                "legend": {
-                    "avg": false,
-                    "current": false,
-                    "max": false,
-                    "min": false,
-                    "show": true,
-                    "total": false,
-                    "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "links": [],
-                "nullPointMode": "connected",
-                "percentage": false,
-                "pointradius": 5,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "span": 4,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [{
-                    "refId": "A",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-read), 8)"
-                }, {
-                    "refId": "B",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-write), 8)"
-                }],
-                "thresholds": [],
-                "timeFrom": null,
-                "timeShift": null,
-                "title": "IOPS",
-                "tooltip": {
-                    "shared": true,
-                    "sort": 0,
-                    "value_type": "individual"
-                },
-                "transparent": true,
-                "type": "graph",
-                "xaxis": {
-                    "buckets": null,
-                    "mode": "time",
-                    "name": null,
-                    "show": true,
-                    "values": []
-                },
-                "yaxes": [{
-                    "format": "short",
                     "label": null,
                     "logBase": 1,
                     "max": null,
@@ -567,7 +555,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -592,51 +580,75 @@
                     "show": true
                 }]
             }, {
-                "columns": [{
-                    "text": "Current",
-                    "value": "current"
-                }],
-                "fontSize": "100%",
-                "id": 29,
-                "links": [],
-                "pageSize": null,
-                "scroll": true,
-                "showHeader": true,
-                "sort": {
-                    "col": 1,
-                    "desc": true
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "fill": 1,
+                "id": 14,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
                 },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
                 "span": 4,
-                "styles": [{
-                    "alias": "Time",
-                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "pattern": "Time",
-                    "type": "date"
-                }, {
-                    "alias": "Status",
-                    "colorMode": "row",
-                    "colors": [
-                        "rgba(50, 172, 45, 0.97)",
-                        "rgba(237, 129, 40, 0.89)",
-                        "rgba(245, 54, 54, 0.9)"
-                    ],
-                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 0,
-                    "pattern": "Current",
-                    "thresholds": [
-                        "2"
-                    ],
-                    "type": "number",
-                    "unit": "short"
-                }],
+                "stack": false,
+                "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.status, 6, 'maxSeries'), '\\|', '/')"
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-read), 8)"
+                }, {
+                    "refId": "B",
+                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-write), 8)"
                 }],
-                "title": "Brick Status",
-                "transform": "timeseries_aggregations",
-                "transparent": true,
-                "type": "table"
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "IOPS",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
             }],
             "repeat": null,
             "repeatIteration": null,
@@ -706,7 +718,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -795,7 +807,7 @@
                 }],
                 "thresholds": "80, 90",
                 "title": "Total Brick Capacity Utilization",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -869,7 +881,7 @@
                 }],
                 "thresholds": "",
                 "title": "Total Brick Capacity Available",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "70%",
                 "valueMaps": [{
@@ -947,7 +959,7 @@
                 }],
                 "thresholds": "",
                 "title": "Weekly Growth Rate",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "70%",
                 "valueMaps": [{
@@ -1057,7 +1069,7 @@
                 }],
                 "thresholds": "",
                 "title": "Weeks Remaining",
-                "transparent": true,
+                "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "70%",
                 "valueMaps": [{
@@ -1091,7 +1103,7 @@
                         "rgba(245, 54, 54, 0.9)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [
                         "80",
@@ -1108,10 +1120,11 @@
                         "rgba(50, 172, 45, 0.97)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 1,
                     "pattern": "Metric",
+                    "sanitize": false,
                     "thresholds": [],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }],
                 "targets": [{
@@ -1120,7 +1133,7 @@
                 }],
                 "title": "Brick Utilization",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "columns": [{
@@ -1147,7 +1160,7 @@
                         "rgba(50, 172, 45, 0.97)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [],
                     "type": "number",
@@ -1163,8 +1176,9 @@
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
                     "decimals": 2,
                     "pattern": "Metric",
+                    "preserveFormat": false,
                     "thresholds": [],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }],
                 "targets": [{
@@ -1174,7 +1188,7 @@
                 }],
                 "title": "Brick Capacity",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "columns": [{
@@ -1201,7 +1215,7 @@
                         "rgba(50, 172, 45, 0.97)"
                     ],
                     "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
+                    "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [],
                     "type": "number",
@@ -1218,7 +1232,7 @@
                     "decimals": 2,
                     "pattern": "Metric",
                     "thresholds": [],
-                    "type": "number",
+                    "type": "string",
                     "unit": "short"
                 }],
                 "targets": [{
@@ -1229,7 +1243,7 @@
                 }],
                 "title": "Brick Capacity Used",
                 "transform": "timeseries_aggregations",
-                "transparent": true,
+                "transparent": false,
                 "type": "table"
             }, {
                 "aliasColors": {},
@@ -1277,7 +1291,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1347,7 +1361,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1414,7 +1428,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1492,7 +1506,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1559,7 +1573,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1626,7 +1640,7 @@
                     "sort": 0,
                     "value_type": "individual"
                 },
-                "transparent": true,
+                "transparent": false,
                 "type": "graph",
                 "xaxis": {
                     "buckets": null,
@@ -1752,7 +1766,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Hosts",
-        "version": 3
+        "version": 4
     }
 }
 
