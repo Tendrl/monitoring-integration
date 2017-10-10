@@ -60,9 +60,12 @@ def _upload_default_dashboards():
     try:
         main_org_id = grafana_org_utils.get_org_id("Main Org.")
         if main_org_id:
-            grafana_org_utils.switch_context(json.loads(main_org_id)["id"])
-    except exceptions.ConnectionFailedException as ex:
-        pass
+            response = grafana_org_utils.switch_context(json.loads(main_org_id)["id"])
+    except (exceptions.ConnectionFailedException, KeyError) as ex:
+        msg = (json.loads(main_org_id)).get("message", "Cannot connect to grafana")
+        logger.log("error", NS.get("publisher_id", None),
+                       {'message': msg})
+        raise ex
     title = []
 
     for dashboard_json in dashboards:
