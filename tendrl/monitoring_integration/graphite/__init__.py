@@ -391,7 +391,7 @@ class GraphitePlugin():
                 try:
                     volume_detail[str(brick["vol_name"])]["total"] = \
                         volume_detail[str(brick["vol_name"])]["total"] + 1
-                    if brick["status"] == 0:
+                    if brick["status"] == 0 or brick["status"] == 1:
                         volume_detail[str(brick["vol_name"])]["up"] = \
                             volume_detail[str(brick["vol_name"])]["up"] + 1
                     else:
@@ -422,7 +422,7 @@ class GraphitePlugin():
                             brick["host_name"] ==
                                 node["fqdn"].replace(".", "_")
                         ):
-                            if brick["status"] == 0:
+                            if brick["status"] == 0 or brick["status"] == 1:
                                 total = total + 1
                                 up = up + 1
                             else:
@@ -461,7 +461,7 @@ class GraphitePlugin():
             down = 0
             for resource in resources:
                 try:
-                    if resource["status"] == 0:
+                    if resource["status"] == 0 or resource["status"] == 1:
                         up = up + 1
                     else:
                         down = down + 1
@@ -489,11 +489,11 @@ class GraphitePlugin():
             degraded = 0
             for resource in resources:
                 try:
-                    if resource["state"] == 0:
+                    if resource["state"] == 0 or resource["state"] == 1 :
                         up = up + 1
-                    elif resource["state"] == 5:
+                    elif resource["state"] == 4:
                         partial = partial + 1
-                    elif resource["state"] == 6:
+                    elif resource["state"] == 3:
                         degraded = degraded + 1
                     else:
                         down = down + 1
@@ -517,20 +517,19 @@ class GraphitePlugin():
         return cluster_data
 
     def resource_status_mapper(self, status):
-        status_map = {"created": 0.5, "stopped": 2, "started": 0,
-                      "degraded": 8, "up": 0, "down": 1,
-                      "completed": 11, "not_started": 12,
-                      "in progress": 13, "in_progress": 13,
-                      "not started": 12, "failed": 4, "(partial)": 5,
-                      "(degraded)": 6, "unknown": 15}
-
+        status_map = {"started": 1, "up": 0, "(degraded)": 3, "degraded": 3,
+                      "(partial)": 4, "unknown": 5, "failed": 7, "down": 8,
+                      "created": 9, "stopped" : 10, "completed": 12,
+                      "not started": 13,
+                      "not_started": 13, "in progress": 14,
+                      "in_progress": 14}
         try:
             return status_map[status]
         except KeyError:
             return status
 
     def cluster_status_mapper(self, status):
-        status_map = {"healthy": 1, "unhealthy": 0}
+        status_map = {"healthy": 0, "unhealthy": 2}
         try:
             return status_map[status]
         except KeyError:
