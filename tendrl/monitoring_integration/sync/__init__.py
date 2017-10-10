@@ -19,7 +19,7 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
         self.plugin_obj = GraphitePlugin()
         self.sync_interval = None
 
-    def _run(self):
+    def run(self):
         aggregate_gluster_objects = NS.monitoring.definitions.\
             get_parsed_defs()["namespace.monitoring"]["graphite_data"]
         while not self._complete.is_set():
