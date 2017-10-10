@@ -199,7 +199,15 @@ def miscellaneous_metrics(cluster_details):
     metric = "clusters.$integration_id.volumes.$volume_name." \
         "nodes.$node_name.bricks.$brick_name.status.$status"
     for cluster_detail in cluster_details:
+        volume_names = []
+        for volume in cluster_detail.details["Volume"]:
+            volume_names.append(volume["name"])
         for brick in cluster_detail.details["Brick"]:
+            try:
+                if brick["vol_name"] not in volume_names:
+                    continue
+            except (KeyError, AttributeError):
+                continue
             try:
                 local_metric = metric.replace(
                     "$integration_id",

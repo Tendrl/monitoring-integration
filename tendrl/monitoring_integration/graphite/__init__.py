@@ -189,6 +189,14 @@ class GraphitePlugin():
                     resource_detail["host_name"] = host.replace(".", "_")
                     brick_list = self.get_resource_keys("", attr_key)
                     for brick in brick_list:
+                        brick_deleted_key = os.path.join(cluster_key, "Bricks/all",
+                                                         host, brick, "deleted")
+                        try:
+                            is_brick_deleted = etcd_utils.read(brick_deleted_key).value
+                            if is_brick_deleted.lower() == "true":
+                                continue
+                        except etcd.EtcdKeyNotFound:
+                            continue
                         for key, value in objects["Brick"]["attrs"].items():
                             try:
                                 brick_attr_key = os.path.join(cluster_key,
@@ -214,6 +222,13 @@ class GraphitePlugin():
                 for volume in volume_list:
                     resource_detail = {}
                     volume_key = os.path.join(cluster_key, "Volumes", volume)
+                    volume_deleted_key = os.path.join(volume_key, "deleted")
+                    try:
+                        is_volume_deleted = etcd_utils.read(volume_deleted_key).value
+                        if is_volume_deleted.lower() == "true":
+                            continue
+                    except etcd.EtcdKeyNotFound:
+                        continue
                     for key, value in objects["Volume"]["attrs"].items():
                         if value is None:
                             try:
