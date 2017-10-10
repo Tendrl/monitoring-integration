@@ -1,10 +1,10 @@
-import os
 import copy
+import os
+import socket
+import time
 
 
 import etcd
-import time
-from gevent import socket
 
 
 from tendrl.commons.utils import etcd_utils
