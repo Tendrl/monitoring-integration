@@ -122,7 +122,8 @@ setup(
         "ruamel.yaml",
         "maps",
         "requests",
-        "urllib3"
+        "urllib3",
+        "werkzeug"
         ],
     include_package_data=True,
     cmdclass={'bumpversion': BumpVersionCommand, 'release': ReleaseCommand}
