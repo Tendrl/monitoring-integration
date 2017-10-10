@@ -1,9 +1,8 @@
-import gevent
-import gevent.greenlet
 import json
+import threading
 
-from gevent.pywsgi import WSGIServer
-from gevent.server import StreamServer
+from werkzeug.serving import run_simple
+
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
 from tendrl.monitoring_integration.alert.handlers import AlertHandlerManager
@@ -12,13 +11,10 @@ HOST = "127.0.0.1"
 PORT = 8789
 
 
-class WebhookReceiver(gevent.greenlet.Greenlet):
+class WebhookReceiver(threading.Thread):
     def __init__(self):
         super(WebhookReceiver, self).__init__()
-        self.server = WSGIServer(
-            (HOST, PORT),
-            self._application
-        )
+        self.daemon = True
         self.alert_handler = AlertHandlerManager()
 
     def _application(self, env, start_response):
@@ -55,9 +51,9 @@ class WebhookReceiver(gevent.greenlet.Greenlet):
 
         return response
 
-    def _run(self):
+    def run(self):
         try:
-            self.server.serve_forever()
+            run_simple(HOST, PORT, self._application, threaded=True)
         except (TypeError,
                 ValueError) as ex:
             Event(
