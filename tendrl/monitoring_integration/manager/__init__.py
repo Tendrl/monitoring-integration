@@ -1,12 +1,12 @@
 import __builtin__
-import traceback
 import json
-import time
-
-import signal
-import maps
-import gevent
 import os
+import signal
+import threading
+import time
+import traceback
+
+import maps
 
 
 from tendrl.monitoring_integration.grafana import utils
@@ -30,7 +30,7 @@ class MonitoringIntegrationManager(common_manager.Manager):
 
     def __init__(self):
 
-        self._complete = gevent.event.Event()
+        self._complete = threading.Event()
         super(
             MonitoringIntegrationManager,
             self
@@ -173,19 +173,19 @@ def main():
 
     monitoring_integration_manager = MonitoringIntegrationManager()
     monitoring_integration_manager.start()
-    complete = gevent.event.Event()
+    complete = threading.Event()
     NS.node_context = NS.node_context.load()
     current_tags = list(NS.node_context.tags)
     current_tags += ["tendrl/integration/monitoring"]
     NS.node_context.tags = list(set(current_tags))
     NS.node_context.save()
 
-    def shutdown():
+    def shutdown(signum, frame):
         complete.set()
         NS.sync_thread.stop()
 
-    gevent.signal(signal.SIGTERM, shutdown)
-    gevent.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGTERM, shutdown)
+    signal.signal(signal.SIGINT, shutdown)
 
     while not complete.is_set():
         complete.wait(timeout=1)
