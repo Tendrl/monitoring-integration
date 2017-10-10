@@ -168,7 +168,7 @@ class GraphitePlugin():
                             attr_key = os.path.join(obj_key, key)
                             attr_data = etcd_utils.read(attr_key)
                             attr_value = self.cluster_status_mapper(
-                                str(attr_data.value).lower())
+                                str(attr_data.value))
                             resource_detail[str(obj)][key] = copy.deepcopy(
                                 attr_value)
                         except (KeyError, etcd.EtcdKeyNotFound) as ex:
@@ -205,7 +205,7 @@ class GraphitePlugin():
                                 brick_attr_data = etcd_utils.read(
                                     brick_attr_key)
                                 brick_attr_value = self.resource_status_mapper(
-                                    str(brick_attr_data.value).lower())
+                                    str(brick_attr_data.value))
                                 resource_detail[key] = brick_attr_value
                             except (KeyError, etcd.EtcdKeyNotFound) as ex:
                                 logger.log(
@@ -235,7 +235,7 @@ class GraphitePlugin():
                                 attr_key = os.path.join(volume_key, key)
                                 attr_data = etcd_utils.read(attr_key)
                                 attr_value = self.resource_status_mapper(
-                                    str(attr_data.value).lower())
+                                    str(attr_data.value))
                                 resource_detail[key] = attr_value
                             except (KeyError, etcd.EtcdKeyNotFound) as ex:
                                 logger.log(
@@ -285,7 +285,7 @@ class GraphitePlugin():
                                 attr_key = os.path.join(node_key, key)
                                 attr_data = etcd_utils.read(attr_key)
                                 attr_value = self.resource_status_mapper(
-                                    str(attr_data.value).lower())
+                                    str(attr_data.value))
                                 resource_detail[key] = attr_value
                             except (etcd.EtcdKeyNotFound,
                                     AttributeError,
@@ -300,7 +300,7 @@ class GraphitePlugin():
                                     try:
                                         node_status_value = etcd_utils.read(node_status_key).value
                                         attr_value = self.resource_status_mapper(
-                                            node_status_value.lower()
+                                            node_status_value
                                         )
                                         resource_detail[key] = attr_value
                                     except etcd.EtcdKeyNotFound:
@@ -456,7 +456,7 @@ class GraphitePlugin():
         for cluster in cluster_data:
             resources = cluster.details[str(resource_name)]
             cluster.details[
-                str(resource_name.lower()) + "_total_count"] = len(resources)
+                str(resource_name) + "_total_count"] = len(resources)
             up = 0
             down = 0
             for resource in resources:
@@ -474,15 +474,15 @@ class GraphitePlugin():
                             "for {0}".format(resource_name) + str(ex)
                         }
                     )
-            cluster.details[str(resource_name.lower()) + "_up_count"] = up
-            cluster.details[str(resource_name.lower()) + "_down_count"] = down
+            cluster.details[str(resource_name) + "_up_count"] = up
+            cluster.details[str(resource_name) + "_down_count"] = down
         return cluster_data
 
     def set_volume_count(self, cluster_data, resource_name):
         for cluster in cluster_data:
             resources = cluster.details[str(resource_name)]
             cluster.details[str(
-                resource_name.lower()) + "_total_count"] = len(resources)
+                resource_name) + "_total_count"] = len(resources)
             up = 0
             down = 0
             partial = 0
@@ -507,13 +507,13 @@ class GraphitePlugin():
                         }
                     )
             cluster.details[str(
-                resource_name.lower()) + "_up_count"] = up
+                resource_name) + "_up_count"] = up
             cluster.details[str(
-                resource_name.lower()) + "_down_count"] = down
+                resource_name) + "_down_count"] = down
             cluster.details[str(
-                resource_name.lower()) + "_partial_count"] = partial
+                resource_name) + "_partial_count"] = partial
             cluster.details[str(
-                resource_name.lower()) + "_degraded_count"] = degraded
+                resource_name) + "_degraded_count"] = degraded
         return cluster_data
 
     def resource_status_mapper(self, status):
@@ -524,7 +524,8 @@ class GraphitePlugin():
                       "not_started": 13, "in progress": 14,
                       "in_progress": 14}
         try:
-            return status_map[status]
+            temp_status = copy.deepcopy(status).lower()
+            return status_map[temp_status]
         except KeyError:
             return status
 
