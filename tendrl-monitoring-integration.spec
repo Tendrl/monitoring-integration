@@ -17,6 +17,7 @@ Requires: python-requests
 Requires: python-setuptools
 Requires: python-urllib3
 Requires: tendrl-grafana-plugins
+Requires: python-werkzeug
 
 BuildRequires: python-setuptools
 BuildRequires: systemd
