@@ -124,7 +124,6 @@ class UpdateDashboard(flows.BaseFlow):
                             pass
                 except (KeyError, etcd.EtcdKeyNotFound):
                     pass
-'
             for brick in brick_list:
                 return_value = self._add_panel(integration_id, "bricks", brick, recursive_call=True)
                 if return_value == 1:
