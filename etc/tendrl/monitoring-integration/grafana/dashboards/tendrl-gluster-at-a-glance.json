@@ -322,8 +322,8 @@
             "height": 228,
             "panels": [{
                 "cacheTimeout": null,
-                "colorBackground": true,
-                "colorValue": false,
+                "colorBackground": false,
+                "colorValue": true,
                 "colors": [
                     "rgba(50, 172, 45, 0.97)",
                     "rgba(237, 129, 40, 0.89)",
@@ -331,6 +331,7 @@
                 ],
                 "datasource": "",
                 "decimals": null,
+                "description": "Shows the overall health of the Gluster cluster",
                 "format": "none",
                 "gauge": {
                     "maxValue": 2,
@@ -376,7 +377,7 @@
                     "textEditor": true
                 }],
                 "thresholds": "1,2",
-                "title": "Status",
+                "title": "Health",
                 "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
@@ -461,7 +462,7 @@
                 "valueName": "current"
             }, {
                 "clusterName": "Hosts",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -524,7 +525,7 @@
                 "type": "vonage-status-panel"
             }, {
                 "clusterName": "Volumes",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -619,7 +620,7 @@
                 "type": "vonage-status-panel"
             }, {
                 "clusterName": "Bricks",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -662,7 +663,7 @@
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.brick_count.down), \"max\")),\"Down\")",
                     "textEditor": true,
-                    "units": "none",
+                    "units": "short",
                     "valueHandler": "Number Threshold",
                     "warn": 1
                 }],
@@ -670,7 +671,7 @@
                 "type": "vonage-status-panel"
             }, {
                 "clusterName": "Geo-Replication Session",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -698,11 +699,16 @@
                 }, {
                     "aggregation": "Last",
                     "alias": "Partial",
+                    "crit": 999,
+                    "decimals": 0,
+                    "display": true,
                     "displayType": "Regular",
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.up), \"max\")),\"Up\")",
                     "textEditor": true,
-                    "valueHandler": "Text Only"
+                    "units": "none",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
                 }, {
                     "aggregation": "Last",
                     "alias": "Up",
@@ -714,11 +720,16 @@
                 }, {
                     "aggregation": "Last",
                     "alias": "Down",
+                    "crit": 1,
+                    "decimals": 0,
+                    "display": true,
                     "displayType": "Regular",
                     "refId": "D",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.down), \"max\")),\"Down\")",
                     "textEditor": true,
-                    "valueHandler": "Text Only"
+                    "units": "none",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -1580,6 +1591,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "description": "Shows the status of each volume in cluster.  \n0->Up, 3->Up(Degraded), 4->Up(Partial), 5->Unknown, 8->Down",
                 "fontSize": "80%",
                 "id": 44,
                 "links": [],
@@ -1638,6 +1650,67 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "description": "Shows the Status of each Host in a Cluster.  \n0->Up, 8->Down",
+                "fontSize": "80%",
+                "id": 48,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 4,
+                "styles": [{
+                    "alias": "Host Name",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Metric",
+                    "thresholds": [
+                        ""
+                    ],
+                    "type": "string",
+                    "unit": "short"
+                }, {
+                    "alias": "Status",
+                    "colorMode": "row",
+                    "colors": [
+                        "rgba(50, 172, 45, 0.97)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(245, 54, 54, 0.9)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 0,
+                    "pattern": "Current",
+                    "thresholds": [
+                        "2",
+                        "6"
+                    ],
+                    "type": "number",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "refId": "A",
+                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.*.status, 4, 'maxSeries')",
+                    "textEditor": false
+                }],
+                "title": "Host Status",
+                "transform": "timeseries_aggregations",
+                "transparent": false,
+                "type": "table"
+            }, {
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "description": "Shows the Status of each Brick in a Cluster.  \n1->Started, 10->Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 47,
@@ -1691,65 +1764,6 @@
                     "textEditor": false
                 }],
                 "title": "Brick Status",
-                "transform": "timeseries_aggregations",
-                "transparent": false,
-                "type": "table"
-            }, {
-                "columns": [{
-                    "text": "Current",
-                    "value": "current"
-                }],
-                "fontSize": "80%",
-                "id": 48,
-                "links": [],
-                "pageSize": null,
-                "scroll": true,
-                "showHeader": true,
-                "sort": {
-                    "col": 1,
-                    "desc": true
-                },
-                "span": 4,
-                "styles": [{
-                    "alias": "Host Name",
-                    "colorMode": null,
-                    "colors": [
-                        "rgba(245, 54, 54, 0.9)",
-                        "rgba(237, 129, 40, 0.89)",
-                        "rgba(50, 172, 45, 0.97)"
-                    ],
-                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 2,
-                    "pattern": "Metric",
-                    "thresholds": [
-                        ""
-                    ],
-                    "type": "string",
-                    "unit": "short"
-                }, {
-                    "alias": "Status",
-                    "colorMode": "row",
-                    "colors": [
-                        "rgba(50, 172, 45, 0.97)",
-                        "rgba(237, 129, 40, 0.89)",
-                        "rgba(245, 54, 54, 0.9)"
-                    ],
-                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
-                    "decimals": 0,
-                    "pattern": "Current",
-                    "thresholds": [
-                        "2",
-                        "6"
-                    ],
-                    "type": "number",
-                    "unit": "short"
-                }],
-                "targets": [{
-                    "refId": "A",
-                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.*.status, 4, 'maxSeries')",
-                    "textEditor": false
-                }],
-                "title": "Host Status",
                 "transform": "timeseries_aggregations",
                 "transparent": false,
                 "type": "table"
@@ -1819,7 +1833,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-at-a-Glance",
-        "version": 4
+        "version": 5
     }
 }
 

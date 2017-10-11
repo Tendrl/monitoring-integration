@@ -15,8 +15,8 @@
             "height": 192,
             "panels": [{
                 "cacheTimeout": null,
-                "colorBackground": true,
-                "colorValue": false,
+                "colorBackground": false,
+                "colorValue": true,
                 "colors": [
                     "rgba(50, 172, 45, 0.97)",
                     "rgba(237, 129, 40, 0.89)",
@@ -24,6 +24,7 @@
                 ],
                 "datasource": "",
                 "decimals": 0,
+                "description": "Shows Health of a Volume.",
                 "format": "short",
                 "gauge": {
                     "maxValue": 100,
@@ -172,6 +173,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "description": "Shows the Status of each Brick in a Volume.  \n1->Started, 10->Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 41,
@@ -227,7 +229,7 @@
                 "type": "table"
             }, {
                 "clusterName": "Bricks",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -263,7 +265,7 @@
                 }, {
                     "aggregation": "Last",
                     "alias": "Up",
-                    "decimals": 2,
+                    "decimals": 0,
                     "displayType": "Regular",
                     "refId": "B",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.up), \"max\")),\"Up\")",
@@ -280,7 +282,7 @@
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.down), \"max\")),\"Down\")",
                     "textEditor": true,
-                    "units": "none",
+                    "units": "short",
                     "valueHandler": "Number Threshold",
                     "warn": 1
                 }],
@@ -288,7 +290,7 @@
                 "type": "vonage-status-panel"
             }, {
                 "clusterName": "Subvolume",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -318,7 +320,7 @@
                 "type": "vonage-status-panel"
             }, {
                 "clusterName": "Geo-Replication Sessions",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -354,27 +356,27 @@
                 }, {
                     "aggregation": "Last",
                     "alias": "Partial",
-                    "crit": 2,
-                    "decimals": 2,
-                    "display": false,
+                    "crit": 999,
+                    "decimals": 0,
+                    "display": true,
                     "displayType": "Regular",
                     "refId": "D",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.partial), 'max')), 'Partial')",
                     "textEditor": false,
-                    "units": "none",
-                    "valueHandler": "Text Only",
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
                     "warn": 1
                 }, {
                     "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
-                    "decimals": 2,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.down), 'max')), 'Down')",
                     "textEditor": false,
-                    "units": "none",
+                    "units": "short",
                     "valueHandler": "Number Threshold",
                     "warn": 1
                 }],
@@ -382,7 +384,7 @@
                 "type": "vonage-status-panel"
             }, {
                 "clusterName": "Healing",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -431,7 +433,7 @@
                 "type": "vonage-status-panel"
             }, {
                 "clusterName": "Rebalance",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -453,7 +455,7 @@
                     "alias": "Rebalanced Files",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.rebalance_files), 'max')), 'Rebalanced Files')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_files)), 'max')), 'Rebalanced Files')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -461,7 +463,7 @@
                     "alias": "MB Size",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.rebalance_bytes), 'max')), 'MB Size')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes)), 'max')), 'MB Size')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -469,7 +471,7 @@
                     "alias": "Skipped",
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.rebalance_skipped), 'max')), 'Skipped')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_skipped)), 'max')), 'Skipped')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -477,7 +479,7 @@
                     "alias": "Failure",
                     "displayType": "Regular",
                     "refId": "D",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.rebalance_failures), 'max')), 'Failure')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_failures)), 'max')), 'Failure')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }],
@@ -542,7 +544,7 @@
                 "title": "Rebalance Status",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "70%",
+                "valueFontSize": "50%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -1772,7 +1774,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Volumes",
-        "version": 4
+        "version": 5
     }
 }
 
