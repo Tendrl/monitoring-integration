@@ -15,14 +15,15 @@
             "height": 222,
             "panels": [{
                 "cacheTimeout": null,
-                "colorBackground": true,
-                "colorValue": false,
+                "colorBackground": false,
+                "colorValue": true,
                 "colors": [
                     "rgba(50, 172, 45, 0.97)",
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
+                "description": "Shows health of the host",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -87,7 +88,7 @@
                 "valueName": "current"
             }, {
                 "clusterName": "Bricks",
-                "colorMode": "Panel",
+                "colorMode": "Metric",
                 "colors": {
                     "crit": "rgba(245, 54, 54, 0.9)",
                     "disable": "rgba(128, 128, 128, 0.9)",
@@ -132,7 +133,7 @@
                     "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
-                    "decimals": null,
+                    "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
@@ -149,6 +150,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "description": "Shows the Status of each Brick in a Host.  \n1->Started, 10->Stopped",
                 "fontSize": "100%",
                 "id": 29,
                 "links": [],
@@ -213,15 +215,16 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
-                "format": "none",
+                "description": "Sum of Memory Free and Memory Cached.",
+                "format": "decbytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
-                    "show": true,
+                    "show": false,
                     "thresholdLabels": false,
                     "thresholdMarkers": true
                 },
-                "id": 16,
+                "id": 34,
                 "interval": null,
                 "links": [],
                 "mappingType": 1,
@@ -235,7 +238,7 @@
                 "maxDataPoints": 100,
                 "nullPointMode": "connected",
                 "nullText": null,
-                "postfix": "%",
+                "postfix": "",
                 "postfixFontSize": "50%",
                 "prefix": "",
                 "prefixFontSize": "50%",
@@ -253,12 +256,22 @@
                 },
                 "tableColumn": "",
                 "targets": [{
+                    "hide": true,
                     "refId": "A",
-                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-free"
+                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-cached",
+                    "textEditor": false
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-free",
+                    "textEditor": false
+                }, {
+                    "refId": "C",
+                    "target": "sumSeries(#A, #B)",
+                    "targetFull": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-cached, $my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-free)"
                 }],
-                "thresholds": "10,20",
-                "title": "Memory Free",
-                "transparent": false,
+                "thresholds": "",
+                "title": "Memory",
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -1766,7 +1779,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Hosts",
-        "version": 4
+        "version": 5
     }
 }
 

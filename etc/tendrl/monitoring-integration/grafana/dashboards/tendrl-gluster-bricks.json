@@ -15,14 +15,15 @@
             "height": 211,
             "panels": [{
                 "cacheTimeout": null,
-                "colorBackground": true,
-                "colorValue": false,
+                "colorBackground": false,
+                "colorValue": true,
                 "colors": [
                     "rgba(50, 172, 45, 0.97)",
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
+                "description": "Shows Status of a Brick.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -68,7 +69,7 @@
                     "textEditor": false
                 }],
                 "thresholds": "2,6",
-                "title": "Health",
+                "title": "Status",
                 "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
@@ -1271,7 +1272,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Bricks",
-        "version": 4
+        "version": 5
     }
 }
 
