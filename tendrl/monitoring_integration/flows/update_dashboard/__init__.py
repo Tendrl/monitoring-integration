@@ -4,6 +4,7 @@ import etcd
 import time
 
 
+from tendrl.monitoring_integration.grafana import create_alert_dashboard
 from tendrl.monitoring_integration.flows.update_dashboard.alert_utils import \
     get_alert_dashboard
 from tendrl.monitoring_integration.flows.update_dashboard import alert_utils
@@ -25,34 +26,59 @@ class UpdateDashboard(flows.BaseFlow):
         resource_type = str(
             self.parameters.get("Trigger.resource_type")).lower()
         operation = str(self.parameters.get("Trigger.action")).lower()
-        cluster_id = self.parameters.get("TendrlContext.integration_id")
+        integration_id = self.parameters.get("TendrlContext.integration_id")
         if operation.lower() == "add":
             self._add_panel(
-                cluster_id, self.map[resource_type], resource_name)
+                integration_id, self.map[resource_type], resource_name)
         elif operation.lower() == "delete":
             self._delete_panel(
-                cluster_id, self.map[resource_type], resource_name=None)
+                integration_id, self.map[resource_type], resource_name=None)
         else:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Wrong action"})
 
-    def _add_panel(self, cluster_id, resource_type, resource_name=None):
+    def _add_panel(self, integration_id, resource_type, resource_name=None,
+                   recursive_call=False):
         if resource_type == "nodes":
             resource_name = resource_name.replace(".", "_")
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
         if alert_dashboard:
-            alert_row = alert_utils.fetch_row(alert_dashboard)
-            alert_utils.add_resource_panel(
-                alert_row, cluster_id, resource_type, resource_name)
-            dash_json = alert_utils.create_updated_dashboard(
-                alert_dashboard, alert_row)
-            dashboard._post_dashboard(dash_json)
-        else:
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': "Dashboard not found"})
+            try:
+                if alert_dashboard["message"] == "Dashboard not found":
+                    flag = False
+                else:
+                    flag = True
+            except (KeyError, AttributeError):
+                    flag = True
+            if flag:
+                try:
+                    if len(alert_dashboard["dashboard"]["rows"]) == 0 or \
+                        len(alert_dashboard["dashboard"]["rows"][0]["panels"]) == 0:
+                        alert_utils.delete_alert_dashboard(resource_type)
+                        self.create_all_dashboard(resource_type, integration_id)
+                        if recursive_call:
+                            return 1
+                    else:
+                        alert_row = alert_utils.fetch_row(alert_dashboard)
+                        alert_utils.add_resource_panel(
+                        alert_row, integration_id, resource_type, resource_name)
+                        dash_json = alert_utils.create_updated_dashboard(
+                            alert_dashboard, alert_row)
+                        dashboard._post_dashboard(dash_json)
+                except Exception:
+                    alert_utils.delete_alert_dashboard(resource_type)
+                    self.create_all_dashboard(resource_type, integration_id)
+                    if recursive_call:
+                        return 1
+            else:
+                self.create_all_dashboard(resource_type, integration_id)
+                if recursive_call:
+                    return 1
 
-        if resource_type == "volumes":
-            cluster_key = "/clusters/" + str(cluster_id)
+        if resource_type is not "volumes":
+            return 0
+        else:
+            cluster_key = "/clusters/" + str(integration_id)
             vol_id = None
             try_count = 0
             while try_count < 18 and not vol_id:
@@ -73,10 +99,10 @@ class UpdateDashboard(flows.BaseFlow):
                         try_count = try_count + 1
                         pass
             if try_count == 18:
-                return
+                return 0
 
             time.sleep(10)
-            volume_key = "/clusters/" + str(cluster_id) + "/Volumes/" + \
+            volume_key = "/clusters/" + str(integration_id) + "/Volumes/" + \
                 str(vol_id)
             subvols = etcd_utils.read(volume_key + "/Bricks")
             brick_list = []
@@ -97,17 +123,35 @@ class UpdateDashboard(flows.BaseFlow):
                         except(KeyError, etcd.EtcdKeyNotFound):
                             pass
                 except (KeyError, etcd.EtcdKeyNotFound):
-                    # This should not happen as the bricks would be
-                    # added by this time
                     pass
-
+'
             for brick in brick_list:
-                self._add_panel(cluster_id, "bricks", brick)
+                return_value = self._add_panel(integration_id, "bricks", brick, recursive_call=True)
+                if return_value == 1:
+                    return 0
 
-    def _delete_panel(self, cluster_id, resource_type, resource_name=None):
+    def create_all_dashboard(self, dashboard_name, integration_id):
+        cluster_detail_list = []
+        time.sleep(60)
+        try:
+            cluster_detail_list = create_dashboards.get_cluster_details(
+                integration_id)
+        except etcd.EtcdKeyNotFound:
+            logger.log("error", NS.get("publisher_id", None),
+                           {'message': "Failed to get cluster "
+                            "details".format(integration_id)})
+            return
+        try:
+            create_alert_dashboard.CreateAlertDashboard(dashboard_name, cluster_detail_list)
+        except (etcd.EtcdKeyNotFound, KeyError) as error:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Failed to create dashboard"
+                           "with error {0}".format(str(error))})
+
+    def _delete_panel(self, integration_id, resource_type, resource_name=None):
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
         alert_utils.remove_row(alert_dashboard,
-                               cluster_id,
+                               integration_id,
                                resource_type,
                                resource_name)
         resp = dashboard._post_dashboard(alert_dashboard)
@@ -116,7 +160,7 @@ class UpdateDashboard(flows.BaseFlow):
         if resource_name is None:
             dashboard_names = ["volumes", "hosts", "bricks"]
             for dash_name in dashboard_names:
-                alert_dashboard = alert_utils.remove_cluster_rows(cluster_id,
+                alert_dashboard = alert_utils.remove_cluster_rows(integration_id,
                                                                   dash_name)
                 resp = dashboard._post_dashboard(alert_dashboard)
                 response.append(copy.deepcopy(resp))
