@@ -62,6 +62,8 @@ class NewClusterDashboard(flows.BaseFlow):
                 self.create_all_dashboard(dashboard_name, cluster_detail_list)
 
     def create_all_dashboard(self, dashboard_name, cluster_detail_list):
+        if dashboard_name == "nodes":
+            dashboard_name = "hosts"
         try:
             create_alert_dashboard.CreateAlertDashboard(dashboard_name, cluster_detail_list)
         except (etcd.EtcdKeyNotFound, KeyError) as error:
