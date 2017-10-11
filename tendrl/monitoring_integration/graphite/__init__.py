@@ -456,7 +456,7 @@ class GraphitePlugin():
         for cluster in cluster_data:
             resources = cluster.details[str(resource_name)]
             cluster.details[
-                str(resource_name) + "_total_count"] = len(resources)
+                str(resource_name).lower() + "_total_count"] = len(resources)
             up = 0
             down = 0
             for resource in resources:
@@ -474,15 +474,15 @@ class GraphitePlugin():
                             "for {0}".format(resource_name) + str(ex)
                         }
                     )
-            cluster.details[str(resource_name) + "_up_count"] = up
-            cluster.details[str(resource_name) + "_down_count"] = down
+            cluster.details[str(resource_name).lower() + "_up_count"] = up
+            cluster.details[str(resource_name).lower() + "_down_count"] = down
         return cluster_data
 
     def set_volume_count(self, cluster_data, resource_name):
         for cluster in cluster_data:
             resources = cluster.details[str(resource_name)]
             cluster.details[str(
-                resource_name) + "_total_count"] = len(resources)
+                resource_name).lower() + "_total_count"] = len(resources)
             up = 0
             down = 0
             partial = 0
@@ -507,13 +507,13 @@ class GraphitePlugin():
                         }
                     )
             cluster.details[str(
-                resource_name) + "_up_count"] = up
+                resource_name).lower() + "_up_count"] = up
             cluster.details[str(
-                resource_name) + "_down_count"] = down
+                resource_name).lower() + "_down_count"] = down
             cluster.details[str(
-                resource_name) + "_partial_count"] = partial
+                resource_name).lower() + "_partial_count"] = partial
             cluster.details[str(
-                resource_name) + "_degraded_count"] = degraded
+                resource_name).lower() + "_degraded_count"] = degraded
         return cluster_data
 
     def resource_status_mapper(self, status):
