@@ -552,23 +552,23 @@
                 }, {
                     "op": "=",
                     "text": "Completed",
-                    "value": "11"
-                }, {
-                    "op": "=",
-                    "text": "Not Started",
                     "value": "12"
                 }, {
                     "op": "=",
-                    "text": "In Progress",
+                    "text": "Not Started",
                     "value": "13"
                 }, {
                     "op": "=",
+                    "text": "In Progress",
+                    "value": "14"
+                }, {
+                    "op": "=",
                     "text": "Failed",
-                    "value": "4"
+                    "value": "7"
                 }, {
                     "op": "=",
                     "text": "Stopped",
-                    "value": "2"
+                    "value": "10"
                 }],
                 "valueName": "current"
             }],
