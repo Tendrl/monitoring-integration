@@ -12,3 +12,7 @@ class NodeNotFound(Exception):
 
 class InvalidAlertSeverity(Exception):
     pass
+
+
+class PermissionDenied(Exception):
+    pass

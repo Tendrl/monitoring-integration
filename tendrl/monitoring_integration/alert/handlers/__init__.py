@@ -11,6 +11,7 @@ from tendrl.commons.message import ExceptionMessage
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
+from tendrl.monitoring_integration.alert.exceptions import PermissionDenied
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.grafana.exceptions import \
@@ -122,6 +123,7 @@ class AlertHandlerManager(object):
                 )
         except(AlertNotFound,
                Unauthorized,
+               PermissionDenied,
                ConnectionFailedException,
                ConnectionError,
                RequestException) as ex:
