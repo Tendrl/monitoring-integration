@@ -36,10 +36,6 @@ class VolumeHandler(AlertHandler):
             alert['classification'] = alert_json["classification"]
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
-            alert['tags']['volume_id'] = utils.find_volume_id(
-                alert['tags']['volume_name'],
-                alert['tags']['integration_id']
-            )
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = (
                     "Volume utilization of %s in "

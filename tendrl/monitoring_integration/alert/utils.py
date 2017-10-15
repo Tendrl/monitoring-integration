@@ -70,28 +70,6 @@ def find_current_value(eval_data):
     return cur_value
 
 
-def find_volume_id(vol_name, integration_id):
-    try:
-        volumes = etcd_utils.read(
-            "clusters/%s/Volumes" % integration_id
-        )
-        for volume in volumes.leaves:
-            key = volume.key + "/name"
-            name = etcd_utils.read(key).value
-            if vol_name == name:
-                return volume.key.split("/")[-1]
-    except (EtcdKeyNotFound) as ex:
-        logger.log(
-            "error",
-            NS.publisher_id,
-            {
-                "message": "Failed to fetch volume id for volume name %s" %
-                vol_name
-            }
-        )
-        raise ex
-
-
 def find_alert_target(conditions):
     target = None
     if "targetFull" in conditions[0]['query']['model']:
