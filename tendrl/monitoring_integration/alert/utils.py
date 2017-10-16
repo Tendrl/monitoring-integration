@@ -9,6 +9,7 @@ from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
+from tendrl.monitoring_integration.alert.exceptions import PermissionDenied
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.grafana import alert
@@ -58,6 +59,16 @@ def get_alert_info(alert_id):
                 }
             )
             raise Unauthorized
+        elif alert_json["message"] == "You are not allowed to edit/view alert":
+            logger.log(
+                "error",
+                NS.publisher_id,
+                {
+                    "message": "Unable to fetch alert from grafana"
+                    " %s err: %s" % (alert_id, alert_json["message"])
+                }
+            )
+            raise PermissionDenied
     return alert_json
 
 
