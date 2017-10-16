@@ -376,7 +376,7 @@
                     "target": "tendrl.clusters.$cluster_id.status",
                     "textEditor": true
                 }],
-                "thresholds": "1,2",
+                "thresholds": "1",
                 "title": "Health",
                 "transparent": false,
                 "type": "singlestat",

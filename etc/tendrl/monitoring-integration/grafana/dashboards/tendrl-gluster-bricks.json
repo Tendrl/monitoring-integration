@@ -165,6 +165,82 @@
                 }],
                 "valueName": "current"
             }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "decimals": 1,
+                "fill": 1,
+                "id": 17,
+                "legend": {
+                    "alignAsTable": false,
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 3,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes, '$brick_path')",
+                    "textEditor": false
+                }],
+                "thresholds": [{
+                    "colorMode": "warning",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 80
+                }],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Capacity Utilization Trend",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "percent",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
                 "cacheTimeout": null,
                 "colorBackground": false,
                 "colorValue": false,
@@ -234,87 +310,13 @@
                 "title": "Capacity Available",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "80%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
                     "value": "null"
                 }],
                 "valueName": "current"
-            }, {
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": "",
-                "fill": 1,
-                "id": 17,
-                "legend": {
-                    "avg": false,
-                    "current": false,
-                    "max": false,
-                    "min": false,
-                    "show": false,
-                    "total": false,
-                    "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "links": [],
-                "nullPointMode": "connected",
-                "percentage": false,
-                "pointradius": 5,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "span": 3,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [{
-                    "refId": "A",
-                    "target": "alias(averageSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes), '$brick_path')",
-                    "textEditor": false
-                }],
-                "thresholds": [{
-                    "colorMode": "warning",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 80
-                }],
-                "timeFrom": null,
-                "timeShift": null,
-                "title": "Capacity Utilization Trend",
-                "tooltip": {
-                    "shared": true,
-                    "sort": 0,
-                    "value_type": "individual"
-                },
-                "transparent": false,
-                "type": "graph",
-                "xaxis": {
-                    "buckets": null,
-                    "mode": "time",
-                    "name": null,
-                    "show": true,
-                    "values": []
-                },
-                "yaxes": [{
-                    "format": "percent",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                }, {
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                }]
             }, {
                 "cacheTimeout": null,
                 "colorBackground": false,
@@ -588,6 +590,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "decimals": 1,
                 "fill": 1,
                 "id": 2,
                 "legend": {
