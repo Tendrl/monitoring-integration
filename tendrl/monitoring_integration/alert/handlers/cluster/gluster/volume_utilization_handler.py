@@ -18,7 +18,7 @@ class VolumeHandler(AlertHandler):
     def __init__(self):
         AlertHandler.__init__(self)
         self.template = "tendrl.clusters.{cluster_id}.volumes.{volume_name}."\
-            "nodes.*.bricks.*.utilization.percent-percent_bytes"
+            "nodes.*.bricks.*.utilization.gauge-total"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
