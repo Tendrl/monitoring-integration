@@ -1451,8 +1451,8 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
-                    "label": "milliseconds",
+                    "format": "ms",
+                    "label": "",
                     "logBase": 1,
                     "max": null,
                     "min": null,

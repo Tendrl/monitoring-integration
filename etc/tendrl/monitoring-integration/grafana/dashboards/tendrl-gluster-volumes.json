@@ -580,7 +580,7 @@
             "titleSize": "h5"
         }, {
             "collapse": false,
-            "height": 158,
+            "height": 192,
             "panels": [{
                 "cacheTimeout": null,
                 "colorBackground": false,
@@ -791,7 +791,7 @@
                 "title": "Weekly Growth Rate",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "80%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -900,7 +900,7 @@
                 "title": "Weeks Remaining",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "80%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -941,18 +941,9 @@
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
-                    "hide": true,
-                    "refId": "A",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.utilization.gauge-total)"
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.utilization.gauge-used)"
-                }, {
                     "hide": false,
-                    "refId": "C",
-                    "target": "alias(asPercent(#B, #A), '$volume_name')",
-                    "targetFull": "alias(asPercent(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.utilization.gauge-used), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.utilization.gauge-total)), '$volume_name')"
+                    "refId": "A",
+                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.pcnt_used, '$volume_name')"
                 }],
                 "thresholds": [{
                     "colorMode": "warning",
@@ -1049,7 +1040,7 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
+                    "format": "percent",
                     "label": null,
                     "logBase": 1,
                     "max": null,
