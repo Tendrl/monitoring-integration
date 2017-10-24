@@ -13,7 +13,7 @@ from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 class ClusterHandler(AlertHandler):
 
     handles = 'cluster'
-    representive_name = 'cluster_utilization_alert'
+    representive_name = 'cluster_utilization'
 
     def __init__(self):
         AlertHandler.__init__(self)
@@ -33,7 +33,6 @@ class ClusterHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['classification'] = alert_json["classification"]
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
             if alert['severity'] == "WARNING":

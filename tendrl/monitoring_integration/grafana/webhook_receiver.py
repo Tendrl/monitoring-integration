@@ -2,6 +2,7 @@ import json
 import threading
 
 from werkzeug.serving import run_simple
+from werkzeug.wrappers import Request, Response
 
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
@@ -20,22 +21,20 @@ class WebhookReceiver(threading.Thread):
     def _application(self, env, start_response):
         try:
             if env['PATH_INFO'] != '/grafana_callback':
-                start_response(
-                    '404 Not Found',
-                    [('Content-Type', 'text/html')]
-                )
-                response = [b'<h1>Alert Not Found</h1>']
+                response = Response('Alert not found')
+                response.headers['content-length'] = len(response.data)
+                response.status_code = 404
             else:
-                data = env['wsgi.input'].read()
+                data = env['wsgi.input'].read(
+                    int(env['CONTENT_LENGTH'])
+                )
                 data = json.loads(data)
                 self.alert_handler.handle_alert(
                     data["ruleId"]
                 )
-                start_response(
-                    '200 OK',
-                    [('Content-Type', 'text/html')]
-                )
-                response = [b'<h1>Alert Received</h1>']
+                response = Response('Alert received successfully')
+                response.headers['content-length'] = len(response.data)
+                response.status_code = 200
         except (IOError, AssertionError) as ex:
             Event(
                 ExceptionMessage(
@@ -47,9 +46,10 @@ class WebhookReceiver(threading.Thread):
                     }
                 )
             )
-            response = [b'<h1>Error in reading alert from socket</h1>']
-
-        return response
+            response = Response('Error in reading alert from socket')
+            response.headers['content-length'] = len(response.data)
+            response.status_code = 500 
+        return response(env, start_response)
 
     def run(self):
         try:

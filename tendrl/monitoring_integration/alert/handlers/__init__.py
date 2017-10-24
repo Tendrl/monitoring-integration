@@ -79,7 +79,6 @@ class AlertHandlerManager(object):
                     # node.cpu_utilization
                     # cluster.gluster.cluster_utilization
                     alert_classification = alert_handlers.rsplit(".", 1)[0]
-                    cls.classification = alert_classification.split(".")[0]
                     alert_classification = alert_classification.replace(
                         ".", "/")
                     if alert_classification in self.alert_types:
@@ -106,7 +105,6 @@ class AlertHandlerManager(object):
             handled_alert = False
             for handler in AlertHandler.handlers:
                 if handler.handles in alert_json['Name'].lower():
-                    alert_json["classification"] = handler.classification
                     handler.handle(alert_json)
                     handled_alert = True
             if not handled_alert:

@@ -13,18 +13,18 @@ from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 class SwapHandler(AlertHandler):
 
     handles = 'swap'
-    representive_name = 'swap_alert'
+    representive_name = 'swap_utilization'
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl.clusters.{cluster_id}.nodes.{host_name}.swap"
+        self.template = "tendrl.clusters.{integration_id}.nodes.{host_name}.swap"
 
     def format_alert(self, alert_json):
-        alert = self.parse_alert_metrics(alert_json)
+        alert, integration_id = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
             alert["node_id"] = utils.find_node_id(
-                alert['tags']['integration_id'],
+                integration_id,
                 alert['tags']['fqdn']
             )
             alert["time_stamp"] = alert_json['NewStateDate']
@@ -36,7 +36,6 @@ class SwapHandler(AlertHandler):
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
             alert['tags']['fqdn'] = alert['tags']['fqdn']
-            alert['classification'] = alert_json["classification"]
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = ("Swap utilization of node %s is"
                                             " %s which is above the %s "
@@ -115,6 +114,6 @@ class SwapHandler(AlertHandler):
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         # identifying cluster_id and node_id from target
         result = utils.parse_target(target, self.template)
-        alert['tags']['integration_id'] = result["cluster_id"]
+        integration_id = result["integration_id"]
         alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
-        return alert
+        return alert, integration_id
