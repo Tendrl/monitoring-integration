@@ -215,7 +215,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
-                "description": "Sum of Memory Free and Memory Cached.",
+                "description": "Memory Available is the sum of memory free and memory cached",
                 "format": "decbytes",
                 "gauge": {
                     "maxValue": 100,
@@ -271,7 +271,7 @@
                     "targetFull": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-cached, $my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-free)"
                 }],
                 "thresholds": "",
-                "title": "Memory",
+                "title": "Memory Available",
                 "type": "singlestat",
                 "valueFontSize": "80%",
                 "valueMaps": [{
@@ -343,8 +343,7 @@
                     "textEditor": false
                 }, {
                     "refId": "F",
-                    "target": "alias(sumSeries(#A, #B, #C, #D, #E), 'Total Used')",
-                    "targetFull": "alias(sumSeries(alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-buffered, 'Buffered'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-cached, 'cached'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_recl, 'Slab Recl'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_unrecl, 'Slab Unrecl'), alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-used, 'Used')), 'Total Used')"
+		    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.memory.{percent-buffered,percent-cached,percent-slab_recl,percent-slab_unrecl,percent-used}), 'Total Used')"
                 }],
                 "thresholds": [{
                     "colorMode": "warning",
