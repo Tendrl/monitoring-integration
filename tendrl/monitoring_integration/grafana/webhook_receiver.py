@@ -6,6 +6,7 @@ from werkzeug.wrappers import Request, Response
 
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
+from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert.handlers import AlertHandlerManager
 
 HOST = "127.0.0.1"
@@ -29,13 +30,22 @@ class WebhookReceiver(threading.Thread):
                     int(env['CONTENT_LENGTH'])
                 )
                 data = json.loads(data)
-                self.alert_handler.handle_alert(
-                    data["ruleId"]
-                )
-                response = Response('Alert received successfully')
-                response.headers['content-length'] = len(response.data)
-                response.status_code = 200
-        except (IOError, AssertionError) as ex:
+                if "ruleId" in data:
+                    self.alert_handler.handle_alert(
+                        data["ruleId"]
+                    )
+                    response = Response('Alert received successfully')
+                    response.headers['content-length'] = len(response.data)
+                    response.status_code = 200
+                else:
+                    logger.log(
+                        "error",
+                        NS.publisher_id,
+                        {
+                            "message": "Unable to find ruleId %s" % data
+                        }
+                    )
+        except (IOError, AssertionError, KeyError) as ex:
             Event(
                 ExceptionMessage(
                     priority="error",
