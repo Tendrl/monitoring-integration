@@ -13,12 +13,12 @@ from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 class VolumeHandler(AlertHandler):
 
     handles = 'volume'
-    representive_name = 'volume_utilization_alert'
+    representive_name = 'volume_utilization'
 
     def __init__(self):
         AlertHandler.__init__(self)
         self.template = "tendrl.clusters.{cluster_id}.volumes.{volume_name}."\
-            "nodes.*.bricks.*.utilization.gauge-total"
+            "pcnt_used"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
@@ -33,7 +33,6 @@ class VolumeHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['classification'] = alert_json["classification"]
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
             if alert['severity'] == "WARNING":

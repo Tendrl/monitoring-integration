@@ -13,7 +13,7 @@ from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 class BrickHandler(AlertHandler):
 
     handles = 'brick'
-    representive_name = 'bricks_utilization_alert'
+    representive_name = 'brick_utilization'
 
     def __init__(self):
         AlertHandler.__init__(self)
@@ -37,7 +37,6 @@ class BrickHandler(AlertHandler):
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
-            alert['classification'] = alert_json["classification"]
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
             if alert['severity'] == "WARNING":
