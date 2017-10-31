@@ -73,7 +73,7 @@ class NewClusterDashboard(flows.BaseFlow):
                            "with error {0}".format(str(error))})
 
     def create_resource(self, integration_id, cluster_detail_list, resource_type):
-        if reource_type == "volumes":
+        if resource_type == "volumes":
             self.brick_dashboard_upload_flag = True
         if self.brick_dashboard_upload_flag and resource_type == "bricks":
             return
