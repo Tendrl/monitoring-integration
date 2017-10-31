@@ -20,6 +20,7 @@ class NewClusterDashboard(flows.BaseFlow):
         self.upload_alert_dashboard(cluster_id)
 
     def upload_alert_dashboard(self, integration_id=None):
+        self.global_flag = False
         if not integration_id:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "cluster id not found"})
@@ -33,7 +34,7 @@ class NewClusterDashboard(flows.BaseFlow):
                            {'message': "Failed to get cluster "
                             "details".format(integration_id)})
             return
-        dashboards = ["volumes", "nodes"]
+        dashboards = ["volumes", "nodes", "bricks"]
         for dashboard_name in dashboards:
             alert_dashboard = alert_utils.get_alert_dashboard(dashboard_name)
             flag = False
@@ -72,6 +73,10 @@ class NewClusterDashboard(flows.BaseFlow):
                            "with error {0}".format(str(error))})
 
     def create_resource(self, integration_id, cluster_detail_list, resource_type):
+        if reource_type == "volumes":
+            self.global_flag = True
+        if self.global_flag and resource_type == "bricks":
+            return
         update_dashboard = UpdateDashboard()
         self.map = {"cluster": "at-a-glance", "host": "nodes",
                     "volume": "volumes", "brick": "bricks"}
