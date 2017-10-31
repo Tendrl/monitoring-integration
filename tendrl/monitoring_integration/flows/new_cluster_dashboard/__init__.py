@@ -20,7 +20,7 @@ class NewClusterDashboard(flows.BaseFlow):
         self.upload_alert_dashboard(cluster_id)
 
     def upload_alert_dashboard(self, integration_id=None):
-        self.global_flag = False
+        self.brick_dashboard_upload_flag = False
         if not integration_id:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "cluster id not found"})
@@ -74,8 +74,8 @@ class NewClusterDashboard(flows.BaseFlow):
 
     def create_resource(self, integration_id, cluster_detail_list, resource_type):
         if reource_type == "volumes":
-            self.global_flag = True
-        if self.global_flag and resource_type == "bricks":
+            self.brick_dashboard_upload_flag = True
+        if self.brick_dashboard_upload_flag and resource_type == "bricks":
             return
         update_dashboard = UpdateDashboard()
         self.map = {"cluster": "at-a-glance", "host": "nodes",
