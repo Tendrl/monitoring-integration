@@ -38,7 +38,7 @@ class ClusterHandler(AlertHandler):
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = (
                     "Cluster utilization of cluster %s is"
-                    " %s which is above the %s threshold (%s)." % (
+                    " %s %% which is above the %s threshold (%s %%)." % (
                         alert['tags']['integration_id'],
                         alert['current_value'],
                         alert['severity'],

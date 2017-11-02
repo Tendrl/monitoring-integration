@@ -39,7 +39,7 @@ class MemoryHandler(AlertHandler):
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = (
                     "Memory utilization of node %s is"
-                    " %s which is above the %s threshold (%s)." % (
+                    " %s %% which is above the %s threshold (%s %%)." % (
                         alert['tags']['fqdn'],
                         alert['current_value'],
                         alert['severity'],

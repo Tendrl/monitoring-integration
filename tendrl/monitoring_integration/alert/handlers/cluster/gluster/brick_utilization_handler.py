@@ -42,8 +42,8 @@ class BrickHandler(AlertHandler):
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = (
                     "Brick utilization of %s in node %s in "
-                    "cluster %s is %s which is above %s"
-                    " threshold %s" % (
+                    "cluster %s is %s %% which is above %s"
+                    " threshold (%s %%)" % (
                         alert['tags']['brick_path'],
                         alert['tags']['fqdn'],
                         alert['tags']['integration_id'],
