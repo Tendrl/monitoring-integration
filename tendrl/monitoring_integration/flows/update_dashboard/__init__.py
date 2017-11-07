@@ -21,8 +21,9 @@ class UpdateDashboard(flows.BaseFlow):
         super(UpdateDashboard, self).run()
         self.map = {"cluster": "at-a-glance", "host": "nodes",
                     "volume": "volumes", "brick": "bricks"}
-        resource_name = str(
-            self.parameters.get("Trigger.resource_name")).lower()
+        resource_name = self.parameters.get("Trigger.resource_name", None)
+        if resource_name:
+            resource_name = str(resource_name).lower()
         resource_type = str(
             self.parameters.get("Trigger.resource_type")).lower()
         operation = str(self.parameters.get("Trigger.action")).lower()
@@ -32,7 +33,7 @@ class UpdateDashboard(flows.BaseFlow):
                 integration_id, self.map[resource_type], resource_name)
         elif operation.lower() == "delete":
             self._delete_panel(
-                integration_id, self.map[resource_type], resource_name=None)
+                integration_id, self.map[resource_type], resource_name)
         else:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Wrong action"})

@@ -99,14 +99,21 @@ def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
     flag = True
     for row in rows:
         for target in row["panels"][0]["targets"]:
+            resource = resource_name
             if resource_type == "bricks":
-                resource_name = resource_name.split(
+                hostname = resource.split(":")[0].split("|")[1].replace(".", "_")
+                resource = resource.split(
                     ":", 1)[1].replace("/", "|")
-            if resource_name is not None:
+            if resource is not None:
                 if str(cluster_id) in target["target"] and str(
-                        resource_name) in target["target"]:
-                    flag = False
-                    break
+                        resource) in target["target"]:
+                    if resource_type == "bricks":
+                        if hostname in target["target"]:
+                            flag = False
+                            break
+                    else:
+                        flag = False
+                        break
             else:
                 if str(cluster_id) in target["target"]:
                     flag = False
