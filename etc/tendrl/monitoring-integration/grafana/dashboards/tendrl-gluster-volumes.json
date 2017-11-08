@@ -12,7 +12,7 @@
         "refresh": "10s",
         "rows": [{
             "collapse": false,
-            "height": 192,
+            "height": 266,
             "panels": [{
                 "cacheTimeout": null,
                 "colorBackground": false,
@@ -347,6 +347,19 @@
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
+                    "alias": "Created",
+                    "crit": 1,
+                    "decimals": null,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "F",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.created), 'max')), 'Created')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Text Only",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
                     "alias": "Up",
                     "displayType": "Regular",
                     "refId": "B",
@@ -362,6 +375,32 @@
                     "displayType": "Regular",
                     "refId": "D",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.partial), 'max')), 'Partial')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Paused",
+                    "crit": 999,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "G",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.paused), 'max')), 'Paused')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Stopped",
+                    "crit": 1,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "E",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.stopped), 'max')), 'Stopped')",
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",

@@ -319,7 +319,7 @@
             "titleSize": "h6"
         }, {
             "collapse": false,
-            "height": 228,
+            "height": 247,
             "panels": [{
                 "cacheTimeout": null,
                 "colorBackground": false,
@@ -703,16 +703,29 @@
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
-                    "alias": "Partial",
+                    "alias": "Paused",
                     "crit": 999,
                     "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "E",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.created), \"max\")),\"Created\")",
+                    "textEditor": true,
+                    "units": "none",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Created",
+                    "crit": 999,
+                    "decimals": 2,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.up), \"max\")),\"Up\")",
                     "textEditor": true,
                     "units": "none",
-                    "valueHandler": "Number Threshold",
+                    "valueHandler": "Text Only",
                     "warn": 1
                 }, {
                     "aggregation": "Last",
@@ -724,8 +737,34 @@
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
+                    "alias": "Stopped",
+                    "crit": 1,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "F",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.paused), \"max\")),\"Paused\")",
+                    "textEditor": true,
+                    "units": "none",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "G",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.georep.stopped), \"max\")),\"Stopped\")",
+                    "textEditor": true,
+                    "units": "none",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Partial",
+                    "crit": 999,
                     "decimals": 0,
                     "display": true,
                     "displayType": "Regular",
