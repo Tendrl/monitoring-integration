@@ -288,7 +288,10 @@ def miscellaneous_metrics(cluster_details):
     local_metrics = ["clusters.$integration_id.georep.total.$total",
                      "clusters.$integration_id.georep.up.$up",
                      "clusters.$integration_id.georep.down.$down",
-                     "clusters.$integration_id.georep.partial.$partial"]
+                     "clusters.$integration_id.georep.partial.$partial",
+                     "clusters.$integration_id.georep.stopped.$stopped",
+                     "clusters.$integration_id.georep.paused.$paused",
+                     "clusters.$integration_id.georep.created.$created"]
     for cluster_detail in cluster_details:
         for metric in local_metrics:
             try:
