@@ -331,7 +331,7 @@
                 ],
                 "datasource": "",
                 "decimals": null,
-                "description": "Shows the overall health of the Gluster cluster",
+                "description": "The Health panel displays the overall health of a given cluster, which is either Healthy or Unhealthy.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 2,
@@ -406,6 +406,7 @@
                 ],
                 "datasource": "",
                 "decimals": 0,
+                "description": "The Snapshots panel displays the count of active snapshots of a given cluster",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -470,6 +471,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Hosts panel displays host status information of a given cluster, including the total number of hosts in the cluster, and the count of hosts based on their respective status. For details, go to the Hosts Dashboard.",
                 "displayName": "Hosts",
                 "flipCard": false,
                 "flipTime": "10",
@@ -533,6 +535,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Volumes panel displays volume status information of a given cluster, including the total number of volumes in the cluster, and the count of volumes based on their respective status. For details, go to the Volumes Dashboard.",
                 "displayName": "Volumes",
                 "flipCard": false,
                 "flipTime": "60",
@@ -628,6 +631,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Bricks panel displays brick status information of a given cluster, including the total number of bricks in the cluster, and the count of bricks based on their respective status.",
                 "displayName": "Bricks",
                 "flipCard": false,
                 "flipTime": "60",
@@ -679,6 +683,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Geo-Replication Session panel displays geo-replication session information from a given cluster, including the total number of geo-replication session in the cluster, and the count of geo-replication session based on their respective status.",
                 "displayName": "Geo-Replication Session",
                 "flipCard": false,
                 "flipTime": "60",
@@ -739,6 +744,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Connection Trend panel displays the total number of client connections to bricks in the volumes of a given cluster over a period of time.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
@@ -787,14 +793,14 @@
                 },
                 "yaxes": [{
                     "format": "short",
-                    "label": null,
+                    "label": "",
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
-                    "label": null,
+                    "label": "",
                     "logBase": 1,
                     "max": null,
                     "min": null,
@@ -811,6 +817,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "",
                 "format": "short",
                 "gauge": {
                     "maxValue": 100,
@@ -1591,7 +1598,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "description": "Shows the status of each volume in cluster.  \n0->Up, 3->Up(Degraded), 4->Up(Partial), 5->Unknown, 8->Down",
+                "description": "The Volume Status Panel display the status of each volume in a given cluster, whereby the status is as follow:  \n0 = Up  \n3 = Up(Degraded)  \n4 = Up(Partial)  \n5 = Unknown  \n8 = Down",
                 "fontSize": "80%",
                 "id": 44,
                 "links": [],
@@ -1650,7 +1657,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "description": "Shows the Status of each Host in a Cluster.  \n0->Up, 8->Down",
+                "description": "The Host Status Panel displays the status of each host in a given cluster, whereby the status is as follow:  \n0 = Up  \n8 = Down",
                 "fontSize": "80%",
                 "id": 48,
                 "links": [],
@@ -1710,7 +1717,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "description": "Shows the Status of each Brick in a Cluster.  \n1->Started, 10->Stopped",
+                "description": "The Brick Status Panel display the status of each brick in a given cluster, whereby the status is as follow:  \n1 = Started  \n10 = Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 47,
@@ -1833,7 +1840,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-at-a-Glance",
-        "version": 5
+        "version": 6
     }
 }
 
