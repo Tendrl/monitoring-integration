@@ -88,8 +88,16 @@ def add_resource_panel(alert_rows, cluster_id, resource_type, resource_name):
                     pass
             panel["id"] = panel_count
             panel_count = panel_count + 1
+            new_title = resource_name
+            if resource_type == "bricks":
+                new_title = str(
+                    new_title.split("|",1)[1].split(":",1)[0].replace(".","_")
+                )
+                new_title = str(
+                    new_title.split("|",1)[1].split(":",1)[1].replace("/","|")
+                )
             panel["title"] = panel["title"].split(
-                "-", 1)[0] + "-" + str(resource_name)
+                "-", 1)[0] + "-" + str(new_title)
 
 
 def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
