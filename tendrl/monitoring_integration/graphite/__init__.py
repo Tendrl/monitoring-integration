@@ -69,6 +69,9 @@ class GraphitePlugin():
         up = 0
         down = 0
         partial = 0
+        created = 0
+        stopped = 0
+        paused = 0
         for key, value in obj_attr["count"].items():
             for resource_detail in resource_details["details"]:
                 if key == "total":
@@ -88,10 +91,28 @@ class GraphitePlugin():
                             "count"]["partial"].items():
                         if resource_detail[attr_key] in attr_values:
                             partial = partial + 1
+                if key == "created":
+                    for attr_key, attr_values in obj_attr[
+                            "count"]["created"].items():
+                        if resource_detail[attr_key] in attr_values:
+                            created = created + 1
+                if key == "stopped":
+                    for attr_key, attr_values in obj_attr[
+                            "count"]["stopped"].items():
+                        if resource_detail[attr_key] in attr_values:
+                            stopped = stopped + 1
+                if key == "paused":
+                    for attr_key, attr_values in obj_attr[
+                            "count"]["paused"].items():
+                        if resource_detail[attr_key] in attr_values:
+                            paused = paused + 1
         resource_details["total"] = total
         resource_details["up"] = up
         resource_details["down"] = down
         resource_details["partial"] = partial
+        resource_details["paused"] = paused
+        resource_details["created"] = created
+        resource_details["stopped"] = stopped
         return resource_details
 
     def get_object_from_central_store(self, resource_key, obj_attr):
@@ -269,7 +290,10 @@ class GraphitePlugin():
                                 resource_detail[key] = {"total": 0,
                                                         "up": 0,
                                                         "down": 0,
-                                                        "partial": 0}
+                                                        "partial": 0,
+                                                        "created": 0,
+                                                        "stopped": 0,
+                                                        "paused" : 0}
                     cluster_details.details["Volume"].append(
                         copy.deepcopy(resource_detail))
                 node_list = self.get_resource_keys(cluster_key, "nodes")
@@ -343,8 +367,12 @@ class GraphitePlugin():
         partial = 0
         up = 0
         down = 0
+        created = 0
+        stopped = 0
+        paused = 0
         geo_rep_mapper = {"total": total, "partial": partial, "up": up,
-                          "down": down}
+                          "down": down, "created": created, "stopped": stopped,
+                          "paused": paused}
         for cluster in cluster_data:
             for volume in cluster.details["Volume"]:
                 try:
@@ -374,6 +402,9 @@ class GraphitePlugin():
             cluster.details["geo_rep"]["up"] = geo_rep_mapper["up"]
             cluster.details["geo_rep"]["down"] = geo_rep_mapper["down"]
             cluster.details["geo_rep"]["partial"] = geo_rep_mapper["partial"]
+            cluster.details["geo_rep"]["created"] = geo_rep_mapper["created"]
+            cluster.details["geo_rep"]["stopped"] = geo_rep_mapper["stopped"]
+            cluster.details["geo_rep"]["paused"] = geo_rep_mapper["paused"]
         return cluster_data
 
     def set_volume_level_brick_count(self, cluster_data):
@@ -518,11 +549,10 @@ class GraphitePlugin():
 
     def resource_status_mapper(self, status):
         status_map = {"started": 1, "up": 0, "(degraded)": 3, "degraded": 3,
-                      "(partial)": 4, "unknown": 5, "failed": 7, "down": 8,
-                      "created": 9, "stopped" : 10, "completed": 12,
-                      "not started": 13,
-                      "not_started": 13, "in progress": 14,
-                      "in_progress": 14}
+                      "(partial)": 4, "partial": 4, "unknown": 5, "failed": 7,
+                      "down": 8, "created": 9, "stopped" : 10, "completed": 12,
+                      "not started": 13, "not_started": 13, "in progress": 14,
+                      "in_progress": 14, "paused": 15}
         try:
             temp_status = copy.deepcopy(status).lower()
             return status_map[temp_status]
