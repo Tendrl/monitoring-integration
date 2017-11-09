@@ -216,7 +216,7 @@
                 "datasource": "",
                 "decimals": 1,
                 "description": "Memory Available is the sum of memory free and memory cached",
-                "format": "decbytes",
+                "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -287,10 +287,11 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": null,
+                "description": "The memory utilization threshold is set to 80%. Reaching or exceeding this value displays an orange horizontal line indicating high memory usage.",
                 "fill": 1,
                 "id": 2,
                 "legend": {
-                    "alignAsTable": false,
+                    "alignAsTable": true,
                     "avg": false,
                     "current": false,
                     "hideEmpty": false,
@@ -299,7 +300,7 @@
                     "min": false,
                     "rightSide": true,
                     "show": true,
-                    "sideWidth": 120,
+                    "sideWidth": null,
                     "total": false,
                     "values": false
                 },
@@ -341,9 +342,6 @@
                     "refId": "E",
                     "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-used, 'Used')",
                     "textEditor": false
-                }, {
-                    "refId": "F",
-                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.memory.{percent-buffered,percent-cached,percent-slab_recl,percent-slab_unrecl,percent-used}), 'Total Used')"
                 }],
                 "thresholds": [{
                     "colorMode": "warning",
@@ -526,15 +524,16 @@
                 "fill": 1,
                 "id": 1,
                 "legend": {
+                    "alignAsTable": true,
                     "avg": false,
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": true,
-                    "total": false,
-                    "values": false,
                     "rightSide": true,
-                    "sideWidth": 80
+                    "show": true,
+                    "sideWidth": null,
+                    "total": false,
+                    "values": false
                 },
                 "lines": true,
                 "linewidth": 1,
@@ -554,6 +553,7 @@
                     "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}, 6, 'sum'), 'percent-', ' ')",
                     "textEditor": false
                 }, {
+                    "hide": true,
                     "refId": "B",
                     "target": "alias(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}), 'Total')",
                     "textEditor": false
@@ -845,7 +845,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
-                "format": "decbytes",
+                "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -1784,7 +1784,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Hosts",
-        "version": 6
+        "version": 7
     }
 }
 

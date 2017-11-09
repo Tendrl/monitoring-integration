@@ -240,7 +240,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
-                "format": "decbytes",
+                "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -1264,7 +1264,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Bricks",
-        "version": 6
+        "version": 7
     }
 }
 
