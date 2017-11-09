@@ -22,7 +22,14 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
     def run(self):
         aggregate_gluster_objects = NS.monitoring.definitions.\
             get_parsed_defs()["namespace.monitoring"]["graphite_data"]
+        
+        _sleep = 0
         while not self._complete.is_set():
+            if _sleep > 5:
+                _sleep = self.sync_interval
+            else:
+                _sleep +=1
+            
             if self.sync_interval is None:
                 try:
                     interval = etcd_utils.read(
@@ -52,11 +59,11 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                     for key, value in metric.items():
                         if value:
                             self.plugin_obj.push_metrics(key, value)
-                time.sleep(self.sync_interval)
+                time.sleep(_sleep)
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),
                            {'message': str(ex)})
-                time.sleep(self.sync_interval)
+                time.sleep(_sleep)
 
     def stop(self):
         super(MonitoringIntegrationSdsSyncThread, self).stop()
