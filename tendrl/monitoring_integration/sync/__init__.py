@@ -44,7 +44,6 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                     continue
 
             try:
-                time.sleep(self.sync_interval)
                 cluster_details = self.plugin_obj.get_central_store_data(
                     aggregate_gluster_objects)
                 metrics = graphite_utils.create_metrics(
@@ -53,9 +52,11 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                     for key, value in metric.items():
                         if value:
                             self.plugin_obj.push_metrics(key, value)
+                time.sleep(self.sync_interval)
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),
                            {'message': str(ex)})
+                time.sleep(self.sync_interval)
 
     def stop(self):
         super(MonitoringIntegrationSdsSyncThread, self).stop()
