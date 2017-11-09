@@ -38,8 +38,8 @@ class VolumeHandler(AlertHandler):
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = (
                     "Volume utilization of %s in "
-                    "cluster %s is %s which is above %s"
-                    " threshold %s" % (
+                    "cluster %s is %s %% which is above %s"
+                    " threshold (%s %%)" % (
                         alert['tags']['volume_name'],
                         alert['tags']['integration_id'],
                         alert['current_value'],
