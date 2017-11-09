@@ -25,17 +25,12 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
         
         _sleep = 0
         while not self._complete.is_set():
-            if _sleep > 5:
-                _sleep = self.sync_interval
-            else:
-                _sleep +=1
-            
             if self.sync_interval is None:
                 try:
                     interval = etcd_utils.read(
                         "_NS/gluster/config/data/sync_interval")
                     try:
-                        self.sync_interval = float(interval.value)
+                        self.sync_interval = int(interval.value)
                     except ValueError as ex:
                         logger.log(
                             "error",
@@ -49,7 +44,12 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                         raise ex
                 except etcd.EtcdKeyNotFound as ex:
                     continue
-
+                    
+            if _sleep > 5:
+                _sleep = self.sync_interval
+            else:
+                _sleep +=1
+            
             try:
                 cluster_details = self.plugin_obj.get_central_store_data(
                     aggregate_gluster_objects)
