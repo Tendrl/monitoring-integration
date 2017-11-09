@@ -855,9 +855,9 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
-                "decimals": 1,
+                "decimals": 0,
                 "description": "",
-                "format": "short",
+                "format": "none",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -998,7 +998,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
-                "format": "decbytes",
+                "format": "kbytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -1301,7 +1301,7 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
+                    "format": "none",
                     "label": null,
                     "logBase": 1,
                     "max": null,
@@ -1380,7 +1380,7 @@
                     "refId": "A",
                     "target": "aliasSub(aliasSub(substr(limit(tendrl.clusters.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes, 5), 4, -2), '(\\.bricks\\.)', ':'), '\\|', '/')"
                 }],
-                "title": "Top 5 Utilization By Bricks",
+                "title": "Top 5 Utilization by Bricks",
                 "transform": "timeseries_aggregations",
                 "transparent": false,
                 "type": "table"
@@ -1550,7 +1550,7 @@
                     "refId": "A",
                     "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.*.memory.percent-used, 4, 'maxSeries')"
                 }],
-                "title": "Memory Utilization By Host",
+                "title": "Memory Utilization by Host",
                 "transform": "timeseries_aggregations",
                 "transparent": false,
                 "type": "table"
@@ -1879,7 +1879,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-at-a-Glance",
-        "version": 6
+        "version": 7
     }
 }
 
