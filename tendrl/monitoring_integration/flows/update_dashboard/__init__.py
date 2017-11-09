@@ -4,6 +4,8 @@ import etcd
 import time
 
 
+from tendrl.monitoring_integration.grafana.grafana_org_utils import  \
+    get_current_org_name
 from tendrl.monitoring_integration.grafana import create_alert_dashboard
 from tendrl.monitoring_integration.flows.update_dashboard.alert_utils import \
     get_alert_dashboard
@@ -65,7 +67,7 @@ class UpdateDashboard(flows.BaseFlow):
                         alert_row, integration_id, resource_type, resource_name)
                         dash_json = alert_utils.create_updated_dashboard(
                             alert_dashboard, alert_row)
-                        dashboard._post_dashboard(dash_json)
+                        self._post_dashboard(dash_json)
                 except Exception:
                     alert_utils.delete_alert_dashboard(resource_type)
                     self.create_all_dashboard(resource_type, integration_id)
@@ -155,7 +157,7 @@ class UpdateDashboard(flows.BaseFlow):
                                integration_id,
                                resource_type,
                                resource_name)
-        resp = dashboard._post_dashboard(alert_dashboard)
+        resp = self._post_dashboard(alert_dashboard)
         response = []
         response.append(copy.deepcopy(resp))
         if resource_name is None:
@@ -163,6 +165,16 @@ class UpdateDashboard(flows.BaseFlow):
             for dash_name in dashboard_names:
                 alert_dashboard = alert_utils.remove_cluster_rows(integration_id,
                                                                   dash_name)
-                resp = dashboard._post_dashboard(alert_dashboard)
+                resp = self._post_dashboard(alert_dashboard)
                 response.append(copy.deepcopy(resp))
         return response
+
+    def _post_dashboard(self, alert_dashboard):
+        resp = None
+        if get_current_org_name()["name"] == "Alert_dashboard":
+            resp = dashboard._post_dashboard(alert_dashboard)
+        elif alert_utils.switch_context("Alert_dashboard"):
+            resp = dashboard._post_dashboard(alert_dashboard)
+            # return to main org
+            alert_utils.switch_context("Main Org.")
+        return resp

@@ -1,7 +1,10 @@
 import copy
-
+import json
 
 from tendrl.monitoring_integration.grafana import dashboard
+from tendrl.monitoring_integration.grafana.grafana_org_utils import  \
+    get_current_org_name
+from tendrl.monitoring_integration.grafana import grafana_org_utils
 
 
 def get_alert_dashboard(dashboard_name):
@@ -9,7 +12,13 @@ def get_alert_dashboard(dashboard_name):
         slug = "alerts-tendrl-gluster-hosts"
     else:
         slug = "alerts-tendrl-gluster-" + str(dashboard_name)
-    dashboard_json = dashboard.get_dashboard(slug)
+    dashboard_json = {}
+    if get_current_org_name()["name"] == "Alert_dashboard":
+        dashboard_json = dashboard.get_dashboard(slug)
+    elif switch_context("Alert_dashboard"):
+        dashboard_json = dashboard.get_dashboard(slug)
+        # return to main org
+        switch_context("Main Org.")
     return dashboard_json
 
 
@@ -18,7 +27,13 @@ def delete_alert_dashboard(dashboard_name):
         slug = "alerts-tendrl-gluster-hosts"
     else:
         slug = "alerts-tendrl-gluster-" + str(dashboard_name)
-    dashboard_json = dashboard.delete_dashboard(slug)
+    dashboard_json = {}
+    if get_current_org_name()["name"] == "Alert_dashboard":
+        dashboard_json = dashboard.delete_dashboard(slug)
+    elif switch_context("Alert_dashboard"):
+        dashboard_json = dashboard.delete_dashboard(slug)
+        # return to main org
+        switch_context("Main Org.")
     return dashboard_json
 
 
@@ -110,8 +125,8 @@ def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
             resource = resource_name
             if resource_type == "bricks":
                 hostname = resource.split(":")[0].split("|")[1].replace(".", "_")
-                resource = resource.split(
-                    ":", 1)[1].replace("/", "|")
+                resource = "." + resource.split(
+                    ":", 1)[1].replace("/", "|") + "."
             if resource is not None:
                 if str(cluster_id) in target["target"] and str(
                         resource) in target["target"]:
@@ -154,3 +169,13 @@ def create_updated_dashboard(dashboard_json, alert_rows):
     dashboard_json["dashboard"]["rows"] = dashboard_json[
         "dashboard"]["rows"] + alert_rows
     return dashboard_json
+
+
+def switch_context(org_name):
+    alert_org_id = grafana_org_utils.get_org_id(
+        org_name
+    )
+    switched = grafana_org_utils.switch_context(json.loads(
+        alert_org_id)["id"]
+    ) 
+    return switched
