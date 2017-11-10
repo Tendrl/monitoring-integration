@@ -101,11 +101,17 @@ namespace.monitoring:
           count:
             total:
             up:
-              session_status: [active]
+              session_status: [up]
             down:
-              session_status: [faulty]
+              session_status: [down]
             partial:
               session_status: [partial]
+            created:
+              session_status: [created]
+            stopped:
+              session_status: [stopped]
+            paused:
+              session_status: [paused]
           value: clusters/$integration_id/Volumes/$volume_id/GeoRepSessions
       value: clusters/$integration_id/Volumes/$volume_id
       metric: [clusters.$integration_id.volumes.$volume_name]
