@@ -57,6 +57,21 @@ def get_org_id(org_name):
         raise exceptions.ConnectionFailedException
 
 
+def get_current_org_name():
+    config = maps.NamedDict(NS.config.data)
+    if utils.port_open(config.grafana_port, config.grafana_host):
+        resp = get("http://{}:{}/api/"
+                   "org/".format(config.grafana_host,
+                               config.grafana_port),
+                   auth=config.credentials)
+        try:
+            return resp.json()
+        except (KeyError, AttributeError):
+            return None
+    else:
+        raise exceptions.ConnectionFailedException
+
+
 ''' Switch context to particular org '''
 
 
