@@ -77,7 +77,7 @@ def find_current_value(eval_data):
     cur_value = None
     if 'evalMatches' in eval_data and eval_data['evalMatches']:
         # Getting current value
-        cur_value = str(eval_data['evalMatches'][0]['value'])
+        cur_value = str(round(eval_data['evalMatches'][0]['value'], 2))
     return cur_value
 
 

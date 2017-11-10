@@ -14,7 +14,7 @@ from tendrl.monitoring_integration.grafana import create_dashboards
 class DeleteResourceFromGraphite(flows.BaseFlow):
 
     def run(self):
-        super(UpdateGraphite, self).run()
+        super(DeleteResourceFromGraphite, self).run()
         integration_id = self.parameters.get("TendrlContext.integration_id")
         resource_name = str(
             self.parameters.get("Trigger.resource_name")).lower()
@@ -207,11 +207,11 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                        {'message': "Cannot retrieve whisper path"})
             return
         if resource_type == "volume":
-            self.delete_volume_details(self, integration_id,
+            self.delete_volume_details(integration_id,
                                        resource_name, whisper_path)
         if resource_type == "brick":
-            self.delete_brick_details(self, integration_id,
+            self.delete_brick_details(integration_id,
                                       resource_name, whisper_path)
         if resource_type == "host":
-            self.delete_host_details(self, integration_id,
+            self.delete_host_details(integration_id,
                                      resource_name, whisper_path)

@@ -41,11 +41,11 @@ class BrickHandler(AlertHandler):
                 alert['tags']['integration_id'])
             if alert['severity'] == "WARNING":
                 alert['tags']['message'] = (
-                    "Brick utilization of %s in node %s in "
-                    "cluster %s is %s which is above %s"
-                    " threshold %s" % (
-                        alert['tags']['brick_path'],
+                    "Brick utilization of %s:%s in "
+                    "cluster %s is %s %% which is above %s"
+                    " threshold (%s %%)" % (
                         alert['tags']['fqdn'],
+                        alert['tags']['brick_path'],
                         alert['tags']['integration_id'],
                         alert['current_value'],
                         alert['severity'],
@@ -54,10 +54,10 @@ class BrickHandler(AlertHandler):
                 )
             elif alert['severity'] == "INFO":
                 alert['tags']['message'] = (
-                    "Brick utilization of %s in node %s in "
+                    "Brick utilization of %s:%s in "
                     "cluster %s is back normal" % (
-                        alert['tags']['brick_path'],
                         alert['tags']['fqdn'],
+                        alert['tags']['brick_path'],
                         alert['tags']['integration_id']
                     )
                 )

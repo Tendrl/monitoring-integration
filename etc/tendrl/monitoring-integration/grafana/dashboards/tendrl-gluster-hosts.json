@@ -216,7 +216,7 @@
                 "datasource": "",
                 "decimals": 1,
                 "description": "Memory Available is the sum of memory free and memory cached",
-                "format": "decbytes",
+                "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -287,10 +287,11 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": null,
+                "description": "The memory utilization threshold is set to 80%. Reaching or exceeding this value displays an orange horizontal line indicating high memory usage.",
                 "fill": 1,
                 "id": 2,
                 "legend": {
-                    "alignAsTable": false,
+                    "alignAsTable": true,
                     "avg": false,
                     "current": false,
                     "hideEmpty": false,
@@ -299,7 +300,7 @@
                     "min": false,
                     "rightSide": true,
                     "show": true,
-                    "sideWidth": 120,
+                    "sideWidth": null,
                     "total": false,
                     "values": false
                 },
@@ -324,7 +325,7 @@
                 }, {
                     "hide": false,
                     "refId": "B",
-                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-cached, 'cached')",
+                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-cached, 'Cached')",
                     "textEditor": false
                 }, {
                     "hide": false,
@@ -341,9 +342,6 @@
                     "refId": "E",
                     "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-used, 'Used')",
                     "textEditor": false
-                }, {
-                    "refId": "F",
-		    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.memory.{percent-buffered,percent-cached,percent-slab_recl,percent-slab_unrecl,percent-used}), 'Total Used')"
                 }],
                 "thresholds": [{
                     "colorMode": "warning",
@@ -507,7 +505,7 @@
                     "label": null,
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -526,11 +524,14 @@
                 "fill": 1,
                 "id": 1,
                 "legend": {
+                    "alignAsTable": true,
                     "avg": false,
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": false,
+                    "rightSide": true,
+                    "show": true,
+                    "sideWidth": null,
                     "total": false,
                     "values": false
                 },
@@ -549,7 +550,12 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias(averageSeries($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}), '$host_name')",
+                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}, 6, 'sum'), 'percent-', ' ')",
+                    "textEditor": false
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "alias(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}), 'Total')",
                     "textEditor": false
                 }],
                 "thresholds": [{
@@ -581,7 +587,7 @@
                     "label": null,
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -651,7 +657,7 @@
                     "label": null,
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -744,7 +750,7 @@
                     "label": null,
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -839,7 +845,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
-                "format": "decbytes",
+                "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -1317,7 +1323,7 @@
                     "label": null,
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -1387,7 +1393,7 @@
                     "label": null,
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -1454,7 +1460,7 @@
                     "label": "",
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -1532,7 +1538,7 @@
                     "label": "",
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -1599,7 +1605,7 @@
                     "label": null,
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -1663,10 +1669,10 @@
                 },
                 "yaxes": [{
                     "format": "short",
-                    "label": null,
+                    "label": "",
                     "logBase": 1,
                     "max": null,
-                    "min": null,
+                    "min": "0",
                     "show": true
                 }, {
                     "format": "short",
@@ -1778,7 +1784,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Hosts",
-        "version": 5
+        "version": 7
     }
 }
 
