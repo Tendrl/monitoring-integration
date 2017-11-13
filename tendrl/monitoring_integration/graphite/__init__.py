@@ -363,17 +363,17 @@ class GraphitePlugin():
             raise ex
 
     def set_geo_rep_session(self, cluster_data):
-        total = 0
-        partial = 0
-        up = 0
-        down = 0
-        created = 0
-        stopped = 0
-        paused = 0
-        geo_rep_mapper = {"total": total, "partial": partial, "up": up,
-                          "down": down, "created": created, "stopped": stopped,
-                          "paused": paused}
         for cluster in cluster_data:
+            # Initialize the counts map
+            geo_rep_mapper = {
+                "total": 0,
+                "partial": 0,
+                "up": 0,
+                "down": 0,
+                "created": 0,
+                "stopped": 0,
+                "paused": 0
+            }
             for volume in cluster.details["Volume"]:
                 try:
                     for key, value in volume["geo_rep_session"].items():
