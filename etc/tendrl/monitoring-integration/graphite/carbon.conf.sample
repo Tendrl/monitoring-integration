@@ -105,7 +105,7 @@ PICKLE_RECEIVER_PORT = 2004
 # PICKLE_RECEIVER_BACKLOG = 1024
 
 # Set to false to disable logging of successful connections
-LOG_LISTENER_CONNECTIONS = True
+LOG_LISTENER_CONNECTIONS = False
 
 # Per security concerns outlined in Bug #817247 the pickle receiver
 # will use a more secure and slightly less efficient unpickler.
