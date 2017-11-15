@@ -30,10 +30,7 @@ class UpdateDashboard(flows.BaseFlow):
             self.parameters.get("Trigger.resource_type")).lower()
         operation = str(self.parameters.get("Trigger.action")).lower()
         integration_id = self.parameters.get("TendrlContext.integration_id")
-        if operation.lower() == "add":
-            self._add_panel(
-                integration_id, self.map[resource_type], resource_name)
-        elif operation.lower() == "delete":
+        if operation.lower() == "delete":
             self._delete_panel(
                 integration_id, self.map[resource_type], resource_name)
         else:
@@ -54,49 +51,24 @@ class UpdateDashboard(flows.BaseFlow):
                     flag = True
             if flag:
                 try:
-                    if len(alert_dashboard["dashboard"]["rows"]) == 0 or \
-                        len(alert_dashboard["dashboard"]["rows"][0]["panels"]) == 0:
-                        alert_utils.delete_alert_dashboard(resource_type)
-                        self.create_all_dashboard(resource_type, integration_id)
-                    else:
-                        # check duplicate rows
-                        if not alert_utils.check_duplicate(
-                            alert_dashboard,
-                            integration_id,
-                            resource_type,
-                            resource_name
-                        ):
-                            alert_row = alert_utils.fetch_row(alert_dashboard)
-                            alert_utils.add_resource_panel(
-                            alert_row, integration_id, resource_type, resource_name)
-                            dash_json = alert_utils.create_updated_dashboard(
-                                alert_dashboard, alert_row)
-                            self._post_dashboard(dash_json)
+                    # check duplicate rows
+                    if not alert_utils.check_duplicate(
+                        alert_dashboard,
+                        integration_id,
+                        resource_type,
+                        resource_name
+                    ):
+                        alert_row = alert_utils.fetch_row(alert_dashboard)
+                        alert_utils.add_resource_panel(
+                        alert_row, integration_id, resource_type, resource_name)
+                        dash_json = alert_utils.create_updated_dashboard(
+                        alert_dashboard, alert_row)
+                        self._post_dashboard(dash_json)
                 except Exception:
                     logger.log("error", NS.get("publisher_id", None),
                                {'message': "Error while updating "
                                            "dashboard for %s" % resource_name})
-            else:
-                self.create_all_dashboard(resource_type, integration_id)
 
-
-    def create_all_dashboard(self, dashboard_name, integration_id):
-        cluster_detail_list = []
-        time.sleep(60)
-        try:
-            cluster_detail_list = create_dashboards.get_cluster_details(
-                integration_id)
-        except etcd.EtcdKeyNotFound:
-            logger.log("error", NS.get("publisher_id", None),
-                           {'message': "Failed to get cluster "
-                            "details".format(integration_id)})
-            return
-        try:
-            create_alert_dashboard.CreateAlertDashboard(dashboard_name, cluster_detail_list)
-        except (etcd.EtcdKeyNotFound, KeyError) as error:
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': "Failed to create dashboard"
-                           "with error {0}".format(str(error))})
 
     def _delete_panel(self, integration_id, resource_type, resource_name=None):
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
