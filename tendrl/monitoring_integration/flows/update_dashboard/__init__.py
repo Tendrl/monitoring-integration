@@ -40,8 +40,7 @@ class UpdateDashboard(flows.BaseFlow):
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Wrong action"})
 
-    def _add_panel(self, integration_id, resource_type, resource_name=None,
-                   recursive_call=False):
+    def _add_panel(self, integration_id, resource_type, resource_name=None):
         if resource_type == "nodes":
             resource_name = resource_name.replace(".", "_")
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
@@ -59,79 +58,27 @@ class UpdateDashboard(flows.BaseFlow):
                         len(alert_dashboard["dashboard"]["rows"][0]["panels"]) == 0:
                         alert_utils.delete_alert_dashboard(resource_type)
                         self.create_all_dashboard(resource_type, integration_id)
-                        if recursive_call:
-                            return 1
                     else:
-                        alert_row = alert_utils.fetch_row(alert_dashboard)
-                        alert_utils.add_resource_panel(
-                        alert_row, integration_id, resource_type, resource_name)
-                        dash_json = alert_utils.create_updated_dashboard(
-                            alert_dashboard, alert_row)
-                        self._post_dashboard(dash_json)
+                        # check duplicate rows
+                        if not alert_utils.check_duplicate(
+                            alert_dashboard,
+                            integration_id,
+                            resource_type,
+                            resource_name
+                        ):
+                            alert_row = alert_utils.fetch_row(alert_dashboard)
+                            alert_utils.add_resource_panel(
+                            alert_row, integration_id, resource_type, resource_name)
+                            dash_json = alert_utils.create_updated_dashboard(
+                                alert_dashboard, alert_row)
+                            self._post_dashboard(dash_json)
                 except Exception:
-                    alert_utils.delete_alert_dashboard(resource_type)
-                    self.create_all_dashboard(resource_type, integration_id)
-                    if recursive_call:
-                        return 1
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Error while updating "
+                                           "dashboard for %s" % resource_name})
             else:
                 self.create_all_dashboard(resource_type, integration_id)
-                if recursive_call:
-                    return 1
 
-        if resource_type is not "volumes":
-            return 0
-        else:
-            cluster_key = "/clusters/" + str(integration_id)
-            vol_id = None
-            try_count = 0
-            while try_count < 18 and not vol_id:
-                time.sleep(10)
-                if vol_id is not None:
-                    break
-                volumes = etcd_utils.read(cluster_key + "/Volumes")
-                for volume in volumes.leaves:
-                    volume_id = volume.key.rsplit("/")[-1]
-                    try:
-                        vol_name_key = cluster_key + "/Volumes/" + \
-                            volume_id + "/name"
-                        vol_name = etcd_utils.read(vol_name_key).value
-                        if vol_name == resource_name:
-                            vol_id = volume_id
-                            break
-                    except (etcd.EtcdKeyNotFound, KeyError):
-                        try_count = try_count + 1
-                        pass
-            if try_count == 18:
-                return 0
-
-            time.sleep(10)
-            volume_key = "/clusters/" + str(integration_id) + "/Volumes/" + \
-                str(vol_id)
-            subvols = etcd_utils.read(volume_key + "/Bricks")
-            brick_list = []
-            for subvol in subvols.leaves:
-                subvol_name = subvol.key.rsplit("/")[-1]
-                try:
-                    subvolume_key = volume_key + "/Bricks/" + subvol_name
-                    brick_details = etcd_utils.read(subvolume_key)
-                    for entry in brick_details.leaves:
-                        try:
-                            brick_name = entry.key.rsplit("/", 1)[1]
-                            brick_key = cluster_key + "/Bricks/all/" + \
-                                brick_name.split(":", 1)[0] + \
-                                "/" + brick_name.split(":_", 1)[1] + \
-                                "/brick_path"
-                            brick_name = etcd_utils.read(brick_key).value
-                            brick_list.append(copy.deepcopy(brick_name))
-                        except(KeyError, etcd.EtcdKeyNotFound):
-                            pass
-                except (KeyError, etcd.EtcdKeyNotFound):
-                    pass
-            for brick in brick_list:
-                brick = resource_name + "|" + brick
-                return_value = self._add_panel(integration_id, "bricks", brick, recursive_call=True)
-                if return_value == 1:
-                    return 0
 
     def create_all_dashboard(self, dashboard_name, integration_id):
         cluster_detail_list = []
