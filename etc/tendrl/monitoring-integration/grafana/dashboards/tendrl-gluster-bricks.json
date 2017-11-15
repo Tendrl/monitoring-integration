@@ -1107,7 +1107,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.utilization.percent_used, 10, 'maxSeries')",
+                    "target": "groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.mount_utilization.percent_used, 10, 'maxSeries')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -1129,7 +1129,7 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
+                    "format": "percent",
                     "label": null,
                     "logBase": 1,
                     "max": null,
