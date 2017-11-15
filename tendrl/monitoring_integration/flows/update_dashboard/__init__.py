@@ -62,7 +62,7 @@ class UpdateDashboard(flows.BaseFlow):
                         alert_utils.add_resource_panel(
                         alert_row, integration_id, resource_type, resource_name)
                         dash_json = alert_utils.create_updated_dashboard(
-                        alert_dashboard, alert_row)
+                            alert_dashboard, alert_row)
                         self._post_dashboard(dash_json)
                 except Exception:
                     logger.log("error", NS.get("publisher_id", None),

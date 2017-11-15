@@ -329,4 +329,3 @@ def create_resource_dashboard(cluster_details_list, resource_name):
             logger.log("error", NS.get("publisher_id", None),
                        {'message': str(ex)})
             return None
-
