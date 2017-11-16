@@ -95,6 +95,9 @@ namespace.monitoring:
         usable_capacity:
         used_capacity:
         rebal_status:
+        pcnt_inode_used:
+        total_inode_capacity:
+        used_inode_capacity:
         geo_rep_session:
           attrs:
             session_status:
