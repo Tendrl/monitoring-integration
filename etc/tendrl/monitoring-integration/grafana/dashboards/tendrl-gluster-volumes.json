@@ -1058,7 +1058,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias(averageSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_utilization.percent-percent_bytes), '$volume_name')"
+                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.pcnt_inode_used, '$volume_name')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1145,16 +1145,18 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_utilization.gauge-total)"
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.total_inode_capacity",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_utilization.gauge-used)"
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.used_inode_capacity",
+                    "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#A, #B)",
-                    "targetFull": "diffSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_utilization.gauge-total), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_utilization.gauge-used))"
+                    "targetFull": "diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.total_inode_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_inode_capacity)"
                 }],
                 "thresholds": "",
                 "title": "Inode Available",
