@@ -5,10 +5,11 @@ import etcd
 
 
 from tendrl.commons import sds_sync
-from tendrl.monitoring_integration.graphite import GraphitePlugin
-from tendrl.monitoring_integration.graphite import graphite_utils
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.graphite import GraphitePlugin
+from tendrl.monitoring_integration.graphite import graphite_utils
+from tendrl.monitoring_integration.sync.dashbaord_sync import SyncDashboard
 
 
 class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
@@ -59,6 +60,9 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                     for key, value in metric.items():
                         if value:
                             self.plugin_obj.push_metrics(key, value)
+                # Creating or refreshing alert dashboard
+                if _sleep > 5:
+                    SyncDashboard().refresh_dashboard()
                 time.sleep(_sleep)
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),

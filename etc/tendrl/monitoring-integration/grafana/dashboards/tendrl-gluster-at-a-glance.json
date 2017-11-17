@@ -1324,7 +1324,7 @@
             "titleSize": "h5"
         }, {
             "collapse": true,
-            "height": 256,
+            "height": 206,
             "panels": [{
                 "columns": [{
                     "text": "Current",
@@ -1341,7 +1341,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 2,
+                "span": 4,
                 "styles": [{
                     "alias": "Bricks",
                     "colorMode": null,
@@ -1378,7 +1378,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(aliasSub(substr(limit(tendrl.clusters.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes, 5), 4, -2), '(\\.bricks\\.)', ':'), '\\|', '/')"
+                    "target": "aliasSub(aliasSub(substr(limit(sortByMaxima(tendrl.clusters.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes), 5), 4, -2), '(\\.bricks\\.)', ':'), '\\|', '/')"
                 }],
                 "title": "Top 5 Utilization by Bricks",
                 "transform": "timeseries_aggregations",
@@ -1400,7 +1400,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 2,
+                "span": 4,
                 "styles": [{
                     "alias": "Volume Name",
                     "colorMode": null,
@@ -1435,7 +1435,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "limit(groupByNode(tendrl.clusters.$cluster_id.volumes.*.pcnt_used, 4, 'maxSeries'), 5)",
+                    "target": "limit(sortByMaxima(groupByNode(tendrl.clusters.$cluster_id.volumes.*.pcnt_used, 4, 'maxSeries')), 5)",
                     "textEditor": false
                 }],
                 "title": "Top 5 Utilization by Volume",
@@ -1457,7 +1457,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 2,
+                "span": 4,
                 "styles": [{
                     "alias": "Host Name",
                     "colorMode": null,
@@ -1513,7 +1513,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 2,
+                "span": 6,
                 "styles": [{
                     "alias": "Host Name",
                     "colorMode": null,
@@ -1582,7 +1582,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 4,
+                "span": 6,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{

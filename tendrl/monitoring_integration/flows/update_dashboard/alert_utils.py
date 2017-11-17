@@ -105,7 +105,7 @@ def add_resource_panel(alert_rows, cluster_id, resource_type, resource_name):
             panel_count = panel_count + 1
             new_title = resource_name
             if resource_type == "bricks":
-                host_name = resourcename.split("|", 1)[1].split(
+                host_name = resource_name.split("|", 1)[1].split(
                     ":", 1)[0].replace(".", "")
                 brick_name = resource_name.split("|", 1)[1].split(
                     ":", 1)[1].replace("/", "|")
@@ -179,3 +179,33 @@ def switch_context(org_name):
         alert_org_id)["id"]
     ) 
     return switched
+
+
+def check_duplicate(alert_dashboard, integration_id,
+                    resource_type, resource_name):
+    flag = False
+    for row in alert_dashboard["dashboard"]["rows"]:
+        if "panels" in row and (not flag):
+            for target in row["panels"][0]["targets"]:
+                resource = resource_name
+                if resource_type == "bricks":
+                    hostname = resource.split(":")[0].split(
+                        "|")[1].replace(".", "_")
+                    resource = "." + resource.split(
+                        ":", 1)[1].replace("/", "|") + "."
+                if resource is not None:
+                    if str(integration_id) in target["target"] and str(
+                            resource) in target["target"]:
+                        if resource_type == "bricks":
+                            if hostname in target["target"]:
+                                flag = True
+                                break
+                        else:
+                            flag = True
+                            break
+                elif str(integration_id) in target["target"]:
+                        flag = True
+                        break
+        elif flag:
+            break
+    return flag

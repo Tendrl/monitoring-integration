@@ -1,6 +1,6 @@
 Name: tendrl-monitoring-integration
 Version: 1.5.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
 Source0: %{name}-%{version}.tar.gz
@@ -108,6 +108,9 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
+* Sat Nov 18 2017 Rohan Kanade <rkanade@redhat.com> - 1.5.4-3
+- Bugfixes-2 tendrl-monitoring-integration 1.5.4
+
 * Fri Nov 10 2017 Rohan Kanade <rkanade@redhat.com> - 1.5.4-2
 - Bugfixes tendrl-monitoring-integration 1.5.4
 
