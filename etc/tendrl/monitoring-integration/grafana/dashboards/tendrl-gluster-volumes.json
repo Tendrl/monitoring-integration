@@ -247,7 +247,7 @@
                 "links": [{
                     "dashUri": "db/tendrl-gluster-bricks",
                     "dashboard": "Tendrl - Gluster - Bricks",
-                    "includeVars": true,
+                    "includeVars": false,
                     "keepTime": true,
                     "params": "var-cluster_id=$cluster_id&var-volume_name=$volume_name",
                     "title": "Bricks Dashboard",
