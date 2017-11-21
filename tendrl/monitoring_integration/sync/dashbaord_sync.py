@@ -1,3 +1,5 @@
+import time
+
 import etcd
 
 
@@ -72,6 +74,7 @@ class SyncDashboard():
             integration_id = cluster.integration_id
             if resource_type == "volumes":
                 for volume in cluster.volumes:
+                    time.sleep(2)
                     try:
                         resource_name = str(volume["name"])
                         response = update_dashboard._add_panel(
@@ -85,6 +88,7 @@ class SyncDashboard():
                                       "details".format(volume)})
             if resource_type == "nodes":
                 for host in cluster.hosts:
+                    time.sleep(2)
                     try:
                         resource_name = str(host["fqdn"])
                         response = update_dashboard._add_panel(
@@ -99,6 +103,7 @@ class SyncDashboard():
 
             if resource_type == "bricks":
                 for brick in cluster.bricks:
+                    time.sleep(2)
                     try:
                         resource_name = "%s|%s:%s" % (
                             str(brick["vol_name"]),

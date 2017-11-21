@@ -482,7 +482,7 @@
                 "links": [{
                     "dashUri": "db/tendrl-gluster-hosts",
                     "dashboard": "Tendrl - Gluster - Hosts",
-                    "includeVars": true,
+                    "includeVars": false,
                     "keepTime": true,
                     "params": "var-cluster_id=$cluster_id",
                     "targetBlank": false,
@@ -546,7 +546,7 @@
                 "links": [{
                     "dashUri": "db/tendrl-gluster-volumes",
                     "dashboard": "Tendrl - Gluster - Volumes",
-                    "includeVars": true,
+                    "includeVars": false,
                     "keepTime": true,
                     "params": "var-cluster_id=$cluster_id",
                     "title": "Volumes Dashboard",

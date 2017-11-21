@@ -186,9 +186,14 @@ def main():
     def shutdown(signum, frame):
         complete.set()
         NS.sync_thread.stop()
+        
+    def reload_config(signum, frame):
+        NS.config = NS.config.__class__()
+        NS.config.save()
 
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGHUP, reload_config)
 
     while not complete.is_set():
         complete.wait(timeout=1)
