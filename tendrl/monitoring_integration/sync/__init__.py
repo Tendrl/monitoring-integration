@@ -59,7 +59,6 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                 for metric in metrics:
                     for key, value in metric.items():
                         if value:
-                            time.sleep(0.5)
                             self.plugin_obj.push_metrics(key, value)
                 # Creating or refreshing alert dashboard
                 if _sleep > 5:
