@@ -563,7 +563,9 @@ class GraphitePlugin():
                       "(partial)": 4, "partial": 4, "unknown": 5, "failed": 7,
                       "down": 8, "created": 9, "stopped" : 10, "completed": 12,
                       "not started": 13, "not_started": 13, "in progress": 14,
-                      "in_progress": 14, "paused": 15}
+                      "in_progress": 14, "paused": 15, "layout_fix_started": 16,
+                      "layout_fix_stopped": 17, "layout_fix_complete": 18,
+                      "layout_fix_failed": 19}
         try:
             temp_status = copy.deepcopy(status).lower()
             return status_map[temp_status]
