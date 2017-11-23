@@ -71,6 +71,8 @@ class UpdateDashboard(flows.BaseFlow):
 
 
     def _delete_panel(self, integration_id, resource_type, resource_name=None):
+        if resource_type == "nodes":
+            resource_name = resource_name.replace(".", "_")
         alert_dashboard = alert_utils.get_alert_dashboard(resource_type)
         alert_utils.remove_row(alert_dashboard,
                                integration_id,
