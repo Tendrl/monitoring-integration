@@ -85,7 +85,7 @@ def get_cluster_details(integration_id=None):
             # Get volume details
             cluster_obj.volumes = get_volumes_details(cluster_key)
             # Get brick details from subvolumes
-            cluster_obj.bricks = get_brick_details(cluster_obj.volumes)
+            cluster_obj.bricks = get_brick_details(cluster_obj.volumes, cluster_key)
             cluster_details_list.append(cluster_obj)
         return cluster_details_list
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
@@ -113,18 +113,30 @@ def get_node_details(cluster_key):
     return node_details
 
 
-def get_brick_details(volumes):
+def get_brick_path(brick_info, cluster_key):
+    key = "%s/Bricks/all/%s/brick_path" % (
+        cluster_key, brick_info.replace(":_", "/"))
+    path = etcd_utils.read(key).value
+    return path.split(":")[1].replace("/", "|")
+
+
+def get_brick_details(volumes, cluster_key):
     brick_details = []
     for volume in volumes:
         for subvolume in volume["subvolume"]:
             for brick_info in subvolume["bricks"]:
-                brick = {}
-                brick["hostname"] = brick_info.split(":")[0]
-                brick["brick_path"] = brick_info.split(
-                    ":")[1].replace('_', '|')
-                brick["vol_id"] = volume["vol_id"]
-                brick["vol_name"] = volume["name"]
-                brick_details.append(brick)
+                time.sleep(1)
+                try:
+                    brick = {}
+                    brick["hostname"] = brick_info.split(":")[0]
+                    brick["vol_id"] = volume["vol_id"]
+                    brick["vol_name"] = volume["name"]
+                    brick["brick_path"] = get_brick_path(brick_info, cluster_key)
+                    brick_details.append(brick)
+                except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                    logger.log("error", NS.get("publisher_id", None),
+                                {'message': "Error while brick details for"
+                                 "brick {}".format(subvolume) + str(ex)})
     return brick_details
 
 
