@@ -479,7 +479,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
-                "datasource": "",
+                "datasource": null,
                 "displayName": "Rebalance",
                 "flipCard": false,
                 "flipTime": 5,
@@ -494,23 +494,26 @@
                     "alias": "Rebalanced Files",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_files)), 'max')), 'Rebalanced Files')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_files, 'max'))), 'Rebalanced Files')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
-                    "alias": "MB Size",
+                    "alias": "Size",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes)), 'max')), 'MB Size')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
                     "textEditor": false,
-                    "valueHandler": "Text Only"
+                    "valueHandler": "Number Threshold",
+                    "units": "none",
+                    "decimals": 0,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Skipped",
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_skipped)), 'max')), 'Skipped')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_skipped, 'max'))), 'Skipped')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -518,7 +521,7 @@
                     "alias": "Failure",
                     "displayType": "Regular",
                     "refId": "D",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_failures)), 'max')), 'Failure')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_failures, 'max'))), 'Failure')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }],
@@ -599,7 +602,7 @@
                 }, {
                     "op": "=",
                     "text": "In Progress",
-                    "value": "14"
+                    "value": "1"
                 }, {
                     "op": "=",
                     "text": "Failed",
@@ -608,6 +611,26 @@
                     "op": "=",
                     "text": "Stopped",
                     "value": "10"
+                }, {
+                    "op": "=",
+                    "text": "Unknown",
+                    "value": "5"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout in progress",
+                    "value": "16"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout stopped",
+                    "value": "17"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout completed",
+                    "value": "18"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout failed",
+                    "value": "19"
                 }],
                 "valueName": "current"
             }],

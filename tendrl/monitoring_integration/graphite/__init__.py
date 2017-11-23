@@ -116,14 +116,14 @@ class GraphitePlugin():
         return resource_details
 
     def get_object_from_central_store(self, resource_key, obj_attr):
-        time.sleep(5)
+        time.sleep(0.5)
         attr_details = etcd_utils.read(resource_key)
         resource_details = {"details": []}
         for attr_detail in attr_details.leaves:
             resource_detail = {}
             attr_key = attr_detail.key.rsplit("/", 1)[1]
             for key, value in obj_attr["attrs"].items():
-                time.sleep(3)
+                time.sleep(0.5)
                 sub_attr = etcd_utils.read(
                     os.path.join(resource_key, attr_key, key))
                 resource_detail[key] = sub_attr.value
@@ -142,7 +142,7 @@ class GraphitePlugin():
 
         resource_list = []
         try:
-            time.sleep(3)
+            time.sleep(0.5)
             resource_details = etcd_utils.read(key + "/" + str(
                 resource_name))
             for resource in resource_details.leaves:
@@ -167,7 +167,7 @@ class GraphitePlugin():
                 try:
                     cluster_key = "/clusters/" + str(
                         cluster_id) + "/is_managed"
-                    time.sleep(5)
+                    time.sleep(1)
                     cluster_is_managed = etcd_utils.read(
                         cluster_key).value
                     if cluster_is_managed.lower() == "no":
@@ -191,7 +191,7 @@ class GraphitePlugin():
                     for key, value in obj_attrs.items():
                         try:
                             attr_key = os.path.join(obj_key, key)
-                            time.sleep(3)
+                            time.sleep(1)
                             attr_data = etcd_utils.read(attr_key)
                             attr_value = self.cluster_status_mapper(
                                 str(attr_data.value))
@@ -218,7 +218,7 @@ class GraphitePlugin():
                         brick_deleted_key = os.path.join(cluster_key, "Bricks/all",
                                                          host, brick, "deleted")
                         try:
-                            time.sleep(3)
+                            time.sleep(0.5)
                             is_brick_deleted = etcd_utils.read(brick_deleted_key).value
                             if is_brick_deleted.lower() == "true":
                                 continue
@@ -229,7 +229,7 @@ class GraphitePlugin():
                                 brick_attr_key = os.path.join(cluster_key,
                                                               "Bricks/all",
                                                               host, brick, key)
-                                time.sleep(1)
+                                time.sleep(0.5)
                                 brick_attr_data = etcd_utils.read(
                                     brick_attr_key)
                                 brick_attr_value = self.resource_status_mapper(
@@ -252,7 +252,7 @@ class GraphitePlugin():
                     volume_key = os.path.join(cluster_key, "Volumes", volume)
                     volume_deleted_key = os.path.join(volume_key, "deleted")
                     try:
-                        time.sleep(3)
+                        time.sleep(0.5)
                         is_volume_deleted = etcd_utils.read(volume_deleted_key).value
                         if is_volume_deleted.lower() == "true":
                             continue
@@ -262,7 +262,7 @@ class GraphitePlugin():
                         if value is None:
                             try:
                                 attr_key = os.path.join(volume_key, key)
-                                time.sleep(1)
+                                time.sleep(0.5)
                                 attr_data = etcd_utils.read(attr_key)
                                 attr_value = self.resource_status_mapper(
                                     str(attr_data.value))
@@ -316,7 +316,7 @@ class GraphitePlugin():
                         if value is None:
                             try:
                                 attr_key = os.path.join(node_key, key)
-                                time.sleep(1)
+                                time.sleep(0.5)
                                 attr_data = etcd_utils.read(attr_key)
                                 attr_value = self.resource_status_mapper(
                                     str(attr_data.value))
@@ -332,7 +332,7 @@ class GraphitePlugin():
                                         "status"
                                     )
                                     try:
-                                        time.sleep(1)
+                                        time.sleep(0.5)
                                         node_status_value = etcd_utils.read(node_status_key).value
                                         attr_value = self.resource_status_mapper(
                                             node_status_value
@@ -563,7 +563,9 @@ class GraphitePlugin():
                       "(partial)": 4, "partial": 4, "unknown": 5, "failed": 7,
                       "down": 8, "created": 9, "stopped" : 10, "completed": 12,
                       "not started": 13, "not_started": 13, "in progress": 14,
-                      "in_progress": 14, "paused": 15}
+                      "in_progress": 14, "paused": 15, "layout_fix_started": 16,
+                      "layout_fix_stopped": 17, "layout_fix_complete": 18,
+                      "layout_fix_failed": 19}
         try:
             temp_status = copy.deepcopy(status).lower()
             return status_map[temp_status]

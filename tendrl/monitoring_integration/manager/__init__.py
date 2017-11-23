@@ -158,7 +158,7 @@ def main():
     while grafana_conn_count < 10:
         if not utils.port_open(3000, "127.0.0.1"):
             grafana_conn_count = grafana_conn_count + 1
-            time.sleep(10)
+            time.sleep(4)
         else:
             break
     if grafana_conn_count == 10:
