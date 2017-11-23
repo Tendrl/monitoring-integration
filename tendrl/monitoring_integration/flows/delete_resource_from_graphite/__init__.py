@@ -38,29 +38,29 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
 
     def delete_brick_details(self, integration_id, resource_name,
                              whisper_path):
+        
         host_name = resource_name.split("|", 1)[1].split(":",
                                                          1)[0].replace(".",
                                                                       "_")
-        brick_name = resource_name.split("|", 1)[1].split(":",
-                                                          1)[1].replace("/",
-                                                                       '\|')
+        brick_name = resource_name.split("|", 1)[1].split(
+            ":", 1)[1].replace("/", "|")
         vol_name = resource_name.split("|", 1)[0]
-        archive_path = os.path.join(whisper_path, "clusters",
-                                    str(integration_id),
-                                    "archive", "bricks")
-        if not os.path.exists(archive_path):
-            os.makedirs(str(archive_path))
-        resource_folder_name = str(brick_name) + "_" + \
-            str(datetime.datetime.now().isoformat())
-        archive_path = os.path.join(archive_path, resource_folder_name)
-        resource_path = os.path.join(whisper_path, "clusters",
-                                     str(integration_id), "nodes",
-                                     str(host_name), "bricks",
-                                     str(brick_name))
+        archive_base_path = os.path.join(
+            whisper_path, "clusters", str(integration_id), "archive", "bricks"
+        )
+        archive_time  = str(datetime.datetime.now().isoformat())
+        if not os.path.exists(archive_base_path):
+            os.makedirs(str(archive_base_path))
+        archive_path = os.path.join(
+            archive_base_path,
+            str(brick_name).replace("|", "\|") + "_" + archive_time
+        )
+        resource_path = os.path.join(
+            whisper_path, "clusters", str(integration_id), "nodes",
+            str(host_name), "bricks", str(brick_name).replace("|", "\|"))
         brick_path = os.path.join(
             whisper_path, "clusters", str(integration_id), "nodes",
-            str(host_name), "bricks",
-            resource_name.split("|", 1)[1].split(":", 1)[1].replace("/", "|")
+            str(host_name), "bricks", str(brick_name)
         )
         if os.path.exists(brick_path):
             ret_val = os.system("mv " + str(resource_path) + " " +
@@ -73,21 +73,26 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                 logger.log("error", NS.get("publisher_id", None),
                            {'message': "Brick " + str(resource_name) + 
                                "deletion from graphite failed"})
-        archive_path = os.path.join(archive_path,
+        archive_path = os.path.join(archive_base_path,
+                                    str(brick_name) + "_" + archive_time,
                                     "volumes", vol_name)
         os.makedirs(str(archive_path))
+        archive_path = os.path.join(
+            archive_base_path,
+            str(brick_name).replace("|", "\|") + "_" + archive_time,
+            "volumes",
+            vol_name
+        )
         resource_path = os.path.join(whisper_path, "clusters",
                                      str(integration_id), "volumes",
                                      str(vol_name), "nodes",
                                      str(host_name), "bricks",
-                                     str(brick_name))
+                                     str(brick_name).replace("|", "\|"))
         brick_path = os.path.join(whisper_path, "clusters",
                                   str(integration_id), "volumes",
                                   str(vol_name), "nodes",
                                   str(host_name), "bricks",
-                                  resource_name.split("|",
-                                                      1)[1].split(":",
-                                                                  1)[1].replace("/", "|"))
+                                  str(brick_name))
         if os.path.exists(brick_path):
             ret_val = os.system("mv " + str(resource_path) + " " +
                 str(archive_path))
