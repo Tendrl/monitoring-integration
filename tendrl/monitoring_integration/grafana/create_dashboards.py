@@ -101,7 +101,7 @@ def get_node_details(cluster_key):
         try:
             node = {}
             for attr in ATTRS["nodes"]:
-                time.sleep(1)
+                time.sleep(0.5)
                 node[attr] = etcd_utils.read(
                     cluster_key  + "/nodes/" + str(node_id) + "/NodeContext/" + attr
                 ).value
@@ -152,7 +152,7 @@ def get_volumes_details(cluster_key):
             try:
                 volume_data = {}
                 for attr in ATTRS["volumes"]:
-                    time.sleep(1)
+                    time.sleep(0.5)
                     volume_data[attr] = etcd_utils.read(
                         cluster_key + "/Volumes/" + str(volume_id) + "/" + attr
                     ).value
