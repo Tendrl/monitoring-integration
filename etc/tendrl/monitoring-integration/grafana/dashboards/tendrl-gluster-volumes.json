@@ -599,7 +599,7 @@
                 }, {
                     "op": "=",
                     "text": "In Progress",
-                    "value": "14"
+                    "value": "1"
                 }, {
                     "op": "=",
                     "text": "Failed",
@@ -608,6 +608,26 @@
                     "op": "=",
                     "text": "Stopped",
                     "value": "10"
+                }, {
+                    "op": "=",
+                    "text": "Unknown",
+                    "value": "5"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout in progress",
+                    "value": "16"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout stopped",
+                    "value": "17"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout completed",
+                    "value": "18"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout failed",
+                    "value": "19"
                 }],
                 "valueName": "current"
             }],
