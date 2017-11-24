@@ -24,7 +24,7 @@ def get_resource_keys(key, resource_name):
 
     resource_list = []
     try:
-        time.sleep(0.5)
+        time.sleep(1)
         resource_details = etcd_utils.read(key + "/" + str(resource_name))
         for resource in resource_details.leaves:
             resource_list.append(resource.key.split('/')[-1])
@@ -101,7 +101,7 @@ def get_node_details(cluster_key):
         try:
             node = {}
             for attr in ATTRS["nodes"]:
-                time.sleep(0.5)
+                time.sleep(1)
                 node[attr] = etcd_utils.read(
                     cluster_key  + "/nodes/" + str(node_id) + "/NodeContext/" + attr
                 ).value
@@ -125,7 +125,7 @@ def get_brick_details(volumes, cluster_key):
     for volume in volumes:
         for subvolume in volume["subvolume"]:
             for brick_info in subvolume["bricks"]:
-                time.sleep(0.5)
+                time.sleep(1)
                 try:
                     brick = {}
                     brick["hostname"] = brick_info.split(":")[0]
@@ -144,7 +144,7 @@ def get_volumes_details(cluster_key):
     volume_details = []
     volume_list = get_resource_keys(cluster_key, "Volumes")
     for volume_id in volume_list:
-        time.sleep(0.5)
+        time.sleep(1)
         deleted = etcd_utils.read(
             cluster_key + "/Volumes/" + str(volume_id) + "/" + "deleted"
         ).value
@@ -152,7 +152,7 @@ def get_volumes_details(cluster_key):
             try:
                 volume_data = {}
                 for attr in ATTRS["volumes"]:
-                    time.sleep(0.5)
+                    time.sleep(1)
                     volume_data[attr] = etcd_utils.read(
                         cluster_key + "/Volumes/" + str(volume_id) + "/" + attr
                     ).value
