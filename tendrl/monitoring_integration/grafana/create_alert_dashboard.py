@@ -66,7 +66,7 @@ class CreateAlertDashboard():
                 else:
                     resource_name = [resource_type]
                 for resource in resource_name:
-                    time.sleep(1)
+                    time.sleep(2)
                     # Uploading Alert Dashboards
                     resource_dashboard = \
                         create_dashboards.create_resource_dashboard(
