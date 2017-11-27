@@ -74,7 +74,7 @@ if [ $1 -eq 1 ] ; then
     ln -s /etc/tendrl/monitoring-integration/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
     chgrp grafana /etc/tendrl/monitoring-integration/grafana/grafana.ini
 fi
-systemctl enable tendrl-monitoring-integration
+systemctl enable tendrl-monitoring-integration >/dev/null 2>&1 || :
 %systemd_post tendrl-monitoring-integration.service
 
 
