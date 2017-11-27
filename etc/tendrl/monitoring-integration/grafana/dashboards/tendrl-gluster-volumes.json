@@ -24,7 +24,7 @@
                 ],
                 "datasource": "",
                 "decimals": 0,
-                "description": "Shows Health of a Volume.",
+                "description": "The Health panel displays the overall health for a given volume.",
                 "format": "short",
                 "gauge": {
                     "maxValue": 100,
@@ -114,6 +114,7 @@
                 ],
                 "datasource": "",
                 "decimals": 0,
+                "description": "The Snapshots panel displays the count of active snapshots for a given cluster.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -173,7 +174,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "description": "Shows the Status of each Brick in a Volume.  \n1->Started, 10->Stopped",
+                "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n1 = Started  \n10 = Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 41,
@@ -237,6 +238,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Bricks panel displays brick status information for a given volume, including the total number of bricks in the volume, and a count of bricks by status. For details, go to the Bricks Dashboard.",
                 "displayName": "Bricks",
                 "flipCard": false,
                 "flipTime": "10",
@@ -298,6 +300,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Subvolumes panel displays subvolume status information for a given volume.",
                 "displayName": "Subvolume",
                 "flipCard": false,
                 "flipTime": 5,
@@ -328,6 +331,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Geo-Replication Session panel displays geo-replication session information from a given volume.",
                 "displayName": "Geo-Replication Sessions",
                 "flipCard": false,
                 "flipTime": 5,
@@ -431,6 +435,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Healing panel displays healing information for a given volume based on healinfo.  See https://gluster.readthedocs.io/en/latest/Troubleshooting/heal-info-and-split-brain-resolution/  \nfor how to troubleshoot healing and split brain issues",
                 "displayName": "Healing",
                 "flipCard": false,
                 "flipTime": 5,
@@ -446,8 +451,8 @@
                     "displayType": "Regular",
                     "hide": false,
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.healed_cnt)), \"max\")),\"Healed\")",
-                    "textEditor": true,
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.healed_cnt, 'max'))), 'Healed')",
+                    "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
@@ -455,8 +460,8 @@
                     "displayType": "Regular",
                     "hide": false,
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.split_brain_cnt)), \"max\")),\"Split Brain\")",
-                    "textEditor": true,
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.split_brain_cnt, 'max'))), 'Split Brain')",
+                    "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
@@ -464,8 +469,8 @@
                     "displayType": "Regular",
                     "hide": false,
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.heal_failed_cnt)), 'max')), 'Heal Failed')",
-                    "textEditor": true,
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.heal_failed_cnt, 'max'))), 'Heal Failed')",
+                    "textEditor": false,
                     "valueHandler": "Text Only"
                 }],
                 "title": "",
@@ -479,7 +484,8 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
-                "datasource": null,
+                "datasource": "",
+                "description": "The Rebalance panel displays rebalance progress information for a given volume, which is applicable when rebalancing is underway.",
                 "displayName": "Rebalance",
                 "flipCard": false,
                 "flipTime": 5,
@@ -500,14 +506,14 @@
                 }, {
                     "aggregation": "Last",
                     "alias": "Size",
+                    "decimals": 0,
+                    "display": true,
                     "displayType": "Regular",
                     "refId": "B",
                     "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
                     "textEditor": false,
-                    "valueHandler": "Number Threshold",
                     "units": "none",
-                    "decimals": 0,
-                    "display": true
+                    "valueHandler": "Number Threshold"
                 }, {
                     "aggregation": "Last",
                     "alias": "Skipped",
@@ -538,6 +544,7 @@
                 ],
                 "datasource": "",
                 "decimals": 0,
+                "description": "The Rebalance Status panel displays the status of rebalancing for a given volume, which is applicable when rebalancing is underway.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -654,6 +661,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Capacity Utilization panel displays the used capacity for a given volume.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -720,6 +728,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Capacity Available panel displays the available capacity for a given volume.",
                 "format": "kbytes",
                 "gauge": {
                     "maxValue": 100,
@@ -794,6 +803,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
                 "format": "decbytes",
                 "gauge": {
                     "maxValue": 100,
@@ -874,6 +884,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till volume reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -976,6 +987,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Capacity Utilization Trend panel displays the volume capacity utilization over a period of time.",
                 "fill": 1,
                 "id": 34,
                 "legend": {
@@ -1053,6 +1065,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Inode Utilization panel displays inodes used for bricks in the volume over a period of time.",
                 "fill": 1,
                 "id": 24,
                 "legend": {
@@ -1126,6 +1139,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "description": "The Inode Available panel displays inodes free for bricks in the volume.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -1212,6 +1226,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "description": "The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile.The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile”.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -1285,6 +1300,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "description": "The LVM Thin Pool Metadata % panel displays the utilization of LVM thin pool metadata for a given volume.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -1350,6 +1366,8 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "decimals": 1,
+                "description": "The LVM Thin Pool Data Usage % panel displays the LVM thin pool data usage for a given volume.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -1412,8 +1430,7 @@
                     "text": "N/A",
                     "value": "null"
                 }],
-                "valueName": "current",
-                "decimals": 1
+                "valueName": "current"
             }],
             "repeat": null,
             "repeatIteration": null,
@@ -1429,6 +1446,8 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "datasource": "",
+                "description": "The Top File Operations panel displays the top 5 FOP (file operations) with the highest % latency, wherein the % latency is the fraction of the FOP response time that is consumed by the FOP.",
                 "fontSize": "100%",
                 "id": 29,
                 "links": [],
@@ -1436,7 +1455,7 @@
                 "scroll": true,
                 "showHeader": true,
                 "sort": {
-                    "col": 0,
+                    "col": 1,
                     "desc": true
                 },
                 "span": 4,
@@ -1455,7 +1474,7 @@
                     "type": "number",
                     "unit": "short"
                 }, {
-                    "alias": "Used",
+                    "alias": "% Latency",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1471,7 +1490,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.fop.*.hits, 10, 'maxSeries')"
+                    "target": "limit(sortByMaxima(groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.fop.*.hits, 10, 'maxSeries')), 5)"
                 }],
                 "title": "Top File Operations",
                 "transform": "timeseries_aggregations",
@@ -1483,6 +1502,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The File Operations for Locks Trend panel displays the average latency, maximum latency, call rate for each FOP for Locks over a period of time.",
                 "fill": 1,
                 "id": 30,
                 "legend": {
@@ -1551,6 +1571,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The File Operations for Read/Write panel displays the average latency, maximum latency, call rate for each FOP for Read/Write Operations over a period of time.",
                 "fill": 1,
                 "id": 31,
                 "legend": {
@@ -1618,6 +1639,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The File Operations for Inode Operations panel displays the average latency, maximum latency, call rate for each FOP for Inode Operations over a period of time.",
                 "fill": 1,
                 "id": 32,
                 "legend": {
@@ -1686,6 +1708,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The File Operations for Entry Operations panel displays the average latency, maximum latency, call rate for each FOP for Entry Operations over a period of time.",
                 "fill": 1,
                 "id": 33,
                 "legend": {

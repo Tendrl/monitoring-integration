@@ -23,7 +23,7 @@
                     "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
-                "description": "Shows health of the host",
+                "description": "The Health panel displays the overall health for a given host.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -96,6 +96,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "datasource": "",
+                "description": "The Bricks panel displays brick status information for a given host, including the total number of bricks in the host, and a count of bricks by status. For details, go to the Bricks Dashboard.",
                 "displayName": "Bricks",
                 "flipCard": false,
                 "flipTime": "10",
@@ -150,7 +151,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "description": "Shows the Status of each Brick in a Host.  \n1->Started, 10->Stopped",
+                "description": "The Brick Status panel displays the status code of each brick for a given host.  \n1 = Started  \n10 = Stopped",
                 "fontSize": "100%",
                 "id": 29,
                 "links": [],
@@ -287,7 +288,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": null,
-                "description": "The memory utilization threshold is set to 80%. Reaching or exceeding this value displays an orange horizontal line indicating high memory usage.",
+                "description": "The Memory Utilization panel displays memory utilization percentage for a given host that includes buffers and caches used by the kernel over a period of time. \n \nBuffered:  Amount of memory used for buffering, mostly for I/O operations.  \nCached:  Memory used for caching disk data for reads, memory-mapped files or tmpfs data.  \nSlab Rec:  Amount of reclaimable memory used for slab kernel allocations.  \nSlab Unrecl:  Amount of unreclaimable memory used for slab kernel allocations.  \nUsed:  Amount of memory used, calculated as Total - Free (Unused Memory) - Buffered - Cache  \nTotal:  Total memory used  \n\nThe memory utilization threshold is set to 80%. Reaching or exceeding this value displays an orange horizontal line indicating high memory usage.",
                 "fill": 1,
                 "id": 2,
                 "legend": {
@@ -393,6 +394,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Swap Free panel displays the available swap space in percent for a given host.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -454,6 +456,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Swap Utilization panel displays the used swap space in percent for a given host.",
                 "fill": 1,
                 "id": 3,
                 "legend": {
@@ -521,6 +524,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The CPU utilization panel displays the CPU utilization for a given host over a period of time.",
                 "fill": 1,
                 "id": 1,
                 "legend": {
@@ -603,6 +607,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The IOPS panel displays IOPS for a given host over a period of time.  IOPS is based on the aggregated brick level read and write operations.",
                 "fill": 1,
                 "id": 14,
                 "legend": {
@@ -684,6 +689,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Total Brick Capacity Utilization Trend panel displays the capacity utilization for all bricks on a given for a period of time.",
                 "fill": 1,
                 "id": 28,
                 "legend": {
@@ -771,6 +777,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Total Brick Capacity Utilization panel displays the current percent capacity utilization for a given host.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -845,6 +852,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Total Brick Capacity Available panel displays the current available capacity for a given host.",
                 "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
@@ -919,6 +927,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
                 "format": "decbytes",
                 "gauge": {
                     "maxValue": 100,
@@ -1001,6 +1010,7 @@
                 ],
                 "datasource": "",
                 "decimals": null,
+                "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till host capacity reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -1269,6 +1279,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Disk Load panel shows the host’s aggregated read and writes from/to disks over a period of time.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
@@ -1339,6 +1350,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Disk Operations panel shows the host’s aggregated read and writes disk operations over a period of time.",
                 "fill": 1,
                 "id": 24,
                 "legend": {
@@ -1409,6 +1421,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Disk IO panel shows the host’s aggregated I/O time over a period of time.",
                 "fill": 1,
                 "id": 25,
                 "legend": {
@@ -1486,6 +1499,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Throughput panel displays the network throughput for a given host over a period of time.",
                 "fill": 1,
                 "id": 11,
                 "legend": {
@@ -1554,6 +1568,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Dropped Packets Per Second panel displays dropped network packets for the host over a period of time.  Typically, dropped packets indicates network congestion, e.g. the queue on the switch port your host is connected to is full and packets are dropped because it can’t transmit data fast enough.",
                 "fill": 1,
                 "id": 26,
                 "legend": {
@@ -1621,6 +1636,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Errors Per Second panel displays network errors for a given host over a period of time.  Typically, the errors indicate issues that occurred while transmitting packets due to carrier errors (duplex mismatch, faulty cable), fifo errors, heartbeat errors, and window errors, CRC errors too short frames, and/or too long frames. In short, errors typically result from faulty hardware, and/or speed mismatch.",
                 "fill": 1,
                 "id": 27,
                 "legend": {
