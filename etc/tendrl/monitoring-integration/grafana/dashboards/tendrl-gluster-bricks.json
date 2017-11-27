@@ -23,7 +23,7 @@
                     "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
-                "description": "Shows Status of a Brick.",
+                "description": "The Status panel displays the status for a given brick.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -98,6 +98,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Capacity Utilization panel displays the percentage of capacity utilization for a given brick.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -160,6 +161,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Capacity Utilization Trend panel displays the brick capacity utilization over a period of time.",
                 "fill": 1,
                 "id": 17,
                 "legend": {
@@ -240,6 +242,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Capacity Available panel displays the available capacity for a given volume.",
                 "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
@@ -317,6 +320,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
                 "format": "decbytes",
                 "gauge": {
                     "maxValue": 100,
@@ -399,6 +403,7 @@
                 ],
                 "datasource": "",
                 "decimals": null,
+                "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till brick reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -580,6 +585,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
+                "description": "The Inode Utilization panel displays inodes used for a given brick over a period of time.",
                 "fill": 1,
                 "id": 2,
                 "legend": {
@@ -652,6 +658,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "description": "The Inode Available panel displays inodes free for a given brick.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -728,6 +735,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The LVM Thin Pool Metadata % panel displays the utilization of LVM thin pool metadata for a given brick.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -794,6 +802,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
+                "description": "The LVM Thin Pool Data Usage % panel displays the LVM thin pool data usage for a given brick.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -865,6 +874,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Throughput panel displays brick-level read and write operations fetched using “gluster volume profile”.",
                 "fill": 1,
                 "id": 18,
                 "legend": {
@@ -937,6 +947,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The IOPS panel displays IOPS for a brick  over a period of time.  IOPS is based on brick level read and write operations.",
                 "fill": 1,
                 "id": 19,
                 "legend": {
@@ -1009,6 +1020,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Latency panel displays latency for a brick  over a period of time.  Latency is based on the average amount of time a brick spends doing a read or write operation.",
                 "fill": 1,
                 "id": 20,
                 "legend": {
@@ -1081,6 +1093,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
+                "description": "The Disk Utilization panel displays the percentage of capacity utilization for a given brick.",
                 "fill": 1,
                 "id": 21,
                 "legend": {
