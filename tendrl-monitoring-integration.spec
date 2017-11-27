@@ -1,6 +1,6 @@
 Name: tendrl-monitoring-integration
 Version: 1.5.4
-Release: 6%{?dist}
+Release: 7%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
 Source0: %{name}-%{version}.tar.gz
@@ -74,7 +74,7 @@ if [ $1 -eq 1 ] ; then
     ln -s /etc/tendrl/monitoring-integration/graphite-web.conf /etc/httpd/conf.d/graphite-web.conf
     chgrp grafana /etc/tendrl/monitoring-integration/grafana/grafana.ini
 fi
-systemctl enable tendrl-monitoring-integration
+systemctl enable tendrl-monitoring-integration >/dev/null 2>&1 || :
 %systemd_post tendrl-monitoring-integration.service
 
 
@@ -108,6 +108,9 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
+* Mon Nov 27 2017 Rohan Kanade <rkanade@redhat.com> - 1.5.4-7
+- Bugfixes
+
 * Fri Nov 24 2017 Rohan Kanade <rkanade@redhat.com> - 1.5.4-6
 - Fix for etcd raft errors
 
