@@ -188,9 +188,8 @@ def main():
         NS.sync_thread.stop()
         
     def reload_config(signum, frame):
-        NS.config = NS.config.__class__()
-        NS.config.save()
-
+        NS.monitoring.ns.setup_common_objects()
+        
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     signal.signal(signal.SIGHUP, reload_config)
