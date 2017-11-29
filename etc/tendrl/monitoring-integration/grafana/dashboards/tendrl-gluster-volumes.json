@@ -447,11 +447,11 @@
                 "span": 1,
                 "targets": [{
                     "aggregation": "Last",
-                    "alias": "Healed",
+                    "alias": "Pending Heal",
                     "displayType": "Regular",
                     "hide": false,
                     "refId": "A",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.healed_cnt, 'max'))), 'Healed')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.heal_pending_cnt, 'max'))), 'Pending Heal')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -461,15 +461,6 @@
                     "hide": false,
                     "refId": "B",
                     "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.split_brain_cnt, 'max'))), 'Split Brain')",
-                    "textEditor": false,
-                    "valueHandler": "Text Only"
-                }, {
-                    "aggregation": "Last",
-                    "alias": "Heal Failed",
-                    "displayType": "Regular",
-                    "hide": false,
-                    "refId": "C",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.heal_failed_cnt, 'max'))), 'Heal Failed')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }],
