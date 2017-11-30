@@ -475,7 +475,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
-                "datasource": "",
+                "datasource": null,
                 "description": "The Rebalance panel displays rebalance progress information for a given volume, which is applicable when rebalancing is underway.",
                 "displayName": "Rebalance",
                 "flipCard": false,
@@ -497,13 +497,13 @@
                 }, {
                     "aggregation": "Last",
                     "alias": "Size",
-                    "decimals": 0,
+                    "decimals": 2,
                     "display": true,
                     "displayType": "Regular",
                     "refId": "B",
                     "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
                     "textEditor": false,
-                    "units": "none",
+                    "units": "mbytes",
                     "valueHandler": "Number Threshold"
                 }, {
                     "aggregation": "Last",
