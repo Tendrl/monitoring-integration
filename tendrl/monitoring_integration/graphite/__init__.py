@@ -278,15 +278,6 @@ class GraphitePlugin():
                             except (etcd.EtcdKeyNotFound,
                                     AttributeError,
                                     KeyError) as ex:
-                                logger.log(
-                                    "error",
-                                    NS.get("publisher_id", None),
-                                    {
-                                        'message': "Error in retreiving "
-                                        "geo_replication data for "
-                                        "volume" + str(volume) + str(ex)
-                                    }
-                                )
                                 resource_detail[key] = {"total": 0,
                                                         "up": 0,
                                                         "down": 0,
