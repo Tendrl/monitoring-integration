@@ -14,6 +14,7 @@
             "collapse": false,
             "height": 266,
             "panels": [{
+                "timeFrom": "15m",
                 "cacheTimeout": null,
                 "colorBackground": false,
                 "colorValue": true,
