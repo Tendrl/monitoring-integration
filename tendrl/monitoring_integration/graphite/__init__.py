@@ -564,6 +564,6 @@ class GraphitePlugin():
     def cluster_status_mapper(self, status):
         status_map = {"healthy": 0, "unhealthy": 2}
         try:
-            return status_map[status]
+            return "unhealthy" if not status else status_map[status]
         except KeyError:
             return status
