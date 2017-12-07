@@ -38,7 +38,7 @@ def _add_metrics(objects, obj_name, metric, resource):
                 metrics.append(copy.deepcopy(final_metric))
         except (AttributeError, KeyError) as ex:
             logger.log(
-                "warning",
+                "debug",
                 NS.get("publisher_id", None),
                 {
                     'message': "Failed to fetch attribute "
@@ -76,7 +76,7 @@ def miscellaneous_metrics(cluster_details):
                     metrics.append(copy.deepcopy(local_metric))
                 except (AttributeError, KeyError) as ex:
                     logger.log(
-                        "warning",
+                        "debug",
                         NS.get("publisher_id", None),
                         {
                             'message': "Failed to create brick metric "
@@ -226,7 +226,7 @@ def miscellaneous_metrics(cluster_details):
                 metrics.append(copy.deepcopy(local_metric))
             except (AttributeError, KeyError) as ex:
                 logger.log(
-                    "warning",
+                    "debug",
                     NS.get("publisher_id", None),
                     {
                         'message': "Failed to create brick metric {0} "
@@ -256,7 +256,7 @@ def miscellaneous_metrics(cluster_details):
                 metrics.append(copy.deepcopy(local_metric))
             except (AttributeError, KeyError) as ex:
                 logger.log(
-                    "warning",
+                    "debug",
                     NS.get("publisher_id", None),
                     {
                         'message': "Failed to create brick metric {0} "
@@ -278,7 +278,7 @@ def miscellaneous_metrics(cluster_details):
                 metrics.append(copy.deepcopy(local_metric))
             except (AttributeError, KeyError) as ex:
                     logger.log(
-                        "warning",
+                        "debug",
                         NS.get("publisher_id", None),
                         {
                             'message': "Failed to create cluster metric {0} "
