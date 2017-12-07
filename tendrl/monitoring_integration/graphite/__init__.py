@@ -194,7 +194,7 @@ class GraphitePlugin():
                                 attr_value)
                         except (KeyError, etcd.EtcdKeyNotFound) as ex:
                             logger.log(
-                                "error",
+                                "warning",
                                 NS.get("publisher_id", None),
                                 {
                                     'message': "Cannot Find {0} in Cluster "
@@ -230,7 +230,7 @@ class GraphitePlugin():
                                 resource_detail[key] = brick_attr_value
                             except (KeyError, etcd.EtcdKeyNotFound) as ex:
                                 logger.log(
-                                    "error",
+                                    "warning",
                                     NS.get("publisher_id", None),
                                     {
                                         'message': "Cannot Find {0} in brick "
@@ -321,7 +321,7 @@ class GraphitePlugin():
                                     except etcd.EtcdKeyNotFound:
                                         pass
                                 logger.log(
-                                    "error",
+                                    "warning",
                                     NS.get("publisher_id", None),
                                     {
                                         'message': "Cannot Find {0} in "
@@ -341,7 +341,7 @@ class GraphitePlugin():
                 cluster_data = self.set_volume_level_brick_count(cluster_data)
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log(
-                    "error",
+                    "warning",
                     NS.get("publisher_id", None),
                     {
                         'message': "Failed to set resource details" + str(ex)
@@ -421,7 +421,7 @@ class GraphitePlugin():
                             volume_detail[str(brick["vol_name"])]["down"] + 1
                 except (AttributeError, KeyError) as ex:
                     logger.log(
-                        "error",
+                        "warning",
                         NS.get("publisher_id", None),
                         {
                             'message': "Failed to set volume level "
@@ -455,7 +455,7 @@ class GraphitePlugin():
                     node["brick_down_count"] = down
                 except (AttributeError, KeyError) as ex:
                     logger.log(
-                        "error",
+                        "warning",
                         NS.get("publisher_id", None),
                         {'message': "Failed to set brick count" + str(ex)}
                     )
@@ -489,7 +489,7 @@ class GraphitePlugin():
                         down = down + 1
                 except KeyError as ex:
                     logger.log(
-                        "error",
+                        "warning",
                         NS.get("publisher_id", None),
                         {
                             'message': "Failed to set resource count "
