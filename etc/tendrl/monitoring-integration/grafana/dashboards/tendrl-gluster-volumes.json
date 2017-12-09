@@ -14,7 +14,6 @@
             "collapse": false,
             "height": 266,
             "panels": [{
-                "timeFrom": "15m",
                 "cacheTimeout": null,
                 "colorBackground": false,
                 "colorValue": true,
@@ -70,6 +69,7 @@
                     "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.state"
                 }],
                 "thresholds": "2,6",
+                "timeFrom": "15m",
                 "title": "Health",
                 "transparent": false,
                 "type": "singlestat",
@@ -427,47 +427,6 @@
                 "title": "",
                 "type": "vonage-status-panel"
             }, {
-                "clusterName": "Healing",
-                "colorMode": "Metric",
-                "colors": {
-                    "crit": "rgba(245, 54, 54, 0.9)",
-                    "disable": "rgba(128, 128, 128, 0.9)",
-                    "ok": "rgba(50, 128, 45, 0.9)",
-                    "warn": "rgba(237, 129, 40, 0.9)"
-                },
-                "datasource": "",
-                "description": "The Healing panel displays healing information for a given volume based on healinfo.  See https://gluster.readthedocs.io/en/latest/Troubleshooting/heal-info-and-split-brain-resolution/  \nfor how to troubleshoot healing and split brain issues",
-                "displayName": "Healing",
-                "flipCard": false,
-                "flipTime": 5,
-                "id": 39,
-                "isGrayOnNoData": true,
-                "isHideAlertsOnDisable": false,
-                "isIgnoreOKColors": false,
-                "links": [],
-                "span": 1,
-                "targets": [{
-                    "aggregation": "Last",
-                    "alias": "Pending Heal",
-                    "displayType": "Regular",
-                    "hide": false,
-                    "refId": "A",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.heal_pending_cnt, 'max'))), 'Pending Heal')",
-                    "textEditor": false,
-                    "valueHandler": "Text Only"
-                }, {
-                    "aggregation": "Last",
-                    "alias": "Split Brain",
-                    "displayType": "Regular",
-                    "hide": false,
-                    "refId": "B",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.split_brain_cnt, 'max'))), 'Split Brain')",
-                    "textEditor": false,
-                    "valueHandler": "Text Only"
-                }],
-                "title": "",
-                "type": "vonage-status-panel"
-            }, {
                 "clusterName": "Rebalance",
                 "colorMode": "Metric",
                 "colors": {
@@ -476,7 +435,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
-                "datasource": null,
+                "datasource": "",
                 "description": "The Rebalance panel displays rebalance progress information for a given volume, which is applicable when rebalancing is underway.",
                 "displayName": "Rebalance",
                 "flipCard": false,
@@ -568,7 +527,7 @@
                     "text": "N/A",
                     "to": "null"
                 }],
-                "span": 1,
+                "span": 2,
                 "sparkline": {
                     "fillColor": "rgba(31, 118, 189, 0.18)",
                     "full": false,
