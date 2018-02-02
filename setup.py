@@ -121,9 +121,11 @@ setup(
     install_requires=[
         "ruamel.yaml",
         "maps",
+        "netifaces",
         "requests",
         "urllib3",
-        "werkzeug"
+        "werkzeug",
+        "tendrl-commons"
         ],
     include_package_data=True,
     cmdclass={'bumpversion': BumpVersionCommand, 'release': ReleaseCommand}

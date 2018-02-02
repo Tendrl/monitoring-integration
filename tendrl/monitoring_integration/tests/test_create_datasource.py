@@ -1,28 +1,21 @@
-import __builtin__
-import os
-
-
 import maps
+import mock
 import pytest
-from mock import patch
 
-
-from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.grafana import datasource
 from tendrl.monitoring_integration.grafana import exceptions
+from tendrl.monitoring_integration.grafana import utils
+from tendrl.monitoring_integration.tests.test_init import init
 
 
 def test_create_datasource():
-    grafana_conf = os.path.join(os.path.dirname(__file__), "fixtures",
-                                "test_monitoring-integration.conf.yaml")
-    config = utils.get_conf(grafana_conf)
-    setattr(__builtin__, "NS", maps.NamedDict())
-    setattr(NS, "conf", config)
-    with patch.object(datasource, '_post_datasource',
-                      return_value=maps.NamedDict(status_code=200)):
+    init()
+    utils.get_conf()
+    with mock.patch.object(datasource, '_post_datasource',
+                           return_value=maps.NamedDict(status_code=200)):
         ret = datasource.create_datasource()
         assert ret.status_code == 200
-    with patch.object(utils, 'port_open',
-                      return_value=False):
+    with mock.patch.object(utils, 'port_open',
+                           return_value=False):
         with pytest.raises(exceptions.ConnectionFailedException):
             ret = datasource.create_datasource()
