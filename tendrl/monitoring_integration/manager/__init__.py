@@ -1,29 +1,24 @@
-import __builtin__
 import json
-import os
 import signal
 import threading
 import time
 import traceback
 
-import maps
-
-
-from tendrl.monitoring_integration.grafana import utils
-from tendrl.monitoring_integration.grafana import exceptions
-from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import create_alert_dashboard
+from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import datasource
+from tendrl.monitoring_integration.grafana import exceptions
+from tendrl.monitoring_integration.grafana import utils
 
-from tendrl.monitoring_integration.grafana import webhook_receiver
-from tendrl.monitoring_integration.grafana import \
-    create_new_notification_channel
 from tendrl.commons import manager as common_manager
-from tendrl import monitoring_integration
-from tendrl.monitoring_integration import sync
 from tendrl.commons import TendrlNS
 from tendrl.commons.utils import log_utils as logger
+from tendrl import monitoring_integration
+from tendrl.monitoring_integration.grafana import \
+    create_new_notification_channel
 from tendrl.monitoring_integration.grafana import grafana_org_utils
+from tendrl.monitoring_integration.grafana import webhook_receiver
+from tendrl.monitoring_integration import sync
 
 
 class MonitoringIntegrationManager(common_manager.Manager):
@@ -60,11 +55,19 @@ def _upload_default_dashboards():
     try:
         main_org_id = grafana_org_utils.get_org_id("Main Org.")
         if main_org_id:
-            response = grafana_org_utils.switch_context(json.loads(main_org_id)["id"])
+            response = grafana_org_utils.switch_context(
+                json.loads(main_org_id)["id"]
+            )
     except (exceptions.ConnectionFailedException, KeyError) as ex:
-        msg = (json.loads(main_org_id)).get("message", "Cannot connect to grafana")
-        logger.log("error", NS.get("publisher_id", None),
-                       {'message': msg})
+        msg = (json.loads(main_org_id)).get(
+            "message",
+            "Cannot connect to grafana"
+        )
+        logger.log(
+            "error",
+            NS.get("publisher_id", None),
+            {'message': msg}
+        )
         raise ex
     title = []
 
@@ -186,10 +189,10 @@ def main():
     def shutdown(signum, frame):
         complete.set()
         NS.sync_thread.stop()
-        
+
     def reload_config(signum, frame):
         NS.monitoring.ns.setup_common_objects()
-        
+
     signal.signal(signal.SIGTERM, shutdown)
     signal.signal(signal.SIGINT, shutdown)
     signal.signal(signal.SIGHUP, reload_config)

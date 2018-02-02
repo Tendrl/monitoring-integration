@@ -1,19 +1,15 @@
-import json
-import time
-
 import etcd
+import json
 
-
+from tendrl.commons.utils import etcd_utils
+from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import create_dashboards
 from tendrl.monitoring_integration.grafana import dashboard
-from tendrl.monitoring_integration.grafana import grafana_org_utils
 from tendrl.monitoring_integration.grafana import datasource
-from tendrl.commons.utils import log_utils as logger
-from tendrl.commons.utils import etcd_utils
+from tendrl.monitoring_integration.grafana import grafana_org_utils
 
 
-class CreateAlertDashboard():
-
+class CreateAlertDashboard(object):
     def __init__(self, resource_type=None, cluster_detail_list=None):
         org_key = "_NS/monitoring/grafana_org_id"
         auth_key = "_NS/monitoring/grafana_auth_key"
@@ -50,13 +46,13 @@ class CreateAlertDashboard():
                       " uploaded successfully" + '\n'
                 logger.log("info", NS.get("publisher_id", None),
                            {'message': msg})
-
             else:
                 msg = "Datasource upload failed. Error code: {0} ," + \
                       "Error message: " + \
                       "{1} ".format(
                           response.status_code,
-                          str(self.get_message_from_response(response)))
+                          str(self.get_message_from_response(response))
+                      )
                 logger.log("info", NS.get("publisher_id", None),
                            {'message': msg})
             if cluster_detail_list:

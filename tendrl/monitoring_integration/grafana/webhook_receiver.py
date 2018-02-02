@@ -2,7 +2,7 @@ import json
 import threading
 
 from werkzeug.serving import run_simple
-from werkzeug.wrappers import Request, Response
+from werkzeug.wrappers import Response
 
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
@@ -58,7 +58,7 @@ class WebhookReceiver(threading.Thread):
             )
             response = Response('Error in reading alert from socket')
             response.headers['content-length'] = len(response.data)
-            response.status_code = 500 
+            response.status_code = 500
         return response(env, start_response)
 
     def run(self):
