@@ -4,14 +4,13 @@ import re
 from etcd import EtcdKeyNotFound
 from subprocess import CalledProcessError
 from subprocess import check_output
-from tendrl.commons.objects.alert import Alert
+
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
+from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.alert.exceptions import PermissionDenied
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
-from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.grafana import alert
 from tendrl.monitoring_integration.objects.alert_types import AlertTypes
 

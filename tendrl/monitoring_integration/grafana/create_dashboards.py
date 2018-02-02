@@ -1,37 +1,36 @@
 import copy
+import etcd
 import json
 import os
-import time
 
-
-import etcd
-
-
-from tendrl.monitoring_integration.grafana import cluster_detail
 from tendrl.commons.utils import etcd_utils
-from tendrl.monitoring_integration.grafana import utils
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import cluster_detail
+from tendrl.monitoring_integration.grafana import utils
 
 
-ATTRS = {"bricks": ["brick_path", "hostname", "vol_id", "vol_name"],
-         "nodes": ["fqdn"],
-         "volumes": ["name", "vol_id"]
-         }
-
+ATTRS = {
+    "bricks": ["brick_path", "hostname", "vol_id", "vol_name"],
+    "nodes": ["fqdn"],
+    "volumes": ["name", "vol_id"]
+}
 
 
 def get_resource_keys(key, resource_name):
-
     resource_list = []
     try:
         resource_details = etcd_utils.read(key + "/" + str(resource_name))
         for resource in resource_details.leaves:
             resource_list.append(resource.key.split('/')[-1])
     except (KeyError, etcd.EtcdKeyNotFound) as ex:
-        logger.log("error", NS.get("publisher_id", None),
-                   {'message': "Error while fetching " +
-                    str(resource_name).split('/')[0] + str(ex)})
-
+        logger.log(
+            "error",
+            NS.get("publisher_id", None),
+            {
+                'message': "Error while fetching " +
+                str(resource_name).split('/')[0] + str(ex)
+            }
+        )
     return resource_list
 
 
@@ -48,18 +47,23 @@ def get_subvolume_details(key):
             subvolume_details["bricks"] = brick_list
             subvolume_brick_details.append(copy.deepcopy(subvolume_details))
         except (KeyError, etcd.EtcdKeyNotFound) as ex:
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': "Error while fetching "
-                        "subvolumes" + str(ex)})
-
+            logger.log(
+                "error",
+                NS.get("publisher_id", None),
+                {
+                    'message': "Error while fetching "
+                    "subvolumes" + str(ex)
+                }
+            )
     return subvolume_brick_details
 
 
 def get_cluster_details(integration_id=None):
-    '''
-        To get details of glusters from etcd
-        TODO: Optimize the code, reduce number of etcd calls
-        TODO: Extract etcd host and port from configuration file '''
+    """To get details of glusters from etcd
+
+    TODO: Optimize the code, reduce number of etcd calls
+    TODO: Extract etcd host and port from configuration file
+    """
 
     cluster_details_list = []
     try:
@@ -70,7 +74,9 @@ def get_cluster_details(integration_id=None):
             cluster_list = get_resource_keys("", "clusters")
         for integration_id in cluster_list:
             try:
-                cluster_key = "/clusters/" + str(integration_id) + "/is_managed"
+                cluster_key = "/clusters/" + \
+                    str(integration_id) + \
+                    "/is_managed"
                 cluster_is_managed = etcd_utils.read(cluster_key).value
                 if cluster_is_managed.lower() == "no":
                     continue
@@ -84,12 +90,18 @@ def get_cluster_details(integration_id=None):
             # Get volume details
             cluster_obj.volumes = get_volumes_details(cluster_key)
             # Get brick details from subvolumes
-            cluster_obj.bricks = get_brick_details(cluster_obj.volumes, cluster_key)
+            cluster_obj.bricks = get_brick_details(
+                cluster_obj.volumes,
+                cluster_key
+            )
             cluster_details_list.append(cluster_obj)
         return cluster_details_list
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
-        logger.log("error", NS.get("publisher_id", None),
-                   {'message': str(ex)})
+        logger.log(
+            "error",
+            NS.get("publisher_id", None),
+            {'message': str(ex)}
+        )
         return None
 
 
@@ -101,19 +113,30 @@ def get_node_details(cluster_key):
             node = {}
             for attr in ATTRS["nodes"]:
                 node[attr] = etcd_utils.read(
-                    cluster_key  + "/nodes/" + str(node_id) + "/NodeContext/" + attr
+                    cluster_key +
+                    "/nodes/" +
+                    str(node_id) +
+                    "/NodeContext/" +
+                    attr
                 ).value
             node_details.append(node)
         except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                logger.log("error", NS.get("publisher_id", None),
-                           {'message': "Error while fetching "
-                            "node id {}".format(node_id) + str(ex)})
+                logger.log(
+                    "error",
+                    NS.get("publisher_id", None),
+                    {
+                        'message': "Error while fetching "
+                        "node id {}".format(node_id) + str(ex)
+                    }
+                )
     return node_details
 
 
 def get_brick_path(brick_info, cluster_key):
     key = "%s/Bricks/all/%s/brick_path" % (
-        cluster_key, brick_info.replace(":_", "/"))
+        cluster_key,
+        brick_info.replace(":_", "/")
+    )
     path = etcd_utils.read(key).value
     return path.split(":")[1].replace("/", "|")
 
@@ -128,12 +151,20 @@ def get_brick_details(volumes, cluster_key):
                     brick["hostname"] = brick_info.split(":")[0]
                     brick["vol_id"] = volume["vol_id"]
                     brick["vol_name"] = volume["name"]
-                    brick["brick_path"] = get_brick_path(brick_info, cluster_key)
+                    brick["brick_path"] = get_brick_path(
+                        brick_info,
+                        cluster_key
+                    )
                     brick_details.append(brick)
                 except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                    logger.log("error", NS.get("publisher_id", None),
-                                {'message': "Error while brick details for"
-                                 "brick {}".format(subvolume) + str(ex)})
+                    logger.log(
+                        "error",
+                        NS.get("publisher_id", None),
+                        {
+                            'message': "Error while brick details for"
+                            "brick {}".format(subvolume) + str(ex)
+                        }
+                    )
     return brick_details
 
 
@@ -156,38 +187,55 @@ def get_volumes_details(cluster_key):
                 volume_data["subvolume"] = subvolume_details
                 volume_details.append(volume_data)
             except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                    logger.log("error", NS.get("publisher_id", None),
-                               {'message': "Error while fetching "
-                                "volume id {}".format(volume_id) + str(ex)
-                                })
-    return volume_details       
+                logger.log(
+                    "error",
+                    NS.get("publisher_id", None),
+                    {
+                        'message': "Error while fetching "
+                        "volume id {}".format(volume_id) + str(ex)
+                    }
+                )
+    return volume_details
 
 
 def set_alert(panel, alert_thresholds, panel_title, resource_name):
-    panel["thresholds"] = [{"colorMode": "critical", "fill": True,
-                            "line": True,
-                            "op": "gt",
-                            "value": alert_thresholds[panel_title]["Warning"]}]
+    panel["thresholds"] = [
+        {
+            "colorMode": "critical",
+            "fill": True,
+            "line": True,
+            "op": "gt",
+            "value": alert_thresholds[panel_title]["Warning"]
+        }
+    ]
     panel["alert"] = (
-        {"conditions": [
-            {"evaluator": {"params": [alert_thresholds[
-                panel_title]["Warning"]], "type": "gt"},
-             "operator": {"type": "and"},
-             "query": {"params": [panel["targets"][-1]["refId"], "3m", "now"]},
-             "reducer": {"params": [], "type": "avg"},
-             "type": "query"
-             }],
-         "executionErrorState": "keep_state",
-         "frequency": "60s", "handler": 1,
-         "name": str(resource_name) + " " + str(panel["title"]) + " Alert",
-         "noDataState": "keep_state",
-         "notifications": []
-         }
+        {
+            "conditions": [{
+                "evaluator": {
+                    "params": [alert_thresholds[panel_title]["Warning"]],
+                    "type": "gt"
+                },
+                "operator": {"type": "and"},
+                "query": {
+                    "params": [
+                        panel["targets"][-1]["refId"],
+                        "3m",
+                        "now"
+                    ]
+                },
+                "reducer": {"params": [], "type": "avg"},
+                "type": "query"}
+            ],
+            "executionErrorState": "keep_state",
+            "frequency": "60s", "handler": 1,
+            "name": str(resource_name) + " " + str(panel["title"]) + " Alert",
+            "noDataState": "keep_state",
+            "notifications": []
+        }
     )
 
 
 def get_resource_list(cluster_details, resource_type):
-
     resource = []
     if resource_type == "volumes":
         for volume in cluster_details.volumes:
@@ -218,9 +266,14 @@ def get_rows(resource_rows):
                     row["panels"] = [panel]
                     new_resource_rows.append(copy.deepcopy(row))
     except (KeyError, AttributeError) as ex:
-        logger.log("error", NS.get("publisher_id", None),
-                   {'message': "Error in retrieving resource "
-                   "rows (get_rows) " + str(ex)})
+        logger.log(
+            "error",
+            NS.get("publisher_id", None),
+            {
+                'message': "Error in retrieving resource "
+                "rows (get_rows) " + str(ex)
+            }
+        )
     return new_resource_rows
 
 
@@ -229,10 +282,13 @@ def set_target(target, cluster_details, resource, resource_name):
     target["target"] = target["target"].replace('$interval', '1m')
     target["target"] = target["target"].replace('$my_app', 'tendrl')
     target["target"] = target["target"].replace(
-        '$cluster_id', str(cluster_details.integration_id))
+        '$cluster_id', str(cluster_details.integration_id)
+    )
     if resource_name == "volumes":
-        target["target"] = target["target"].replace('$volume_name',
-                                                    str(resource["name"]))
+        target["target"] = target["target"].replace(
+            '$volume_name',
+            str(resource["name"])
+        )
         new_title = str(resource["name"])
     elif resource_name == "hosts":
         target["target"] = target["target"].replace(
@@ -242,17 +298,25 @@ def set_target(target, cluster_details, resource, resource_name):
     elif resource_name == "bricks":
         target["target"] = target["target"].replace(
             '$host_name',
-            str(resource["hostname"].replace(".", "_")))
+            str(resource["hostname"].replace(".", "_"))
+        )
         target["target"] = target["target"].replace(
             '$brick_path',
-            str(resource["brick_path"]))
-        target["target"] = target["target"].replace('$volume_name',
-                                                    str(resource["vol_name"]))
-        new_title = str(resource["vol_name"] + "-" + resource[
-            "hostname"].replace(".", "_")) + \
-            "-" + str(resource["brick_path"])
-    if "alias" in target["target"] and "aliasByNode" not in target["target"]:
-        target["target"] = target["target"].split('(', 1)[-1].rsplit(',', 1)[0]
+            str(resource["brick_path"])
+        )
+        target["target"] = target["target"].replace(
+            '$volume_name',
+            str(resource["vol_name"])
+        )
+        new_title = str(
+            resource["vol_name"] +
+            "-" + resource["hostname"].replace(".", "_")
+        ) + "-" + str(resource["brick_path"])
+    if "alias" in target["target"] and \
+        "aliasByNode" not in target["target"]:
+        target["target"] = target[
+            "target"
+        ].split('(', 1)[-1].rsplit(',', 1)[0]
     return new_title
 
 
@@ -274,19 +338,21 @@ def create_resource_dashboard(cluster_details_list, resource_name):
             resource_json["dashboard"]["title"] = "Alerts - " + \
                 str(resource_json["dashboard"]["title"])
             resource_rows = resource_json["dashboard"]["rows"]
-            global_row = {"collapse": False,
-                          "height": 250,
-                          "panels": [],
-                          "repeat": "null",
-                          "repeatIteration": "null",
-                          "repeatRowId": "null",
-                          "showTitle": False,
-                          "title": "Dashboard Row",
-                          "titleSize": "h6"
-                          }
+            global_row = {
+                "collapse": False,
+                "height": 250,
+                "panels": [],
+                "repeat": "null",
+                "repeatIteration": "null",
+                "repeatRowId": "null",
+                "showTitle": False,
+                "title": "Dashboard Row",
+                "titleSize": "h6"
+            }
             new_resource_rows = get_rows(resource_rows)
             alert_thresholds = NS.monitoring.definitions.get_parsed_defs()[
-                "namespace.monitoring"]["thresholds"][resource_name]
+                "namespace.monitoring"
+            ]["thresholds"][resource_name]
             all_resource_rows = []
             count = 1
             for cluster_details in cluster_details_list:
@@ -302,16 +368,21 @@ def create_resource_dashboard(cluster_details_list, resource_name):
                             try:
                                 for panel_title in alert_thresholds:
                                     if not panel["title"].lower().find(
-                                            panel_title.replace("_", " ")):
+                                        panel_title.replace("_", " ")):
                                         targets = panel["targets"]
                                         for target in targets:
                                             new_title = set_target(
                                                 target,
                                                 cluster_details,
                                                 resource,
-                                                resource_name)
-                                        set_alert(panel, alert_thresholds,
-                                                  panel_title, resource_name)
+                                                resource_name
+                                            )
+                                        set_alert(
+                                            panel,
+                                            alert_thresholds,
+                                            panel_title,
+                                            resource_name
+                                        )
                                         panel["id"] = count
                                         panel["legend"]["show"] = False
                                         panel["title"] = panel["title"] + \
@@ -323,14 +394,19 @@ def create_resource_dashboard(cluster_details_list, resource_name):
                                         else:
                                             global_row["panels"].append(panel)
                                             all_resource_rows.append(
-                                                copy.deepcopy(global_row))
+                                                copy.deepcopy(global_row)
+                                            )
                                             global_row["panels"] = []
                                             panel_count = 1
                             except KeyError as ex:
-                                logger.log("error",
-                                           NS.get("publisher_id", None),
-                                           {'message': str(panel["title"]) +
-                                            "failed" + str(ex)})
+                                logger.log(
+                                    "error",
+                                    NS.get("publisher_id", None),
+                                    {
+                                        'message': str(panel["title"]) +
+                                        "failed" + str(ex)
+                                    }
+                                )
                     all_resource_rows.append(copy.deepcopy(global_row))
 
             resource_json["dashboard"]["rows"] = []
@@ -338,6 +414,9 @@ def create_resource_dashboard(cluster_details_list, resource_name):
             resource_json["dashboard"]["templating"] = {}
             return resource_json
         except Exception as ex:
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': str(ex)})
+            logger.log(
+                "error",
+                NS.get("publisher_id", None),
+                {'message': str(ex)}
+            )
             return None

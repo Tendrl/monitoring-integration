@@ -1,13 +1,15 @@
 from etcd import EtcdKeyNotFound
 from subprocess import CalledProcessError
+
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.alert import constants
-from tendrl.monitoring_integration.alert.handlers import AlertHandler
-from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
+from tendrl.monitoring_integration.alert.handlers import AlertHandler
+
+from tendrl.monitoring_integration.alert import constants
+from tendrl.monitoring_integration.alert import utils
 
 
 class ClusterHandler(AlertHandler):
@@ -81,8 +83,8 @@ class ClusterHandler(AlertHandler):
             )
 
     def parse_alert_metrics(self, alert_json):
-        """
-            {
+        """{
+
               "EvalData": {
                 "evalMatches": [{
                   "metric": "tendrl.clusters.ab3b125e-4769-4071-a349-e82b38.
@@ -106,6 +108,7 @@ class ClusterHandler(AlertHandler):
               },
             }
         """
+
         alert = {}
         alert['tags'] = {}
         alert['current_value'] = utils.find_current_value(

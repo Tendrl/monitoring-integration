@@ -1,22 +1,17 @@
-import __builtin__
 import json
+import maps
 import traceback
 
-
 from requests import post
-import maps
 
-
-from tendrl.monitoring_integration.grafana import utils
-from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import exceptions
+from tendrl.monitoring_integration.grafana import utils
 
-HEADERS = {"Accept": "application/json",
-           "Content-Type": "application/json"
-           }
-
-
-''' Create Datasource '''
+HEADERS = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+}
 
 
 def _post_datasource(datasource_json):
@@ -36,7 +31,6 @@ def _post_datasource(datasource_json):
 
 
 def create_datasource():
-
     try:
         config = maps.NamedDict(NS.config.data)
         url = "http://" + str(config.datasource_host) + ":" \

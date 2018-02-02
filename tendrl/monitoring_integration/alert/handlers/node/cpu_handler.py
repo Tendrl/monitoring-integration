@@ -1,13 +1,15 @@
 from etcd import EtcdKeyNotFound
 from subprocess import CalledProcessError
+
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.alert import constants
-from tendrl.monitoring_integration.alert.handlers import AlertHandler
-from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
+from tendrl.monitoring_integration.alert.handlers import AlertHandler
+
+from tendrl.monitoring_integration.alert import constants
+from tendrl.monitoring_integration.alert import utils
 
 
 class CpuHandler(AlertHandler):
@@ -17,7 +19,8 @@ class CpuHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl.clusters.{integration_id}.nodes.{host_name}.cpu"
+        self.template = \
+            "tendrl.clusters.{integration_id}.nodes.{host_name}.cpu"
 
     def format_alert(self, alert_json):
         alert, integration_id = self.parse_alert_metrics(alert_json)
@@ -77,8 +80,8 @@ class CpuHandler(AlertHandler):
             )
 
     def parse_alert_metrics(self, alert_json):
-        """
-        {
+        """{
+
          "EvalData": {
              "evalMatches": [{
                  "metric": "sumSeries(sumSeries(tendrl.clusters.ab3b125e-4769
@@ -109,6 +112,7 @@ class CpuHandler(AlertHandler):
          }
         }
         """
+
         alert = {}
         alert['tags'] = {}
         alert['current_value'] = utils.find_current_value(

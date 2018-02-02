@@ -2,9 +2,9 @@ import copy
 import json
 
 from tendrl.monitoring_integration.grafana import dashboard
+from tendrl.monitoring_integration.grafana import grafana_org_utils
 from tendrl.monitoring_integration.grafana.grafana_org_utils import  \
     get_current_org_name
-from tendrl.monitoring_integration.grafana import grafana_org_utils
 
 
 def get_alert_dashboard(dashboard_name):
@@ -109,7 +109,7 @@ def add_resource_panel(alert_rows, cluster_id, resource_type, resource_name):
                     ":", 1)[0].replace(".", "")
                 brick_name = resource_name.split("|", 1)[1].split(
                     ":", 1)[1].replace("/", "|")
-                volume_name = resource_name.split("|",1)[0]
+                volume_name = resource_name.split("|", 1)[0]
                 new_title = volume_name + "|" + host_name + ":" + brick_name
             panel["title"] = panel["title"].split(
                 "-", 1)[0] + "-" + str(new_title)
@@ -124,7 +124,8 @@ def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
         for target in row["panels"][0]["targets"]:
             resource = resource_name
             if resource_type == "bricks":
-                hostname = resource.split(":")[0].split("|")[1].replace(".", "_")
+                hostname = resource.split(":")[0].split(
+                    "|")[1].replace(".", "_")
                 resource = "." + resource.split(
                     ":", 1)[1].replace("/", "|") + "."
             if resource is not None:
@@ -177,7 +178,7 @@ def switch_context(org_name):
     )
     switched = grafana_org_utils.switch_context(json.loads(
         alert_org_id)["id"]
-    ) 
+    )
     return switched
 
 

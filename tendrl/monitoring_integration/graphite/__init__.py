@@ -3,19 +3,15 @@ import os
 import socket
 import time
 
-
 import etcd
-
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import cluster_detail
 
 
-class GraphitePlugin():
-
+class GraphitePlugin(object):
     def __init__(self):
-
         self.host = NS.config.data["datasource_host"]
         self.port = NS.config.data["datasource_port"]
         self.carbon_port = NS.config.data["carbon_port"]
@@ -210,11 +206,19 @@ class GraphitePlugin():
                     resource_detail["host_name"] = host.replace(".", "_")
                     brick_list = self.get_resource_keys("", attr_key)
                     for brick in brick_list:
-                        brick_deleted_key = os.path.join(cluster_key, "Bricks/all",
-                                                         host, brick, "deleted")
+                        brick_deleted_key = os.path.join(
+                            cluster_key,
+                            "Bricks/all",
+                            host,
+                            brick,
+                            "deleted"
+                        )
                         try:
-                            is_brick_deleted = etcd_utils.read(brick_deleted_key).value
-                            if is_brick_deleted.lower() == "true":
+                            is_brick_deleted = etcd_utils.read(
+                                brick_deleted_key
+                            ).value
+                            if is_brick_deleted.lower() == \
+                                "true":
                                 continue
                         except etcd.EtcdKeyNotFound:
                             continue
@@ -245,7 +249,9 @@ class GraphitePlugin():
                     volume_key = os.path.join(cluster_key, "Volumes", volume)
                     volume_deleted_key = os.path.join(volume_key, "deleted")
                     try:
-                        is_volume_deleted = etcd_utils.read(volume_deleted_key).value
+                        is_volume_deleted = etcd_utils.read(
+                            volume_deleted_key
+                        ).value
                         if is_volume_deleted.lower() == "true":
                             continue
                     except etcd.EtcdKeyNotFound:
@@ -278,13 +284,15 @@ class GraphitePlugin():
                             except (etcd.EtcdKeyNotFound,
                                     AttributeError,
                                     KeyError) as ex:
-                                resource_detail[key] = {"total": 0,
-                                                        "up": 0,
-                                                        "down": 0,
-                                                        "partial": 0,
-                                                        "created": 0,
-                                                        "stopped": 0,
-                                                        "paused" : 0}
+                                resource_detail[key] = {
+                                    "total": 0,
+                                    "up": 0,
+                                    "down": 0,
+                                    "partial": 0,
+                                    "created": 0,
+                                    "stopped": 0,
+                                    "paused": 0
+                                }
                     cluster_details.details["Volume"].append(
                         copy.deepcopy(resource_detail))
                 node_list = self.get_resource_keys(cluster_key, "nodes")
@@ -313,10 +321,13 @@ class GraphitePlugin():
                                         "status"
                                     )
                                     try:
-                                        node_status_value = etcd_utils.read(node_status_key).value
-                                        attr_value = self.resource_status_mapper(
-                                            node_status_value
-                                        )
+                                        node_status_value = etcd_utils.read(
+                                            node_status_key
+                                        ).value
+                                        attr_value = \
+                                            self.resource_status_mapper(
+                                                node_status_value
+                                            )
                                         resource_detail[key] = attr_value
                                     except etcd.EtcdKeyNotFound:
                                         pass
@@ -511,7 +522,7 @@ class GraphitePlugin():
             degraded = 0
             for resource in resources:
                 try:
-                    if resource["state"] == 0 or resource["state"] == 1 :
+                    if resource["state"] == 0 or resource["state"] == 1:
                         up = up + 1
                     elif resource["state"] == 4:
                         partial = partial + 1
@@ -539,13 +550,15 @@ class GraphitePlugin():
         return cluster_data
 
     def resource_status_mapper(self, status):
-        status_map = {"started": 1, "up": 0, "(degraded)": 3, "degraded": 3,
-                      "(partial)": 4, "partial": 4, "unknown": 5, "failed": 7,
-                      "down": 8, "created": 9, "stopped" : 10, "completed": 12,
-                      "not started": 13, "not_started": 13, "in progress": 14,
-                      "in_progress": 14, "paused": 15, "layout_fix_started": 16,
-                      "layout_fix_stopped": 17, "layout_fix_complete": 18,
-                      "layout_fix_failed": 19}
+        status_map = {
+            "started": 1, "up": 0, "(degraded)": 3, "degraded": 3,
+            "(partial)": 4, "partial": 4, "unknown": 5, "failed": 7,
+            "down": 8, "created": 9, "stopped": 10, "completed": 12,
+            "not started": 13, "not_started": 13, "in progress": 14,
+            "in_progress": 14, "paused": 15, "layout_fix_started": 16,
+            "layout_fix_stopped": 17, "layout_fix_complete": 18,
+            "layout_fix_failed": 19
+        }
         try:
             temp_status = copy.deepcopy(status).lower()
             return status_map[temp_status]
