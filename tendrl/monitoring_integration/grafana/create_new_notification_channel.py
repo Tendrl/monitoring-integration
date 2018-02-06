@@ -12,7 +12,7 @@ def create_notification_channel(
     host=constants.GRAFANA_IP,
     port=constants.GRAFANA_PORT
 ):
-    url = "http%//%s:%s/grafana_callback" % (
+    url = "http://%s:%s/grafana_callback" % (
         str(host),
         str(port)
     )
