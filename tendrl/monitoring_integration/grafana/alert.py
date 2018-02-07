@@ -17,8 +17,7 @@ def connect(alert_id, config):
             config["grafana_port"],
             alert_id
         ),
-        auth=config["credentials"]
-    )
+        auth=config["credentials"])
     return resp
 
 
@@ -63,7 +62,9 @@ def get_alert(alert_id):
         logger.log(
             "error",
             NS.publisher_id,
-            {"message": 'grafana connection error'}
+            {
+                "message": 'grafana connection error'
+            }
         )
         raise exceptions.ConnectionFailedException
     return resp.json()

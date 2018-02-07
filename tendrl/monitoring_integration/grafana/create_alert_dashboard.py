@@ -1,97 +1,337 @@
-import etcd
+import copy
 import json
+import os
 
-from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.grafana import create_dashboards
-from tendrl.monitoring_integration.grafana import dashboard
-from tendrl.monitoring_integration.grafana import datasource
-from tendrl.monitoring_integration.grafana import grafana_org_utils
+from tendrl.monitoring_integration.grafana import alert_utils
+from tendrl.monitoring_integration.grafana import utils
 
 
-class CreateAlertDashboard(object):
-    def __init__(self, resource_type=None, cluster_detail_list=None):
-        org_key = "_NS/monitoring/grafana_org_id"
-        auth_key = "_NS/monitoring/grafana_auth_key"
-        if not cluster_detail_list:
-            cluster_detail_list = create_dashboards.get_cluster_details()
-        org_id = NS.config.data.get("org_id", None)
-        if not org_id:
-            try:
-                org_id = etcd_utils.read(org_key).value
-            except etcd.EtcdKeyNotFound:
-                org_id = grafana_org_utils.create_org("Alert_dashboard")
-                try:
-                    etcd_utils.write(org_key, org_id)
-                except etcd.EtcdKeyNotFound:
-                    pass
-                NS.config.data["org_id"] = org_id
-        key = ""
-        if grafana_org_utils.switch_context(org_id):
-            key = NS.config.data.get("grafana_auth_key", None)
-            if not key:
-                try:
-                    key = etcd_utils.read(auth_key).value
-                except etcd.EtcdKeyNotFound:
-                    key = grafana_org_utils.create_api_token(
-                        "grafana_auth_key", "Admin")
-                    try:
-                        etcd_utils.write(auth_key, key)
-                    except etcd.EtcdKeyNotFound:
-                        pass
-                    NS.config.data["grafana_auth_key"] = key
-            response = datasource.create_datasource()
-            if response.status_code == 200:
-                msg = '\n' + "Datasource " + \
-                      " uploaded successfully" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            else:
-                msg = "Datasource upload failed. Error code: {0} ," + \
-                      "Error message: " + \
-                      "{1} ".format(
-                          response.status_code,
-                          str(self.get_message_from_response(response))
-                      )
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            if cluster_detail_list:
-                resource_name = []
-                if not resource_type:
-                    resource_name = ["volumes", "hosts", "bricks", "clusters"]
-                else:
-                    resource_name = [resource_type]
-                for resource in resource_name:
-                    # Uploading Alert Dashboards
-                    resource_dashboard = \
-                        create_dashboards.create_resource_dashboard(
-                            cluster_detail_list, resource)
-                    response = dashboard._post_dashboard(
-                        resource_dashboard, key)
-                    if response.status_code == 200:
-                        msg = '\n' + "{} dashboard uploaded successfully". \
-                            format(str(resource)) + '\n'
-                        logger.log("info", NS.get("publisher_id", None),
-                                   {'message': msg})
-                    else:
-                        msg = '\n' + "{} dashboard upload failed".format(
-                            str(resource)) + '\n'
-                        logger.log("info", NS.get("publisher_id", None),
-                                   {'message': msg})
-        else:
-            msg = "Could not switch context, Alert dashboard upload failed"
-            logger.log("error", NS.get("publisher_id", None),
-                       {'message': msg})
+ALERT_DASHBOARD = "Alert_dashboard"
+PATH_PREFIX = "/etc/tendrl/monitoring-integration"
+DASHBOARD_PATH = '/grafana/dashboards'
+GLUSTER = "gluster"
 
-    def get_message_from_response(self, response_data):
 
-        message = ""
+def set_alert(panel, alert_thresholds, panel_title, resource_name):
+    panel["thresholds"] = [{"colorMode": "critical", "fill": True,
+                            "line": True,
+                            "op": "gt",
+                            "value": alert_thresholds[panel_title]["Warning"]}]
+    panel["alert"] = (
+        {"conditions": [
+            {"evaluator": {"params": [alert_thresholds[
+                panel_title]["Warning"]], "type": "gt"},
+             "operator": {"type": "and"},
+             "query": {"params": [panel["targets"][-1]["refId"], "3m", "now"]},
+             "reducer": {"params": [], "type": "avg"},
+             "type": "query"
+             }],
+         "executionErrorState": "keep_state",
+         "frequency": "60s", "handler": 1,
+         "name": str(resource_name) + " " + str(panel["title"]) + " Alert",
+         "noDataState": "keep_state",
+         "notifications": []
+         }
+    )
+
+
+def get_rows(resource_rows):
+
+    new_resource_rows = []
+    try:
+        for row in resource_rows:
+            panels = row["panels"]
+            for panel in panels:
+                if panel["type"] == "graph":
+                    row["panels"] = [panel]
+                    new_resource_rows.append(copy.deepcopy(row))
+    except (KeyError, AttributeError) as ex:
+        logger.log("error", NS.get("publisher_id", None),
+                   {'message': "Error in retrieving resource "
+                   "rows (get_rows) " + str(ex)})
+    return new_resource_rows
+
+
+def set_gluster_target(target, integration_id, resource, resource_name):
+
+    target["target"] = target["target"].replace('$interval', '1m')
+    target["target"] = target["target"].replace('$my_app', 'tendrl')
+    target["target"] = target["target"].replace(
+        '$cluster_id', str(integration_id))
+    if resource_name == "volumes":
+        target["target"] = target["target"].replace('$volume_name',
+                                                    str(resource["name"]))
+        new_title = str(resource["name"])
+    elif resource_name == "hosts":
+        target["target"] = target["target"].replace(
+            '$host_name',
+            str(resource["fqdn"].replace(".", "_")))
+        new_title = str(resource["fqdn"].replace(".", "_"))
+    elif resource_name == "bricks":
+        target["target"] = target["target"].replace(
+            '$host_name',
+            str(resource["hostname"].replace(".", "_")))
+        target["target"] = target["target"].replace(
+            '$brick_path',
+            str(resource["brick_path"]))
+        target["target"] = target["target"].replace('$volume_name',
+                                                    str(resource["vol_name"]))
+        new_title = str(resource["vol_name"] + "-" + resource[
+            "hostname"].replace(".", "_")) + \
+            "-" + str(resource["brick_path"])
+    if "alias" in target["target"] and "aliasByNode" not in target["target"]:
+        target["target"] = target["target"].split('(', 1)[-1].rsplit(',', 1)[0]
+    return new_title
+
+
+def create_resource_dashboard(resource_name, resource,
+                              sds_name, integration_id):
+    dashboard_path = PATH_PREFIX + DASHBOARD_PATH + "/tendrl-" + \
+        str(sds_name) + "-" + str(resource_name) + '.json'
+
+    if os.path.exists(dashboard_path):
+        resource_file = utils.fread(dashboard_path)
         try:
-            if isinstance(json.loads(response_data.content), list):
-                message = str(json.loads(response_data.content)[0]["message"])
+            new_title = ""
+            resource_json = json.loads(resource_file)
+            resource_json["dashboard"]["title"] = "Alerts - " + \
+                str(resource_json["dashboard"]["title"])
+            resource_rows = resource_json["dashboard"]["rows"]
+            global_row = {"collapse": False,
+                          "height": 250,
+                          "panels": [],
+                          "repeat": "null",
+                          "repeatIteration": "null",
+                          "repeatRowId": "null",
+                          "showTitle": False,
+                          "title": "Dashboard Row",
+                          "titleSize": "h6"
+                          }
+            new_resource_rows = get_rows(resource_rows)
+            alert_thresholds = NS.monitoring.definitions.get_parsed_defs()[
+                "namespace.monitoring"]["thresholds"][resource_name]
+            all_resource_rows = []
+            count = 1
+            global_row["panels"] = []
+            panel_count = 1
+            for row in new_resource_rows:
+                new_row = copy.deepcopy(row)
+                panels = new_row["panels"]
+                new_title = ""
+                for panel in panels:
+                    try:
+                        for panel_title in alert_thresholds:
+                            if not panel["title"].lower().find(
+                                    panel_title.replace("_", " ")):
+                                targets = panel["targets"]
+                                for target in targets:
+                                    if sds_name == GLUSTER:
+                                        new_title = set_gluster_target(
+                                            target,
+                                            integration_id,
+                                            resource,
+                                            resource_name
+                                        )
+                                    else:
+                                        # In future need to add ceph target
+                                        pass
+                                set_alert(
+                                    panel,
+                                    alert_thresholds,
+                                    panel_title,
+                                    resource_name
+                                )
+                                panel["id"] = count
+                                panel["legend"]["show"] = False
+                                panel["title"] = panel["title"] + \
+                                    " - " + str(new_title)
+                                count = count + 1
+                                panel_count = panel_count + 1
+                                if panel_count < 7:
+                                    global_row["panels"].append(panel)
+                                else:
+                                    global_row["panels"].append(panel)
+                                    all_resource_rows.append(
+                                        copy.deepcopy(global_row))
+                                    global_row["panels"] = []
+                                    panel_count = 1
+                    except KeyError as ex:
+                        logger.log("error",
+                                   NS.get("publisher_id", None),
+                                   {'message': str(panel["title"]) +
+                                    "failed" + str(ex)})
+            all_resource_rows.append(copy.deepcopy(global_row))
+            resource_json["dashboard"]["rows"] = []
+            resource_json["dashboard"]["rows"] = all_resource_rows
+            resource_json["dashboard"]["templating"] = {}
+            resp = alert_utils.post_dashboard(resource_json)
+            if resp.status_code == 200:
+                msg = "Alert dashboard for %s-%s is created successfully" %  \
+                      (resource_name, new_title)
+                logger.log("info", NS.get("publisher_id", None),
+                           {'message': msg})
             else:
-                message = str(json.loads(response_data.content)["message"])
-        except (AttributeError, KeyError):
-            pass
+                msg = "Alert dashboard upload failed for %s-%s" % \
+                      (resource_name, new_title)
+                logger.log("error", NS.get("publisher_id", None),
+                           {'message': msg})
+        except Exception as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': str(ex)})
+        return None
 
-        return message
+
+def add_panel(integration_id, resource_type, resource_name, sds_name):
+        alert_dashboard = alert_utils.get_alert_dashboard(
+            resource_type
+        )
+        if alert_dashboard:
+            try:
+                if alert_dashboard["message"] == "Dashboard not found":
+                    flag = False
+                else:
+                    flag = True
+            except (KeyError, AttributeError):
+                    flag = True
+            if flag:
+                try:
+                    if sds_name == GLUSTER:
+                        # check duplicate rows
+                        if not check_duplicate(
+                            alert_dashboard,
+                            integration_id,
+                            resource_type,
+                            resource_name
+                        ):
+                            alert_row = fetch_row(alert_dashboard)
+                            add_gluster_resource_panel(
+                                alert_row,
+                                integration_id,
+                                resource_type,
+                                resource_name
+                            )
+                            dash_json = create_updated_dashboard(
+                                alert_dashboard, alert_row
+                            )
+                            alert_utils.post_dashboard(dash_json)
+                except Exception:
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': "Error while updating "
+                                "dashboard for %s" % resource_name})
+
+
+def check_duplicate(alert_dashboard, integration_id,
+                    resource_type, resource_name):
+    flag = False
+    for row in alert_dashboard["dashboard"]["rows"]:
+        if "panels" in row and (not flag):
+            for target in row["panels"][0]["targets"]:
+                resource = resource_name
+                if resource_type == "bricks":
+                    hostname = resource.split(":")[0].split(
+                        "|")[1].replace(".", "_")
+                    resource = "." + resource.split(
+                        ":", 1)[1].replace("/", "|") + "."
+                if resource is not None:
+                    if str(integration_id) in target["target"] and str(
+                            resource) in target["target"]:
+                        if resource_type == "bricks":
+                            if hostname in target["target"]:
+                                flag = True
+                                break
+                        else:
+                            flag = True
+                            break
+                elif str(integration_id) in target["target"]:
+                        flag = True
+                        break
+        elif flag:
+            break
+    return flag
+
+
+def add_gluster_resource_panel(alert_rows, cluster_id,
+                               resource_type, resource_name):
+    if resource_type == "hosts":
+            resource_type = "nodes"
+    for alert_row in alert_rows:
+        panel_count = alert_row["panels"][-1]["id"] + 1
+        for panel in alert_row["panels"]:
+            targets = panel["targets"]
+            for target in targets:
+                try:
+                    if resource_type == "bricks":
+                        panel_target = ("tendrl" + target["target"].split(
+                            "tendrl")[1].split(")")[0]).split(".")
+                        old_cluster_id = panel_target[
+                            panel_target.index("clusters") + 1]
+                        target["target"] = target["target"].replace(
+                            old_cluster_id, str(cluster_id))
+                        if "volumes" in panel_target:
+                            old_resource_name = panel_target[
+                                panel_target.index("volumes") + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name,
+                                str(resource_name.split("|", 1)[0]))
+                        if "nodes" in panel_target:
+                            old_resource_name = panel_target[
+                                panel_target.index("nodes") + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name,
+                                str(resource_name.split("|", 1)[1].split(
+                                    ":", 1)[0].replace(".", "_")))
+                        if "bricks" in panel_target:
+                            old_resource_name = panel_target[
+                                panel_target.index("bricks") + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name,
+                                str(resource_name.split("|", 1)[1].split(
+                                    ":", 1)[1].replace("/", "|")))
+                    else:
+                        panel_target = ("tendrl" + target["target"].split(
+                            "tendrl")[1].split(")")[0]).split(".")
+                        old_cluster_id = panel_target[
+                            panel_target.index("clusters") + 1]
+                        target["target"] = target["target"].replace(
+                            old_cluster_id, str(cluster_id))
+                        if resource_name is not None:
+                            old_resource_name = panel_target[
+                                panel_target.index(str(resource_type)) + 1]
+                            target["target"] = target["target"].replace(
+                                old_resource_name, str(resource_name))
+                except (KeyError, IndexError):
+                    pass
+            panel["id"] = panel_count
+            panel_count = panel_count + 1
+            new_title = resource_name
+            if resource_type == "bricks":
+                host_name = resource_name.split("|", 1)[1].split(
+                    ":", 1)[0].replace(".", "")
+                brick_name = resource_name.split("|", 1)[1].split(
+                    ":", 1)[1].replace("/", "|")
+                volume_name = resource_name.split("|", 1)[0]
+                new_title = volume_name + "|" + host_name + ":" + brick_name
+            panel["title"] = panel["title"].split(
+                "-", 1)[0] + "-" + str(new_title)
+
+
+def fetch_row(dashboard_json):
+
+    rows = dashboard_json["dashboard"]["rows"]
+    if len(rows) > 1:
+        for count in xrange(1, len(rows)):
+            if rows[0]["panels"][0]["title"].split("-", 1)[0] == \
+                    rows[count]["panels"][0]["title"].split("-", 1)[0]:
+                alert_row = copy.deepcopy(
+                    dashboard_json["dashboard"]["rows"][-count:])
+                break
+    else:
+        alert_row = [copy.deepcopy(dashboard_json["dashboard"]["rows"][-1])]
+    return alert_row
+
+
+def create_updated_dashboard(dashboard_json, alert_rows):
+    dashboard_json["dashboard"]["rows"] = dashboard_json[
+        "dashboard"]["rows"] + alert_rows
+    return dashboard_json

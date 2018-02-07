@@ -3,15 +3,19 @@ import os
 import socket
 import time
 
+
 import etcd
+
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.grafana import cluster_detail
+from tendrl.monitoring_integration.grafana import utils
 
 
 class GraphitePlugin(object):
+
     def __init__(self):
+
         self.host = NS.config.data["datasource_host"]
         self.port = NS.config.data["datasource_port"]
         self.carbon_port = NS.config.data["carbon_port"]
@@ -132,215 +136,39 @@ class GraphitePlugin(object):
             pass
         return resource_details
 
-    def get_resource_keys(self, key, resource_name):
-
-        resource_list = []
-        try:
-            resource_details = etcd_utils.read(key + "/" + str(
-                resource_name))
-            for resource in resource_details.leaves:
-                resource_list.append(resource.key.split('/')[-1])
-        except (KeyError, etcd.EtcdKeyNotFound) as ex:
-            logger.log(
-                "error",
-                NS.get("publisher_id", None),
-                {
-                    'message': "Error while fetching " +
-                    str(resource_name).split('/')[0] + str(ex)
-                }
-            )
-
-        return resource_list
-
     def get_central_store_data(self, objects):
         try:
-            cluster_list = self.get_resource_keys("", "clusters")
+            cluster_list = utils.get_resource_keys("", "clusters")
             cluster_data = []
-            for cluster_id in cluster_list:
+            for integration_id in cluster_list:
                 try:
                     cluster_key = "/clusters/" + str(
-                        cluster_id) + "/is_managed"
+                        integration_id) + "/is_managed"
                     cluster_is_managed = etcd_utils.read(
                         cluster_key).value
                     if cluster_is_managed.lower() == "no":
                         continue
                 except etcd.EtcdKeyNotFound:
                     continue
-                cluster_details = cluster_detail.ClusterDetail()
-                cluster_details.integration_id = cluster_id
+                cluster_details = {}
+                cluster_details["integration_id"] = integration_id
                 cluster_key = objects["Cluster"]["value"].replace(
                     "$integration_id",
-                    cluster_details.integration_id
+                    cluster_details["integration_id"]
                 )
-                for obj in objects["Cluster"]:
-                    if obj in ["metric", "value"]:
-                        continue
-                    resource_detail = {}
-                    resource_detail[str(obj)] = {}
-                    obj_details = objects["Cluster"][str(obj)]
-                    obj_key = os.path.join(cluster_key, str(obj))
-                    obj_attrs = obj_details["attrs"]
-                    for key, value in obj_attrs.items():
-                        try:
-                            attr_key = os.path.join(obj_key, key)
-                            attr_data = etcd_utils.read(attr_key)
-                            attr_value = self.cluster_status_mapper(
-                                str(attr_data.value))
-                            resource_detail[str(obj)][key] = copy.deepcopy(
-                                attr_value)
-                        except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                            logger.log(
-                                "debug",
-                                NS.get("publisher_id", None),
-                                {
-                                    'message': "Cannot Find {0} in Cluster "
-                                    "{1}".format(key, cluster_id) + str(ex)
-                                }
-                            )
-                    cluster_details.details["Cluster"].append(
-                        copy.deepcopy(resource_detail))
-                host_list = self.get_resource_keys(cluster_key, "Bricks/all")
-                for host in host_list:
-                    resource_detail = {}
-                    attr_key = os.path.join(cluster_key, "Bricks/all", host)
-                    resource_detail["host_name"] = host.replace(".", "_")
-                    brick_list = self.get_resource_keys("", attr_key)
-                    for brick in brick_list:
-                        brick_deleted_key = os.path.join(
-                            cluster_key,
-                            "Bricks/all",
-                            host,
-                            brick,
-                            "deleted"
-                        )
-                        try:
-                            is_brick_deleted = etcd_utils.read(
-                                brick_deleted_key
-                            ).value
-                            if is_brick_deleted.lower() == \
-                                "true":
-                                continue
-                        except etcd.EtcdKeyNotFound:
-                            continue
-                        for key, value in objects["Brick"]["attrs"].items():
-                            try:
-                                brick_attr_key = os.path.join(cluster_key,
-                                                              "Bricks/all",
-                                                              host, brick, key)
-                                brick_attr_data = etcd_utils.read(
-                                    brick_attr_key)
-                                brick_attr_value = self.resource_status_mapper(
-                                    str(brick_attr_data.value))
-                                resource_detail[key] = brick_attr_value
-                            except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                                logger.log(
-                                    "debug",
-                                    NS.get("publisher_id", None),
-                                    {
-                                        'message': "Cannot Find {0} in brick "
-                                        "{1}".format(key, brick) + str(ex)
-                                    }
-                                )
-                        cluster_details.details["Brick"].append(
-                            copy.deepcopy(resource_detail))
-                volume_list = self.get_resource_keys(cluster_key, "Volumes")
-                for volume in volume_list:
-                    resource_detail = {}
-                    volume_key = os.path.join(cluster_key, "Volumes", volume)
-                    volume_deleted_key = os.path.join(volume_key, "deleted")
-                    try:
-                        is_volume_deleted = etcd_utils.read(
-                            volume_deleted_key
-                        ).value
-                        if is_volume_deleted.lower() == "true":
-                            continue
-                    except etcd.EtcdKeyNotFound:
-                        continue
-                    for key, value in objects["Volume"]["attrs"].items():
-                        if value is None:
-                            try:
-                                attr_key = os.path.join(volume_key, key)
-                                attr_data = etcd_utils.read(attr_key)
-                                attr_value = self.resource_status_mapper(
-                                    str(attr_data.value))
-                                resource_detail[key] = attr_value
-                            except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                                logger.log(
-                                    "error",
-                                    NS.get("publisher_id", None),
-                                    {
-                                        'message': "Cannot Find {0} in volume "
-                                        "{1}".format(key, volume) + str(ex)
-                                    }
-                                )
-                        else:
-                            try:
-                                new_key = os.path.join(
-                                    volume_key, objects["Volume"]["attrs"][
-                                        key]["value"].rsplit("/", 1)[1])
-                                resp_data = self.get_object_from_central_store(
-                                    new_key, objects["Volume"]["attrs"][key])
-                                resource_detail[key] = resp_data
-                            except (etcd.EtcdKeyNotFound,
-                                    AttributeError,
-                                    KeyError) as ex:
-                                resource_detail[key] = {
-                                    "total": 0,
-                                    "up": 0,
-                                    "down": 0,
-                                    "partial": 0,
-                                    "created": 0,
-                                    "stopped": 0,
-                                    "paused": 0
-                                }
-                    cluster_details.details["Volume"].append(
-                        copy.deepcopy(resource_detail))
-                node_list = self.get_resource_keys(cluster_key, "nodes")
-                for node in node_list:
-                    resource_detail = {}
-                    node_key = objects["Node"]["value"].replace(
-                        "$integration_id",
-                        cluster_details.integration_id
-                    ).replace("$node_id", node)
-                    for key, value in objects["Node"]["attrs"].items():
-                        if value is None:
-                            try:
-                                attr_key = os.path.join(node_key, key)
-                                attr_data = etcd_utils.read(attr_key)
-                                attr_value = self.resource_status_mapper(
-                                    str(attr_data.value))
-                                resource_detail[key] = attr_value
-                            except (etcd.EtcdKeyNotFound,
-                                    AttributeError,
-                                    KeyError) as ex:
-                                if key == 'status':
-                                    node_status_key = os.path.join(
-                                        "nodes",
-                                        node,
-                                        "NodeContext",
-                                        "status"
-                                    )
-                                    try:
-                                        node_status_value = etcd_utils.read(
-                                            node_status_key
-                                        ).value
-                                        attr_value = \
-                                            self.resource_status_mapper(
-                                                node_status_value
-                                            )
-                                        resource_detail[key] = attr_value
-                                    except etcd.EtcdKeyNotFound:
-                                        pass
-                                logger.log(
-                                    "debug",
-                                    NS.get("publisher_id", None),
-                                    {
-                                        'message': "Cannot Find {0} in "
-                                        "Node {1}".format(key, node) + str(ex)
-                                    }
-                                )
-                    cluster_details.details["Node"].append(
-                        copy.deepcopy(resource_detail))
+                cluster_details["Cluster"] = self.get_cluster_details(
+                    objects, cluster_key
+                )
+                cluster_details["Brick"] = self.get_brick_details(
+                    objects, cluster_key
+                )
+                cluster_details["Volume"] = self.get_volume_details(
+                    objects, cluster_key
+                )
+                cluster_details["Node"] = self.get_node_details(
+                    objects, cluster_key,
+                    cluster_details["integration_id"]
+                )
                 cluster_data.append(copy.deepcopy(cluster_details))
             try:
                 cluster_data = self.set_volume_count(cluster_data, "Volume")
@@ -364,6 +192,191 @@ class GraphitePlugin(object):
                        {'message': str(ex)})
             raise ex
 
+    def get_cluster_details(self, objects, cluster_key):
+        cluster_detail = []
+        for obj in objects["Cluster"]:
+            if obj in ["metric", "value"]:
+                continue
+            resource_detail = {}
+            resource_detail[str(obj)] = {}
+            obj_details = objects["Cluster"][str(obj)]
+            obj_key = os.path.join(cluster_key, str(obj))
+            obj_attrs = obj_details["attrs"]
+            for key, value in obj_attrs.items():
+                try:
+                    attr_key = os.path.join(obj_key, key)
+                    attr_data = etcd_utils.read(attr_key)
+                    attr_value = self.cluster_status_mapper(
+                        str(attr_data.value))
+                    resource_detail[str(obj)][key] = copy.deepcopy(
+                        attr_value
+                    )
+                except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                    cluster_id = cluster_key.split("/")[-1]
+                    logger.log(
+                        "debug",
+                        NS.get("publisher_id", None),
+                        {'message': "Cannot Find {0} in Cluster "
+                         "{1}".format(key, cluster_id) + str(ex)
+                         }
+                    )
+            if not resource_detail == {}:
+                cluster_detail.append(resource_detail)
+        return cluster_detail
+
+    def get_brick_details(self, objects, cluster_key):
+        brick_detail = []
+        host_list = utils.get_resource_keys(cluster_key, "Bricks/all")
+        for host in host_list:
+            attr_key = os.path.join(cluster_key, "Bricks/all", host)
+            brick_list = utils.get_resource_keys("", attr_key)
+            for brick in brick_list:
+                resource_detail = {}
+                resource_detail["host_name"] = host.replace(".", "_")
+                brick_deleted_key = os.path.join(
+                    cluster_key,
+                    "Bricks/all",
+                    host,
+                    brick,
+                    "deleted"
+                )
+                try:
+                    is_brick_deleted = etcd_utils.read(brick_deleted_key).value
+                    if is_brick_deleted.lower() == "true":
+                        continue
+                except etcd.EtcdKeyNotFound:
+                    continue
+                for key, value in objects["Brick"]["attrs"].items():
+                    try:
+                        brick_attr_key = os.path.join(
+                            cluster_key,
+                            "Bricks/all",
+                            host,
+                            brick,
+                            key
+                        )
+                        brick_attr_data = etcd_utils.read(
+                            brick_attr_key)
+                        brick_attr_value = self.resource_status_mapper(
+                            str(brick_attr_data.value))
+                        resource_detail[key] = brick_attr_value
+                    except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                        logger.log(
+                            "debug",
+                            NS.get("publisher_id", None),
+                            {
+                                'message': "Cannot Find {0} in brick "
+                                "{1}".format(key, brick) + str(ex)
+                            }
+                        )
+                if not resource_detail == {}:
+                    brick_detail.append(resource_detail)
+        return brick_detail
+
+    def get_volume_details(self, objects, cluster_key):
+        volume_detail = []
+        volume_list = utils.get_resource_keys(cluster_key, "Volumes")
+        for volume in volume_list:
+            resource_detail = {}
+            volume_key = os.path.join(cluster_key, "Volumes", volume)
+            volume_deleted_key = os.path.join(volume_key, "deleted")
+            try:
+                is_volume_deleted = etcd_utils.read(
+                    volume_deleted_key
+                ).value
+                if is_volume_deleted.lower() == "true":
+                    continue
+            except etcd.EtcdKeyNotFound:
+                continue
+            for key, value in objects["Volume"]["attrs"].items():
+                if value is None:
+                    try:
+                        attr_key = os.path.join(volume_key, key)
+                        attr_data = etcd_utils.read(attr_key)
+                        attr_value = self.resource_status_mapper(
+                            str(attr_data.value))
+                        resource_detail[key] = attr_value
+                    except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                        logger.log(
+                            "error",
+                            NS.get("publisher_id", None),
+                            {'message': "Cannot Find {0} in volume "
+                             "{1}".format(key, volume) + str(ex)
+                             }
+                        )
+                else:
+                    try:
+                        new_key = os.path.join(
+                            volume_key,
+                            objects["Volume"]["attrs"][
+                                key]["value"].rsplit("/", 1)[1]
+                        )
+                        resp_data = self.get_object_from_central_store(
+                            new_key, objects["Volume"]["attrs"][key])
+                        resource_detail[key] = resp_data
+                    except (etcd.EtcdKeyNotFound,
+                            AttributeError,
+                            KeyError) as ex:
+                        resource_detail[key] = {
+                            "total": 0,
+                            "up": 0,
+                            "down": 0,
+                            "partial": 0,
+                            "created": 0,
+                            "stopped": 0,
+                            "paused": 0
+                        }
+            if not resource_detail == {}:
+                volume_detail.append(resource_detail)
+        return volume_detail
+
+    def get_node_details(self, objects, cluster_key, integration_id):
+        node_detail = []
+        node_list = utils.get_resource_keys(cluster_key, "nodes")
+        for node in node_list:
+            resource_detail = {}
+            node_key = objects["Node"]["value"].replace(
+                "$integration_id",
+                integration_id
+            ).replace("$node_id", node)
+            for key, value in objects["Node"]["attrs"].items():
+                if value is None:
+                    try:
+                        attr_key = os.path.join(node_key, key)
+                        attr_data = etcd_utils.read(attr_key)
+                        attr_value = self.resource_status_mapper(
+                            str(attr_data.value))
+                        resource_detail[key] = attr_value
+                    except (etcd.EtcdKeyNotFound,
+                            AttributeError,
+                            KeyError) as ex:
+                        if key == 'status':
+                            node_status_key = os.path.join(
+                                "nodes",
+                                node,
+                                "NodeContext",
+                                "status"
+                            )
+                            try:
+                                node_status_value = etcd_utils.read(
+                                    node_status_key).value
+                                attr_value = self.resource_status_mapper(
+                                    node_status_value
+                                )
+                                resource_detail[key] = attr_value
+                            except etcd.EtcdKeyNotFound:
+                                pass
+                        logger.log(
+                            "debug",
+                            NS.get("publisher_id", None),
+                            {
+                                'message': "Cannot Find {0} in "
+                                "Node {1}".format(key, node) + str(ex)
+                            }
+                        )
+            node_detail.append(resource_detail)
+        return node_detail
+
     def set_geo_rep_session(self, cluster_data):
         for cluster in cluster_data:
             # Initialize the counts map
@@ -376,7 +389,7 @@ class GraphitePlugin(object):
                 "stopped": 0,
                 "paused": 0
             }
-            for volume in cluster.details["Volume"]:
+            for volume in cluster["Volume"]:
                 try:
                     for key, value in volume["geo_rep_session"].items():
                         try:
@@ -399,20 +412,20 @@ class GraphitePlugin(object):
                                 "for volume" + str(ex)
                             }
                         )
-            cluster.details["geo_rep"] = {}
-            cluster.details["geo_rep"]["total"] = geo_rep_mapper["total"]
-            cluster.details["geo_rep"]["up"] = geo_rep_mapper["up"]
-            cluster.details["geo_rep"]["down"] = geo_rep_mapper["down"]
-            cluster.details["geo_rep"]["partial"] = geo_rep_mapper["partial"]
-            cluster.details["geo_rep"]["created"] = geo_rep_mapper["created"]
-            cluster.details["geo_rep"]["stopped"] = geo_rep_mapper["stopped"]
-            cluster.details["geo_rep"]["paused"] = geo_rep_mapper["paused"]
+            cluster["geo_rep"] = {}
+            cluster["geo_rep"]["total"] = geo_rep_mapper["total"]
+            cluster["geo_rep"]["up"] = geo_rep_mapper["up"]
+            cluster["geo_rep"]["down"] = geo_rep_mapper["down"]
+            cluster["geo_rep"]["partial"] = geo_rep_mapper["partial"]
+            cluster["geo_rep"]["created"] = geo_rep_mapper["created"]
+            cluster["geo_rep"]["stopped"] = geo_rep_mapper["stopped"]
+            cluster["geo_rep"]["paused"] = geo_rep_mapper["paused"]
         return cluster_data
 
     def set_volume_level_brick_count(self, cluster_data):
         volume_detail = {}
         for cluster in cluster_data:
-            for volume in cluster.details["Volume"]:
+            for volume in cluster["Volume"]:
                 try:
                     volume_detail[volume["name"]] = {"total": 0,
                                                      "up": 0,
@@ -420,7 +433,7 @@ class GraphitePlugin(object):
                 except (AttributeError, KeyError):
                     pass
         for cluster in cluster_data:
-            for brick in cluster.details["Brick"]:
+            for brick in cluster["Brick"]:
                 try:
                     volume_detail[str(brick["vol_name"])]["total"] = \
                         volume_detail[str(brick["vol_name"])]["total"] + 1
@@ -440,17 +453,17 @@ class GraphitePlugin(object):
                                 ex)
                         }
                     )
-            cluster.details["volume_level_brick_count"] = volume_detail
+            cluster["volume_level_brick_count"] = volume_detail
         return cluster_data
 
     def set_brick_count(self, cluster_data):
         for cluster in cluster_data:
-            for node in cluster.details["Node"]:
+            for node in cluster["Node"]:
                 try:
                     total = 0
                     up = 0
                     down = 0
-                    for brick in cluster.details["Brick"]:
+                    for brick in cluster["Brick"]:
                         if(
                             brick["host_name"] ==
                                 node["fqdn"].replace(".", "_")
@@ -474,7 +487,7 @@ class GraphitePlugin(object):
 
     def set_brick_path(self, cluster_data):
         for cluster in cluster_data:
-            for brick in cluster.details["Brick"]:
+            for brick in cluster["Brick"]:
                 try:
                     brick["brick_name"] = brick["brick_path"].split(":")[1]
                 except (AttributeError, KeyError) as ex:
@@ -487,8 +500,8 @@ class GraphitePlugin(object):
 
     def set_resource_count(self, cluster_data, resource_name):
         for cluster in cluster_data:
-            resources = cluster.details[str(resource_name)]
-            cluster.details[
+            resources = cluster[str(resource_name)]
+            cluster[
                 str(resource_name).lower() + "_total_count"] = len(resources)
             up = 0
             down = 0
@@ -507,14 +520,14 @@ class GraphitePlugin(object):
                             "for {0}".format(resource_name) + str(ex)
                         }
                     )
-            cluster.details[str(resource_name).lower() + "_up_count"] = up
-            cluster.details[str(resource_name).lower() + "_down_count"] = down
+            cluster[str(resource_name).lower() + "_up_count"] = up
+            cluster[str(resource_name).lower() + "_down_count"] = down
         return cluster_data
 
     def set_volume_count(self, cluster_data, resource_name):
         for cluster in cluster_data:
-            resources = cluster.details[str(resource_name)]
-            cluster.details[str(
+            resources = cluster[str(resource_name)]
+            cluster[str(
                 resource_name).lower() + "_total_count"] = len(resources)
             up = 0
             down = 0
@@ -539,26 +552,39 @@ class GraphitePlugin(object):
                             "for {0}".format(resource_name) + str(ex)
                         }
                     )
-            cluster.details[str(
+            cluster[str(
                 resource_name).lower() + "_up_count"] = up
-            cluster.details[str(
+            cluster[str(
                 resource_name).lower() + "_down_count"] = down
-            cluster.details[str(
+            cluster[str(
                 resource_name).lower() + "_partial_count"] = partial
-            cluster.details[str(
+            cluster[str(
                 resource_name).lower() + "_degraded_count"] = degraded
         return cluster_data
 
     def resource_status_mapper(self, status):
-        status_map = {
-            "started": 1, "up": 0, "(degraded)": 3, "degraded": 3,
-            "(partial)": 4, "partial": 4, "unknown": 5, "failed": 7,
-            "down": 8, "created": 9, "stopped": 10, "completed": 12,
-            "not started": 13, "not_started": 13, "in progress": 14,
-            "in_progress": 14, "paused": 15, "layout_fix_started": 16,
-            "layout_fix_stopped": 17, "layout_fix_complete": 18,
-            "layout_fix_failed": 19
-        }
+        status_map = {"started": 1,
+                      "up": 0,
+                      "(degraded)": 3,
+                      "degraded": 3,
+                      "(partial)": 4,
+                      "partial": 4,
+                      "unknown": 5,
+                      "failed": 7,
+                      "down": 8,
+                      "created": 9,
+                      "stopped": 10,
+                      "completed": 12,
+                      "not started": 13,
+                      "not_started": 13,
+                      "in progress": 14,
+                      "in_progress": 14,
+                      "paused": 15,
+                      "layout_fix_started": 16,
+                      "layout_fix_stopped": 17,
+                      "layout_fix_complete": 18,
+                      "layout_fix_failed": 19
+                      }
         try:
             temp_status = copy.deepcopy(status).lower()
             return status_map[temp_status]

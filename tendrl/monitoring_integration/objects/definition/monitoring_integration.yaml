@@ -57,6 +57,21 @@ namespace.monitoring:
           type: str
       enabled: true
       help: Resource details to trigger flow
+    AlertOrganization:
+      enabled: True
+      attrs:
+        org_name:
+          help: "Name of the alert organization in grafana"
+          type: String
+        org_id:
+          help: "Id of the alert organization in grafana"
+          type: String
+        auth_key:
+          help: "Access token"
+          type: String
+      value: _NS/monitoring/alert_organization
+      metric: [_NS.monitoring.alert_organization]
+      help: "alert organization"    
   graphite_data:
     Cluster:
       GlobalDetails:

@@ -1,35 +1,17 @@
+import etcd
 import socket
 
+
+from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.grafana import exceptions
 
 
-def get_conf():
-    try:
-        # Graphite and Grafana will be running on localhost
-        NS.config.data["grafana_host"] = "127.0.0.1"
-        NS.config.data["grafana_port"] = 3000
-
-        # Default values for graphite datasource
-        NS.config.data["datasource_type"] = "graphite"
-        NS.config.data["basicAuth"] = False
-
-        # Grafana related configs
-        NS.config.data["datasource"] = []
-        NS.config.data["credentials"] = (
-            NS.config.data["credentials"]["user"],
-            NS.config.data["credentials"]["password"]
-        )
-    except exceptions.InvalidConfigurationException:
-        err = exceptions.InvalidConfigurationException(
-            "Error in loading configuration"
-        )
-        logger.log(
-            "info",
-            NS.get("publisher_id", None),
-            {'message': str(err)}
-        )
-        raise err
+def get_credentials():
+    credentials = (
+        NS.config.data["credentials"]["user"],
+        NS.config.data["credentials"]["password"]
+    )
+    return credentials
 
 
 def port_open(port, host='localhost'):
@@ -54,3 +36,21 @@ def fread(file_name):
     with open(file_name) as f:
         f_data = f.read()
     return f_data
+
+
+def get_resource_keys(key, resource_name):
+    resource_list = []
+    try:
+        resource_details = etcd_utils.read(key + "/" + str(resource_name))
+        for resource in resource_details.leaves:
+            resource_list.append(resource.key.split('/')[-1])
+    except (KeyError, etcd.EtcdKeyNotFound) as ex:
+        logger.log(
+            "error",
+            NS.get("publisher_id", None),
+            {
+                'message': "Error while fetching " +
+                str(resource_name).split('/')[0] + str(ex)
+            }
+        )
+    return resource_list
