@@ -7,6 +7,7 @@ from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import \
     create_alert_dashboard
 from tendrl.monitoring_integration.grafana import utils
+from tendrl.monitoring_integration.tests import test_init
 
 
 @patch.object(os.path, "exists")
@@ -14,6 +15,7 @@ from tendrl.monitoring_integration.grafana import utils
 @patch.object(alert_utils, "post_dashboard")
 @patch.object(logger, "log")
 def test_create_alert_dashboard(log, post, fread, exist):
+    test_init.init()
     post.return_value = maps.NamedDict(status_code=200)
     exist.return_value = True
     path = os.path.join(os.path.dirname(__file__),
