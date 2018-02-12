@@ -1,0 +1,70 @@
+{
+  "Id": 2,
+  "Version": 0,
+  "OrgId": 2,
+  "DashboardId": 5,
+  "PanelId": 2,
+  "Name": "hosts Swap Utilization Alert",
+  "Message": "",
+  "Severity": "",
+  "State": "alerting",
+  "Handler": 1,
+  "Silenced": false,
+  "ExecutionError": " ",
+  "Frequency": 2,
+  "EvalData": {
+    "evalMatches": [
+      {
+        "metric": "tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.swap.percent-used",
+        "tags": null,
+        "value": 80
+      }
+    ]
+  },
+  "NewStateDate": "2018-02-12T11:16:23+05:30",
+  "StateChanges": 2,
+  "Created": "2018-02-07T17:21:08+05:30",
+  "Updated": "2018-02-12T11:16:18+05:30",
+  "Settings": {
+    "conditions": [
+      {
+        "evaluator": {
+          "params": [
+            70
+          ],
+          "type": "gt"
+        },
+        "operator": {
+          "type": "and"
+        },
+        "query": {
+          "datasourceId": 2,
+          "model": {
+            "refId": "A",
+            "target": "tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.swap.percent-used"
+          },
+          "params": [
+            "A",
+            "3m",
+            "now"
+          ]
+        },
+        "reducer": {
+          "params": [
+            
+          ],
+          "type": "avg"
+        },
+        "type": "query"
+      }
+    ],
+    "executionErrorState": "keep_state",
+    "frequency": "2s",
+    "handler": 1,
+    "name": "hosts Swap Utilization Alert",
+    "noDataState": "keep_state",
+    "notifications": [
+      
+    ]
+  }
+}

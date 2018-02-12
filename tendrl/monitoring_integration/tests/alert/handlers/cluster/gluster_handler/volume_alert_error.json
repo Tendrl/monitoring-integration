@@ -1,0 +1,71 @@
+{
+  "Id": 4,
+  "Version": 0,
+  "OrgId": 2,
+  "DashboardId": 6,
+  "PanelId": 1,
+  "Name": "volumes Capacity Utilization Trend Alert",
+  "Message": "",
+  "Severity": "",
+  "State": "alerting",
+  "Handler": 1,
+  "Silenced": false,
+  "ExecutionError": " ",
+  "Frequency": 6,
+  "EvalData": {
+    "evalMatches": [
+      {
+        "metric": "tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.volumes.V1.pcnt_used",
+        "tags": null,
+        "value": 20.85508486905
+      }
+    ]
+  },
+  "NewStateDate": "2018-02-12T13:36:25+05:30",
+  "StateChanges": 2,
+  "Created": "2018-02-07T17:22:10+05:30",
+  "Updated": "2018-02-12T13:36:19+05:30",
+  "Settings": {
+    "conditions": [
+      {
+        "evaluator": {
+          "params": [
+            14
+          ],
+          "type": "gt"
+        },
+        "operator": {
+          "type": "and"
+        },
+        "query": {
+          "datasourceId": 2,
+          "model": {
+            "hide": false,
+            "refId": "A",
+            "target": "tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.volumes.V1.pcnt_used"
+          },
+          "params": [
+            "A",
+            "3m",
+            "now"
+          ]
+        },
+        "reducer": {
+          "params": [
+            
+          ],
+          "type": "avg"
+        },
+        "type": "query"
+      }
+    ],
+    "executionErrorState": "keep_state",
+    "frequency": "6s",
+    "handler": 1,
+    "name": "volumes Capacity Utilization Trend Alert",
+    "noDataState": "keep_state",
+    "notifications": [
+      
+    ]
+  }
+}

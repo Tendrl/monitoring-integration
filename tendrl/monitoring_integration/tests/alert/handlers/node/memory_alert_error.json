@@ -1,0 +1,72 @@
+{
+  "Id": 1,
+  "Version": 0,
+  "OrgId": 2,
+  "DashboardId": 5,
+  "PanelId": 1,
+  "Name": "hosts Memory Utilization Alert",
+  "Message": "",
+  "Severity": "",
+  "State": "alerting",
+  "Handler": 1,
+  "Silenced": false,
+  "ExecutionError": " ",
+  "Frequency": 6,
+  "EvalData": {
+    "evalMatches": [
+      {
+        "metric": "tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.memory.percent-used",
+        "tags": null,
+        "value": 29.4729919188419
+      }
+    ]
+  },
+  "NewStateDate": "2018-02-12T11:30:19+05:30",
+  "StateChanges": 2,
+  "Created": "2018-02-07T17:21:08+05:30",
+  "Updated": "2018-02-12T11:30:13+05:30",
+  "Settings": {
+    "conditions": [
+      {
+        "evaluator": {
+          "params": [
+            23
+          ],
+          "type": "gt"
+        },
+        "operator": {
+          "type": "and"
+        },
+        "query": {
+          "datasourceId": 2,
+          "model": {
+            "hide": false,
+            "refId": "E",
+            "target": "tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.memory.percent-used",
+            "textEditor": false
+          },
+          "params": [
+            "E",
+            "3m",
+            "now"
+          ]
+        },
+        "reducer": {
+          "params": [
+            
+          ],
+          "type": "avg"
+        },
+        "type": "query"
+      }
+    ],
+    "executionErrorState": "keep_state",
+    "frequency": "6s",
+    "handler": 1,
+    "name": "hosts Memory Utilization Alert",
+    "noDataState": "keep_state",
+    "notifications": [
+      
+    ]
+  }
+}
