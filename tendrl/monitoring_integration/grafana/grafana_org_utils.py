@@ -4,12 +4,9 @@ import maps
 from requests import get
 from requests import post
 
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
-
-HEADERS = {"Accept": "application/json",
-           "Content-Type": "application/json"
-           }
 
 
 ''' Create new organisation'''
@@ -25,7 +22,7 @@ def create_org(org_name):
                 config.grafana_host,
                 config.grafana_port
             ),
-            headers=HEADERS,
+            headers=constants.HEADERS,
             auth=config.credentials,
             data=json.dumps(upload_str)
         )
@@ -89,7 +86,7 @@ def switch_context(org_id):
                         "/{}".format(config.grafana_host,
                                      config.grafana_port,
                                      org_id),
-                        headers=HEADERS,
+                        headers=constants.HEADERS,
                         auth=config.credentials,
                         data=upload_str)
         try:
@@ -110,7 +107,7 @@ def create_api_token(key_name, role):
         response = post("http://{}:{}/api/auth/"
                         "keys".format(config.grafana_host,
                                       config.grafana_port),
-                        headers=HEADERS,
+                        headers=constants.HEADERS,
                         auth=config.credentials,
                         data=json.dumps(request_body))
         try:

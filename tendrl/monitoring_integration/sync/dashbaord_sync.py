@@ -5,14 +5,13 @@ from requests.exceptions import RequestException
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import alert_utils
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import create_alert_dashboard
 from tendrl.monitoring_integration.grafana import \
     create_alert_organization
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.sync import gluster_cluster_details
-
-GLUSTER = "gluster"
 
 
 class SyncAlertDashboard(object):
@@ -27,12 +26,12 @@ class SyncAlertDashboard(object):
                     key = "/clusters/%s/TendrlContext/sds_name" % \
                         integration_id
                     sds_name = etcd_utils.read(key).value
-                    if sds_name == GLUSTER:
+                    if sds_name == constants.GLUSTER:
                         cluster_details, dashboards = gluster_cluster_details.\
                             get_cluster_details(
                                 integration_id
                             )
-                        cluster_details["sds_name"] = GLUSTER
+                        cluster_details["sds_name"] = constants.GLUSTER
                     self.update_dashboard(cluster_details, dashboards)
             else:
                 # try to create alert organization once again
@@ -81,7 +80,8 @@ class SyncAlertDashboard(object):
                                 cluster_details
                             )
                         else:
-                            if cluster_details["sds_name"] == GLUSTER:
+                            if cluster_details["sds_name"] == \
+                                    constants.GLUSTER:
                                 self.create_gluster_resource(
                                     cluster_details[dashboard_name],
                                     dashboard_name,

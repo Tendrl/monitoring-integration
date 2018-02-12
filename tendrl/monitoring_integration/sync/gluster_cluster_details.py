@@ -4,9 +4,9 @@ import etcd
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import utils
 
-DASHBOARDS = ["volumes", "hosts", "bricks"]
 ATTRS = {
     "bricks": ["brick_path", "hostname", "vol_id", "vol_name"],
     "nodes": ["fqdn"],
@@ -38,7 +38,7 @@ def get_cluster_details(integration_id):
             NS.get("publisher_id", None),
             {'message': str(ex)}
         )
-    return cluster_details, DASHBOARDS
+    return cluster_details, constants.GLUSTER_DASHBOARDS
 
 
 def get_node_details(cluster_key):

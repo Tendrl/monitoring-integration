@@ -2,6 +2,7 @@ import json
 import traceback
 
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import create_datasource
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import exceptions
@@ -9,14 +10,11 @@ from tendrl.monitoring_integration.grafana import grafana_org_utils
 from tendrl.monitoring_integration.grafana import utils
 
 
-DASHBOARD_NAME = "Main Org."
-
-
 def upload_default_dashboards():
     dashboards = []
     NS.config.data["credentials"] = utils.get_credentials()
     try:
-        main_org_id = grafana_org_utils.get_org_id(DASHBOARD_NAME)
+        main_org_id = grafana_org_utils.get_org_id(constants.MAIN_ORG)
         if main_org_id:
             response = grafana_org_utils.switch_context(
                 json.loads(main_org_id)["id"]

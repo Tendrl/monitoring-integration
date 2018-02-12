@@ -8,12 +8,9 @@ from requests import post
 from requests import put
 
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
-
-HEADERS = {"Accept": "application/json",
-           "Content-Type": "application/json"
-           }
 
 
 ''' Create Datasource '''
@@ -27,7 +24,7 @@ def _post_datasource(datasource_json):
                 config.grafana_host,
                 config.grafana_port
             ),
-            headers=HEADERS,
+            headers=constants.HEADERS,
             auth=config.credentials,
             data=datasource_json
         )
@@ -96,7 +93,7 @@ def update_datasource(id):
                     config.grafana_port,
                     id
                 ),
-                headers=HEADERS,
+                headers=constants.HEADERS,
                 auth=config.credentials,
                 data=datasource_str
             )

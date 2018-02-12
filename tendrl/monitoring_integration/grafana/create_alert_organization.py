@@ -6,6 +6,7 @@ from requests.exceptions import RequestException
 
 
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import \
     create_datasource
 from tendrl.monitoring_integration.grafana import \
@@ -14,8 +15,6 @@ from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import grafana_org_utils
 
 
-MAIN_ORG_NAME = "Main Org."
-ALERT_ORG_NAME = "Alert_dashboard"
 GRAFANA_AUTH_KEY = "grafana_auth_key"
 GRAFANA_USER = "Admin"
 
@@ -28,7 +27,7 @@ def create():
             NS.config.data["org_id"] = org_id
             NS.config.data["grafana_auth_key"] = key
             NS.monitoring.objects.AlertOrganization(
-                org_name=ALERT_ORG_NAME,
+                org_name=constants.ALERT_ORG,
                 org_id=org_id,
                 auth_key=key
             ).save()
@@ -38,7 +37,7 @@ def create():
             create_notification_channel.create_notification_channel()
             # context swith to main org
             main_org_id = grafana_org_utils.get_org_id(
-                MAIN_ORG_NAME
+                constants.MAIN_ORG
             )
             if main_org_id:
                 grafana_org_utils.switch_context(
@@ -64,25 +63,25 @@ def create():
 
 def create_organization():
     # Check organization is already exist
-    resp = grafana_org_utils.get_org_id(ALERT_ORG_NAME)
+    resp = grafana_org_utils.get_org_id(constants.ALERT_ORG)
     resp = json.loads(resp)
     if "id" in resp:
         org_id = resp['id']
         msg = ("alert organization with name %s " +
-               "is already exist") % ALERT_ORG_NAME
+               "is already exist") % constants.ALERT_ORG
         logger.log("info", NS.get("publisher_id", None),
                    {'message': msg})
     elif "message" in resp and resp["message"] == \
             "Organization not found":
         # Create alert organization
-        org_id = grafana_org_utils.create_org(ALERT_ORG_NAME)
+        org_id = grafana_org_utils.create_org(constants.ALERT_ORG)
         msg = ("alert organization %s created " +
-               "successfully") % ALERT_ORG_NAME
+               "successfully") % constants.ALERT_ORG
         logger.log("info", NS.get("publisher_id", None),
                    {'message': msg})
     else:
         org_id = None
-        msg = "Unable to create alert organization %s " % ALERT_ORG_NAME
+        msg = "Unable to create alert organization %s " % constants.ALERT_ORG
         logger.log("error", NS.get("publisher_id", None),
                    {'message': msg})
     return org_id

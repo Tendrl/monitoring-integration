@@ -4,13 +4,8 @@ import os
 
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import alert_utils
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import utils
-
-
-ALERT_DASHBOARD = "Alert_dashboard"
-PATH_PREFIX = "/etc/tendrl/monitoring-integration"
-DASHBOARD_PATH = '/grafana/dashboards'
-GLUSTER = "gluster"
 
 
 def set_alert(panel, alert_thresholds, panel_title, resource_name):
@@ -87,8 +82,8 @@ def set_gluster_target(target, integration_id, resource, resource_name):
 
 def create_resource_dashboard(resource_name, resource,
                               sds_name, integration_id):
-    dashboard_path = PATH_PREFIX + DASHBOARD_PATH + "/tendrl-" + \
-        str(sds_name) + "-" + str(resource_name) + '.json'
+    dashboard_path = constants.PATH_PREFIX + constants.DASHBOARD_PATH + \
+        "/tendrl-" + str(sds_name) + "-" + str(resource_name) + '.json'
 
     if os.path.exists(dashboard_path):
         resource_file = utils.fread(dashboard_path)
@@ -126,7 +121,7 @@ def create_resource_dashboard(resource_name, resource,
                                     panel_title.replace("_", " ")):
                                 targets = panel["targets"]
                                 for target in targets:
-                                    if sds_name == GLUSTER:
+                                    if sds_name == constants.GLUSTER:
                                         new_title = set_gluster_target(
                                             target,
                                             integration_id,
@@ -196,7 +191,7 @@ def add_panel(integration_id, resource_type, resource_name, sds_name):
                     flag = True
             if flag:
                 try:
-                    if sds_name == GLUSTER:
+                    if sds_name == constants.GLUSTER:
                         # check duplicate rows
                         if not check_duplicate(
                             alert_dashboard,

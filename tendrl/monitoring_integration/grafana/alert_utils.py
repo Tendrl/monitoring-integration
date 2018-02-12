@@ -1,11 +1,8 @@
 import json
 
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import grafana_org_utils
-
-
-ALERT_ORG = "Alert_dashboard"
-MAIN_ORG = "Main Org."
 
 
 def get_alert_dashboard(dashboard_name):
@@ -15,12 +12,12 @@ def get_alert_dashboard(dashboard_name):
         slug = "alerts-tendrl-gluster-" + str(dashboard_name)
     dashboard_json = {}
     if grafana_org_utils.get_current_org_name()["name"] == \
-            ALERT_ORG:
+            constants.ALERT_ORG:
         dashboard_json = dashboard.get_dashboard(slug)
-    elif switch_context(ALERT_ORG):
+    elif switch_context(constants.ALERT_ORG):
         dashboard_json = dashboard.get_dashboard(slug)
         # return to main org
-        switch_context(MAIN_ORG)
+        switch_context(constants.MAIN_ORG)
     return dashboard_json
 
 
@@ -38,21 +35,22 @@ def delete_alert_dashboard(dashboard_name):
     slug = "alerts-tendrl-gluster-" + str(dashboard_name)
     dashboard_json = {}
     if grafana_org_utils.get_current_org_name()["name"] == \
-            ALERT_ORG:
+            constants.ALERT_ORG:
         dashboard_json = dashboard.delete_dashboard(slug)
-    elif switch_context(ALERT_ORG):
+    elif switch_context(constants.ALERT_ORG):
         dashboard_json = dashboard.delete_dashboard(slug)
         # return to main org
-        switch_context(MAIN_ORG)
+        switch_context(constants.MAIN_ORG)
     return dashboard_json
 
 
 def post_dashboard(alert_dashboard):
         resp = None
-        if grafana_org_utils.get_current_org_name()["name"] == ALERT_ORG:
+        if grafana_org_utils.get_current_org_name()["name"] == \
+                constants.ALERT_ORG:
             resp = dashboard._post_dashboard(alert_dashboard)
-        elif switch_context(ALERT_ORG):
+        elif switch_context(constants.ALERT_ORG):
             resp = dashboard._post_dashboard(alert_dashboard)
             # return to main org
-            switch_context(MAIN_ORG)
+            switch_context(constants.MAIN_ORG)
         return resp

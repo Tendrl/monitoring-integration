@@ -1,7 +1,22 @@
+import ConfigParser
 import copy
-
+import os
 
 from tendrl.commons.utils import log_utils as logger
+
+
+def get_data_dir_path():
+    carbon_path = "/etc/carbon/carbon.conf"
+    if not os.path.exists(carbon_path):
+        return None
+    carbon_config = ConfigParser.ConfigParser()
+    carbon_config.read(carbon_path)
+    try:
+        whisper_path = str(carbon_config.get("cache", "local_data_dir"))
+        whisper_path = os.path.join(whisper_path, "tendrl/")
+        return whisper_path
+    except KeyError:
+        return None
 
 
 def _add_metrics(objects, obj_name, metric, resource):

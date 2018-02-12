@@ -8,13 +8,9 @@ from requests import get
 from requests import post
 from requests import put
 
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
-
-
-HEADERS = {"Accept": "application/json",
-           "Content-Type": "application/json"
-           }
 
 
 '''Create Dashboard'''
@@ -25,7 +21,7 @@ def _post_dashboard(dashboard_json, authorization_key=None):
     if utils.port_open(config.grafana_port, config.grafana_host):
         upload_str = json.dumps(dashboard_json)
         if authorization_key:
-            new_header = HEADERS
+            new_header = constants.HEADERS
             new_header["Authorization"] = "Bearer " + str(authorization_key)
             response = post("http://{}:{}/api/dashboards/"
                             "db".format(config.grafana_host,
@@ -36,7 +32,7 @@ def _post_dashboard(dashboard_json, authorization_key=None):
             response = post("http://{}:{}/api/dashboards/"
                             "db".format(config.grafana_host,
                                         config.grafana_port),
-                            headers=HEADERS,
+                            headers=constants.HEADERS,
                             auth=config.credentials,
                             data=upload_str)
         return response
@@ -91,9 +87,9 @@ def set_home_dashboard(dash_id):
         resp = put('http://{}:{}/api/org/'
                    'preferences'.format(config.grafana_host,
                                         config.grafana_port),
-                   headers=HEADERS,
+                   headers=constants.HEADERS,
                    auth=config.credentials,
-                   data=json.dumps({"name": "Main Org.",
+                   data=json.dumps({"name": constants.MAIN_ORG,
                                     "theme": "light",
                                     "homeDashboardId": dash_id}))
     else:

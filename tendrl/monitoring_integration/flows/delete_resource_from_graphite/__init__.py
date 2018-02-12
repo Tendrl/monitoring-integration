@@ -1,4 +1,3 @@
-import ConfigParser
 import datetime
 import etcd
 import os
@@ -7,8 +6,8 @@ from tendrl.commons import flows
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import utils
-
-CONF_PATH = "/etc/tendrl/monitoring-integration/carbon.conf"
+from tendrl.monitoring_integration.graphite.graphite_utils import \
+    get_data_dir_path
 
 
 class DeleteResourceFromGraphite(flows.BaseFlow):
@@ -23,21 +22,6 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
         self.update_graphite(integration_id,
                              resource_name,
                              resource_type)
-
-    def get_data_dir_path(self):
-        try:
-            if os.path.exists(CONF_PATH):
-                carbon_config = ConfigParser.ConfigParser()
-                carbon_config.read(CONF_PATH)
-                whisper_path = str(
-                    carbon_config.get("cache", "local_data_dir")
-                )
-                whisper_path = os.path.join(whisper_path, "tendrl/")
-                return whisper_path
-            else:
-                return None
-        except KeyError:
-            return None
 
     def delete_brick_details(self, integration_id, resource_name,
                              whisper_path, resource_type):
@@ -272,7 +256,7 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
                 )
 
     def update_graphite(self, integration_id, resource_name, resource_type):
-        whisper_path = self.get_data_dir_path()
+        whisper_path = get_data_dir_path()
         if whisper_path:
             if resource_type == "volume":
                 self.delete_volume_details(

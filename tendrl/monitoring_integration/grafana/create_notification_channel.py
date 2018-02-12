@@ -2,14 +2,12 @@ import json
 import maps
 from requests import post
 
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
 
 NOTIFICATION_CHANNEL = "tendrl_notification_channel"
 PORT = 8789
-HEADERS = {"Accept": "application/json",
-           "Content-Type": "application/json"
-           }
 
 
 def create_notification_channel():
@@ -28,7 +26,7 @@ def create_notification_channel():
         response = post("http://{}:{}/api/alert-notifications"
                         .format(config.grafana_host,
                                 config.grafana_port),
-                        headers=HEADERS,
+                        headers=constants.HEADERS,
                         auth=config.credentials,
                         data=channel_details)
 
