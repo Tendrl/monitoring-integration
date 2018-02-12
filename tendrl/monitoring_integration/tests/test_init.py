@@ -4,6 +4,7 @@ import maps
 import mock
 from mock import patch
 
+from tendrl.commons import config as cmn_config
 import tendrl.commons.objects.node_context as node
 from tendrl.commons import TendrlNS
 from tendrl.commons.utils.central_store import utils as cs_utils
@@ -14,9 +15,11 @@ from tendrl.commons.utils.central_store import utils as cs_utils
 @patch.object(Client, "write")
 @patch.object(cs_utils, "write")
 @patch.object(cs_utils, "read")
+@patch.object(cmn_config, "load_config")
 @patch.object(node.NodeContext, '_get_node_id')
-def init(patch_get_node_id, util_read, util_write,
-         patch_write, patch_read, patch_client):
+def init(patch_get_node_id, load_conf, util_read,
+         util_write, patch_write, patch_read,
+         patch_client):
     patch_get_node_id.return_value = 1
     patch_read.return_value = etcd.Client()
     patch_write.return_value = etcd.Client()
@@ -24,6 +27,10 @@ def init(patch_get_node_id, util_read, util_write,
     util_read.return_value = etcd.Client()
     util_write.return_value = etcd.Client()
     # creating monitoring NS
+    dummy_conf = {"etcd_port": "1234",
+                  "etcd_connection": "127.0.0.1"
+                  }
+    load_conf.return_value = dummy_conf
     TendrlNS("monitoring", "tendrl.monitoring_integration")
     # overwriting conf
     setattr(NS, "type", "monitoring")
