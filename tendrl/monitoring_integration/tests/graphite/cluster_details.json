@@ -1,0 +1,169 @@
+[
+  {
+    "integration_id": "f3a74e36-0462-4fb0-9a92-3ee9d244f8a2",
+    "Node": [
+      {
+        "status": 0,
+        "brick_up_count": 2,
+        "fqdn": "dhcp122-3",
+        "brick_down_count": 0,
+        "brick_total_count": 2
+      },
+      {
+        "status": 0,
+        "brick_up_count": 2,
+        "fqdn": "dhcp122-137",
+        "brick_down_count": 0,
+        "brick_total_count": 2
+      },
+      {
+        "status": 0,
+        "brick_up_count": 2,
+        "fqdn": "dhcp122-234",
+        "brick_down_count": 0,
+        "brick_total_count": 2
+      }
+    ],
+    "volume_partial_count": 0,
+    "volume_up_count": 2,
+    "geo_rep": {
+      "paused": 0,
+      "partial": 0,
+      "created": 0,
+      "up": 0,
+      "down": 0,
+      "stopped": 0,
+      "total": 0
+    },
+    "volume_level_brick_count": {
+      "V1": {
+        "down": 0,
+        "total": 3,
+        "up": 3
+      },
+      "V2": {
+        "down": 0,
+        "total": 3,
+        "up": 3
+      }
+    },
+    "node_up_count": 3,
+    "Volume": [
+      {
+        "status": 1,
+        "pcnt_used": "21.4820967334",
+        "name": "V1",
+        "usable_capacity": "21281256",
+        "used_inode_capacity": "140190",
+        "pcnt_inode_used": "10.1863316127",
+        "state": 0,
+        "subvol_count": "3",
+        "total_inode_capacity": "1376256",
+        "used_capacity": "4571660",
+        "rebal_status": 13,
+        "geo_rep_session": {
+          "down": 0,
+          "partial": 0,
+          "created": 0,
+          "up": 0,
+          "paused": 0,
+          "stopped": 0,
+          "total": 0
+        }
+      },
+      {
+        "status": 1,
+        "pcnt_used": "21.4843898311",
+        "name": "V2",
+        "usable_capacity": "21281256",
+        "used_inode_capacity": "140195",
+        "pcnt_inode_used": "10.1866949172",
+        "state": 0,
+        "subvol_count": "3",
+        "total_inode_capacity": "1376256",
+        "used_capacity": "4572148",
+        "rebal_status": 13,
+        "geo_rep_session": {
+          "down": 0,
+          "partial": 0,
+          "created": 0,
+          "up": 0,
+          "paused": 0,
+          "stopped": 0,
+          "total": 0
+        }
+      }
+    ],
+    "Cluster": [
+      {
+        "GlobalDetails": {
+          "status": 0
+        }
+      }
+    ],
+    "volume_degraded_count": 0,
+    "node_total_count": 3,
+    "brick_down_count": 0,
+    "volume_total_count": 2,
+    "volume_down_count": 0,
+    "Brick": [
+      {
+        "status": 1,
+        "vol_name": "V1",
+        "name": "dhcp122-234:_gluster_brick1",
+        "brick_path": "dhcp122-234:/gluster/brick1",
+        "vol_id": "f31d3ead-63c0-4464-8c1e-eb3db0bf8196",
+        "brick_name": "/gluster/brick1",
+        "host_name": "dhcp122-234"
+      },
+      {
+        "status": 1,
+        "vol_name": "V2",
+        "name": "dhcp122-234:_gluster_brick2",
+        "brick_path": "dhcp122-234:/gluster/brick2",
+        "vol_id": "4ff7cf55-a6ef-4ea1-a8ea-f406803503a4",
+        "brick_name": "/gluster/brick2",
+        "host_name": "dhcp122-234"
+      },
+      {
+        "status": 1,
+        "vol_name": "V1",
+        "name": "dhcp122-3:_gluster_brick1",
+        "brick_path": "dhcp122-3:/gluster/brick1",
+        "vol_id": "f31d3ead-63c0-4464-8c1e-eb3db0bf8196",
+        "brick_name": "/gluster/brick1",
+        "host_name": "dhcp122-3"
+      },
+      {
+        "status": 1,
+        "vol_name": "V2",
+        "name": "dhcp122-3:_gluster_brick2",
+        "brick_path": "dhcp122-3:/gluster/brick2",
+        "vol_id": "4ff7cf55-a6ef-4ea1-a8ea-f406803503a4",
+        "brick_name": "/gluster/brick2",
+        "host_name": "dhcp122-3"
+      },
+      {
+        "status": 1,
+        "vol_name": "V1",
+        "name": "dhcp122-137:_gluster_brick1",
+        "brick_path": "dhcp122-137:/gluster/brick1",
+        "vol_id": "f31d3ead-63c0-4464-8c1e-eb3db0bf8196",
+        "brick_name": "/gluster/brick1",
+        "host_name": "dhcp122-137"
+      },
+      {
+        "status": 1,
+        "vol_name": "V2",
+        "name": "dhcp122-137:_gluster_brick2",
+        "brick_path": "dhcp122-137:/gluster/brick2",
+        "vol_id": "4ff7cf55-a6ef-4ea1-a8ea-f406803503a4",
+        "brick_name": "/gluster/brick2",
+        "host_name": "dhcp122-137"
+      }
+    ],
+    "node_down_count": 0,
+    "brick_total_count": 6,
+    "brick_up_count": 6
+  }
+]

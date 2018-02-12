@@ -1,0 +1,1809 @@
+{
+    "dashboard": {
+        "annotations": {
+            "list": []
+        },
+        "editable": false,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "hideControls": true,
+        "id": null,
+        "links": [],
+        "refresh": "10s",
+        "rows": [{
+            "collapse": false,
+            "height": 266,
+            "panels": [{
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": true,
+                "colors": [
+                    "rgba(50, 172, 45, 0.97)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(245, 54, 54, 0.9)"
+                ],
+                "datasource": "",
+                "decimals": 0,
+                "description": "The Health panel displays the overall health for a given volume.",
+                "format": "short",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 2,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.state"
+                }],
+                "thresholds": "2,6",
+                "timeFrom": "15m",
+                "title": "Health",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "70%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }, {
+                    "op": "=",
+                    "text": "Up",
+                    "value": "0"
+                }, {
+                    "op": "=",
+                    "text": "Down",
+                    "value": "8"
+                }, {
+                    "op": "=",
+                    "text": "Failed",
+                    "value": "7"
+                }, {
+                    "op": "=",
+                    "text": "Up(Degraded)",
+                    "value": "3"
+                }, {
+                    "op": "=",
+                    "text": "Up(Partial)",
+                    "value": "4"
+                }, {
+                    "op": "=",
+                    "text": "Unknown",
+                    "value": "5"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 0,
+                "description": "The Snapshots panel displays the count of active snapshots for a given cluster.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 10,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 1,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.snap_count"
+                }],
+                "thresholds": "",
+                "title": "Snapshots",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n1 = Started  \n10 = Stopped",
+                "fontSize": "80%",
+                "hideTimeOverride": false,
+                "id": 41,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 3,
+                "styles": [{
+                    "alias": "Brick Path",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 0,
+                    "pattern": "Metric",
+                    "thresholds": [],
+                    "type": "string",
+                    "unit": "short"
+                }, {
+                    "alias": "Status",
+                    "colorMode": "row",
+                    "colors": [
+                        "rgba(50, 172, 45, 0.97)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(245, 54, 54, 0.9)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 0,
+                    "pattern": "Current",
+                    "thresholds": [
+                        "2",
+                        "6"
+                    ],
+                    "type": "number",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "refId": "A",
+                    "target": "aliasSub(aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.status, 6, -1), '(\\.bricks\\.)', ':'), '\\|', '/')"
+                }],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Brick Status",
+                "transform": "timeseries_aggregations",
+                "type": "table"
+            }, {
+                "clusterName": "Bricks",
+                "colorMode": "Metric",
+                "colors": {
+                    "crit": "rgba(245, 54, 54, 0.9)",
+                    "disable": "rgba(128, 128, 128, 0.9)",
+                    "ok": "rgba(50, 128, 45, 0.9)",
+                    "warn": "rgba(237, 129, 40, 0.9)"
+                },
+                "datasource": "",
+                "description": "The Bricks panel displays brick status information for a given volume, including the total number of bricks in the volume, and a count of bricks by status. For details, go to the Bricks Dashboard.",
+                "displayName": "Bricks",
+                "flipCard": false,
+                "flipTime": "10",
+                "id": 37,
+                "isGrayOnNoData": true,
+                "isHideAlertsOnDisable": false,
+                "isIgnoreOKColors": false,
+                "links": [{
+                    "dashUri": "db/tendrl-gluster-bricks",
+                    "dashboard": "Tendrl - Gluster - Bricks",
+                    "includeVars": false,
+                    "keepTime": true,
+                    "params": "var-cluster_id=$cluster_id&var-volume_name=$volume_name",
+                    "title": "Bricks Dashboard",
+                    "type": "dashboard"
+                }],
+                "span": 1,
+                "targets": [{
+                    "aggregation": "Last",
+                    "alias": "Total",
+                    "displayType": "Regular",
+                    "refId": "A",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.total), \"max\")),\"Total\")",
+                    "textEditor": true,
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Up",
+                    "decimals": 0,
+                    "displayType": "Regular",
+                    "refId": "B",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.up), \"max\")),\"Up\")",
+                    "textEditor": true,
+                    "units": "none",
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Down",
+                    "crit": 1,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "C",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.down), \"max\")),\"Down\")",
+                    "textEditor": true,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }],
+                "title": "",
+                "type": "vonage-status-panel"
+            }, {
+                "clusterName": "Subvolume",
+                "colorMode": "Metric",
+                "colors": {
+                    "crit": "rgba(245, 54, 54, 0.9)",
+                    "disable": "rgba(128, 128, 128, 0.9)",
+                    "ok": "rgba(50, 128, 45, 0.9)",
+                    "warn": "rgba(237, 129, 40, 0.9)"
+                },
+                "datasource": "",
+                "description": "The Subvolumes panel displays subvolume status information for a given volume.",
+                "displayName": "Subvolume",
+                "flipCard": false,
+                "flipTime": 5,
+                "id": 36,
+                "isGrayOnNoData": true,
+                "isHideAlertsOnDisable": false,
+                "isIgnoreOKColors": false,
+                "links": [],
+                "span": 1,
+                "targets": [{
+                    "aggregation": "Last",
+                    "alias": "Total",
+                    "displayType": "Regular",
+                    "refId": "A",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.subvol_count), \"max\")),\"Total\")",
+                    "textEditor": true,
+                    "valueHandler": "Text Only"
+                }],
+                "title": "",
+                "type": "vonage-status-panel"
+            }, {
+                "clusterName": "Geo-Replication Sessions",
+                "colorMode": "Metric",
+                "colors": {
+                    "crit": "rgba(245, 54, 54, 0.9)",
+                    "disable": "rgba(128, 128, 128, 0.9)",
+                    "ok": "rgba(50, 128, 45, 0.9)",
+                    "warn": "rgba(237, 129, 40, 0.9)"
+                },
+                "datasource": "",
+                "description": "The Geo-Replication Session panel displays geo-replication session information from a given volume.",
+                "displayName": "Geo-Replication Sessions",
+                "flipCard": false,
+                "flipTime": 5,
+                "id": 38,
+                "isGrayOnNoData": true,
+                "isHideAlertsOnDisable": false,
+                "isIgnoreOKColors": false,
+                "links": [],
+                "span": 1,
+                "targets": [{
+                    "aggregation": "Last",
+                    "alias": "Total",
+                    "displayType": "Regular",
+                    "refId": "A",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.total), 'max')), 'Total')",
+                    "textEditor": false,
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Created",
+                    "crit": 1,
+                    "decimals": null,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "F",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.created), 'max')), 'Created')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Text Only",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Up",
+                    "displayType": "Regular",
+                    "refId": "B",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.up), 'max')), 'Up')",
+                    "textEditor": false,
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Partial",
+                    "crit": 999,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "D",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.partial), 'max')), 'Partial')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Paused",
+                    "crit": 999,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "G",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.paused), 'max')), 'Paused')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Stopped",
+                    "crit": 1,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "E",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.stopped), 'max')), 'Stopped')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Down",
+                    "crit": 1,
+                    "decimals": 0,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "C",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.down), 'max')), 'Down')",
+                    "textEditor": false,
+                    "units": "short",
+                    "valueHandler": "Number Threshold",
+                    "warn": 1
+                }],
+                "title": "",
+                "type": "vonage-status-panel"
+            }, {
+                "clusterName": "Rebalance",
+                "colorMode": "Metric",
+                "colors": {
+                    "crit": "rgba(245, 54, 54, 0.9)",
+                    "disable": "rgba(128, 128, 128, 0.9)",
+                    "ok": "rgba(50, 128, 45, 0.9)",
+                    "warn": "rgba(237, 129, 40, 0.9)"
+                },
+                "datasource": "",
+                "description": "The Rebalance panel displays rebalance progress information for a given volume, which is applicable when rebalancing is underway.",
+                "displayName": "Rebalance",
+                "flipCard": false,
+                "flipTime": 5,
+                "id": 40,
+                "isGrayOnNoData": true,
+                "isHideAlertsOnDisable": false,
+                "isIgnoreOKColors": false,
+                "links": [],
+                "span": 1,
+                "targets": [{
+                    "aggregation": "Last",
+                    "alias": "Rebalanced Files",
+                    "displayType": "Regular",
+                    "refId": "A",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_files, 'max'))), 'Rebalanced Files')",
+                    "textEditor": false,
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Size",
+                    "decimals": 2,
+                    "display": true,
+                    "displayType": "Regular",
+                    "refId": "B",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
+                    "textEditor": false,
+                    "units": "mbytes",
+                    "valueHandler": "Number Threshold"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Skipped",
+                    "displayType": "Regular",
+                    "refId": "C",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_skipped, 'max'))), 'Skipped')",
+                    "textEditor": false,
+                    "valueHandler": "Text Only"
+                }, {
+                    "aggregation": "Last",
+                    "alias": "Failure",
+                    "displayType": "Regular",
+                    "refId": "D",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_failures, 'max'))), 'Failure')",
+                    "textEditor": false,
+                    "valueHandler": "Text Only"
+                }],
+                "title": "",
+                "type": "vonage-status-panel"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 0,
+                "description": "The Rebalance Status panel displays the status of rebalancing for a given volume, which is applicable when rebalancing is underway.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 7,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.rebal_status",
+                    "textEditor": true
+                }],
+                "thresholds": "",
+                "title": "Rebalance Status",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "50%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }, {
+                    "op": "=",
+                    "text": "Completed",
+                    "value": "12"
+                }, {
+                    "op": "=",
+                    "text": "Not Started",
+                    "value": "13"
+                }, {
+                    "op": "=",
+                    "text": "In Progress",
+                    "value": "1"
+                }, {
+                    "op": "=",
+                    "text": "Failed",
+                    "value": "7"
+                }, {
+                    "op": "=",
+                    "text": "Stopped",
+                    "value": "10"
+                }, {
+                    "op": "=",
+                    "text": "Unknown",
+                    "value": "5"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout in progress",
+                    "value": "16"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout stopped",
+                    "value": "17"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout completed",
+                    "value": "18"
+                }, {
+                    "op": "=",
+                    "text": "fix-layout failed",
+                    "value": "19"
+                }],
+                "valueName": "current"
+            }],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "At-a-Glance",
+            "titleSize": "h5"
+        }, {
+            "collapse": false,
+            "height": 192,
+            "panels": [{
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(50, 172, 45, 0.97)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(245, 54, 54, 0.9)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "description": "The Capacity Utilization panel displays the used capacity for a given volume.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": true,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 21,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "%",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 2,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.pcnt_used",
+                    "textEditor": true
+                }],
+                "thresholds": "80,90",
+                "title": "Capacity Utilization",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "description": "The Capacity Available panel displays the available capacity for a given volume.",
+                "format": "kbytes",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 20,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 1,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity"
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity"
+                }, {
+                    "refId": "C",
+                    "target": "diffSeries(#A, #B)",
+                    "targetFull": "diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)"
+                }],
+                "thresholds": "",
+                "title": "Capacity Available",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "70%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
+                "format": "decbytes",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 22,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 1,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": false,
+                    "refId": "B",
+                    "target": "consolidateBy(sumSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "C",
+                    "target": "diffSeries(#B, #A)",
+                    "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))"
+                }],
+                "thresholds": "",
+                "title": "Weekly Growth Rate",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "70%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }, {
+                    "op": "=",
+                    "text": "0",
+                    "value": "-99999"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till volume reaches full capacity based on the forecasted Weekly Growth Rate.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 23,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 1,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "C",
+                    "target": "keepLastValue(diffSeries(#B, #A))",
+                    "targetFull": "keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')))",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "D",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "E",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "F",
+                    "target": "diffSeries(#D, #E)",
+                    "targetFull": "diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)",
+                    "textEditor": true
+                }, {
+                    "hide": true,
+                    "refId": "G",
+                    "target": "consolidateBy(minSeries(#F), \"min\")",
+                    "targetFull": "consolidateBy(minSeries(diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)), \"min\")",
+                    "textEditor": true
+                }, {
+                    "hide": false,
+                    "refId": "H",
+                    "target": "divideSeries(#G, #C)",
+                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)), \"min\"), keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))))",
+                    "textEditor": true
+                }],
+                "thresholds": "",
+                "title": "Weeks Remaining",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "70%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "decimals": 1,
+                "description": "The Capacity Utilization Trend panel displays the volume capacity utilization over a period of time.",
+                "fill": 1,
+                "id": 34,
+                "legend": {
+                    "alignAsTable": false,
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 3,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "hide": false,
+                    "refId": "A",
+                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.pcnt_used, '$volume_name')"
+                }],
+                "thresholds": [{
+                    "colorMode": "warning",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 80
+                }],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Capacity Utilization Trend",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "cumulative"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "percent",
+                    "label": "",
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "decimals": 1,
+                "description": "The Inode Utilization panel displays inodes used for bricks in the volume over a period of time.",
+                "fill": 1,
+                "id": 24,
+                "legend": {
+                    "alignAsTable": false,
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 3,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.pcnt_inode_used, '$volume_name')"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Inode Utilization",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "cumulative"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "percent",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "description": "The Inode Available panel displays inodes free for bricks in the volume.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 25,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 1,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.total_inode_capacity",
+                    "textEditor": false
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.used_inode_capacity",
+                    "textEditor": false
+                }, {
+                    "hide": false,
+                    "refId": "C",
+                    "target": "diffSeries(#A, #B)",
+                    "targetFull": "diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.total_inode_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_inode_capacity)"
+                }],
+                "thresholds": "",
+                "title": "Inode Available",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "50%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "avg"
+            }],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Capacity",
+            "titleSize": "h5"
+        }, {
+            "collapse": true,
+            "height": 250,
+            "panels": [{
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "description": "The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile.The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile”.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": false,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 26,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 4,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": true
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read)"
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write)"
+                }, {
+                    "refId": "C",
+                    "target": "sumSeries(#A, #B)",
+                    "targetFull": "sumSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write))"
+                }],
+                "thresholds": "",
+                "title": "Throughput",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "description": "The LVM Thin Pool Metadata % panel displays the utilization of LVM thin pool metadata for a given volume.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": true,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 27,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "%",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 4,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "refId": "A",
+                    "target": "averageSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_meta_data_utilization.percent-percent_bytes)",
+                    "textEditor": true
+                }],
+                "thresholds": "",
+                "title": "LVM Thin Pool Metadata %",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "avg"
+            }, {
+                "cacheTimeout": null,
+                "colorBackground": false,
+                "colorValue": false,
+                "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                ],
+                "datasource": "",
+                "decimals": 1,
+                "description": "The LVM Thin Pool Data Usage % panel displays the LVM thin pool data usage for a given volume.",
+                "format": "none",
+                "gauge": {
+                    "maxValue": 100,
+                    "minValue": 0,
+                    "show": true,
+                    "thresholdLabels": false,
+                    "thresholdMarkers": true
+                },
+                "id": 28,
+                "interval": null,
+                "links": [],
+                "mappingType": 1,
+                "mappingTypes": [{
+                    "name": "value to text",
+                    "value": 1
+                }, {
+                    "name": "range to text",
+                    "value": 2
+                }],
+                "maxDataPoints": 100,
+                "nullPointMode": "connected",
+                "nullText": null,
+                "postfix": "%",
+                "postfixFontSize": "50%",
+                "prefix": "",
+                "prefixFontSize": "50%",
+                "rangeMaps": [{
+                    "from": "null",
+                    "text": "N/A",
+                    "to": "null"
+                }],
+                "span": 4,
+                "sparkline": {
+                    "fillColor": "rgba(31, 118, 189, 0.18)",
+                    "full": false,
+                    "lineColor": "rgb(31, 120, 193)",
+                    "show": false
+                },
+                "tableColumn": "",
+                "targets": [{
+                    "hide": true,
+                    "refId": "A",
+                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-total)"
+                }, {
+                    "hide": true,
+                    "refId": "B",
+                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-used)"
+                }, {
+                    "refId": "C",
+                    "target": "asPercent(#B, #A)",
+                    "targetFull": "asPercent(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-used), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-total))"
+                }],
+                "thresholds": "",
+                "title": "LVM Thin Pool Data Usage %",
+                "transparent": false,
+                "type": "singlestat",
+                "valueFontSize": "80%",
+                "valueMaps": [{
+                    "op": "=",
+                    "text": "N/A",
+                    "value": "null"
+                }],
+                "valueName": "current"
+            }],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Performance",
+            "titleSize": "h5"
+        }, {
+            "collapse": true,
+            "height": 250,
+            "panels": [{
+                "columns": [{
+                    "text": "Current",
+                    "value": "current"
+                }],
+                "datasource": "",
+                "description": "The Top File Operations panel displays the top 5 FOP (file operations) with the highest % latency, wherein the % latency is the fraction of the FOP response time that is consumed by the FOP.",
+                "fontSize": "100%",
+                "id": 29,
+                "links": [],
+                "pageSize": null,
+                "scroll": true,
+                "showHeader": true,
+                "sort": {
+                    "col": 1,
+                    "desc": true
+                },
+                "span": 4,
+                "styles": [{
+                    "alias": "File Operations",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Metric",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "short"
+                }, {
+                    "alias": "% Latency",
+                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "pattern": "Current",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "short"
+                }],
+                "targets": [{
+                    "refId": "A",
+                    "target": "limit(sortByMaxima(groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.fop.*.hits, 10, 'maxSeries')), 5)"
+                }],
+                "title": "Top File Operations",
+                "transform": "timeseries_aggregations",
+                "transparent": false,
+                "type": "table"
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "description": "The File Operations for Locks Trend panel displays the average latency, maximum latency, call rate for each FOP for Locks over a period of time.",
+                "fill": 1,
+                "id": 30,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.lock_ops), 'lock_ops')",
+                    "textEditor": false
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "File Operations For Locks Trend",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "description": "The File Operations for Read/Write panel displays the average latency, maximum latency, call rate for each FOP for Read/Write Operations over a period of time.",
+                "fill": 1,
+                "id": 31,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 4,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.read_write_ops), 'read_write_ops')"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "File Operations for Read/Write",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "description": "The File Operations for Inode Operations panel displays the average latency, maximum latency, call rate for each FOP for Inode Operations over a period of time.",
+                "fill": 1,
+                "id": 32,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 6,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_ops), 'inode_ops')",
+                    "textEditor": false
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "File Operations for Inode Operations",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }, {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "description": "The File Operations for Entry Operations panel displays the average latency, maximum latency, call rate for each FOP for Entry Operations over a period of time.",
+                "fill": 1,
+                "id": 33,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "connected",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "span": 6,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [{
+                    "refId": "A",
+                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.entry_ops), 'entry_ops')"
+                }],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "File Operations for Entry Operations",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "transparent": false,
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
+            }],
+            "repeat": null,
+            "repeatIteration": null,
+            "repeatRowId": null,
+            "showTitle": true,
+            "title": "Profiling Information",
+            "titleSize": "h5"
+        }],
+        "schemaVersion": 14,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": [{
+                "allValue": null,
+                "current": {},
+                "datasource": "",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Cluster Id",
+                "multi": false,
+                "name": "cluster_id",
+                "options": [],
+                "query": "tendrl.clusters.*",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }, {
+                "allValue": null,
+                "current": {},
+                "datasource": "",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Volume Name",
+                "multi": false,
+                "name": "volume_name",
+                "options": [],
+                "query": "tendrl.clusters.$cluster_id.volumes.*",
+                "refresh": 2,
+                "regex": "",
+                "sort": 0,
+                "tagValuesQuery": "",
+                "tags": [],
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }]
+        },
+        "time": {
+            "from": "now-1h",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "5s",
+                "10s",
+                "30s",
+                "1m",
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "2h",
+                "1d"
+            ],
+            "time_options": [
+                "5m",
+                "15m",
+                "1h",
+                "6h",
+                "12h",
+                "24h",
+                "2d",
+                "7d",
+                "30d"
+            ]
+        },
+        "timezone": "browser",
+        "title": "Tendrl-Gluster-Volumes",
+        "version": 7
+    }
+}
