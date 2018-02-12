@@ -9,7 +9,7 @@ License: LGPLv2+
 URL: https://github.com/Tendrl/monitoring-integration
 
 Requires: tendrl-commons
-Requires: grafana >= 4.5.2, grafana < 4.5.3
+Requires: grafana
 Requires: graphite-web
 Requires: python-carbon
 Requires: python-whisper
