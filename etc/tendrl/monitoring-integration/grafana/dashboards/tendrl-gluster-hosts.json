@@ -1,7 +1,15 @@
 {
     "dashboard": {
         "annotations": {
-            "list": []
+            "list": [{
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }]
         },
         "editable": false,
         "gnetId": null,
@@ -14,7 +22,6 @@
             "collapse": false,
             "height": 222,
             "panels": [{
-                "timeFrom": "15m",
                 "cacheTimeout": null,
                 "colorBackground": false,
                 "colorValue": true,
@@ -69,6 +76,7 @@
                     "target": "$my_app.clusters.$cluster_id.nodes.$host_name.status"
                 }],
                 "thresholds": "2,6",
+                "timeFrom": "15m",
                 "title": "Health",
                 "transparent": false,
                 "type": "singlestat",
@@ -96,6 +104,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "cornerRadius": 0,
                 "datasource": "",
                 "description": "The Bricks panel displays brick status information for a given host, including the total number of bricks in the host, and a count of bricks by status. For details, go to the Bricks Dashboard.",
                 "displayName": "Bricks",
@@ -136,8 +145,9 @@
                     "alias": "Down",
                     "crit": 1,
                     "decimals": 0,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Down\")",
                     "textEditor": true,
@@ -152,6 +162,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "datasource": "",
                 "description": "The Brick Status panel displays the status code of each brick for a given host.  \n1 = Started  \n10 = Stopped",
                 "fontSize": "100%",
                 "id": 29,
@@ -929,7 +940,7 @@
                 "datasource": "",
                 "decimals": 1,
                 "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
-                "format": "decbytes",
+                "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -971,18 +982,18 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
-                    "textEditor": true
+                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
-                    "textEditor": true
+                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
+                    "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))",
+                    "targetFull": "diffSeries(consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -1112,6 +1123,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "datasource": "",
                 "fontSize": "100%",
                 "id": 30,
                 "links": [],
@@ -1160,7 +1172,7 @@
                     "refId": "A",
                     "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.percent-percent_bytes, 6, 'maxSeries'), '\\|', '/')"
                 }],
-                "title": "Brick Utilization",
+                "title": "Top Bricks by Capacity Percent Utilized",
                 "transform": "timeseries_aggregations",
                 "transparent": false,
                 "type": "table"
@@ -1169,6 +1181,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "datasource": "",
                 "fontSize": "100%",
                 "id": 31,
                 "links": [],
@@ -1215,7 +1228,7 @@
                     "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total, 6, 'maxSeries'), '\\|', '/')",
                     "textEditor": false
                 }],
-                "title": "Brick Capacity",
+                "title": "Top Bricks by Total Capacity",
                 "transform": "timeseries_aggregations",
                 "transparent": false,
                 "type": "table"
@@ -1224,6 +1237,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "datasource": "",
                 "fontSize": "100%",
                 "id": 32,
                 "links": [],
@@ -1270,7 +1284,7 @@
                     "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used, 6, 'maxSeries'), '\\|', '/')",
                     "textEditor": false
                 }],
-                "title": "Brick Capacity Used",
+                "title": "Top Bricks by Capacity Utilized",
                 "transform": "timeseries_aggregations",
                 "transparent": false,
                 "type": "table"
@@ -1801,7 +1815,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Hosts",
-        "version": 7
+        "version": 8
     }
 }
 

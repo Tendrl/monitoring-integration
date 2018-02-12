@@ -1,7 +1,15 @@
 {
     "dashboard": {
         "annotations": {
-            "list": []
+            "list": [{
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }]
         },
         "editable": false,
         "gnetId": null,
@@ -322,7 +330,7 @@
                 "datasource": "",
                 "decimals": 1,
                 "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
-                "format": "decbytes",
+                "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -365,17 +373,17 @@
                     "hide": true,
                     "refId": "A",
                     "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max')",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(sumSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max')",
-                    "textEditor": true
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max')",
+                    "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max'))",
+                    "targetFull": "diffSeries(consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max'))",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -513,6 +521,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "cornerRadius": 0,
                 "datasource": "",
                 "description": "The Healing panel displays healing information for a given brick based on healinfo.  See https://gluster.readthedocs.io/en/latest/Troubleshooting/heal-info-and-split-brain-resolution/  \nfor how to troubleshoot healing and split brain issues",
                 "displayName": "Healing",
@@ -553,6 +562,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "description": "The IOPS panel displays the sum of IOPS (read + write) for a given brick path",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
@@ -608,7 +618,7 @@
                     "targetFull": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-write, tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-read)"
                 }],
                 "thresholds": "",
-                "title": "Throughput",
+                "title": "IOPS",
                 "transparent": false,
                 "type": "singlestat",
                 "valueFontSize": "80%",
@@ -906,7 +916,7 @@
             "title": "At-a-Glance",
             "titleSize": "h5"
         }, {
-            "collapse": true,
+            "collapse": false,
             "height": 250,
             "panels": [{
                 "aliasColors": {},
@@ -1317,7 +1327,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Bricks",
-        "version": 7
+        "version": 8
     }
 }
 
