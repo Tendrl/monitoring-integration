@@ -5,6 +5,8 @@ VERSION := $(shell PYTHONPATH=. python -c \
 RELEASE=1
 COMMIT := $(shell git rev-parse HEAD)
 SHORTCOMMIT := $(shell echo $(COMMIT) | cut -c1-7)
+LATESTVERSION := $(shell curl -s "https://grafana.com/api/plugins/vonage-status-panel" \
+	              | grep -Pom 1 '"version": "\K[^"]*')
 
 all: srpm
 
@@ -14,8 +16,8 @@ clean:
 	rm -rf $(NAME)-$(VERSION)-$(RELEASE).el7.src.rpm
 
 dist:
-	wget https://grafana.com/api/plugins/vonage-status-panel/versions/1.0.5/download \
-	  --output-document=vonage-status-panel-1.0.5-0-g4ecb061.zip
+	wget https://grafana.com/api/plugins/vonage-status-panel/versions/$(LATESTVERSION)/download \
+	  --output-document=vonage-status-panel.zip
 	python setup.py sdist \
 	  && mv dist/$(NAME)-$(VERSION).tar.gz .
 
