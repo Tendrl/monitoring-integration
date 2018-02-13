@@ -15,13 +15,13 @@ from tendrl.monitoring_integration.tests import test_init
 @patch.object(alert_utils, "post_dashboard")
 @patch.object(logger, "log")
 def test_create_alert_dashboard(log, post, fread, exist):
-    test_init.init()
     post.return_value = maps.NamedDict(status_code=200)
     exist.return_value = True
     path = os.path.join(os.path.dirname(__file__),
                         "dashboard.json")
     with open(path) as f:
         fread.return_value = f.read()
+    test_init.init()
     with patch.object(NS.monitoring.definitions,
                       "get_parsed_defs") as mock_defs:
         threshold = {'capacity_utilization': {'Warning': 75}}

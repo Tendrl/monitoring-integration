@@ -21,4 +21,5 @@ def test_graphite_utils():
             objects, cluster_details
         )
         for metric in metrics:
-            assert metric in result
+            if metric not in result:
+                raise AssertionError()

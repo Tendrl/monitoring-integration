@@ -1,7 +1,7 @@
 from tendrl.monitoring_integration.objects import alert_organization
 
 
-def test_AlertOrganization():
+def test_alert_organization():
     obj = alert_organization.AlertOrganization()
     result = [
         {

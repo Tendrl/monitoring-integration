@@ -29,19 +29,19 @@ def get_data_source_fail():
     return response
 
 
-def update(id):
+def update(ds_id):
     response = maps.NamedDict(status_code=200, content="{}")
     return response
 
 
-def fail_update(id):
+def fail_update(ds_id):
     response = maps.NamedDict(status_code=404, content="{}")
     return response
 
 
 def test_create():
-    test_init.init()
     with mock.patch("tendrl.commons.utils.log_utils.log") as mock_log:
+        test_init.init()
         with mock.patch.object(
             datasource, "create_datasource", pass_create_datasource
         ):
