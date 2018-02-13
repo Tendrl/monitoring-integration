@@ -13,7 +13,8 @@ def test_connect():
 
     alert.get = get
     resp = alert.connect(1, NS.config.data)
-    assert resp == 200
+    if not resp == 200:
+        raise AssertionError()
 
 
 @patch.object(grafana_org_utils, "get_org_id")
@@ -22,4 +23,5 @@ def test_switch_context(context, get_org_id):
     context.return_value = True
     get_org_id.return_value = '{"id": 1}'
     resp = alert.switch_context("test")
-    assert resp is True
+    if resp is not True:
+        raise AssertionError()

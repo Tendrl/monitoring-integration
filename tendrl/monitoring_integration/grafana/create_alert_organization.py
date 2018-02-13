@@ -87,7 +87,7 @@ def create_organization():
 def create_auth_key():
     # Check auth key is already exist
     resp = grafana_org_utils.get_auth_keys()
-    if type(resp) == list:
+    if isinstance(resp, list):
         flag = False
         for grafana_key in resp:
             if grafana_key['name'] == GRAFANA_AUTH_KEY and \

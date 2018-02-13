@@ -24,4 +24,5 @@ def test_AlertOrganization():
         }
     ]
     for atrr in obj.render():
-        assert atrr in result
+        if atrr not in result:
+            raise AssertionError()

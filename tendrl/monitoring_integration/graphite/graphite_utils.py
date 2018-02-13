@@ -6,7 +6,6 @@ from tendrl.commons.utils import log_utils as logger
 
 
 def archive(
-    self,
     resource_path,
     archive_path,
     resource_name,

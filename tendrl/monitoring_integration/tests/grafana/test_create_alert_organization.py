@@ -40,8 +40,11 @@ def test_create(create_notification, create_ds, context, write, client):
                         auth_key="grafana_key")
                     load.return_value = obj
                     create_alert_organization.create()
-                    assert NS.config.data["org_id"] == 2
-                    assert NS.config.data["grafana_auth_key"] == "grafana_key"
+                    if not NS.config.data["org_id"] == 2:
+                        raise AssertionError()
+                    if not NS.config.data["grafana_auth_key"] == \
+                            "grafana_key":
+                        raise AssertionError()
         with patch.object(grafana_org_utils, "get_org_id") as org_utils:
             org_utils.return_value = '{"message": "Organization not found"}'
             with patch.object(grafana_org_utils, "create_org") as create_org:
@@ -53,15 +56,19 @@ def test_create(create_notification, create_ds, context, write, client):
                                       "create_api_token") as api_token:
                         api_token.return_value = "grafana_key_new"
                         create_alert_organization.create()
-                        assert NS.config.data["org_id"] == 3
-                        assert NS.config.data["grafana_auth_key"] ==  \
-                            "grafana_key_new"
+                        if not NS.config.data["org_id"] == 3:
+                            raise AssertionError()
+                        if not NS.config.data["grafana_auth_key"] ==  \
+                                "grafana_key_new":
+                            raise AssertionError()
         with patch.object(grafana_org_utils, "get_org_id") as org_utils:
             org_utils.return_value = '{}'
             with patch.object(grafana_org_utils, "get_auth_keys") as auth_key:
                 auth_key.return_value = {}
                 create_alert_organization.create()
-                assert NS.config.data["org_id"] is None
-                assert NS.config.data["grafana_auth_key"] is None
+                if not NS.config.data["org_id"] is None:
+                    raise AssertionError()
+                if not NS.config.data["grafana_auth_key"] is None:
+                    raise AssertionError()
         with patch.object(grafana_org_utils, "get_org_id") as org_utils:
             org_utils.return_value = {}

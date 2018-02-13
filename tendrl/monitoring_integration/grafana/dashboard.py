@@ -13,9 +13,6 @@ from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
 
 
-'''Create Dashboard'''
-
-
 def _post_dashboard(dashboard_json, authorization_key=None):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):

@@ -19,40 +19,44 @@ def test_swap_handler(pid, node_id):
                         "swap_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
-    assert result == {'alert_id': None,
-                      'alert_type': 'UTILIZATION',
-                      'severity': 'INFO',
-                      'time_stamp': u'2018-02-07T17:40:02+05:30',
-                      'pid': '123',
-                      'tags': {'warning_max': 50,
-                               'message': u'Swap utilization of node '
-                               'dhcp122-234 is back to normal',
-                               'fqdn': u'dhcp122-234'
-                               },
-                      'resource': 'swap_utilization',
-                      'node_id': '1',
-                      'current_value': None,
-                      'source': 'GRAFANA',
-                      'significance': 'HIGH'
-                      }
+    condition = {'alert_id': None,
+                 'alert_type': 'UTILIZATION',
+                 'severity': 'INFO',
+                 'time_stamp': u'2018-02-07T17:40:02+05:30',
+                 'pid': '123',
+                 'tags': {'warning_max': 50,
+                          'message': u'Swap utilization of node '
+                          'dhcp122-234 is back to normal',
+                          'fqdn': u'dhcp122-234'
+                          },
+                 'resource': 'swap_utilization',
+                 'node_id': '1',
+                 'current_value': None,
+                 'source': 'GRAFANA',
+                 'significance': 'HIGH'
+                 }
+    if not result == condition:
+        raise AssertionError()
     path = os.path.join(os.path.dirname(__file__),
                         "swap_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
-    assert result == {'alert_type': 'UTILIZATION',
-                      'alert_id': None,
-                      'resource': 'swap_utilization',
-                      'time_stamp': u'2018-02-12T11:16:23+05:30',
-                      'pid': '123',
-                      'tags': {'warning_max': 70,
-                               'message': u'Swap utilization of node '
-                               'dhcp122-234 is 80.0 % which is above '
-                               'the WARNING threshold (70 %).',
-                               'fqdn': u'dhcp122-234'
-                               },
-                      'source': 'GRAFANA',
-                      'significance': 'HIGH',
-                      'current_value': '80.0',
-                      'severity': 'WARNING',
-                      'node_id': '1'
-                      }
+    condition = {'alert_type': 'UTILIZATION',
+                 'alert_id': None,
+                 'resource': 'swap_utilization',
+                 'time_stamp': u'2018-02-12T11:16:23+05:30',
+                 'pid': '123',
+                 'tags': {'warning_max': 70,
+                          'message': u'Swap utilization of node '
+                          'dhcp122-234 is 80.0 % which is above '
+                          'the WARNING threshold (70 %).',
+                          'fqdn': u'dhcp122-234'
+                          },
+                 'source': 'GRAFANA',
+                 'significance': 'HIGH',
+                 'current_value': '80.0',
+                 'severity': 'WARNING',
+                 'node_id': '1'
+                 }
+    if not result == condition:
+        raise AssertionError()

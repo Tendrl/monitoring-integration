@@ -19,40 +19,44 @@ def test_cpu_handler(pid, node_id):
                         "cpu_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
-    assert result == {'alert_id': None,
-                      'alert_type': 'UTILIZATION',
-                      'severity': 'INFO',
-                      'significance': 'HIGH',
-                      'node_id': '1',
-                      'current_value': None,
-                      'source': 'GRAFANA',
-                      'resource': 'cpu_utilization',
-                      'pid': '123',
-                      'time_stamp': u'2018-02-07T17:28:05+05:30',
-                      'tags': {'warning_max': 80,
-                               'fqdn': u'dhcp122-234',
-                               'message': u'Cpu utilization of '
-                               'node dhcp122-234 is back to normal'
-                               }
-                      }
+    condition = {'alert_id': None,
+                 'alert_type': 'UTILIZATION',
+                 'severity': 'INFO',
+                 'significance': 'HIGH',
+                 'node_id': '1',
+                 'current_value': None,
+                 'source': 'GRAFANA',
+                 'resource': 'cpu_utilization',
+                 'pid': '123',
+                 'time_stamp': u'2018-02-07T17:28:05+05:30',
+                 'tags': {'warning_max': 80,
+                          'fqdn': u'dhcp122-234',
+                          'message': u'Cpu utilization of '
+                          'node dhcp122-234 is back to normal'
+                          }
+                 }
+    if not result == condition:
+        raise AssertionError()
     path = os.path.join(os.path.dirname(__file__),
                         "cpu_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
-    assert result == {'pid': '123',
-                      'tags': {'fqdn': u'dhcp122-234',
-                               'warning_max': 1,
-                               'message': u'Cpu utilization of node '
-                               'dhcp122-234 is 2.61 % which is above the '
-                               'WARNING threshold (1 %).'
-                               },
-                      'alert_id': None,
-                      'source': 'GRAFANA',
-                      'current_value': '2.61',
-                      'significance': 'HIGH',
-                      'time_stamp': u'2018-02-12T10:53:03+05:30',
-                      'node_id': '1',
-                      'alert_type': 'UTILIZATION',
-                      'severity': 'WARNING',
-                      'resource': 'cpu_utilization'
-                      }
+    condition = {'pid': '123',
+                 'tags': {'fqdn': u'dhcp122-234',
+                          'warning_max': 1,
+                          'message': u'Cpu utilization of node '
+                          'dhcp122-234 is 2.61 % which is above the '
+                          'WARNING threshold (1 %).'
+                          },
+                 'alert_id': None,
+                 'source': 'GRAFANA',
+                 'current_value': '2.61',
+                 'significance': 'HIGH',
+                 'time_stamp': u'2018-02-12T10:53:03+05:30',
+                 'node_id': '1',
+                 'alert_type': 'UTILIZATION',
+                 'severity': 'WARNING',
+                 'resource': 'cpu_utilization'
+                 }
+    if not result == condition:
+        raise AssertionError()

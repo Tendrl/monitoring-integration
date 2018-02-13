@@ -19,34 +19,35 @@ class DeleteResourceFromGraphite(flows.BaseFlow):
         resource_name = str(self.parameters.get("Trigger.resource_name"))
         resource_type = str(self.parameters.get(
             "Trigger.resource_type")).lower()
-        self.update_graphite(
+        update_graphite(
             integration_id, resource_name, resource_type
         )
 
-    def update_graphite(self, integration_id, resource_name, resource_type):
-        whisper_path = get_data_dir_path()
-        if whisper_path:
-            if resource_type == "volume":
-                delete_volume_details(
-                    integration_id,
-                    resource_name,
-                    whisper_path,
-                    resource_type
-                )
-            if resource_type == "brick":
-                delete_brick_details(
-                    integration_id,
-                    resource_name,
-                    whisper_path,
-                    resource_type
-                )
-            if resource_type == "host":
-                delete_host_details(
-                    integration_id,
-                    resource_name,
-                    whisper_path,
-                    resource_type
-                )
+
+def update_graphite(integration_id, resource_name, resource_type):
+    whisper_path = get_data_dir_path()
+    if whisper_path:
+        if resource_type == "volume":
+            delete_volume_details(
+                integration_id,
+                resource_name,
+                whisper_path,
+                resource_type
+            )
+        if resource_type == "brick":
+            delete_brick_details(
+                integration_id,
+                resource_name,
+                whisper_path,
+                resource_type
+            )
+        if resource_type == "host":
+            delete_host_details(
+                integration_id,
+                resource_name,
+                whisper_path,
+                resource_type
+            )
 
 
 def delete_brick_details(

@@ -78,7 +78,7 @@ def get_data_source():
     return resp
 
 
-def update_datasource(id):
+def update_datasource(datasource_id):
     try:
         config = maps.NamedDict(NS.config.data)
         datasource_json = form_datasource_json()
@@ -88,14 +88,14 @@ def update_datasource(id):
                 "http://{}:{}/api/datasources/{}".format(
                     config.grafana_host,
                     config.grafana_port,
-                    id
+                    datasource_id
                 ),
                 headers=constants.HEADERS,
                 auth=config.credentials,
                 data=datasource_str
             )
         else:
-            exceptions.ConnectionFailedException
+            raise exceptions.ConnectionFailedException
         return response
 
     except exceptions.ConnectionFailedException as ex:

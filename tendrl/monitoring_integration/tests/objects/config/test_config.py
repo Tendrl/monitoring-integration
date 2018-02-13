@@ -8,4 +8,5 @@ from tendrl.monitoring_integration.objects import config
 def test_config(load_config):
     load_config.return_value = "test_monitoring"
     obj = config.Config()
-    assert obj.data == "test_monitoring"
+    if obj.data is not "test_monitoring":
+        raise AssertionError()
