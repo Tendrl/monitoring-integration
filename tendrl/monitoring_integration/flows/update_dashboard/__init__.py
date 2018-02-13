@@ -1,5 +1,3 @@
-import copy
-
 from tendrl.commons import flows
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.flows.update_dashboard import alert_utils
@@ -51,7 +49,6 @@ class UpdateDashboard(flows.BaseFlow):
 def _delete_panel(
     integration_id, resource_type, resource_name=None
 ):
-    response = []
     if resource_name is None:
         # delete all dashboards using integration id
         for dash_name in GLUSTER_DASHBOARDS:
@@ -70,5 +67,4 @@ def _delete_panel(
             resource_name
         )
     resp = post_dashboard(alert_dashboard)
-    response.append(copy.deepcopy(resp))
-    return response
+    return resp
