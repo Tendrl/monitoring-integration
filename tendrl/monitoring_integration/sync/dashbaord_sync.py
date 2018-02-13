@@ -1,6 +1,5 @@
 import etcd
-from requests.exceptions import ConnectionError
-from requests.exceptions import RequestException
+from requests import exceptions as req_excep
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
@@ -39,9 +38,9 @@ class SyncAlertDashboard(object):
         except (etcd.EtcdException,
                 KeyError,
                 AttributeError,
-                ConnectionError,
+                req_excep.ConnectionError,
                 TypeError,
-                RequestException,
+                req_excep.RequestException,
                 exceptions.ConnectionFailedException,
                 exceptions.AlertOrganizationNotFound) as ex:
             logger.log("error", NS.get("publisher_id", None),
@@ -134,7 +133,8 @@ class SyncAlertDashboard(object):
                         resource_name,
                         sds_name
                     )
-                    self.log_message(response, resource_name, "volume")
+                    if response:
+                        self.log_message(response, resource_name, "volume")
                 except KeyError:
                     logger.log("error", NS.get("publisher_id", None),
                                {'message': "Failed to get volume {} "

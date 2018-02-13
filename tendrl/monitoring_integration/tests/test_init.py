@@ -17,9 +17,14 @@ from tendrl.commons.utils.central_store import utils as cs_utils
 @patch.object(cs_utils, "read")
 @patch.object(cmn_config, "load_config")
 @patch.object(node.NodeContext, '_get_node_id')
-def init(patch_get_node_id, load_conf, util_read,
-         util_write, patch_write, patch_read,
-         patch_client):
+def init(patch_get_node_id=None,
+         load_conf=None,
+         util_read=None,
+         util_write=None,
+         patch_write=None,
+         patch_read=None,
+         patch_client=None
+         ):
     patch_get_node_id.return_value = 1
     patch_read.return_value = etcd.Client()
     patch_write.return_value = etcd.Client()

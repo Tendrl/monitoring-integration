@@ -202,7 +202,7 @@ class GraphitePlugin(object):
             obj_details = objects["Cluster"][str(obj)]
             obj_key = os.path.join(cluster_key, str(obj))
             obj_attrs = obj_details["attrs"]
-            for key, value in obj_attrs.items():
+            for key, _ in obj_attrs.items():
                 try:
                     attr_key = os.path.join(obj_key, key)
                     attr_data = etcd_utils.read(attr_key)
@@ -246,7 +246,7 @@ class GraphitePlugin(object):
                         continue
                 except etcd.EtcdKeyNotFound:
                     continue
-                for key, value in objects["Brick"]["attrs"].items():
+                for key, _ in objects["Brick"]["attrs"].items():
                     try:
                         brick_attr_key = os.path.join(
                             cluster_key,

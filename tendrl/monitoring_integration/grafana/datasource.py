@@ -13,9 +13,6 @@ from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
 
 
-''' Create Datasource '''
-
-
 def _post_datasource(datasource_json):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
@@ -101,7 +98,7 @@ def update_datasource(id):
             exceptions.ConnectionFailedException
         return response
 
-    except exceptions.ConnectionFailedException:
+    except exceptions.ConnectionFailedException as ex:
         logger.log("error", NS.get("publisher_id", None),
-                   {'message': str(traceback.print_stack())})
-        raise exceptions.ConnectionFailedException
+                   {'message': str(ex)})
+        raise ex

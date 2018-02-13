@@ -1,9 +1,6 @@
-import json
-
 import etcd
-from requests.exceptions import ConnectionError
-from requests.exceptions import RequestException
-
+import json
+from requests import exceptions as req_excep
 
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import constants
@@ -50,9 +47,9 @@ def create():
     except(
         KeyError,
         AttributeError,
-        ConnectionError,
+        req_excep.ConnectionError,
         TypeError,
-        RequestException,
+        req_excep.RequestException,
         etcd.EtcdException,
         exceptions.ConnectionFailedException
     ) as ex:

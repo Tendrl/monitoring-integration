@@ -80,8 +80,9 @@ def set_gluster_target(target, integration_id, resource, resource_name):
     return new_title
 
 
-def create_resource_dashboard(resource_name, resource,
-                              sds_name, integration_id):
+def create_resource_dashboard(
+    resource_name, resource, sds_name, integration_id
+):
     dashboard_path = constants.PATH_PREFIX + constants.DASHBOARD_PATH + \
         "/tendrl-" + str(sds_name) + "-" + str(resource_name) + '.json'
 
@@ -152,10 +153,12 @@ def create_resource_dashboard(resource_name, resource,
                                     global_row["panels"] = []
                                     panel_count = 1
                     except KeyError as ex:
-                        logger.log("error",
-                                   NS.get("publisher_id", None),
-                                   {'message': str(panel["title"]) +
-                                    "failed" + str(ex)})
+                        logger.log(
+                            "error",
+                            NS.get("publisher_id", None),
+                            {'message': str(panel[
+                                "title"]) + "failed" + str(ex)}
+                        )
             all_resource_rows.append(copy.deepcopy(global_row))
             resource_json["dashboard"]["rows"] = []
             resource_json["dashboard"]["rows"] = all_resource_rows
@@ -174,50 +177,53 @@ def create_resource_dashboard(resource_name, resource,
         except Exception as ex:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': str(ex)})
-        return None
 
 
 def add_panel(integration_id, resource_type, resource_name, sds_name):
-        alert_dashboard = alert_utils.get_alert_dashboard(
-            resource_type
-        )
-        if alert_dashboard:
+    resp = None
+    alert_dashboard = alert_utils.get_alert_dashboard(
+        resource_type
+    )
+    if alert_dashboard:
+        try:
+            if alert_dashboard["message"] == "Dashboard not found":
+                flag = False
+            else:
+                flag = True
+        except (KeyError, AttributeError):
+            flag = True
+        if flag:
             try:
-                if alert_dashboard["message"] == "Dashboard not found":
-                    flag = False
-                else:
-                    flag = True
-            except (KeyError, AttributeError):
-                    flag = True
-            if flag:
-                try:
-                    if sds_name == constants.GLUSTER:
-                        # check duplicate rows
-                        if not check_duplicate(
-                            alert_dashboard,
+                if sds_name == constants.GLUSTER:
+                    # check duplicate rows
+                    if not check_duplicate(
+                        alert_dashboard,
+                        integration_id,
+                        resource_type,
+                        resource_name
+                    ):
+                        alert_row = fetch_row(alert_dashboard)
+                        add_gluster_resource_panel(
+                            alert_row,
                             integration_id,
                             resource_type,
                             resource_name
-                        ):
-                            alert_row = fetch_row(alert_dashboard)
-                            add_gluster_resource_panel(
-                                alert_row,
-                                integration_id,
-                                resource_type,
-                                resource_name
-                            )
-                            dash_json = create_updated_dashboard(
-                                alert_dashboard, alert_row
-                            )
-                            alert_utils.post_dashboard(dash_json)
-                except Exception:
-                    logger.log("error", NS.get("publisher_id", None),
-                               {'message': "Error while updating "
-                                "dashboard for %s" % resource_name})
+                        )
+                        dash_json = create_updated_dashboard(
+                            alert_dashboard, alert_row
+                        )
+                        resp = alert_utils.post_dashboard(dash_json)
+            except Exception as ex:
+                logger.log("error", NS.get("publisher_id", None),
+                           {'message': "Error while updating "
+                            "dashboard for %s" % resource_name})
+                raise ex
+    return resp
 
 
-def check_duplicate(alert_dashboard, integration_id,
-                    resource_type, resource_name):
+def check_duplicate(
+    alert_dashboard, integration_id, resource_type, resource_name
+):
     flag = False
     for row in alert_dashboard["dashboard"]["rows"]:
         if "panels" in row and (not flag):
@@ -246,8 +252,9 @@ def check_duplicate(alert_dashboard, integration_id,
     return flag
 
 
-def add_gluster_resource_panel(alert_rows, cluster_id,
-                               resource_type, resource_name):
+def add_gluster_resource_panel(
+    alert_rows, cluster_id, resource_type, resource_name
+):
     if resource_type == "hosts":
             resource_type = "nodes"
     for alert_row in alert_rows:

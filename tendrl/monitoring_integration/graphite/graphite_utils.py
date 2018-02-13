@@ -5,6 +5,30 @@ import os
 from tendrl.commons.utils import log_utils as logger
 
 
+def archive(
+    self,
+    resource_path,
+    archive_path,
+    resource_name,
+    resource_type
+):
+    ret_val = os.system(
+        "mv " + str(resource_path) + " " + str(archive_path)
+    )
+    if ret_val is 0:
+        msg = "%s - %s deleted from graphite" % (
+            resource_type, resource_name
+        )
+        logger.log("info", NS.get("publisher_id", None),
+                   {'message': msg})
+    else:
+        msg = "%s - %s deleted from graphite failed" % (
+            resource_type, resource_name
+        )
+        logger.log("error", NS.get("publisher_id", None),
+                   {'message': msg})
+
+
 def get_data_dir_path():
     carbon_path = "/etc/carbon/carbon.conf"
     if not os.path.exists(carbon_path):

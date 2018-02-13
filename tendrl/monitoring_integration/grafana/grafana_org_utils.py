@@ -9,9 +9,6 @@ from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
 
 
-''' Create new organisation'''
-
-
 def create_org(org_name):
 
     config = maps.NamedDict(NS.config.data)
@@ -32,9 +29,6 @@ def create_org(org_name):
             return None
     else:
         raise exceptions.ConnectionFailedException
-
-
-''' Get particular organisation by name '''
 
 
 def get_org_id(org_name):
@@ -73,9 +67,6 @@ def get_current_org_name():
             return None
     else:
         raise exceptions.ConnectionFailedException
-
-
-''' Switch context to particular org '''
 
 
 def switch_context(org_id):
