@@ -5,11 +5,11 @@ from requests import exceptions as req_excep
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import \
-    create_datasource
-from tendrl.monitoring_integration.grafana import \
-    create_notification_channel
+    datasource
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import grafana_org_utils
+from tendrl.monitoring_integration.grafana import \
+    notification_channel
 
 
 GRAFANA_AUTH_KEY = "grafana_auth_key"
@@ -29,9 +29,9 @@ def create():
                 auth_key=key
             ).save()
             # create datasource in alert org
-            create_datasource.create()
+            datasource.create()
             # Create notification medium
-            create_notification_channel.create_notification_channel()
+            notification_channel.create_notification_channel()
             # context swith to main org
             main_org_id = grafana_org_utils.get_org_id(
                 constants.MAIN_ORG

@@ -1,6 +1,7 @@
 import ConfigParser
 import copy
 import os
+import shutil
 
 from tendrl.commons.utils import log_utils as logger
 
@@ -11,16 +12,14 @@ def archive(
     resource_name,
     resource_type
 ):
-    ret_val = os.system(
-        "mv " + str(resource_path) + " " + str(archive_path)
-    )
-    if ret_val is 0:
+    try:
+        shutil.move(resource_path, archive_path)
         msg = "%s - %s deleted from graphite" % (
             resource_type, resource_name
         )
         logger.log("info", NS.get("publisher_id", None),
                    {'message': msg})
-    else:
+    except Exception:
         msg = "%s - %s deleted from graphite failed" % (
             resource_type, resource_name
         )
@@ -29,7 +28,7 @@ def archive(
 
 
 def get_data_dir_path():
-    carbon_path = "/etc/carbon/carbon.conf"
+    carbon_path = "/etc/tendrl/monitoring-integration/carbon.conf"
     if not os.path.exists(carbon_path):
         return None
     carbon_config = ConfigParser.ConfigParser()

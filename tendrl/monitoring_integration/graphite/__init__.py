@@ -412,19 +412,20 @@ class GraphitePlugin(object):
                                 "for volume" + str(ex)
                             }
                         )
-            cluster["geo_rep"] = {}
-            cluster["geo_rep"]["total"] = geo_rep_mapper["total"]
-            cluster["geo_rep"]["up"] = geo_rep_mapper["up"]
-            cluster["geo_rep"]["down"] = geo_rep_mapper["down"]
-            cluster["geo_rep"]["partial"] = geo_rep_mapper["partial"]
-            cluster["geo_rep"]["created"] = geo_rep_mapper["created"]
-            cluster["geo_rep"]["stopped"] = geo_rep_mapper["stopped"]
-            cluster["geo_rep"]["paused"] = geo_rep_mapper["paused"]
+            cluster["geo_rep"] = {
+                "total": geo_rep_mapper["total"],
+                "up": geo_rep_mapper["up"],
+                "down": geo_rep_mapper["down"],
+                "partial": geo_rep_mapper["partial"],
+                "created": geo_rep_mapper["created"],
+                "stopped": geo_rep_mapper["stopped"],
+                "paused": geo_rep_mapper["paused"]
+            }
         return cluster_data
 
     def set_volume_level_brick_count(self, cluster_data):
-        volume_detail = {}
         for cluster in cluster_data:
+            volume_detail = {}
             for volume in cluster["Volume"]:
                 try:
                     volume_detail[volume["name"]] = {"total": 0,
@@ -432,7 +433,7 @@ class GraphitePlugin(object):
                                                      "down": 0}
                 except (AttributeError, KeyError):
                     pass
-        for cluster in cluster_data:
+            # Increment count using volume_details
             for brick in cluster["Brick"]:
                 try:
                     volume_detail[str(brick["vol_name"])]["total"] = \

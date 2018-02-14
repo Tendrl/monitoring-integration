@@ -3,9 +3,9 @@ from mock import patch
 import os
 
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import \
-    create_alert_dashboard
+    alert_dashboard
+from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.tests import test_init
 
@@ -28,7 +28,7 @@ def test_create_alert_dashboard(log, post, fread, exist):
         mock_defs.return_value = (
             {"namespace.monitoring": {"thresholds": {"volumes": threshold}}}
         )
-        create_alert_dashboard.create_resource_dashboard(
+        alert_dashboard.create_resource_dashboard(
             "volumes",
             {'vol_id': u'4ff7cf55-a6ef-4ea1-a8ea-f406803503a4',
              'name': u'V2',

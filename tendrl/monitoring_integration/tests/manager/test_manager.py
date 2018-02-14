@@ -7,12 +7,12 @@ from tendrl.commons.manager import Manager
 from tendrl.commons.objects import BaseObject
 import tendrl.commons.objects.node_context as node
 from tendrl.monitoring_integration.grafana import \
-    create_alert_organization
-from tendrl.monitoring_integration.grafana import create_dashboards
+    alert_organization
+from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import utils
-from tendrl.monitoring_integration.grafana import webhook_receiver
 from tendrl.monitoring_integration import manager
 from tendrl.monitoring_integration.tests import test_init
+from tendrl.monitoring_integration.webhook import webhook_receiver
 
 
 class TimeOutException(Exception):
@@ -26,8 +26,8 @@ def wait(obj, timeout):
 @patch.object(node.NodeContext, '_get_node_id')
 @patch.object(BaseObject, "load")
 @patch.object(utils, "port_open")
-@patch.object(create_alert_organization, "create")
-@patch.object(create_dashboards, "upload_default_dashboards")
+@patch.object(alert_organization, "create")
+@patch.object(dashboard, "upload_default_dashboards")
 @patch.object(webhook_receiver, "WebhookReceiver")
 @patch.object(Manager, "start")
 def test_main(com_start, webhook, dashboard, create,

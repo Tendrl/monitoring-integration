@@ -7,11 +7,11 @@ from tendrl.commons import TendrlNS
 from tendrl.commons.utils import log_utils as logger
 from tendrl import monitoring_integration
 from tendrl.monitoring_integration.grafana import \
-    create_alert_organization
-from tendrl.monitoring_integration.grafana import create_dashboards
+    alert_organization
+from tendrl.monitoring_integration.grafana import dashboard
 from tendrl.monitoring_integration.grafana import utils
-from tendrl.monitoring_integration.grafana import webhook_receiver
 from tendrl.monitoring_integration import sync
+from tendrl.monitoring_integration.webhook import webhook_receiver
 
 
 class MonitoringIntegrationManager(common_manager.Manager):
@@ -28,9 +28,9 @@ class MonitoringIntegrationManager(common_manager.Manager):
 
     def start(self):
         # Creating Default Dashboards
-        create_dashboards.upload_default_dashboards()
+        dashboard.upload_default_dashboards()
         # Create alert organization
-        create_alert_organization.create()
+        alert_organization.create()
         super(MonitoringIntegrationManager, self).start()
         # start webhook for receive alert from grafana
         self.webhook_receiver.start()

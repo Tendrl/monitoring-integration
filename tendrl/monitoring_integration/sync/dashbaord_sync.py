@@ -3,11 +3,11 @@ from requests import exceptions as req_excep
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import alert_dashboard
+from tendrl.monitoring_integration.grafana import \
+    alert_organization
 from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import constants
-from tendrl.monitoring_integration.grafana import create_alert_dashboard
-from tendrl.monitoring_integration.grafana import \
-    create_alert_organization
 from tendrl.monitoring_integration.grafana import exceptions
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.sync import gluster_cluster_details
@@ -34,7 +34,7 @@ class SyncAlertDashboard(object):
                     self.update_dashboard(cluster_details, dashboards)
             else:
                 # try to create alert organization once again
-                create_alert_organization.create()
+                alert_organization.create()
         except (etcd.EtcdException,
                 KeyError,
                 AttributeError,
@@ -105,7 +105,7 @@ class SyncAlertDashboard(object):
         for resource in cluster_details[resource_name]:
             if not flag:
                 # create dashboard
-                create_alert_dashboard.create_resource_dashboard(
+                alert_dashboard.create_resource_dashboard(
                     resource_name,
                     resource,
                     cluster_details["sds_name"],
@@ -121,58 +121,33 @@ class SyncAlertDashboard(object):
                     cluster_details["sds_name"]
                 )
 
-    def create_gluster_resource(self, resource, resource_type,
+    def create_gluster_resource(self, resources, resource_type,
                                 integration_id, sds_name):
-        if resource_type == "volumes":
-            for volume in resource:
-                try:
-                    resource_name = str(volume["name"])
-                    response = create_alert_dashboard.add_panel(
-                        integration_id,
-                        resource_type,
-                        resource_name,
-                        sds_name
-                    )
-                    if response:
-                        self.log_message(response, resource_name, "volume")
-                except KeyError:
-                    logger.log("error", NS.get("publisher_id", None),
-                               {'message': "Failed to get volume {} "
-                                "details".format(volume)})
-        if resource_type == "hosts":
-            for host in resource:
-                try:
-                    resource_name = str(host["fqdn"]).replace(".", "_")
-                    response = create_alert_dashboard.add_panel(
-                        integration_id,
-                        resource_type,
-                        resource_name,
-                        sds_name
-                    )
-                    self.log_message(response, resource_name, "host")
-                except KeyError:
-                    logger.log("error", NS.get("publisher_id", None),
-                               {'message': "Failed to get host {} "
-                                "details".format(host)})
-
-        if resource_type == "bricks":
-            for brick in resource:
-                try:
+        for resource in resources:
+            try:
+                if resource_type == "volumes":
+                    resource_name = str(resource["name"])
+                elif resource_type == "hosts":
+                    resource_name = str(resource["fqdn"]).replace(".", "_")
+                elif resource_type == "bricks":
                     resource_name = "%s|%s:%s" % (
-                        str(brick["vol_name"]),
-                        brick["hostname"],
-                        brick["brick_path"].replace("|", "/")
+                        str(resource["vol_name"]),
+                        resource["hostname"],
+                        resource["brick_path"].replace("|", "/")
                     )
-                    response = create_alert_dashboard.add_panel(
-                        integration_id,
-                        resource_type,
-                        resource_name,
-                        sds_name)
-                    self.log_message(response, resource_name, "brick")
-                except KeyError:
-                    logger.log("error", NS.get("publisher_id", None),
-                               {'message': "Failed to get brick {} "
-                                "details".format(brick)})
+            except KeyError:
+                logger.log("error", NS.get("publisher_id", None),
+                           {'message': "Failed to get resource {} "
+                            "details".format(resource)})
+                continue
+            response = alert_dashboard.add_panel(
+                integration_id,
+                resource_type,
+                resource_name,
+                sds_name
+            )
+            if response:
+                self.log_message(response, resource_name, resource_type)
 
     def log_message(self, response, resource_name, resource_type):
         try:
