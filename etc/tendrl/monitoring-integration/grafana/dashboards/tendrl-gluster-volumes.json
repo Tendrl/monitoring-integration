@@ -1,7 +1,15 @@
 {
     "dashboard": {
         "annotations": {
-            "list": []
+            "list": [{
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }]
         },
         "editable": false,
         "gnetId": null,
@@ -175,6 +183,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
+                "datasource": "",
                 "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n1 = Started  \n10 = Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
@@ -238,6 +247,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "cornerRadius": 0,
                 "datasource": "",
                 "description": "The Bricks panel displays brick status information for a given volume, including the total number of bricks in the volume, and a count of bricks by status. For details, go to the Bricks Dashboard.",
                 "displayName": "Bricks",
@@ -280,8 +290,9 @@
                     "alias": "Down",
                     "crit": 1,
                     "decimals": 0,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.down), \"max\")),\"Down\")",
                     "textEditor": true,
@@ -300,6 +311,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "cornerRadius": 0,
                 "datasource": "",
                 "description": "The Subvolumes panel displays subvolume status information for a given volume.",
                 "displayName": "Subvolume",
@@ -331,6 +343,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "cornerRadius": 0,
                 "datasource": "",
                 "description": "The Geo-Replication Session panel displays geo-replication session information from a given volume.",
                 "displayName": "Geo-Replication Sessions",
@@ -355,8 +368,9 @@
                     "alias": "Created",
                     "crit": 1,
                     "decimals": null,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "F",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.created), 'max')), 'Created')",
                     "textEditor": false,
@@ -376,8 +390,9 @@
                     "alias": "Partial",
                     "crit": 999,
                     "decimals": 0,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "D",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.partial), 'max')), 'Partial')",
                     "textEditor": false,
@@ -389,8 +404,9 @@
                     "alias": "Paused",
                     "crit": 999,
                     "decimals": 0,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "G",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.paused), 'max')), 'Paused')",
                     "textEditor": false,
@@ -402,8 +418,9 @@
                     "alias": "Stopped",
                     "crit": 1,
                     "decimals": 0,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "E",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.stopped), 'max')), 'Stopped')",
                     "textEditor": false,
@@ -415,8 +432,9 @@
                     "alias": "Down",
                     "crit": 1,
                     "decimals": 0,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "C",
                     "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.down), 'max')), 'Down')",
                     "textEditor": false,
@@ -435,6 +453,7 @@
                     "ok": "rgba(50, 128, 45, 0.9)",
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
+                "cornerRadius": 0,
                 "datasource": "",
                 "description": "The Rebalance panel displays rebalance progress information for a given volume, which is applicable when rebalancing is underway.",
                 "displayName": "Rebalance",
@@ -458,8 +477,9 @@
                     "aggregation": "Last",
                     "alias": "Size",
                     "decimals": 2,
-                    "display": true,
+                    "displayAliasType": "Always",
                     "displayType": "Regular",
+                    "displayValueWithAlias": "When Alias Displayed",
                     "refId": "B",
                     "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
                     "textEditor": false,
@@ -755,7 +775,7 @@
                 "datasource": "",
                 "decimals": 1,
                 "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
-                "format": "decbytes",
+                "format": "kbytes",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -1804,7 +1824,7 @@
         },
         "timezone": "browser",
         "title": "Tendrl-Gluster-Volumes",
-        "version": 7
+        "version": 8
     }
 }
 
