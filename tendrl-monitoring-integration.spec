@@ -54,7 +54,9 @@ rm -rf html/.{doctrees,buildinfo}
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
+install -m  0755 --directory $RPM_BUILD_ROOT%{_sysconfdir}/firewalld/services
 install -d %{buildroot}%{_localstatedir}/lib/grafana/plugins/
+install -Dm 0644 etc/firewalld/services/tendrl-monitoring-integration.xml $RPM_BUILD_ROOT%{_sysconfdir}/firewalld/services
 install -Dm 0640 etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 install -Dm 0640 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir}/tendrl-monitoring-integration.service
@@ -97,6 +99,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %dir %{_sysconfdir}/tendrl/monitoring-integration
 %doc README.rst
 %license LICENSE
+%config(noreplace) %{_sysconfdir}/firewalld/services/tendrl-monitoring-integration.xml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards/*
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
