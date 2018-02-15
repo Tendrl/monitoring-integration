@@ -9,7 +9,6 @@ from tendrl.commons.message import ExceptionMessage
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert.handlers import AlertHandlerManager
 
-HOST = "127.0.0.1"
 PORT = 8789
 
 
@@ -63,7 +62,11 @@ class WebhookReceiver(threading.Thread):
 
     def run(self):
         try:
-            run_simple(HOST, PORT, self._application, threaded=True)
+            run_simple(
+                NS.node_context.fqdn,
+                PORT,
+                self._application, threaded=True
+            )
         except (TypeError,
                 ValueError) as ex:
             Event(

@@ -1,0 +1,72 @@
+{
+  "Id": 3,
+  "Version": 0,
+  "OrgId": 2,
+  "DashboardId": 5,
+  "PanelId": 3,
+  "Name": "hosts CPU Utilization Alert",
+  "Message": "",
+  "Severity": "",
+  "State": "alerting",
+  "Handler": 1,
+  "Silenced": false,
+  "ExecutionError": " ",
+  "Frequency": 6,
+  "EvalData": {
+    "evalMatches": [
+      {
+        "metric": "sumSeries(tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.cpu.{percent-user,percent-system})",
+        "tags": null,
+        "value": 2.6086266657247665
+      }
+    ]
+  },
+  "NewStateDate": "2018-02-12T10:53:03+05:30",
+  "StateChanges": 2,
+  "Created": "2018-02-07T17:21:08+05:30",
+  "Updated": "2018-02-12T10:52:56+05:30",
+  "Settings": {
+    "conditions": [
+      {
+        "evaluator": {
+          "params": [
+            1
+          ],
+          "type": "gt"
+        },
+        "operator": {
+          "type": "and"
+        },
+        "query": {
+          "datasourceId": 2,
+          "model": {
+            "hide": true,
+            "refId": "B",
+            "target": "sumSeries(tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.cpu.{percent-user,percent-system})",
+            "textEditor": false
+          },
+          "params": [
+            "B",
+            "3m",
+            "now"
+          ]
+        },
+        "reducer": {
+          "params": [
+            
+          ],
+          "type": "avg"
+        },
+        "type": "query"
+      }
+    ],
+    "executionErrorState": "keep_state",
+    "frequency": "6s",
+    "handler": 1,
+    "name": "hosts CPU Utilization Alert",
+    "noDataState": "keep_state",
+    "notifications": [
+      
+    ]
+  }
+}

@@ -10,6 +10,7 @@ from tendrl.monitoring_integration.grafana import utils
 
 
 def create_org(org_name):
+
     config = maps.NamedDict(NS.config.data)
     upload_str = {"name": org_name}
     if utils.port_open(config.grafana_port, config.grafana_host):
@@ -31,6 +32,7 @@ def create_org(org_name):
 
 
 def get_org_id(org_name):
+
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get(
@@ -53,7 +55,7 @@ def get_current_org_name():
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get(
-            "http://{}:{}/api/" "org/".format(
+            "http://{}:{}/api/org/".format(
                 config.grafana_host,
                 config.grafana_port
             ),
@@ -71,16 +73,13 @@ def switch_context(org_id):
     config = maps.NamedDict(NS.config.data)
     upload_str = ''
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post(
-            "http://{}:{}/api/user/using/{}".format(
-                config.grafana_host,
-                config.grafana_port,
-                org_id
-            ),
-            headers=constants.HEADERS,
-            auth=config.credentials,
-            data=upload_str
-        )
+        response = post("http://{}:{}/api/user/using"
+                        "/{}".format(config.grafana_host,
+                                     config.grafana_port,
+                                     org_id),
+                        headers=constants.HEADERS,
+                        auth=config.credentials,
+                        data=upload_str)
         try:
             if "changed" in json.loads(response.content)["message"]:
                 return True
@@ -96,16 +95,29 @@ def create_api_token(key_name, role):
     config = maps.NamedDict(NS.config.data)
     request_body = {"name": key_name, "role": role}
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post(
+        response = post("http://{}:{}/api/auth/"
+                        "keys".format(config.grafana_host,
+                                      config.grafana_port),
+                        headers=constants.HEADERS,
+                        auth=config.credentials,
+                        data=json.dumps(request_body))
+        try:
+            return json.loads(response.content)["key"]
+        except KeyError:
+            return None
+
+
+def get_auth_keys():
+    config = maps.NamedDict(NS.config.data)
+    if utils.port_open(config.grafana_port, config.grafana_host):
+        response = get(
             "http://{}:{}/api/auth/keys".format(
                 config.grafana_host,
                 config.grafana_port
             ),
-            headers=constants.HEADERS,
-            auth=config.credentials,
-            data=json.dumps(request_body)
+            auth=config.credentials
         )
         try:
-            return json.loads(response.content)["key"]
+            return json.loads(response.content)
         except KeyError:
             return None

@@ -1,0 +1,94 @@
+{
+  "Volume": {
+    "metric": [
+      "clusters.$integration_id.volumes.$volume_name"
+    ],
+    "attrs": {
+      "status": null,
+      "pcnt_used": null,
+      "name": null,
+      "usable_capacity": null,
+      "used_inode_capacity": null,
+      "pcnt_inode_used": null,
+      "state": null,
+      "subvol_count": null,
+      "total_inode_capacity": null,
+      "used_capacity": null,
+      "rebal_status": null,
+      "geo_rep_session": {
+        "count": {
+          "paused": {
+            "session_status": [
+              "paused"
+            ]
+          },
+          "down": {
+            "session_status": [
+              "down"
+            ]
+          },
+          "partial": {
+            "session_status": [
+              "partial"
+            ]
+          },
+          "created": {
+            "session_status": [
+              "created"
+            ]
+          },
+          "stopped": {
+            "session_status": [
+              "stopped"
+            ]
+          },
+          "total": null,
+          "up": {
+            "session_status": [
+              "up"
+            ]
+          }
+        },
+        "attrs": {
+          "session_status": null
+        },
+        "value": "clusters/$integration_id/Volumes/$volume_id/GeoRepSessions"
+      }
+    },
+    "value": "clusters/$integration_id/Volumes/$volume_id"
+  },
+  "Cluster": {
+    "GlobalDetails": {
+      "attrs": {
+        "status": null
+      }
+    },
+    "metric": [
+      "clusters.$integration_id"
+    ],
+    "value": "clusters/$integration_id"
+  },
+  "Brick": {
+    "metric": [
+      "clusters.$integration_id.nodes.$node_name.bricks.$brick_name"
+    ],
+    "attrs": {
+      "status": null,
+      "vol_name": null,
+      "brick_path": null,
+      "vol_id": null,
+      "name": null
+    },
+    "value": "clusters/$integration_id/Bricks/all/$brick_id"
+  },
+  "Node": {
+    "metric": [
+      "clusters.$integration_id.nodes.$node_name"
+    ],
+    "attrs": {
+      "status": null,
+      "fqdn": null
+    },
+    "value": "clusters/$integration_id/nodes/$node_id/NodeContext"
+  }
+}

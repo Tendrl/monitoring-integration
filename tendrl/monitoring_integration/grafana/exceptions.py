@@ -16,3 +16,7 @@ class InvalidConfigurationException(Exception):
 
 class ConnectionFailedException(Exception):
     pass
+
+
+class AlertOrganizationNotFound(Exception):
+    pass

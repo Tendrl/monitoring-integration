@@ -1,0 +1,251 @@
+[
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.subvol_count": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.pcnt_used": "21.4820967334"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.used_inode_capacity": "140190"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.usable_capacity": "21281256"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.used_capacity": "4571660"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.total_inode_capacity": "1376256"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.state": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.geo_rep_session.partial": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.geo_rep_session.stopped": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.geo_rep_session.paused": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.geo_rep_session.created": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.geo_rep_session.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.geo_rep_session.total": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.geo_rep_session.up": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.pcnt_inode_used": "10.1863316127"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.rebal_status": "13"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.subvol_count": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.pcnt_used": "21.4843898311"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.used_inode_capacity": "140195"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.usable_capacity": "21281256"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.used_capacity": "4572148"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.total_inode_capacity": "1376256"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.state": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.geo_rep_session.partial": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.geo_rep_session.stopped": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.geo_rep_session.paused": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.geo_rep_session.created": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.geo_rep_session.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.geo_rep_session.total": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.geo_rep_session.up": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.pcnt_inode_used": "10.1866949172"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.rebal_status": "13"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.status": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.status": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.status": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.brick_count.total": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.brick_count.total": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.brick_count.total": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.brick_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.brick_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.brick_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.brick_count.up": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.brick_count.up": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.brick_count.up": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.brick_count.total": "6"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.brick_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.brick_count.up": "6"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.brick_count.total": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.brick_count.total": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.brick_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.brick_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.brick_count.up": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.brick_count.up": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes_count.total": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes_count.up": "3"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volume_count.total": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volume_count.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volume_count.up": "2"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volume_count.partial": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volume_count.degraded": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-234.bricks.|gluster|brick1.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-234.bricks.|gluster|brick2.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-3.bricks.|gluster|brick1.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-3.bricks.|gluster|brick2.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-137.bricks.|gluster|brick1.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-137.bricks.|gluster|brick2.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.bricks.|gluster|brick1.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.bricks.|gluster|brick2.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.bricks.|gluster|brick1.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.bricks.|gluster|brick2.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.bricks.|gluster|brick1.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.bricks.|gluster|brick2.status": "1"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.status": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.georep.total": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.georep.up": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.georep.down": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.georep.partial": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.georep.stopped": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.georep.paused": "0"
+  },
+  {
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.georep.created": "0"
+  }
+]

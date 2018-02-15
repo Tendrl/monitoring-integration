@@ -11,7 +11,7 @@ from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.alert.exceptions import PermissionDenied
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
-from tendrl.monitoring_integration.grafana import alert
+from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.objects.alert_types import AlertTypes
 
 
@@ -36,7 +36,7 @@ def list_modules_in_package_path(package_path, prefix):
 
 
 def get_alert_info(alert_id):
-    alert_json = alert.get_alert(alert_id)
+    alert_json = alert_utils.get_alert(alert_id)
     if "message" in alert_json:
         if alert_json["message"] == "Alert not found":
             logger.log(
