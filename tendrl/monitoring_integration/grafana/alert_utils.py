@@ -4,6 +4,12 @@ from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import dashboard_utils
 from tendrl.monitoring_integration.grafana import grafana_org_utils
 
+GLUSTER_DASHBOARDS = {
+    "host": "nodes",
+    "volume": "volumes",
+    "brick": "bricks"
+}
+
 
 def get_alert_dashboard(dashboard_name):
     if dashboard_name == "nodes":
@@ -66,3 +72,77 @@ def get_alert(alert_id):
         # return to main org
         switch_context(constants.MAIN_ORG)
     return resp.json()
+
+
+def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
+    rows = alert_dashboard["dashboard"]["rows"]
+    new_rows = []
+    flag = True
+    for row in rows:
+        for target in row["panels"][0]["targets"]:
+            resource = resource_name
+            if resource_type == "bricks":
+                hostname = resource.split(":")[0].split(
+                    "|")[1].replace(".", "_")
+                resource = "." + resource.split(
+                    ":", 1)[1].replace("/", "|") + "."
+            if resource is not None:
+                if str(cluster_id) in target["target"] and str(
+                        resource) in str(target["target"]):
+                    if resource_type == "bricks":
+                        if hostname in target["target"]:
+                            flag = False
+                            break
+                    else:
+                        flag = False
+                        break
+            else:
+                if str(cluster_id) in target["target"]:
+                    flag = False
+                    break
+        if flag:
+            new_rows.append(row)
+        flag = True
+    alert_dashboard["dashboard"]["rows"] = new_rows
+
+
+def remove_cluster_rows(cluster_id, dashboard_name):
+
+    alert_dashboard = get_alert_dashboard(dashboard_name)
+    new_rows = []
+    flag = True
+    rows = alert_dashboard["dashboard"]["rows"]
+    for row in rows:
+        for target in row["panels"][0]["targets"]:
+            if str(cluster_id) in target["target"]:
+                flag = False
+                break
+        if flag:
+            new_rows.append(row)
+        flag = True
+    alert_dashboard["dashboard"]["rows"] = new_rows
+    return alert_dashboard
+
+
+def delete_panel(
+    integration_id, resource_type, resource_name=None
+):
+    if resource_name is None:
+        # delete all dashboards using integration id
+        for dash_name in GLUSTER_DASHBOARDS:
+            alert_dashboard = remove_cluster_rows(
+                integration_id,
+                GLUSTER_DASHBOARDS[dash_name]
+            )
+    else:
+        if resource_type == "nodes":
+            resource_name = resource_name.replace(".", "_")
+        alert_dashboard = get_alert_dashboard(resource_type)
+        remove_row(
+            alert_dashboard,
+            integration_id,
+            resource_type,
+            resource_name
+        )
+    resp = post_dashboard(alert_dashboard)
+    return resp
