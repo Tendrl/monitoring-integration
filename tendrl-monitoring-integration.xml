@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>tendrl-monitoring-integration</short>
-  <description>Enable port for tendrl monitoring integration</description>
+  <description>Enable port for tendrl monitoring integration. This is needed for grafana alerts callback</description>
     <port protocol="tcp" port="8789"/>
 </service>
