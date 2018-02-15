@@ -31,6 +31,18 @@ namespace.monitoring:
       type: Create
       version: 1
       uuid: 1951e821-7aa9-4a91-8183-e73bc8275bfe
+    DeleteMonitoringData:
+      tags:
+        - tendrl/integration/monitoring
+      help: Delete monitoring data for a cluster
+      enabled: true
+      inputs:
+        mandatory:
+          - TendrlContext.integration_id
+      run: monitoring.flows.DeleteMonitoringData
+      type: Update
+      version: 1
+      uuid: 1951e821-7aa9-4a91-8183-e73bc8275efb
   objects:
     AlertTypes:
       enabled: True
