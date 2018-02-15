@@ -4,7 +4,7 @@ Release: 1%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
 Source0: %{name}-%{version}.tar.gz
-Source1: vonage-status-panel-1.0.5-0-g4ecb061.zip
+Source1: vonage-status-panel.zip
 License: LGPLv2+
 URL: https://github.com/Tendrl/monitoring-integration
 
