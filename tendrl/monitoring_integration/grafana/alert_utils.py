@@ -125,7 +125,7 @@ def remove_cluster_rows(cluster_id, dashboard_name):
 
 
 def delete_panel(
-    integration_id, resource_type, resource_name=None
+    integration_id, resource_type=None, resource_name=None
 ):
     if resource_name is None:
         # delete all dashboards using integration id
