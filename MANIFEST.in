@@ -3,11 +3,11 @@ include AUTHORS
 include README.rst
 include ChangeLog
 include tendrl-monitoring-integration.service
-include tendrl-monitoring-integration.xml
 include version.py
 exclude .gitignore
 exclude .gitreview
 graft docs
 graft etc
+graft firewalld
 graft tendrl
 global-exclude *.pyc
