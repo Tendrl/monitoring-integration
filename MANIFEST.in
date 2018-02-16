@@ -8,5 +8,6 @@ exclude .gitignore
 exclude .gitreview
 graft docs
 graft etc
+graft firewalld
 graft tendrl
 global-exclude *.pyc

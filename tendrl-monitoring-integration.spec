@@ -55,6 +55,7 @@ install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-in
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
 install -d %{buildroot}%{_localstatedir}/lib/grafana/plugins/
+install -Dm 0644 firewalld/tendrl-monitoring-integration.xml $RPM_BUILD_ROOT%{_prefix}/lib/firewalld/services/tendrl-monitoring-integration.xml
 install -Dm 0640 etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 install -Dm 0640 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir}/tendrl-monitoring-integration.service
@@ -76,7 +77,7 @@ if [ $1 -eq 1 ] ; then
 fi
 systemctl enable tendrl-monitoring-integration >/dev/null 2>&1 || :
 %systemd_post tendrl-monitoring-integration.service
-
+firewall-cmd --reload >/dev/null 2>&1 || :
 
 %preun
 if [ "$1" = 0 ] ; then
@@ -86,6 +87,9 @@ if [ "$1" = 0 ] ; then
     mv /etc/carbon/storage-schemas.conf.%{name} /etc/carbon/storage-schemas.conf
 fi
 %systemd_preun tendrl-monitoring-integration.service
+
+%postun
+firewall-cmd --reload >/dev/null 2>&1 || :
 
 %check
 py.test -v tendrl/monitoring_integration/tests || :
@@ -97,6 +101,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %dir %{_sysconfdir}/tendrl/monitoring-integration
 %doc README.rst
 %license LICENSE
+%config(noreplace) %{_prefix}/lib/firewalld/services/tendrl-monitoring-integration.xml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards/*
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
