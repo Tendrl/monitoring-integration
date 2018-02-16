@@ -19,6 +19,12 @@ with_internal_profiling: False
 tags:
     - tendrl/integration/monitoring
 
+# Grafana host
+grafana_host: 127.0.0.1
+
+# Grafana port
+grafana_port: 3000 
+
 # List of dashboards to be uploaded
 dashboards:
     - tendrl-gluster-at-a-glance
