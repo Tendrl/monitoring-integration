@@ -1,5 +1,5 @@
 Name: tendrl-monitoring-integration
-Version: 1.5.5
+Version: 1.6.0
 Release: 1%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
@@ -113,6 +113,9 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
+* Sat Feb 17 2018 Rohan Kanade <rkanade@redhat.com> - 1.6.0-1
+- API to un-manage clusters managed by Tendrl
+
 * Fri Feb 02 2018 Rohan Kanade <rkanade@redhat.com> - 1.5.5-1
 - Fix conflicting gluster "cliutils" python module
 
