@@ -4,7 +4,7 @@ import shutil
 
 from tendrl.commons import flows
 from tendrl.commons.flows.exceptions import FlowExecutionFailedError
-from tendrl.commons.utils import event_utils
+from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana \
     import alert_utils as grafana_utils
 from tendrl.monitoring_integration.graphite import graphite_utils
@@ -54,18 +54,15 @@ class DeleteMonitoringData(flows.BaseFlow):
                 ex
             )
 
-        # Raise a notification mentioning the archive data location
-        event_utils.emit_event(
-            'cluster_health_status',
-            'unmanaged',
-            "Cluster %s moved to un-managed state.\n"
-            "The archived monitoring data available at: %s" %
-            (integration_id, archive_path),
-            "cluster_%s" % integration_id,
-            'WARNING',
-            integration_id=integration_id,
-            cluster_name=NS.tendrl_context.cluster_name,
-            node_id=NS.node_context.node_id
+        # Log an event mentioning the archive data location
+        logger.log(
+            "info",
+            NS.publisher_id,
+            {
+                "message": "Cluster %s moved to un-managed state.\n"
+                "The archived monitoring data available at: %s" %
+                (integration_id, archive_path)
+            }
         )
 
         return True
