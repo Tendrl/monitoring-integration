@@ -77,7 +77,6 @@ if [ $1 -eq 1 ] ; then
 fi
 systemctl enable tendrl-monitoring-integration >/dev/null 2>&1 || :
 %systemd_post tendrl-monitoring-integration.service
-firewall-cmd --reload >/dev/null 2>&1 || :
 
 %preun
 if [ "$1" = 0 ] ; then
@@ -87,9 +86,6 @@ if [ "$1" = 0 ] ; then
     mv /etc/carbon/storage-schemas.conf.%{name} /etc/carbon/storage-schemas.conf
 fi
 %systemd_preun tendrl-monitoring-integration.service
-
-%postun
-firewall-cmd --reload >/dev/null 2>&1 || :
 
 %check
 py.test -v tendrl/monitoring_integration/tests || :
