@@ -916,7 +916,7 @@
             "title": "At-a-Glance",
             "titleSize": "h5"
         }, {
-            "collapse": false,
+            "collapse": true,
             "height": 250,
             "panels": [{
                 "aliasColors": {},
@@ -1143,7 +1143,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk Utilization panel displays the percentage of capacity utilization for a given brick.",
+                "description": "The Mount Point Utilization for a given brick over a period of time.",
                 "fill": 1,
                 "id": 21,
                 "legend": {
@@ -1176,7 +1176,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Utilization",
+                "title": "Mount Point Utilization",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
