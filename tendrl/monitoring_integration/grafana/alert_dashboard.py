@@ -8,44 +8,79 @@ from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import utils
 
 
-def set_alert(panel, alert_thresholds, panel_title, resource_name):
-    panel["thresholds"] = [{"colorMode": "critical", "fill": True,
-                            "line": True,
-                            "op": "gt",
-                            "value": alert_thresholds[panel_title]["Warning"]}]
-    panel["alert"] = (
-        {"conditions": [
-            {"evaluator": {"params": [alert_thresholds[
-                panel_title]["Warning"]], "type": "gt"},
+def set_alert(panel, thresholds, severity, resource_name, title):
+    if severity.lower() == "critical":
+        panel["thresholds"] = [
+            {"colorMode": "critical",
+             "fill": True,
+             "line": True,
+             "op": "gt",
+             "value": thresholds[severity]
+             }
+        ]
+        panel["alert"] = ({"conditions": [
+            {"evaluator": {"params": [thresholds[severity]], "type": "gt"},
              "operator": {"type": "and"},
              "query": {"params": [panel["targets"][-1]["refId"], "3m", "now"]},
              "reducer": {"params": [], "type": "avg"},
              "type": "query"
              }],
-         "executionErrorState": "keep_state",
-         "frequency": "60s", "handler": 1,
-         "name": str(resource_name) + " " + str(panel["title"]) + " Alert",
-         "noDataState": "keep_state",
-         "notifications": []
-         }
-    )
+            "executionErrorState": "keep_state",
+            "frequency": "60s", "handler": 1,
+            "name": str(resource_name) + " " + str(title) + " Alert",
+            "noDataState": "keep_state",
+            "notifications": []}
+        )
+    else:
+        panel["thresholds"] = [
+            {"colorMode": "critical",
+             "fill": True,
+             "line": True,
+             "op": "gt",
+             "value": thresholds[severity]
+             },
+            {"colorMode": "critical",
+             "fill": True,
+             "line": True,
+             "op": "lt",
+             "value": thresholds["Critical"]
+             }
+        ]
+        panel["alert"] = (
+            {"conditions": [
+                {"evaluator": {"params": [thresholds[severity],
+                                          thresholds["Critical"]],
+                               "type": "within_range"},
+                 "operator": {"type": "and"},
+                 "query": {"params": [panel["targets"][-1]["refId"],
+                                      "3m",
+                                      "now"]},
+                 "reducer": {"params": [], "type": "avg"},
+                 "type": "query"
+                 }],
+             "executionErrorState": "keep_state",
+             "frequency": "60s", "handler": 1,
+             "name": str(resource_name) + " " + str(title) + " Alert",
+             "noDataState": "keep_state",
+             "notifications": []
+             }
+        )
 
 
-def get_rows(resource_rows):
+def get_panels(resource_rows):
 
-    new_resource_rows = []
+    new_resource_panel = []
     try:
         for row in resource_rows:
             panels = row["panels"]
             for panel in panels:
                 if panel["type"] == "graph":
-                    row["panels"] = [panel]
-                    new_resource_rows.append(copy.deepcopy(row))
+                    new_resource_panel.append(copy.deepcopy(panel))
     except (KeyError, AttributeError) as ex:
         logger.log("debug", NS.get("publisher_id", None),
                    {'message': "Error in retrieving resource "
-                   "rows (get_rows) " + str(ex)})
-    return new_resource_rows
+                   "rows (get_panel) " + str(ex)})
+    return new_resource_panel
 
 
 def set_gluster_target(target, integration_id, resource, resource_name):
@@ -104,76 +139,80 @@ def create_resource_dashboard(
                           "title": "Dashboard Row",
                           "titleSize": "h6"
                           }
-            new_resource_rows = get_rows(resource_rows)
+            new_resource_panel = get_panels(resource_rows)
             alert_thresholds = NS.monitoring.definitions.get_parsed_defs()[
                 "namespace.monitoring"]["thresholds"][resource_name]
             all_resource_rows = []
             count = 1
             global_row["panels"] = []
             panel_count = 1
-            for row in new_resource_rows:
-                new_row = copy.deepcopy(row)
-                panels = new_row["panels"]
-                new_title = ""
-                for panel in panels:
-                    try:
-                        for panel_title in alert_thresholds:
-                            if not panel["title"].lower().find(
-                                    panel_title.replace("_", " ")):
-                                targets = panel["targets"]
-                                for target in targets:
-                                    if sds_name == constants.GLUSTER:
-                                        new_title = set_gluster_target(
-                                            target,
-                                            integration_id,
-                                            resource,
-                                            resource_name
-                                        )
-                                    else:
-                                        # In future need to add ceph target
-                                        pass
+            for panel in new_resource_panel:
+                try:
+                    new_title = ""
+                    for panel_title in alert_thresholds:
+                        if not panel["title"].lower().find(
+                                panel_title.replace("_", " ")):
+                            targets = panel["targets"]
+                            for target in targets:
+                                if sds_name == constants.GLUSTER:
+                                    new_title = set_gluster_target(
+                                        target,
+                                        integration_id,
+                                        resource,
+                                        resource_name
+                                    )
+                                else:
+                                    # In future need to add ceph target
+                                    pass
+                            panel["legend"]["show"] = False
+                            title = panel["title"]
+                            for severity in constants.ALERT_SEVERITY:
                                 set_alert(
                                     panel,
-                                    alert_thresholds,
-                                    panel_title,
-                                    resource_name
+                                    alert_thresholds[panel_title],
+                                    severity,
+                                    resource_name,
+                                    title + "-" + severity
                                 )
+                                panel["title"] = title + "-" + str(
+                                    new_title) + "-" + severity
                                 panel["id"] = count
-                                panel["legend"]["show"] = False
-                                panel["title"] = panel["title"] + \
-                                    " - " + str(new_title)
                                 count = count + 1
                                 panel_count = panel_count + 1
                                 if panel_count < 7:
-                                    global_row["panels"].append(panel)
+                                    global_row["panels"].append(
+                                        copy.deepcopy(panel)
+                                    )
                                 else:
                                     global_row["panels"].append(panel)
                                     all_resource_rows.append(
                                         copy.deepcopy(global_row))
                                     global_row["panels"] = []
                                     panel_count = 1
-                    except KeyError as ex:
-                        logger.log(
-                            "debug",
-                            NS.get("publisher_id", None),
-                            {'message': str(panel[
-                                "title"]) + "failed" + str(ex)}
-                        )
-            all_resource_rows.append(copy.deepcopy(global_row))
-            resource_json["dashboard"]["rows"] = []
-            resource_json["dashboard"]["rows"] = all_resource_rows
-            resource_json["dashboard"]["templating"] = {}
-            resp = alert_utils.post_dashboard(resource_json)
-            if resp.status_code == 200:
-                msg = "Alert dashboard for %s-%s is created successfully" %  \
-                      (resource_name, new_title)
-                logger.log("info", NS.get("publisher_id", None),
-                           {'message': msg})
-            else:
-                msg = "Alert dashboard upload failed for %s-%s" % \
-                      (resource_name, new_title)
-                logger.log("debug", NS.get("publisher_id", None),
-                           {'message': msg})
+                except KeyError as ex:
+                    logger.log(
+                        "error",
+                        NS.get("publisher_id", None),
+                        {'message': str(panel[
+                            "title"]) + "failed" + str(ex)}
+                    )
+            if global_row["panels"]:
+                all_resource_rows.append(copy.deepcopy(global_row))
+            if len(all_resource_rows) > 0:
+                resource_json["dashboard"]["rows"] = []
+                resource_json["dashboard"]["rows"] = all_resource_rows
+                resource_json["dashboard"]["templating"] = {}
+                resp = alert_utils.post_dashboard(resource_json)
+                if resp.status_code == 200:
+                    msg = ("Alert dashboard for %s-%s is created " +
+                           "successfully") % (resource_name, new_title)
+                    logger.log("info", NS.get("publisher_id", None),
+                               {'message': msg})
+                else:
+                    msg = "Alert dashboard upload failed for %s-%s" % \
+                          (resource_name, new_title)
+                    logger.log("error", NS.get("publisher_id", None),
+                               {'message': msg})
         except Exception as ex:
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': str(ex)})
@@ -315,7 +354,8 @@ def add_gluster_resource_panel(
                 volume_name = resource_name.split("|", 1)[0]
                 new_title = volume_name + "|" + host_name + ":" + brick_name
             panel["title"] = panel["title"].split(
-                "-", 1)[0] + "-" + str(new_title)
+                "-", 1
+            )[0] + "-" + str(new_title) + "-" + panel["title"].split("-")[-1]
 
 
 def fetch_row(dashboard_json):

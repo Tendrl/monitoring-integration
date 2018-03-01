@@ -24,7 +24,7 @@ def test_create_alert_dashboard(log, post, fread, exist):
     test_init.init()
     with patch.object(NS.monitoring.definitions,
                       "get_parsed_defs") as mock_defs:
-        threshold = {'capacity_utilization': {'Warning': 75}}
+        threshold = {'capacity_utilization': {'Warning': 75, 'Critical': 90}}
         mock_defs.return_value = (
             {"namespace.monitoring": {"thresholds": {"volumes": threshold}}}
         )

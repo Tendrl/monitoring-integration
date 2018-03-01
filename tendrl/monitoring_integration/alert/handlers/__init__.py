@@ -49,7 +49,7 @@ class AlertHandler(object):
         unset = False
         if alert:
             if alert["severity"] == \
-                    constants.TENDRL_GRAFANA_SEVERITY_MAP["ok"]:
+                    constants.TENDRL_SEVERITY_MAP['info']:
                 unset = True
             logger.log(
                 "notice",

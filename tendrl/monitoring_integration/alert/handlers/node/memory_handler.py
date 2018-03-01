@@ -33,13 +33,17 @@ class MemoryHandler(AlertHandler):
             alert["time_stamp"] = alert_json['NewStateDate']
             alert["resource"] = self.representive_name
             alert['alert_type'] = constants.ALERT_TYPE
-            alert['severity'] = constants.TENDRL_GRAFANA_SEVERITY_MAP[
-                alert_json['State']]
             alert['significance'] = constants.SIGNIFICANCE_HIGH
             alert['pid'] = utils.find_grafana_pid()
             alert['source'] = constants.ALERT_SOURCE
             alert['tags']['fqdn'] = alert['tags']['fqdn']
-            if alert['severity'] == "WARNING":
+            if alert_json['State'] == constants.GRAFANA_ALERT:
+                if "critical" in alert_json['Name'].lower():
+                    alert['severity'] = \
+                        constants.TENDRL_SEVERITY_MAP['critical']
+                else:
+                    alert['severity'] = \
+                        constants.TENDRL_SEVERITY_MAP['warning']
                 alert['tags']['message'] = (
                     "Memory utilization of node %s is"
                     " %s %% which is above the %s threshold (%s %%)." % (
@@ -47,7 +51,8 @@ class MemoryHandler(AlertHandler):
                         alert['current_value'],
                         alert['severity'],
                         alert['tags']['warning_max']))
-            elif alert['severity'] == "INFO":
+            elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
+                alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
                 alert['tags']['message'] = (
                     "Memory utilization of node %s is"
                     " back to normal" % (
