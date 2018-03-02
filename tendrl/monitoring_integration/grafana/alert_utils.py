@@ -1,5 +1,6 @@
 import json
 
+from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import dashboard_utils
 from tendrl.monitoring_integration.grafana import grafana_org_utils
@@ -134,6 +135,16 @@ def delete_panel(
                 integration_id,
                 GLUSTER_DASHBOARDS[dash_name]
             )
+            resp = post_dashboard(alert_dashboard)
+            if resp.status_code != 200:
+                logger.log(
+                    "debug",
+                    NS.publisher_id,
+                    {
+                        "message": "Failed to remove %s alert dashboard "
+                        "(integration_id: %s)" % (dash_name, integration_id)
+                    }
+                )
     else:
         if resource_type == "nodes":
             resource_name = resource_name.replace(".", "_")
@@ -144,5 +155,5 @@ def delete_panel(
             resource_type,
             resource_name
         )
-    resp = post_dashboard(alert_dashboard)
+        resp = post_dashboard(alert_dashboard)
     return resp
