@@ -1,21 +1,17 @@
-import maps
 from mock import patch
 import os
 
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import \
     alert_dashboard
-from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.tests import test_init
 
 
 @patch.object(os.path, "exists")
 @patch.object(utils, "fread")
-@patch.object(alert_utils, "post_dashboard")
 @patch.object(logger, "log")
-def test_create_alert_dashboard(log, post, fread, exist):
-    post.return_value = maps.NamedDict(status_code=200)
+def test_alert_dashboard(log, fread, exist):
     exist.return_value = True
     path = os.path.join(os.path.dirname(__file__),
                         "dashboard.json")
@@ -28,27 +24,30 @@ def test_create_alert_dashboard(log, post, fread, exist):
         mock_defs.return_value = (
             {"namespace.monitoring": {"thresholds": {"volumes": threshold}}}
         )
-        alert_dashboard.create_resource_dashboard(
+        resource = {'vol_id': '4ff7cf55-a6ef-4ea1-a8ea-f406803503a4',
+                    'name': 'V2',
+                    'sds_name': 'gluster',
+                    'integration_id': 'f3a74e36-0462-4fb0-9a92-3ee9d244f8a2',
+                    'resource_name': 'V2'
+                    }
+        resource_json = alert_dashboard.create_resource_dashboard(
             "volumes",
-            {'vol_id': u'4ff7cf55-a6ef-4ea1-a8ea-f406803503a4',
-             'name': u'V2',
-             'subvolume': [{'bricks': [u'dhcp122-137:_gluster_brick2'],
-                            'subvolume': u'subvolume1'
-                            },
-                           {'bricks': [u'dhcp122-234:_gluster_brick2'],
-                            'subvolume': u'subvolume2'
-                            },
-                           {'bricks': [u'dhcp122-3:_gluster_brick2'],
-                            'subvolume': u'subvolume0'
-                            }]
-             },
-            'gluster',
-            'f3a74e36-0462-4fb0-9a92-3ee9d244f8a2'
+            resource
         )
-        log.assert_called_with(
-            'info',
-            'monitoring_integration',
-            {'message': 'Alert dashboard for '
-             'volumes- is created successfully'
-             }
+        new_res, resource_json, panel_id = alert_dashboard.check_duplicate(
+            resource_json,
+            [resource],
+            'volumes'
         )
+        if not (panel_id == 1 and new_res == []):
+            raise AssertionError
+        resource['name'] = 'V3'
+        resource['resource_name'] = 'V3'
+        resource_json = alert_dashboard.add_panel(
+            [resource],
+            'volumes',
+            resource_json,
+            panel_id
+        )
+        if not len(resource_json["dashboard"]["rows"]) == 2:
+            raise AssertionError
