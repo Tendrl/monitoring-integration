@@ -112,17 +112,16 @@ def remove_cluster_rows(cluster_id, dashboard_name):
     alert_dashboard = get_alert_dashboard(dashboard_name)
     new_rows = []
     flag = True
-    rows = alert_dashboard["dashboard"]["rows"]
+    rows = alert_dashboard.get("dashboard", {}).get("rows", [])
     for row in rows:
-        for target in row["panels"][0]["targets"]:
+        for target in row["panels"][0].get("targets", []):
             if str(cluster_id) in target["target"]:
                 flag = False
                 break
         if flag:
             new_rows.append(row)
         flag = True
-    alert_dashboard["dashboard"]["rows"] = new_rows
-    return alert_dashboard
+    return {"dashboard": {"rows": new_rows}}
 
 
 def delete_panel(
