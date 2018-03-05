@@ -97,9 +97,9 @@ def create_resource_dashboard(
             global_row = {"collapse": False,
                           "height": 250,
                           "panels": [],
-                          "repeat": "null",
-                          "repeatIteration": "null",
-                          "repeatRowId": "null",
+                          "repeat": None,
+                          "repeatIteration": None,
+                          "repeatRowId": None,
                           "showTitle": False,
                           "title": "Dashboard Row",
                           "titleSize": "h6"
