@@ -40,7 +40,7 @@ def get_alert_info(alert_id):
     if "message" in alert_json:
         if alert_json["message"] == "Alert not found":
             logger.log(
-                "error",
+                "debug",
                 NS.publisher_id,
                 {
                     "message": "Alert with alert id %s not "
@@ -50,7 +50,7 @@ def get_alert_info(alert_id):
             raise AlertNotFound
         elif alert_json["message"] == "Unauthorized":
             logger.log(
-                "error",
+                "debug",
                 NS.publisher_id,
                 {
                     "message": "Authorization denied while "
@@ -60,7 +60,7 @@ def get_alert_info(alert_id):
             raise Unauthorized
         elif alert_json["message"] == "You are not allowed to edit/view alert":
             logger.log(
-                "error",
+                "debug",
                 NS.publisher_id,
                 {
                     "message": "Unable to fetch alert from grafana"
@@ -99,7 +99,7 @@ def find_grafana_pid():
             ["pidof", "grafana-server"]).strip()
     except CalledProcessError as ex:
         logger.log(
-            "error",
+            "debug",
             NS.publisher_id,
             {
                 "message": "unable to find grafana pid"
@@ -127,7 +127,7 @@ def find_node_id(integration_id, fqdn):
     except (EtcdKeyNotFound, NodeNotFound) as ex:
         if type(ex) != EtcdKeyNotFound:
             logger.log(
-                "error",
+                "debug",
                 NS.publisher_id,
                 {
                     "message": "Failed to fetch fqdn for node %s" %
@@ -136,7 +136,7 @@ def find_node_id(integration_id, fqdn):
             )
         else:
             logger.log(
-                "error",
+                "debug",
                 NS.publisher_id,
                 {
                     "message": "Node with fqdn %s not found "
@@ -153,7 +153,7 @@ def find_cluster_name(integration_id):
         return cluster_name
     except (EtcdKeyNotFound) as ex:
         logger.log(
-            "error",
+            "debug",
             NS.publisher_id,
             {
                 "message": "Failed to fetch cluster name for id %s" %
@@ -179,7 +179,7 @@ def find_alert_types(new_alert_types):
             ).save()
     except (EtcdKeyNotFound) as ex:
         logger.log(
-            "error",
+            "debug",
             NS.publisher_id,
             {
                 "message": "Failed to fetch alert types %s" %

@@ -65,7 +65,7 @@ class BrickHandler(AlertHandler):
                 )
             else:
                 logger.log(
-                    "error",
+                    "debug",
                     NS.publisher_id,
                     {
                         "message": "Alert %s have unsupported alert"
