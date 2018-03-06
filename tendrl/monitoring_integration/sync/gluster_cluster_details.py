@@ -18,27 +18,22 @@ def get_cluster_details(integration_id):
     cluster_details = {}
     try:
         cluster_key = "/clusters/%s" % integration_id
-        cluster_is_managed = etcd_utils.read(
-            cluster_key + "/is_managed"
-        ).value
-        if cluster_is_managed.lower() == "yes":
-            cluster_details["integration_id"] = integration_id
-            # Get node details
-            cluster_details["hosts"] = get_node_details(cluster_key)
-            # Get volume details
-            cluster_details["volumes"] = get_volumes_details(cluster_key)
-            # Get brick details from subvolumes
-            cluster_details["bricks"] = get_brick_details(
-                cluster_details["volumes"],
-                cluster_key
-            )
+        # Get node details
+        cluster_details["hosts"] = get_node_details(cluster_key)
+        # Get volume details
+        cluster_details["volumes"] = get_volumes_details(cluster_key)
+        # Get brick details from subvolumes
+        cluster_details["bricks"] = get_brick_details(
+            cluster_details["volumes"],
+            cluster_key
+        )
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
         logger.log(
             "error",
             NS.get("publisher_id", None),
             {'message': str(ex)}
         )
-    return cluster_details, constants.GLUSTER_DASHBOARDS
+    return cluster_details
 
 
 def get_node_details(cluster_key):
@@ -55,6 +50,9 @@ def get_node_details(cluster_key):
                     "/NodeContext/" +
                     attr
                 ).value
+            node["integration_id"] = cluster_key.split("/")[-1]
+            node["sds_name"] = constants.GLUSTER
+            node["resource_name"] = str(node["fqdn"]).replace(".", "_")
             node_details.append(node)
         except (KeyError, etcd.EtcdKeyNotFound) as ex:
                 logger.log(
@@ -91,6 +89,13 @@ def get_brick_details(volumes, cluster_key):
                         brick_info,
                         cluster_key
                     )
+                    brick["sds_name"] = constants.GLUSTER
+                    brick["integration_id"] = cluster_key.split("/")[-1]
+                    brick["resource_name"] = "%s|%s:%s" % (
+                        str(brick["vol_name"]),
+                        brick["hostname"],
+                        brick["brick_path"].replace("|", "/")
+                    )
                     brick_details.append(brick)
                 except (KeyError, etcd.EtcdKeyNotFound) as ex:
                     logger.log(
@@ -121,6 +126,9 @@ def get_volumes_details(cluster_key):
                 subvolume_key = cluster_key + "/Volumes/" + str(volume_id)
                 subvolume_details = get_subvolume_details(subvolume_key)
                 volume_data["subvolume"] = subvolume_details
+                volume_data["sds_name"] = constants.GLUSTER
+                volume_data["integration_id"] = cluster_key.split("/")[-1]
+                volume_data["resource_name"] = str(volume_data["name"])
                 volume_details.append(volume_data)
             except (KeyError, etcd.EtcdKeyNotFound) as ex:
                 logger.log(
