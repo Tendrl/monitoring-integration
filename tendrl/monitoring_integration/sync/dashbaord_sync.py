@@ -71,7 +71,7 @@ class SyncAlertDashboard(object):
             )
             dashboard_found = True
             if "message" in resource_json and \
-                    resource_json["message"] == "Dashboard not found":
+                    "Dashboard not found" in resource_json["message"]:
                 dashboard_found = False
             if dashboard_found:
                 try:
@@ -142,7 +142,7 @@ class SyncAlertDashboard(object):
         return resource_json
 
     def update_dashboard(self, resource_type, resources, resource_json):
-        new_resources, resource_json, highest_panel_id = \
+        new_resources, resource_json, most_recent_panel_id = \
             alert_dashboard.check_duplicate(
                 resource_json, resources, resource_type
             )
@@ -151,7 +151,7 @@ class SyncAlertDashboard(object):
                 new_resources,
                 resource_type,
                 resource_json,
-                highest_panel_id
+                most_recent_panel_id
             )
         return resource_json
 
@@ -170,11 +170,13 @@ class SyncAlertDashboard(object):
     def log_message(self, response, resource_type):
         try:
             if response.status_code == 200:
-                msg = "Dashboard for {0} uploaded " + \
-                    "successfully".format(resource_type)
+                msg = "Dashboard for {0} uploaded successfully".format(
+                    resource_type
+                )
             else:
                 msg = "Dashboard for {0} upload failed".format(
-                    resource_type)
+                    resource_type
+                )
 
             logger.log("info", NS.get("publisher_id", None),
                        {'message': msg})

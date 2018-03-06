@@ -139,7 +139,9 @@ def create_resource_dashboard(resource_name, resource):
                                 " - " + str(new_title)
                             count = count + 1
                             panel_count = panel_count + 1
-                            if panel_count < 7:
+                            # For better visibility,
+                            # 7 panels per row is created
+                            if panel_count < constants.MAX_PANELS_IN_ROW:
                                 global_row["panels"].append(panel)
                             else:
                                 global_row["panels"].append(panel)
@@ -164,25 +166,25 @@ def create_resource_dashboard(resource_name, resource):
                        {'message': str(ex)})
 
 
-def add_panel(resources, resource_type, alert_dashboard, highest_panel_id):
+def add_panel(resources, resource_type, alert_dashboard, most_recent_panel_id):
     for resource in resources:
         sds_name = resource["sds_name"]
         integration_id = resource["integration_id"]
         resource_name = resource["resource_name"]
         try:
             if sds_name == constants.GLUSTER:
-                alert_rows = fetch_row(alert_dashboard)
+                alert_rows = fetch_rows(alert_dashboard)
                 add_gluster_resource_panel(
                     alert_rows,
                     integration_id,
                     resource_type,
                     resource_name,
-                    highest_panel_id
+                    most_recent_panel_id
                 )
                 alert_dashboard = create_updated_dashboard(
                     alert_dashboard, alert_rows
                 )
-                highest_panel_id = alert_rows[-1]["panels"][-1]["id"]
+                most_recent_panel_id = alert_rows[-1]["panels"][-1]["id"]
         except Exception as ex:
             logger.log("error", NS.get("publisher_id", None),
                        {'message': "Error while updating "
@@ -198,7 +200,7 @@ def check_duplicate(
     alert_dashboard = copy.deepcopy(resource_json)
     resource_json["dashboard"]["rows"] = []
     new_resource = []
-    highest_panel_id = 1
+    most_recent_panel_id = 1
     for resource in resources:
         new_resource_flag = True
         integration_id = str(resource["integration_id"])
@@ -235,19 +237,19 @@ def check_duplicate(
                         break
             else:
                 break
-            if highest_panel_id < row["panels"][-1]["id"]:
-                highest_panel_id = row["panels"][-1]["id"]
+            if most_recent_panel_id < row["panels"][-1]["id"]:
+                most_recent_panel_id = row["panels"][-1]["id"]
         if new_resource_flag:
             new_resource.append(resource)
-    return new_resource, resource_json, highest_panel_id
+    return new_resource, resource_json, most_recent_panel_id
 
 
 def add_gluster_resource_panel(
-    alert_rows, cluster_id, resource_type, resource_name, highest_panel_id
+    alert_rows, cluster_id, resource_type, resource_name, most_recent_panel_id
 ):
     if resource_type == "hosts":
             resource_type = "nodes"
-    panel_count = highest_panel_id
+    panel_count = most_recent_panel_id
     for alert_row in alert_rows:
         panel_count += 1
         for panel in alert_row["panels"]:
@@ -309,7 +311,7 @@ def add_gluster_resource_panel(
                 "-", 1)[0] + "-" + str(new_title)
 
 
-def fetch_row(dashboard_json):
+def fetch_rows(dashboard_json):
 
     rows = dashboard_json["dashboard"]["rows"]
     if len(rows) > 1:
