@@ -36,7 +36,7 @@ def upload_default_dashboards():
         if dashboard_json in title:
             msg = '\n' + "Dashboard " + str(dashboard_json) + \
                   " already exists" + '\n'
-            logger.log("info", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
             continue
         response = dashboard_utils.create_dashboard(dashboard_json)
@@ -44,7 +44,7 @@ def upload_default_dashboards():
         if response.status_code == 200:
             msg = '\n' + "Dashboard " + str(dashboard_json) + \
                   " uploaded successfully" + '\n'
-            logger.log("info", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
         else:
             msg = ("Dashboard {0} upload failed. Error code: {1} ," +
@@ -52,7 +52,7 @@ def upload_default_dashboards():
                        str(dashboard_json),
                        str(response.status_code),
                        str(get_message_from_response(response)))
-            logger.log("error", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
     try:
         dashboard_json = dashboard_utils.get_dashboard(
@@ -67,11 +67,11 @@ def upload_default_dashboards():
                 msg = '\n' + "Dashboard " + \
                       str(NS.config.data["home_dashboard"]) + \
                       " is set as home dashboard" + '\n'
-                logger.log("info", NS.get("publisher_id", None),
+                logger.log("debug", NS.get("publisher_id", None),
                            {'message': msg})
         else:
             msg = '\n' + str(dashboard_json.get('message')) + '\n'
-            logger.log("info", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
     except exceptions.ConnectionFailedException as ex:
         traceback.print_exc()
