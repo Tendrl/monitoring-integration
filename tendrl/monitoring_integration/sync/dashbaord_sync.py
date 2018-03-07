@@ -43,7 +43,7 @@ class SyncAlertDashboard(object):
                 req_excep.RequestException,
                 exceptions.ConnectionFailedException,
                 exceptions.AlertOrganizationNotFound) as ex:
-            logger.log("error", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': "Failed to update cluster "
                        "dashboard.err: %s" % str(ex)})
 
@@ -115,7 +115,7 @@ class SyncAlertDashboard(object):
             else:
                 # update dashboard
                 self.create_gluster_resource(
-                    resource,
+                    [resource],
                     resource_name,
                     cluster_details["integration_id"],
                     cluster_details["sds_name"]
@@ -136,7 +136,7 @@ class SyncAlertDashboard(object):
                         resource["brick_path"].replace("|", "/")
                     )
             except KeyError:
-                logger.log("error", NS.get("publisher_id", None),
+                logger.log("debug", NS.get("publisher_id", None),
                            {'message': "Failed to get resource {} "
                             "details".format(resource)})
                 continue

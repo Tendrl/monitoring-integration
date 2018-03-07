@@ -47,7 +47,7 @@ def test_create():
         ):
             datasource.create()
             mock_log.assert_called_with(
-                'info',
+                'debug',
                 'monitoring_integration',
                 {'message': 'Datasource created successfully'}
             )
@@ -59,7 +59,7 @@ def test_create():
             ):
                 datasource.create()
                 mock_log.assert_called_with(
-                    'error',
+                    'debug',
                     'monitoring_integration',
                     {'message': 'Unable to find datasource id'}
                 )
@@ -71,7 +71,7 @@ def test_create():
                 ):
                     datasource.create()
                     mock_log.assert_called_with(
-                        'info',
+                        'debug',
                         'monitoring_integration',
                         {'message': 'Datasource is updated successfully'}
                     )
@@ -80,7 +80,7 @@ def test_create():
                 ):
                     datasource.create()
                     mock_log.assert_called_with(
-                        'error',
+                        'debug',
                         'monitoring_integration',
                         {'message': 'Unable to update datasource'}
                     )
