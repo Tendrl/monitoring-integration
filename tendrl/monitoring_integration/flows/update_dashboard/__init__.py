@@ -25,13 +25,13 @@ class UpdateDashboard(flows.BaseFlow):
                 if resp.status_code == 200:
                     msg = "Alert dashboard for %s is deleted successfully" % \
                         (resource_name)
-                    logger.log("debug", NS.get("publisher_id", None),
+                    logger.log("info", NS.get("publisher_id", None),
                                {'message': msg})
                 else:
                     msg = "Alert dashboard delete failed for %s" % \
                         (resource_name)
-                    logger.log("debug", NS.get("publisher_id", None),
+                    logger.log("error", NS.get("publisher_id", None),
                                {'message': msg})
             else:
-                logger.log("debug", NS.get("publisher_id", None),
+                logger.log("error", NS.get("publisher_id", None),
                            {'message': "Wrong action"})

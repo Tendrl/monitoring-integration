@@ -56,7 +56,7 @@ class DeleteMonitoringData(flows.BaseFlow):
 
         # Log an event mentioning the archive data location
         logger.log(
-            "debug",
+            "info",
             NS.publisher_id,
             {
                 "message": "Cluster %s moved to un-managed state.\n"

@@ -51,7 +51,7 @@ def main():
         else:
             break
     if grafana_conn_count == 10:
-        logger.log("error", NS.get("publisher_id", None),
+        logger.log("info", NS.get("publisher_id", None),
                    {'message': "Cannot connect to Grafana"})
         return
     NS.type = "monitoring"

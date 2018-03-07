@@ -46,7 +46,7 @@ def get_resource_keys(key, resource_name):
             resource_list.append(resource.key.split('/')[-1])
     except (KeyError, etcd.EtcdKeyNotFound) as ex:
         logger.log(
-            "debug",
+            "error",
             NS.get("publisher_id", None),
             {
                 'message': "Error while fetching " +

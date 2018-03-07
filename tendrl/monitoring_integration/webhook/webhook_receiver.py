@@ -38,7 +38,7 @@ class WebhookReceiver(threading.Thread):
                     response.status_code = 200
                 else:
                     logger.log(
-                        "debug",
+                        "error",
                         NS.publisher_id,
                         {
                             "message": "Unable to find ruleId %s" % data
@@ -47,7 +47,7 @@ class WebhookReceiver(threading.Thread):
         except (IOError, AssertionError, KeyError) as ex:
             Event(
                 ExceptionMessage(
-                    priority="debug",
+                    priority="error",
                     publisher=NS.publisher_id,
                     payload={
                         "message": "Unable to read alert from socket",
@@ -71,7 +71,7 @@ class WebhookReceiver(threading.Thread):
                 ValueError) as ex:
             Event(
                 ExceptionMessage(
-                    priority="debug",
+                    priority="error",
                     publisher=NS.publisher_id,
                     payload={
                         "message": "Unable to start wehook receiver",

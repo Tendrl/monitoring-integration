@@ -29,7 +29,7 @@ def get_cluster_details(integration_id):
         )
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
         logger.log(
-            "debug",
+            "error",
             NS.get("publisher_id", None),
             {'message': str(ex)}
         )
@@ -38,9 +38,9 @@ def get_cluster_details(integration_id):
 
 def get_node_details(cluster_key):
     node_details = []
-    try:
-        node_list = utils.get_resource_keys(cluster_key, "nodes")
-        for node_id in node_list:
+    node_list = utils.get_resource_keys(cluster_key, "nodes")
+    for node_id in node_list:
+        try:
             node = {}
             for attr in ATTRS["nodes"]:
                 node[attr] = etcd_utils.read(
@@ -54,15 +54,15 @@ def get_node_details(cluster_key):
             node["sds_name"] = constants.GLUSTER
             node["resource_name"] = str(node["fqdn"]).replace(".", "_")
             node_details.append(node)
-    except (KeyError, etcd.EtcdKeyNotFound) as ex:
-        logger.log(
-            "debug",
-            NS.get("publisher_id", None),
-            {
-                'message': "Error while fetching "
-                "node id {}".format(node_id) + str(ex)
-            }
-        )
+        except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                logger.log(
+                    "error",
+                    NS.get("publisher_id", None),
+                    {
+                        'message': "Error while fetching "
+                        "node id {}".format(node_id) + str(ex)
+                    }
+                )
     return node_details
 
 
@@ -77,10 +77,10 @@ def get_brick_path(brick_info, cluster_key):
 
 def get_brick_details(volumes, cluster_key):
     brick_details = []
-    try:
-        for volume in volumes:
-            for subvolume in volume["subvolume"]:
-                for brick_info in subvolume["bricks"]:
+    for volume in volumes:
+        for subvolume in volume["subvolume"]:
+            for brick_info in subvolume["bricks"]:
+                try:
                     brick = {}
                     brick["hostname"] = brick_info.split(":")[0]
                     brick["vol_id"] = volume["vol_id"]
@@ -97,27 +97,27 @@ def get_brick_details(volumes, cluster_key):
                         brick["brick_path"].replace("|", "/")
                     )
                     brick_details.append(brick)
-    except (KeyError, etcd.EtcdKeyNotFound) as ex:
-        logger.log(
-            "debug",
-            NS.get("publisher_id", None),
-            {
-                'message': "Error while brick details for"
-                "brick {}".format(subvolume) + str(ex)
-            }
-        )
+                except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                    logger.log(
+                        "error",
+                        NS.get("publisher_id", None),
+                        {
+                            'message': "Error while brick details for"
+                            "brick {}".format(subvolume) + str(ex)
+                        }
+                    )
     return brick_details
 
 
 def get_volumes_details(cluster_key):
     volume_details = []
-    try:
-        volume_list = utils.get_resource_keys(cluster_key, "Volumes")
-        for volume_id in volume_list:
-            deleted = etcd_utils.read(
-                cluster_key + "/Volumes/" + str(volume_id) + "/" + "deleted"
-            ).value
-            if str(deleted).lower() == "false":
+    volume_list = utils.get_resource_keys(cluster_key, "Volumes")
+    for volume_id in volume_list:
+        deleted = etcd_utils.read(
+            cluster_key + "/Volumes/" + str(volume_id) + "/" + "deleted"
+        ).value
+        if str(deleted).lower() == "false":
+            try:
                 volume_data = {}
                 for attr in ATTRS["volumes"]:
                     volume_data[attr] = etcd_utils.read(
@@ -130,23 +130,23 @@ def get_volumes_details(cluster_key):
                 volume_data["integration_id"] = cluster_key.split("/")[-1]
                 volume_data["resource_name"] = str(volume_data["name"])
                 volume_details.append(volume_data)
-    except (KeyError, etcd.EtcdKeyNotFound) as ex:
-        logger.log(
-            "debug",
-            NS.get("publisher_id", None),
-            {
-                'message': "Error while fetching "
-                "volume id {}".format(volume_id) + str(ex)
-            }
-        )
+            except (KeyError, etcd.EtcdKeyNotFound) as ex:
+                logger.log(
+                    "error",
+                    NS.get("publisher_id", None),
+                    {
+                        'message': "Error while fetching "
+                        "volume id {}".format(volume_id) + str(ex)
+                    }
+                )
     return volume_details
 
 
 def get_subvolume_details(key):
     subvolume_brick_details = []
-    try:
-        subvolumes = utils.get_resource_keys(key, "Bricks")
-        for subvolume in subvolumes:
+    subvolumes = utils.get_resource_keys(key, "Bricks")
+    for subvolume in subvolumes:
+        try:
             subvolume_details = {}
             subvolume_details["subvolume"] = ""
             subvolume_details["bricks"] = []
@@ -156,13 +156,13 @@ def get_subvolume_details(key):
             )
             subvolume_details["bricks"] = brick_list
             subvolume_brick_details.append(copy.deepcopy(subvolume_details))
-    except (KeyError, etcd.EtcdKeyNotFound) as ex:
-        logger.log(
-            "debug",
-            NS.get("publisher_id", None),
-            {
-                'message': "Error while fetching "
-                "subvolumes" + str(ex)
-            }
-        )
+        except (KeyError, etcd.EtcdKeyNotFound) as ex:
+            logger.log(
+                "error",
+                NS.get("publisher_id", None),
+                {
+                    'message': "Error while fetching "
+                    "subvolumes" + str(ex)
+                }
+            )
     return subvolume_brick_details

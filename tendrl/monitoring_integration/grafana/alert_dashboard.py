@@ -151,7 +151,7 @@ def create_resource_dashboard(resource_name, resource):
                                 panel_count = 1
                 except KeyError as ex:
                     logger.log(
-                        "debug",
+                        "error",
                         NS.get("publisher_id", None),
                         {'message': str(panel[
                             "title"]) + "failed" + str(ex)}
