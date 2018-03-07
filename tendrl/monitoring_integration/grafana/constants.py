@@ -6,5 +6,4 @@ GLUSTER = "gluster"
 HEADERS = {"Accept": "application/json",
            "Content-Type": "application/json"
            }
-MAX_PANELS_IN_ROW = 7
 GLUSTER_DASHBOARDS = ["volumes", "hosts", "bricks"]
