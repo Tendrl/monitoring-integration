@@ -3,7 +3,6 @@ import json
 import os
 
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import utils
 
@@ -69,18 +68,18 @@ def set_alert(panel, thresholds, severity, resource_name, title):
 
 def get_panels(resource_rows):
 
-    new_resource_panel = []
+    new_resource_panels = []
     try:
         for row in resource_rows:
             panels = row["panels"]
             for panel in panels:
                 if panel["type"] == "graph":
-                    new_resource_panel.append(copy.deepcopy(panel))
+                    new_resource_panels.append(copy.deepcopy(panel))
     except (KeyError, AttributeError) as ex:
         logger.log("debug", NS.get("publisher_id", None),
                    {'message': "Error in retrieving resource "
-                   "rows (get_panel) " + str(ex)})
-    return new_resource_panel
+                   "rows (get_panels) " + str(ex)})
+    return new_resource_panels
 
 
 def set_gluster_target(target, integration_id, resource, resource_name):
@@ -115,12 +114,11 @@ def set_gluster_target(target, integration_id, resource, resource_name):
     return new_title
 
 
-def create_resource_dashboard(
-    resource_name, resource, sds_name, integration_id
-):
+def create_resource_dashboard(resource_name, resource):
+    sds_name = resource['sds_name']
+    integration_id = resource['integration_id']
     dashboard_path = constants.PATH_PREFIX + constants.DASHBOARD_PATH + \
         "/tendrl-" + str(sds_name) + "-" + str(resource_name) + '.json'
-
     if os.path.exists(dashboard_path):
         resource_file = utils.fread(dashboard_path)
         try:
@@ -139,14 +137,14 @@ def create_resource_dashboard(
                           "title": "Dashboard Row",
                           "titleSize": "h6"
                           }
-            new_resource_panel = get_panels(resource_rows)
+            new_resource_panels = get_panels(resource_rows)
             alert_thresholds = NS.monitoring.definitions.get_parsed_defs()[
                 "namespace.monitoring"]["thresholds"][resource_name]
             all_resource_rows = []
             count = 1
             global_row["panels"] = []
             panel_count = 1
-            for panel in new_resource_panel:
+            for panel in new_resource_panels:
                 try:
                     new_title = ""
                     for panel_title in alert_thresholds:
@@ -193,7 +191,7 @@ def create_resource_dashboard(
                                 count = count + 1
                 except KeyError as ex:
                     logger.log(
-                        "error",
+                        "debug",
                         NS.get("publisher_id", None),
                         {'message': str(panel[
                             "title"]) + "failed" + str(ex)}
@@ -204,123 +202,122 @@ def create_resource_dashboard(
                 resource_json["dashboard"]["rows"] = []
                 resource_json["dashboard"]["rows"] = all_resource_rows
                 resource_json["dashboard"]["templating"] = {}
-                resp = alert_utils.post_dashboard(resource_json)
-                if resp.status_code == 200:
-                    msg = ("Alert dashboard for %s-%s is created " +
-                           "successfully") % (resource_name, new_title)
-                    logger.log("debug", NS.get("publisher_id", None),
-                               {'message': msg})
-                else:
-                    msg = "Alert dashboard upload failed for %s-%s" % \
-                          (resource_name, new_title)
-                    logger.log("debug", NS.get("publisher_id", None),
-                               {'message': msg})
+                return resource_json
         except Exception as ex:
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': str(ex)})
 
 
-def add_panel(integration_id, resource_type, resource_name, sds_name):
-    resp = None
-    alert_dashboard = alert_utils.get_alert_dashboard(
-        resource_type
-    )
-    if alert_dashboard:
+def add_panel(resources, resource_type, alert_dashboard, most_recent_panel_id):
+    for resource in resources:
+        sds_name = resource["sds_name"]
+        integration_id = resource["integration_id"]
+        resource_name = resource["resource_name"]
         try:
-            if alert_dashboard["message"] == "Dashboard not found":
-                flag = False
-            else:
-                flag = True
-        except (KeyError, AttributeError):
-            flag = True
-        if flag:
-            try:
-                if sds_name == constants.GLUSTER:
-                    # check duplicate rows
-                    if not check_duplicate(
-                        alert_dashboard,
-                        integration_id,
-                        resource_type,
-                        resource_name
-                    ):
-                        alert_row = fetch_row(alert_dashboard)
-                        add_gluster_resource_panel(
-                            alert_row,
-                            integration_id,
-                            resource_type,
-                            resource_name
-                        )
-                        dash_json = create_updated_dashboard(
-                            alert_dashboard, alert_row
-                        )
-                        resp = alert_utils.post_dashboard(dash_json)
-            except Exception as ex:
-                logger.log("error", NS.get("publisher_id", None),
-                           {'message': "Error while updating "
-                            "dashboard for %s" % resource_name})
-                raise ex
-    return resp
+            if sds_name == constants.GLUSTER:
+                alert_rows = fetch_rows(alert_dashboard)
+                add_gluster_resource_panel(
+                    alert_rows,
+                    integration_id,
+                    resource_type,
+                    resource_name,
+                    most_recent_panel_id
+                )
+                alert_dashboard = create_updated_dashboard(
+                    alert_dashboard, alert_rows
+                )
+                most_recent_panel_id = alert_rows[-1]["panels"][-1]["id"]
+        except Exception as ex:
+            logger.log("error", NS.get("publisher_id", None),
+                       {'message': "Error while updating "
+                        "dashboard for %s" % resource_name})
+            raise ex
+    return alert_dashboard
 
 
 def check_duplicate(
-    alert_dashboard, integration_id, resource_type, resource
+    resource_json, resources, resource_type
 ):
-    existing_reource = False
-    for row in alert_dashboard["dashboard"]["rows"]:
-        if "panels" in row and (not existing_reource):
-            for target in row["panels"][0]["targets"]:
-                resource_name = resource
-                if resource_name is not None:
-                    if str(integration_id) in target["target"]:
-                        if resource_type == "volumes":
-                            # tendrl.names.{integration_id}.volumes.{vol_name}.pcnt_used
-                            vol_name = target["target"].split(
-                                "volumes."
-                            )[1].split(".")[0]
-                            if resource_name == vol_name:
-                                existing_reource = True
-                                break
-                        elif resource_type == "bricks":
-                            # tendrl.names.{integration_id}.nodes.{h_name}.bricks.{path}.
-                            # utilization.percent-percent_bytes
-                            hostname = resource_name.split(":")[0].split(
-                                "|")[1].replace(".", "_")
-                            resource_name = resource_name.split(
-                                ":", 1)[1].replace("/", "|")
-                            host = target["target"].split(
-                                "nodes."
-                            )[1].split(".")[0]
-                            brick_path = target["target"].split(
-                                "bricks."
-                            )[1].split(".")[0]
-                            if hostname == host and \
-                                    resource_name == brick_path:
-                                existing_reource = True
-                                break
-                        elif resource_type == "hosts":
-                            # tendrl.names.{integration_id}.nodes.{host_name}.
-                            # {memory/cpu/swap}.*
-                            host_name = target["target"].split(
-                                "nodes."
-                            )[1].split(".")[0]
-                            if resource_name == host_name:
-                                existing_reource = True
-                                break
-                elif str(integration_id) in target["target"]:
-                    existing_reource = True
-                    break
-        elif existing_reource:
-            break
-    return existing_reource
+    # Keeping rows which are match with newly collcted cluster details
+    dashboard_json = copy.deepcopy(resource_json)
+    resource_json["dashboard"]["rows"] = []
+    new_resource = []
+    most_recent_panel_id = 1
+    for resource in resources:
+        new_resource_flag = True
+        integration_id = str(resource["integration_id"])
+        for row in dashboard_json["dashboard"]["rows"]:
+            if "panels" in row:
+                for target in row["panels"][0]["targets"]:
+                    resource_name = str(resource["resource_name"])
+                    if resource_name is not None:
+                        if integration_id in target["target"]:
+                            if resource_type == "volumes":
+                                # tendrl.clusters.{cid}.volumes.{vol_name}.pcnt_used
+                                vol_name = target["target"].split(
+                                    "volumes."
+                                )[1].split(".")[0]
+                                if resource_name == vol_name:
+                                    resource_json["dashboard"]["rows"].append(
+                                        row
+                                    )
+                                    new_resource_flag = False
+                                    break
+                            elif resource_type == "bricks":
+                                # tendrl.clusters.{cid}.nodes.{h_name}.bricks.{path}.
+                                # utilization.percent-percent_bytes
+                                hostname = resource_name.split(":")[0].split(
+                                    "|")[1].replace(".", "_")
+                                resource_name = resource_name.split(
+                                    ":", 1)[1].replace("/", "|")
+                                host = target["target"].split(
+                                    "nodes."
+                                )[1].split(".")[0]
+                                brick_path = target["target"].split(
+                                    "bricks."
+                                )[1].split(".")[0]
+                                if hostname == host and \
+                                        resource_name == brick_path:
+                                    resource_json["dashboard"]["rows"].append(
+                                        row
+                                    )
+                                    new_resource_flag = False
+                                    break
+                            elif resource_type == "hosts":
+                                # tendrl.clusters.{cid}.nodes.{host_name}.
+                                # {memory/cpu/swap}.*
+                                host_name = target["target"].split(
+                                    "nodes."
+                                )[1].split(".")[0]
+                                if resource_name == host_name:
+                                    resource_json["dashboard"]["rows"].append(
+                                        row
+                                    )
+                                    new_resource_flag = False
+                                    break
+                    elif integration_id in target["target"]:
+                        resource_json["dashboard"]["rows"].append(
+                            row
+                        )
+                        new_resource_flag = False
+                        break
+            else:
+                break
+            if most_recent_panel_id < row["panels"][-1]["id"]:
+                most_recent_panel_id = row["panels"][-1]["id"]
+        if new_resource_flag:
+            new_resource.append(resource)
+    return new_resource, resource_json, most_recent_panel_id
 
 
 def add_gluster_resource_panel(
-    alert_rows, integration_id, resource_type, resource_name
+    alert_rows, integration_id, resource_type, resource_name, most_recent_panel_id
 ):
     if resource_type == "hosts":
         resource_type = "nodes"
+    panel_count = most_recent_panel_id
     for alert_row in alert_rows:
-        panel_count = alert_row["panels"][-1]["id"] + 1
+        panel_count += 1
         for panel in alert_row["panels"]:
             targets = panel["targets"]
             for target in targets:
@@ -381,7 +378,7 @@ def add_gluster_resource_panel(
                     new_title) + "-" + panel["title"].split("-")[-1]
 
 
-def fetch_row(dashboard_json):
+def fetch_rows(dashboard_json):
 
     rows = dashboard_json["dashboard"]["rows"]
     if len(rows) > 1:
@@ -389,7 +386,7 @@ def fetch_row(dashboard_json):
             if rows[0]["panels"][0]["title"].split("-", 1)[0] == \
                     rows[count]["panels"][0]["title"].split("-", 1)[0]:
                 alert_row = copy.deepcopy(
-                    dashboard_json["dashboard"]["rows"][-count:])
+                    dashboard_json["dashboard"]["rows"][:count])
                 break
     else:
         alert_row = [copy.deepcopy(dashboard_json["dashboard"]["rows"][-1])]

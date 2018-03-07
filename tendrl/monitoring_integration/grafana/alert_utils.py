@@ -82,21 +82,36 @@ def remove_row(alert_dashboard, integration_id, resource_type, resource_name):
     for row in rows:
         for target in row["panels"][0]["targets"]:
             resource = resource_name
-            if resource_type == "bricks":
-                hostname = resource.split(":")[0].split(
-                    "|")[1].replace(".", "_")
-                resource = "." + resource.split(
-                    ":", 1)[1].replace("/", "|") + "."
             if resource is not None:
-                if str(integration_id) in target["target"] and str(
-                        resource) in str(target["target"]):
+                if str(integration_id) in target["target"]:
                     if resource_type == "bricks":
-                        if hostname in target["target"]:
+                        hostname = resource.split(":")[0].split(
+                            "|")[1].replace(".", "_")
+                        resource = resource.split(
+                            ":", 1)[1].replace("/", "|")
+                        host = target["target"].split(
+                            "nodes."
+                        )[1].split(".")[0]
+                        brick_path = target["target"].split(
+                            "bricks."
+                        )[1].split(".")[0]
+                        if hostname == host and resource == brick_path:
                             flag = False
                             break
-                    else:
-                        flag = False
-                        break
+                    elif resource_type == "nodes":
+                        hostname = target["target"].split(
+                            "nodes."
+                        )[1].split(".")[0]
+                        if resource == hostname:
+                            flag = False
+                            break
+                    elif resource_type == "volumes":
+                        vol_name = target["target"].split(
+                            "volumes."
+                        )[1].split(".")[0]
+                        if resource == vol_name:
+                            flag = False
+                            break
             else:
                 if str(integration_id) in target["target"]:
                     flag = False
