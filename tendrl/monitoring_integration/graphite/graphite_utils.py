@@ -17,13 +17,13 @@ def archive(
         msg = "%s - %s deleted from graphite" % (
             resource_type, resource_name
         )
-        logger.log("debug", NS.get("publisher_id", None),
+        logger.log("info", NS.get("publisher_id", None),
                    {'message': msg})
     except Exception:
         msg = "%s - %s deleted from graphite failed" % (
             resource_type, resource_name
         )
-        logger.log("debug", NS.get("publisher_id", None),
+        logger.log("error", NS.get("publisher_id", None),
                    {'message': msg})
 
 
@@ -61,7 +61,7 @@ def _add_metrics(objects, obj_name, metric, resource):
                         metrics.append(copy.deepcopy(final_metric))
                     except (AttributeError, KeyError) as ex:
                         logger.log(
-                            "debug",
+                            "error",
                             NS.get("publisher_id", None),
                             {
                                 'message': "Failed to fetch key {0} of attr "
@@ -146,7 +146,7 @@ def cluster_wise_brick_count(cluster_detail):
             metrics.append(copy.deepcopy(local_metric))
         except (AttributeError, KeyError) as ex:
             logger.log(
-                "debug",
+                "error",
                 NS.get("publisher_id", None),
                 {
                     'message': "Failed to create cluster metric {0} "
@@ -186,7 +186,7 @@ def volume_wise_brick_count(cluster_detail):
                 metrics.append(copy.deepcopy(local_metric))
             except (AttributeError, KeyError) as ex:
                 logger.log(
-                    "debug", NS.get("publisher_id", None),
+                    "error", NS.get("publisher_id", None),
                     {
                         'message': "Failed to create volume metric {0} "
                         "for Volume :{1}".format(
@@ -216,7 +216,7 @@ def node_count(cluster_detail):
             metrics.append(copy.deepcopy(local_metric))
         except (AttributeError, KeyError) as ex:
                 logger.log(
-                    "debug",
+                    "error",
                     NS.get("publisher_id", None),
                     {
                         'message': "Failed to create cluster metric {0} "
@@ -249,7 +249,7 @@ def volume_count(cluster_detail):
             metrics.append(copy.deepcopy(local_metric))
         except (AttributeError, KeyError) as ex:
             logger.log(
-                "debug",
+                "error",
                 NS.get("publisher_id", None),
                 {
                     'message': "Failed to create cluster metric "
@@ -384,7 +384,7 @@ def georep_status(cluster_detail):
             metrics.append(copy.deepcopy(local_metric))
         except (AttributeError, KeyError) as ex:
             logger.log(
-                "debug",
+                "error",
                 NS.get("publisher_id", None),
                 {
                     'message': "Failed to create cluster metric {0} "
@@ -434,7 +434,7 @@ def create_metrics(objects, cluster_details):
                                 metrics = metrics + copy.deepcopy(node_metric)
                             except (AttributeError, KeyError) as ex:
                                 logger.log(
-                                    "debug",
+                                    "error",
                                     NS.get("publisher_id", None),
                                     {
                                         'message': "Failed to fetch Node {} "
@@ -451,7 +451,7 @@ def create_metrics(objects, cluster_details):
                                     volume_metric)
                             except (AttributeError, KeyError) as ex:
                                 logger.log(
-                                    "debug",
+                                    "error",
                                     NS.get("publisher_id", None),
                                     {
                                         'message': "Failed to fetch Volume {} "
@@ -460,7 +460,7 @@ def create_metrics(objects, cluster_details):
                                 )
 
         except (AttributeError, KeyError) as ex:
-            logger.log("debug", NS.get("publisher_id", None),
+            logger.log("error", NS.get("publisher_id", None),
                        {'message': "Failed to fetch all metrics " + str(ex)})
     count_metrics = miscellaneous_metrics(cluster_details)
     misc_metrics = []

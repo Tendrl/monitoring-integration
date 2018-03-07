@@ -113,9 +113,8 @@ class SyncAlertDashboard(object):
                         dashboard_name,
                         cluster_details[dashboard_name]
                     )
-            if resource_json:
-                resp = alert_utils.post_dashboard(resource_json)
-                self.log_message(resp, dashboard_name)
+            resp = alert_utils.post_dashboard(resource_json)
+            self.log_message(resp, dashboard_name)
 
     def create_dashboard(self, resource_type, resources):
         resource_json = {}
@@ -147,7 +146,7 @@ class SyncAlertDashboard(object):
             alert_dashboard.check_duplicate(
                 resource_json, resources, resource_type
             )
-        if new_resources and resource_json["dashboard"]["rows"]:
+        if new_resources:
             resource_json = alert_dashboard.add_panel(
                 new_resources,
                 resource_type,
@@ -179,7 +178,7 @@ class SyncAlertDashboard(object):
                     resource_type
                 )
 
-            logger.log("debug", NS.get("publisher_id", None),
+            logger.log("info", NS.get("publisher_id", None),
                        {'message': msg})
         except (KeyError, AttributeError):
             pass

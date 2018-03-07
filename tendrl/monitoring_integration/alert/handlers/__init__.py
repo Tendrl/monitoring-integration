@@ -109,7 +109,7 @@ class AlertHandlerManager(object):
                     handled_alert = True
             if not handled_alert:
                 logger.log(
-                    "debug",
+                    "error",
                     NS.publisher_id,
                     {
                         "message": 'No alert handler defined for '

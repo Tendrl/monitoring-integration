@@ -298,7 +298,7 @@ class GraphitePlugin(object):
                         resource_detail[key] = attr_value
                     except (KeyError, etcd.EtcdKeyNotFound) as ex:
                         logger.log(
-                            "debug",
+                            "error",
                             NS.get("publisher_id", None),
                             {'message': "Cannot Find {0} in volume "
                              "{1}".format(key, volume) + str(ex)
@@ -396,7 +396,7 @@ class GraphitePlugin(object):
                             geo_rep_mapper[key] = geo_rep_mapper[key] + value
                         except (AttributeError, KeyError) as ex:
                             logger.log(
-                                "debug",
+                                "error",
                                 NS.get("publisher_id", None),
                                 {
                                     'message': "Failed to extract georep "
@@ -405,7 +405,7 @@ class GraphitePlugin(object):
                             )
                 except (AttributeError, KeyError) as ex:
                         logger.log(
-                            "debug",
+                            "error",
                             NS.get("publisher_id", None),
                             {
                                 'message': "Failed to extract georep details "
@@ -493,7 +493,7 @@ class GraphitePlugin(object):
                     brick["brick_name"] = brick["brick_path"].split(":")[1]
                 except (AttributeError, KeyError) as ex:
                     logger.log(
-                        "debug",
+                        "error",
                         NS.get("publisher_id", None),
                         {'message': "Failed to set brick path" + str(ex)}
                     )
@@ -546,7 +546,7 @@ class GraphitePlugin(object):
                         down = down + 1
                 except KeyError as ex:
                     logger.log(
-                        "debug",
+                        "error",
                         NS.get("publisher_id", None),
                         {
                             'message': "Failed to set resource count "

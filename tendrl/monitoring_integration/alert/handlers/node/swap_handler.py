@@ -70,7 +70,7 @@ class SwapHandler(AlertHandler):
                 InvalidAlertSeverity) as ex:
             Event(
                 ExceptionMessage(
-                    "debug",
+                    "error",
                     NS.publisher_id,
                     {
                         "message": "Error in converting grafana"
