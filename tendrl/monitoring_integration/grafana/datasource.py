@@ -18,7 +18,7 @@ def create():
     result = json.loads(response.content)
     if response.status_code == 200:
         msg = "Datasource created successfully"
-        logger.log("info", NS.get("publisher_id", None),
+        logger.log("debug", NS.get("publisher_id", None),
                    {'message': msg})
     elif "message" in result and result["message"] == \
             "Data source with same name already exists":
@@ -29,13 +29,13 @@ def create():
             resp = datasource_utils.update_datasource(result["id"])
             if resp.status_code == 200:
                 msg = "Datasource is updated successfully"
-                logger.log("info", NS.get("publisher_id", None),
+                logger.log("debug", NS.get("publisher_id", None),
                            {'message': msg})
             else:
                 msg = "Unable to update datasource"
-                logger.log("error", NS.get("publisher_id", None),
+                logger.log("debug", NS.get("publisher_id", None),
                            {'message': msg})
         else:
             msg = "Unable to find datasource id"
-            logger.log("error", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})

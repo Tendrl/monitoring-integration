@@ -42,7 +42,7 @@ def get_rows(resource_rows):
                     row["panels"] = [panel]
                     new_resource_rows.append(copy.deepcopy(row))
     except (KeyError, AttributeError) as ex:
-        logger.log("error", NS.get("publisher_id", None),
+        logger.log("debug", NS.get("publisher_id", None),
                    {'message': "Error in retrieving resource "
                    "rows (get_rows) " + str(ex)})
     return new_resource_rows
@@ -154,7 +154,7 @@ def create_resource_dashboard(
                                     panel_count = 1
                     except KeyError as ex:
                         logger.log(
-                            "error",
+                            "debug",
                             NS.get("publisher_id", None),
                             {'message': str(panel[
                                 "title"]) + "failed" + str(ex)}
@@ -172,10 +172,10 @@ def create_resource_dashboard(
             else:
                 msg = "Alert dashboard upload failed for %s-%s" % \
                       (resource_name, new_title)
-                logger.log("error", NS.get("publisher_id", None),
+                logger.log("debug", NS.get("publisher_id", None),
                            {'message': msg})
         except Exception as ex:
-            logger.log("error", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': str(ex)})
 
 

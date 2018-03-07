@@ -70,7 +70,7 @@ class MemoryHandler(AlertHandler):
                 InvalidAlertSeverity) as ex:
             Event(
                 ExceptionMessage(
-                    "error",
+                    "debug",
                     NS.publisher_id,
                     {
                         "message": "Error in converting grafana"
