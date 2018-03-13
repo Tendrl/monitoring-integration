@@ -52,6 +52,13 @@ class MemoryHandler(AlertHandler):
                         alert['severity'],
                         alert['tags']['warning_max']))
             elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
+                # Identifying clear alert from which panel critical/warning
+                if "critical" in alert_json['Name'].lower():
+                    alert['tags']['clear_alert'] = \
+                        constants.TENDRL_SEVERITY_MAP['critical']
+                elif "warning" in alert_json['Name'].lower():
+                    alert['tags']['clear_alert'] = \
+                        constants.TENDRL_SEVERITY_MAP['warning']
                 alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
                 alert['tags']['message'] = (
                     "Memory utilization of node %s is"

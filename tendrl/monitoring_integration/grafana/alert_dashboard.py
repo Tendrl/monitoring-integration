@@ -177,18 +177,20 @@ def create_resource_dashboard(
                                 panel["title"] = title + "-" + str(
                                     new_title) + "-" + severity
                                 panel["id"] = count
-                                count = count + 1
-                                panel_count = panel_count + 1
-                                if panel_count < 7:
+                                # For better visibility,
+                                # 7 panels per row is created
+                                if panel_count < constants.MAX_PANELS_IN_ROW:
                                     global_row["panels"].append(
                                         copy.deepcopy(panel)
                                     )
+                                    panel_count = panel_count + 1
                                 else:
                                     global_row["panels"].append(panel)
                                     all_resource_rows.append(
                                         copy.deepcopy(global_row))
                                     global_row["panels"] = []
                                     panel_count = 1
+                                count = count + 1
                 except KeyError as ex:
                     logger.log(
                         "error",
@@ -206,12 +208,12 @@ def create_resource_dashboard(
                 if resp.status_code == 200:
                     msg = ("Alert dashboard for %s-%s is created " +
                            "successfully") % (resource_name, new_title)
-                    logger.log("info", NS.get("publisher_id", None),
-                               {'message': msg})
+                    logger.log("debug", NS.get("publisher_id", None),
+                               {'debug': msg})
                 else:
                     msg = "Alert dashboard upload failed for %s-%s" % \
                           (resource_name, new_title)
-                    logger.log("error", NS.get("publisher_id", None),
+                    logger.log("debug", NS.get("publisher_id", None),
                                {'message': msg})
         except Exception as ex:
             logger.log("debug", NS.get("publisher_id", None),
@@ -295,7 +297,7 @@ def add_gluster_resource_panel(
     alert_rows, cluster_id, resource_type, resource_name
 ):
     if resource_type == "hosts":
-            resource_type = "nodes"
+        resource_type = "nodes"
     for alert_row in alert_rows:
         panel_count = alert_row["panels"][-1]["id"] + 1
         for panel in alert_row["panels"]:
@@ -348,14 +350,14 @@ def add_gluster_resource_panel(
             new_title = resource_name
             if resource_type == "bricks":
                 host_name = resource_name.split("|", 1)[1].split(
-                    ":", 1)[0].replace(".", "")
+                    ":", 1)[0].replace(".", "_")
                 brick_name = resource_name.split("|", 1)[1].split(
                     ":", 1)[1].replace("/", "|")
                 volume_name = resource_name.split("|", 1)[0]
                 new_title = volume_name + "|" + host_name + ":" + brick_name
             panel["title"] = panel["title"].split(
-                "-", 1
-            )[0] + "-" + str(new_title) + "-" + panel["title"].split("-")[-1]
+                "-", 1)[0] + "-" + str(
+                    new_title) + "-" + panel["title"].split("-")[-1]
 
 
 def fetch_row(dashboard_json):
