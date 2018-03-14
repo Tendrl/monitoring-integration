@@ -143,18 +143,25 @@ namespace.monitoring:
     hosts:
       cpu:
         Warning: 80
+        Critical: 90
       mount_point:
         Warning: 80
+        Critical: 90
       memory:
         Warning: 80
+        Critical: 90
       swap:
         Warning: 50
+        Critical: 90
       capacity_utilization:
         Warning: 75
+        Critical: 90
     volumes:
       capacity_utilization:
         Warning: 75
+        Critical: 90
     bricks:
       capacity_utilization:
         Warning: 75
+        Critical: 90
 tendrl_schema_version: 0.3
