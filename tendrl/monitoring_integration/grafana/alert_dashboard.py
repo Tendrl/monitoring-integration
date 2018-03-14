@@ -209,7 +209,7 @@ def create_resource_dashboard(
                     msg = ("Alert dashboard for %s-%s is created " +
                            "successfully") % (resource_name, new_title)
                     logger.log("debug", NS.get("publisher_id", None),
-                               {'debug': msg})
+                               {'message': msg})
                 else:
                     msg = "Alert dashboard upload failed for %s-%s" % \
                           (resource_name, new_title)

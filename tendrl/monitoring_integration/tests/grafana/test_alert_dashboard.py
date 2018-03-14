@@ -46,7 +46,7 @@ def test_create_alert_dashboard(log, post, fread, exist):
             'f3a74e36-0462-4fb0-9a92-3ee9d244f8a2'
         )
         log.assert_called_with(
-            'info',
+            'debug',
             'monitoring_integration',
             {'message': 'Alert dashboard for '
              'volumes- is created successfully'
