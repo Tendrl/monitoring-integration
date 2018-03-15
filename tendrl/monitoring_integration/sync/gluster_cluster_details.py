@@ -112,7 +112,7 @@ def get_volumes_details(cluster_key):
             deleted = etcd_utils.read(
                 cluster_key + "/Volumes/" + str(volume_id) + "/" + "deleted"
             ).value
-            if str(deleted).lower() == "false":
+            if str(deleted).lower() != "true":
                 volume_data = {}
                 for attr in ATTRS["volumes"]:
                     volume_data[attr] = etcd_utils.read(
