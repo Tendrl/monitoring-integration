@@ -14,8 +14,7 @@ ATTRS = {
 }
 
 
-def get_cluster_details(integration_id):
-    cluster_details = {}
+def get_cluster_details(integration_id, cluster_details):
     try:
         cluster_key = "/clusters/%s" % integration_id
         # Get node details
@@ -33,7 +32,6 @@ def get_cluster_details(integration_id):
             NS.get("publisher_id", None),
             {'message': str(ex)}
         )
-    return cluster_details
 
 
 def get_node_details(cluster_key):

@@ -27,16 +27,10 @@ class SyncAlertDashboard(object):
                             integration_id
                         sds_name = etcd_utils.read(key).value
                         if sds_name == constants.GLUSTER:
-                            cluster_details = \
-                                gluster_cluster_details.get_cluster_details(
-                                    integration_id
-                                )
-                            for dashboard_name in cluster_details:
-                                if dashboard_name not in all_cluster_details:
-                                    all_cluster_details[dashboard_name] = []
-                                all_cluster_details[dashboard_name].extend(
-                                    cluster_details[dashboard_name]
-                                )
+                            gluster_cluster_details.get_cluster_details(
+                                integration_id,
+                                all_cluster_details
+                            )
                         else:
                             # In future collecte other sds type cluster details
                             # Add all cluster details in all_cluster_details
@@ -132,10 +126,10 @@ class SyncAlertDashboard(object):
             resource = resources.pop()
             resource_json = alert_dashboard.create_resource_dashboard(
                 resource_type,
-                resource,
+                resource
             )
         # After creating first panel update the other panels
-        if resources:
+        if resources and resource_json:
             # update dashboard
             rows = resource_json["dashboard"]["rows"]
             highest_panel_id = rows[-1]["panels"][-1]["id"]

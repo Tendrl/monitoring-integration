@@ -142,7 +142,6 @@ def create_resource_dashboard(resource_name, resource):
                 "namespace.monitoring"]["thresholds"][resource_name]
             all_resource_rows = []
             count = 1
-            global_row["panels"] = []
             panel_count = 1
             for panel in new_resource_panels:
                 try:
