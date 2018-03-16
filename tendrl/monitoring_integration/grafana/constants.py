@@ -7,3 +7,5 @@ HEADERS = {"Accept": "application/json",
            "Content-Type": "application/json"
            }
 GLUSTER_DASHBOARDS = ["volumes", "hosts", "bricks"]
+ALERT_SEVERITY = ["Warning", "Critical"]
+MAX_PANELS_IN_ROW = 7
