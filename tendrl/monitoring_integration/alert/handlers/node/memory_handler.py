@@ -23,11 +23,11 @@ class MemoryHandler(AlertHandler):
             "tendrl.clusters.{integration_id}.nodes.{host_name}.memory"
 
     def format_alert(self, alert_json):
-        alert, integration_id = self.parse_alert_metrics(alert_json)
+        alert = self.parse_alert_metrics(alert_json)
         try:
             alert["alert_id"] = None
             alert["node_id"] = utils.find_node_id(
-                integration_id,
+                alert['tags']['integration_id'],
                 alert['tags']['fqdn']
             )
             alert["time_stamp"] = alert_json['NewStateDate']
@@ -131,6 +131,6 @@ class MemoryHandler(AlertHandler):
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         # identifying cluster_id and node_id from target
         result = utils.parse_target(target, self.template)
-        integration_id = result["integration_id"]
+        alert['tags']['integration_id'] = result["integration_id"]
         alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
-        return alert, integration_id
+        return alert
