@@ -11,7 +11,9 @@ from tendrl.monitoring_integration.tests import test_init
 @patch.object(utils, "find_node_id")
 @patch.object(utils, "find_grafana_pid")
 @patch.object(utils, "find_cluster_name")
-def test_brick_handler(cluster_name, pid, node_id):
+@patch.object(utils, "find_volume_name")
+def test_brick_handler(vol_name, cluster_name, pid, node_id):
+    vol_name.return_value = "vol1"
     node_id.return_value = "1"
     pid.return_value = "123"
     cluster_name.return_value = "c1"
@@ -39,8 +41,10 @@ def test_brick_handler(cluster_name, pid, node_id):
                           '-c5aff4eef15d',
                           'warning_max': 75,
                           'message': u'Brick utilization of dhcp122-234'
-                          ':|gluster|brick1 in cluster 7616f2a4-6502-4222'
-                          '-85bb-c5aff4eef15d is back normal'
+                          ':|gluster|brick1 under volume vol1 in cluster '
+                          '7616f2a4-6502-4222-85bb-c5aff4eef15d is back '
+                          'normal',
+                          'volume_name': 'vol1'
                           },
                  'source': 'GRAFANA',
                  'severity': 'INFO',
@@ -64,14 +68,15 @@ def test_brick_handler(cluster_name, pid, node_id):
                           'percent-percent_bytes',
                           'fqdn': u'dhcp122-234',
                           'message': u'Brick utilization of dhcp122-234:|'
-                          'gluster|brick1 in cluster 7616f2a4-6502-4222-'
-                          '85bb-c5aff4eef15d is 20.75 % which is above '
-                          'WARNING threshold (17 %)',
+                          'gluster|brick1 under volume vol1 in cluster '
+                          '7616f2a4-6502-4222-85bb-c5aff4eef15d is 20.75 % '
+                          'which is above WARNING threshold (17 %)',
                           'integration_id': u'7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d',
                           'cluster_name': 'c1',
                           'brick_path': u'|gluster|brick1',
-                          'warning_max': 17
+                          'warning_max': 17,
+                          'volume_name': 'vol1'
                           },
                  'pid': '123',
                  'node_id': '1',

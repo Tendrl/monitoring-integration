@@ -195,3 +195,23 @@ def parse_target(target, template):
     keys = re.findall(r'{(.+?)}', template)
     _dict = dict(zip(keys, values))
     return _dict
+
+
+def find_volume_name(integration_id, hostname, brick_path):
+    try:
+        vol_name = etcd_utils.read(
+            "clusters/%s/Bricks/all/%s/%s/vol_name" % (
+                integration_id, hostname, brick_path
+            )
+        ).value
+        return vol_name
+    except (EtcdKeyNotFound) as ex:
+        logger.log(
+            "debug",
+            NS.publisher_id,
+            {
+                "message": "Unable to find volume name for brick"
+                " %s:%s" % (hostname, brick_path)
+            }
+        )
+        raise ex
