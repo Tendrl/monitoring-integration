@@ -263,34 +263,55 @@ def add_panel(integration_id, resource_type, resource_name, sds_name):
 
 
 def check_duplicate(
-    alert_dashboard, integration_id, resource_type, resource_name
+    alert_dashboard, integration_id, resource_type, resource
 ):
-    flag = False
+    existing_reource = False
     for row in alert_dashboard["dashboard"]["rows"]:
-        if "panels" in row and (not flag):
+        if "panels" in row and (not existing_reource):
             for target in row["panels"][0]["targets"]:
-                resource = resource_name
-                if resource_type == "bricks":
-                    hostname = resource.split(":")[0].split(
-                        "|")[1].replace(".", "_")
-                    resource = "." + resource.split(
-                        ":", 1)[1].replace("/", "|") + "."
-                if resource is not None:
-                    if str(integration_id) in target["target"] and str(
-                            resource) in target["target"]:
-                        if resource_type == "bricks":
-                            if hostname in target["target"]:
-                                flag = True
+                resource_name = resource
+                if resource_name is not None:
+                    if str(integration_id) in target["target"]:
+                        if resource_type == "volumes":
+                            # tendrl.clusters.{cid}.volumes.{vol_name}.pcnt_used
+                            vol_name = target["target"].split(
+                                "volumes."
+                            )[1].split(".")[0]
+                            if resource_name == vol_name:
+                                existing_reource = True
                                 break
-                        else:
-                            flag = True
-                            break
+                        elif resource_type == "bricks":
+                            # tendrl.clusters.{cid}.nodes.{h_name}.bricks.{path}.
+                            # utilization.percent-percent_bytes
+                            hostname = resource_name.split(":")[0].split(
+                                "|")[1].replace(".", "_")
+                            resource_name = resource_name.split(
+                                ":", 1)[1].replace("/", "|")
+                            host = target["target"].split(
+                                "nodes."
+                            )[1].split(".")[0]
+                            brick_path = target["target"].split(
+                                "bricks."
+                            )[1].split(".")[0]
+                            if hostname == host and \
+                                    resource_name == brick_path:
+                                existing_reource = True
+                                break
+                        elif resource_type == "hosts":
+                            # tendrl.clusters.{cid}.nodes.{host_name}.
+                            # {memory/cpu/swap}.*
+                            host_name = target["target"].split(
+                                "nodes."
+                            )[1].split(".")[0]
+                            if resource_name == host_name:
+                                existing_reource = True
+                                break
                 elif str(integration_id) in target["target"]:
-                        flag = True
-                        break
-        elif flag:
+                    existing_reource = True
+                    break
+        elif existing_reource:
             break
-    return flag
+    return existing_reource
 
 
 def add_gluster_resource_panel(
