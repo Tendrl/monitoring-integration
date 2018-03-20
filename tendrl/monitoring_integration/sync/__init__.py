@@ -13,6 +13,9 @@ from tendrl.monitoring_integration.sync.dashbaord_sync import \
     SyncAlertDashboard
 
 
+DEFAULT_SLEEP = 60
+
+
 class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
 
     def __init__(self):
@@ -44,6 +47,8 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                         )
                         raise ex
                 except etcd.EtcdKeyNotFound as ex:
+                    # Before cluster import sync_interval is not populated
+                    time.sleep(DEFAULT_SLEEP)
                     continue
             if _sleep > 5:
                 _sleep = self.sync_interval
