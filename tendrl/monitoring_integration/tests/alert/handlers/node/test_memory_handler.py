@@ -23,7 +23,9 @@ def test_memory_handler(pid, node_id):
                  'tags': {'warning_max': 80,
                           'fqdn': u'dhcp122-234',
                           'message': u'Memory utilization of '
-                          'node dhcp122-234 is back to normal'
+                          'node dhcp122-234 is back to normal',
+                          'integration_id': '7616f2a4-6502-4222-85bb-'
+                          'c5aff4eef15d'
                           },
                  'current_value': None,
                  'source': 'GRAFANA',
@@ -33,7 +35,7 @@ def test_memory_handler(pid, node_id):
                  'significance': 'HIGH',
                  'node_id': '1',
                  'resource': 'memory_utilization',
-                 'severity': 'INFO'
+                 'severity': 'INFO',
                  }
     if not result == condition:
         raise AssertionError()
@@ -53,7 +55,9 @@ def test_memory_handler(pid, node_id):
                           'node dhcp122-234 '
                           'is 29.47 % which is above the WARNING '
                           'threshold (23 %).',
-                          'warning_max': 23
+                          'warning_max': 23,
+                          'integration_id': '7616f2a4-6502-4222-85bb-'
+                          'c5aff4eef15d'
                           },
                  'time_stamp': u'2018-02-12T11:30:19+05:30',
                  'alert_id': None,
