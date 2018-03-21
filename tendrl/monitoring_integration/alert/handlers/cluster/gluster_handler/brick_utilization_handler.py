@@ -39,6 +39,11 @@ class BrickHandler(AlertHandler):
             alert['source'] = constants.ALERT_SOURCE
             alert['tags']['cluster_name'] = utils.find_cluster_name(
                 alert['tags']['integration_id'])
+            alert["tags"]["volume_name"] = utils.find_volume_name(
+                alert['tags']['integration_id'],
+                alert['tags']['fqdn'].replace('_', '.'),
+                alert['tags']['brick_path'].strip("|").replace('|', '_')
+            )
             if alert_json['State'] == constants.GRAFANA_ALERT:
                 if "critical" in alert_json['Name'].lower():
                     alert['severity'] = \
@@ -47,11 +52,12 @@ class BrickHandler(AlertHandler):
                     alert['severity'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['tags']['message'] = (
-                    "Brick utilization of %s:%s in "
+                    "Brick utilization of %s:%s under volume %s in "
                     "cluster %s is %s %% which is above %s"
                     " threshold (%s %%)" % (
                         alert['tags']['fqdn'],
                         alert['tags']['brick_path'],
+                        alert["tags"]["volume_name"],
                         alert['tags']['integration_id'],
                         alert['current_value'],
                         alert['severity'],
@@ -68,10 +74,11 @@ class BrickHandler(AlertHandler):
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
                 alert['tags']['message'] = (
-                    "Brick utilization of %s:%s in "
+                    "Brick utilization of %s:%s under volume %s in "
                     "cluster %s is back normal" % (
                         alert['tags']['fqdn'],
                         alert['tags']['brick_path'],
+                        alert["tags"]["volume_name"],
                         alert['tags']['integration_id']
                     )
                 )

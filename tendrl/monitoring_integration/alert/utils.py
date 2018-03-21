@@ -151,7 +151,7 @@ def find_cluster_name(integration_id):
         cluster_name = NS.tendrl.objects.ClusterTendrlContext(
             integration_id=integration_id).load().cluster_name
         return cluster_name
-    except (EtcdKeyNotFound) as ex:
+    except EtcdKeyNotFound as ex:
         logger.log(
             "error",
             NS.publisher_id,
@@ -177,7 +177,7 @@ def find_alert_types(new_alert_types):
                 classification=alert_classification,
                 types=types
             ).save()
-    except (EtcdKeyNotFound) as ex:
+    except EtcdKeyNotFound as ex:
         logger.log(
             "error",
             NS.publisher_id,
@@ -195,3 +195,23 @@ def parse_target(target, template):
     keys = re.findall(r'{(.+?)}', template)
     _dict = dict(zip(keys, values))
     return _dict
+
+
+def find_volume_name(integration_id, hostname, brick_path):
+    try:
+        vol_name = etcd_utils.read(
+            "clusters/%s/Bricks/all/%s/%s/vol_name" % (
+                integration_id, hostname, brick_path
+            )
+        ).value
+        return vol_name
+    except EtcdKeyNotFound as ex:
+        logger.log(
+            "debug",
+            NS.publisher_id,
+            {
+                "message": "Unable to find volume name for brick"
+                " %s:%s" % (hostname, brick_path)
+            }
+        )
+        raise ex
