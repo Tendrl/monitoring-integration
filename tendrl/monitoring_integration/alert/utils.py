@@ -151,7 +151,7 @@ def find_cluster_name(integration_id):
         cluster_name = NS.tendrl.objects.ClusterTendrlContext(
             integration_id=integration_id).load().cluster_name
         return cluster_name
-    except (EtcdKeyNotFound) as ex:
+    except EtcdKeyNotFound as ex:
         logger.log(
             "error",
             NS.publisher_id,
@@ -177,7 +177,7 @@ def find_alert_types(new_alert_types):
                 classification=alert_classification,
                 types=types
             ).save()
-    except (EtcdKeyNotFound) as ex:
+    except EtcdKeyNotFound as ex:
         logger.log(
             "error",
             NS.publisher_id,
@@ -205,7 +205,7 @@ def find_volume_name(integration_id, hostname, brick_path):
             )
         ).value
         return vol_name
-    except (EtcdKeyNotFound) as ex:
+    except EtcdKeyNotFound as ex:
         logger.log(
             "debug",
             NS.publisher_id,
