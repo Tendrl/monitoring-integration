@@ -19,8 +19,8 @@ class VolumeHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl.clusters.{cluster_id}.volumes.{volume_name}."\
-            "pcnt_used"
+        self.template = "tendrl.clusters.{integration_id}.volumes."\
+            "{volume_name}.pcnt_used"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
@@ -137,6 +137,6 @@ class VolumeHandler(AlertHandler):
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         result = utils.parse_target(target, self.template)
-        alert['tags']['integration_id'] = result["cluster_id"]
+        alert['tags']['integration_id'] = result["integration_id"]
         alert['tags']['volume_name'] = result["volume_name"]
         return alert

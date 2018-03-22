@@ -212,12 +212,12 @@ class GraphitePlugin(object):
                         attr_value
                     )
                 except (KeyError, etcd.EtcdKeyNotFound) as ex:
-                    cluster_id = cluster_key.split("/")[-1]
+                    integration_id = cluster_key.split("/")[-1]
                     logger.log(
                         "debug",
                         NS.get("publisher_id", None),
                         {'message': "Cannot Find {0} in Cluster "
-                         "{1}".format(key, cluster_id) + str(ex)
+                         "{1}".format(key, integration_id) + str(ex)
                          }
                     )
             if not resource_detail == {}:

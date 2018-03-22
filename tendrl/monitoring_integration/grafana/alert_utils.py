@@ -75,7 +75,7 @@ def get_alert(alert_id):
     return resp.json()
 
 
-def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
+def remove_row(alert_dashboard, integration_id, resource_type, resource_name):
     rows = alert_dashboard["dashboard"]["rows"]
     new_rows = []
     flag = True
@@ -88,7 +88,7 @@ def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
                 resource = "." + resource.split(
                     ":", 1)[1].replace("/", "|") + "."
             if resource is not None:
-                if str(cluster_id) in target["target"] and str(
+                if str(integration_id) in target["target"] and str(
                         resource) in str(target["target"]):
                     if resource_type == "bricks":
                         if hostname in target["target"]:
@@ -98,7 +98,7 @@ def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
                         flag = False
                         break
             else:
-                if str(cluster_id) in target["target"]:
+                if str(integration_id) in target["target"]:
                     flag = False
                     break
         if flag:
@@ -107,7 +107,7 @@ def remove_row(alert_dashboard, cluster_id, resource_type, resource_name):
     alert_dashboard["dashboard"]["rows"] = new_rows
 
 
-def remove_cluster_rows(cluster_id, dashboard_name):
+def remove_cluster_rows(integration_id, dashboard_name):
 
     alert_dashboard = get_alert_dashboard(dashboard_name)
     new_rows = []
@@ -115,7 +115,7 @@ def remove_cluster_rows(cluster_id, dashboard_name):
     rows = alert_dashboard.get("dashboard", {}).get("rows", [])
     for row in rows:
         for target in row["panels"][0].get("targets", []):
-            if str(cluster_id) in target["target"]:
+            if str(integration_id) in target["target"]:
                 flag = False
                 break
         if flag:

@@ -129,7 +129,7 @@ class MemoryHandler(AlertHandler):
             alert_json['Settings']['conditions'])
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
-        # identifying cluster_id and node_id from target
+        # identifying integration_id and node_id from target
         result = utils.parse_target(target, self.template)
         alert['tags']['integration_id'] = result["integration_id"]
         alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
