@@ -315,7 +315,7 @@ def check_duplicate(
 
 
 def add_gluster_resource_panel(
-    alert_rows, cluster_id, resource_type, resource_name
+    alert_rows, integration_id, resource_type, resource_name
 ):
     if resource_type == "hosts":
         resource_type = "nodes"
@@ -328,10 +328,10 @@ def add_gluster_resource_panel(
                     if resource_type == "bricks":
                         panel_target = ("tendrl" + target["target"].split(
                             "tendrl")[1].split(")")[0]).split(".")
-                        old_cluster_id = panel_target[
+                        old_integration_id = panel_target[
                             panel_target.index("clusters") + 1]
                         target["target"] = target["target"].replace(
-                            old_cluster_id, str(cluster_id))
+                            old_integration_id, str(integration_id))
                         if "volumes" in panel_target:
                             old_resource_name = panel_target[
                                 panel_target.index("volumes") + 1]
@@ -355,10 +355,10 @@ def add_gluster_resource_panel(
                     else:
                         panel_target = ("tendrl" + target["target"].split(
                             "tendrl")[1].split(")")[0]).split(".")
-                        old_cluster_id = panel_target[
+                        old_integration_id = panel_target[
                             panel_target.index("clusters") + 1]
                         target["target"] = target["target"].replace(
-                            old_cluster_id, str(cluster_id))
+                            old_integration_id, str(integration_id))
                         if resource_name is not None:
                             old_resource_name = panel_target[
                                 panel_target.index(str(resource_type)) + 1]

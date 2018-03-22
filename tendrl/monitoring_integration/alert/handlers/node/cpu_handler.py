@@ -133,7 +133,7 @@ class CpuHandler(AlertHandler):
             alert_json['Settings']['conditions'])
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
-        # identifying cluster_id and node_id from target
+        # identifying integration_id and node_id from target
         # Cpu target is an aggregation, So spliting and giving [0]
         # Because both have same cluster and node ids
         result = utils.parse_target(target, self.template)

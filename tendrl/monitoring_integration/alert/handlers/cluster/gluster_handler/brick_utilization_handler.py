@@ -19,7 +19,7 @@ class BrickHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl.clusters.{cluster_id}.nodes."\
+        self.template = "tendrl.clusters.{integration_id}.nodes."\
             "{host_name}.bricks.{brick_path}.utilization."\
             "percent-percent_bytes"
 
@@ -153,7 +153,7 @@ class BrickHandler(AlertHandler):
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         result = utils.parse_target(target, self.template)
-        alert['tags']['integration_id'] = result["cluster_id"]
+        alert['tags']['integration_id'] = result["integration_id"]
         alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
         alert['tags']['brick_path'] = result["brick_path"]
         return alert
