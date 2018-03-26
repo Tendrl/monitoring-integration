@@ -310,7 +310,8 @@ def check_duplicate(
 
 
 def add_gluster_resource_panel(
-    alert_rows, integration_id, resource_type, resource_name, most_recent_panel_id
+    alert_rows, integration_id, resource_type,
+    resource_name, most_recent_panel_id
 ):
     if resource_type == "hosts":
         resource_type = "nodes"
