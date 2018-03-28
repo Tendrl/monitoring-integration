@@ -14,9 +14,9 @@ GLUSTER_DASHBOARDS = {
 
 def get_alert_dashboard(dashboard_name):
     if dashboard_name == "nodes":
-        slug = "alerts-tendrl-gluster-hosts"
+        slug = "alerts-host-dashboard"
     else:
-        slug = "alerts-tendrl-gluster-" + str(dashboard_name)
+        slug = "alerts-" + str(dashboard_name)[:-1] + "-dashboard"
     dashboard_json = {}
     if grafana_org_utils.get_current_org_name()["name"] == \
             constants.ALERT_ORG:
@@ -39,7 +39,7 @@ def switch_context(org_name):
 
 
 def delete_alert_dashboard(dashboard_name):
-    slug = "alerts-tendrl-gluster-" + str(dashboard_name)
+    slug = "alerts-" + str(dashboard_name)[:-1] + "-dashboard"
     dashboard_json = {}
     if grafana_org_utils.get_current_org_name()["name"] == \
             constants.ALERT_ORG:
