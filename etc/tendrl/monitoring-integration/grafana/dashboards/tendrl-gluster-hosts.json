@@ -115,12 +115,12 @@
                 "isHideAlertsOnDisable": false,
                 "isIgnoreOKColors": false,
                 "links": [{
-                    "dashUri": "db/tendrl-gluster-bricks",
-                    "dashboard": "Tendrl - Gluster - Bricks",
+                    "dashUri": "db/brick-dashboard",
+                    "dashboard": "Brick Dashboard",
                     "includeVars": false,
                     "keepTime": true,
                     "params": "var-cluster_id=$cluster_id&var-host_name=$host_name",
-                    "title": "Bricks Dashboard",
+                    "title": "Brick Dashboard",
                     "type": "dashboard"
                 }],
                 "span": 1,
@@ -1814,8 +1814,8 @@
             ]
         },
         "timezone": "browser",
-        "title": "Tendrl-Gluster-Hosts",
-        "version": 8
+        "title": "Host Dashboard",
+        "version": 9
     }
 }
 

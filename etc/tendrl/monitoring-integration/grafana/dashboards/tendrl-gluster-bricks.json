@@ -1326,8 +1326,8 @@
             ]
         },
         "timezone": "browser",
-        "title": "Tendrl-Gluster-Bricks",
-        "version": 8
+        "title": "Brick Dashboard",
+        "version": 9
     }
 }
 
