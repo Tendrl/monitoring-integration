@@ -12,7 +12,6 @@ from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.alert.exceptions import PermissionDenied
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.grafana import alert_utils
-from tendrl.monitoring_integration.objects.alert_types import AlertTypes
 
 
 def list_modules_in_package_path(package_path, prefix):
@@ -167,13 +166,13 @@ def find_alert_types(new_alert_types):
     try:
         for alert_classification in new_alert_types:
             types = new_alert_types[alert_classification]
-            alert_types = AlertTypes(
+            alert_types = NS.monitoring.objects.AlertTypes(
                 classification=alert_classification
             ).load()
             if alert_types.types:
                 types = list(set().union(
                     types, alert_types.types))
-            AlertTypes(
+            NS.monitoring.objects.AlertTypes(
                 classification=alert_classification,
                 types=types
             ).save()
