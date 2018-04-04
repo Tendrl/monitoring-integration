@@ -21,15 +21,16 @@ class SyncAlertDashboard(object):
             if NS.config.data["org_id"]:
                 all_cluster_details = {}
                 integration_ids = self.get_managed_clusters_integration_id()
-                if integration_ids:
+                if len(integration_ids) > 0:
                     for integration_id in integration_ids:
                         key = "/clusters/%s/TendrlContext/sds_name" % \
                             integration_id
                         sds_name = etcd_utils.read(key).value
                         if sds_name == constants.GLUSTER:
-                            gluster_cluster_details.get_cluster_details(
-                                integration_id,
-                                all_cluster_details
+                            all_cluster_details.update(
+                                gluster_cluster_details.get_cluster_details(
+                                    integration_id
+                                )
                             )
                         else:
                             # In future collecte other sds type cluster details
@@ -132,12 +133,12 @@ class SyncAlertDashboard(object):
         if resources and resource_json:
             # update dashboard
             rows = resource_json["dashboard"]["rows"]
-            highest_panel_id = rows[-1]["panels"][-1]["id"]
+            most_recent_panel_id = rows[-1]["panels"][-1]["id"]
             resource_json = alert_dashboard.add_panel(
                 resources,
                 resource_type,
                 resource_json,
-                highest_panel_id
+                most_recent_panel_id
             )
         return resource_json
 
@@ -182,7 +183,7 @@ class SyncAlertDashboard(object):
                     resource_type
                 )
             else:
-                msg = "Dashboard for {0} upload failed".format(
+                msg = "Dashboard upload failed for {0}".format(
                     resource_type
                 )
 
