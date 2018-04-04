@@ -867,7 +867,7 @@
                 "id": 23,
                 "interval": null,
                 "links": [],
-                "mappingType": 1,
+                "mappingType": 2,
                 "mappingTypes": [{
                     "name": "value to text",
                     "value": 1
@@ -883,6 +883,10 @@
                 "prefix": "",
                 "prefixFontSize": "50%",
                 "rangeMaps": [{
+                    "from": "520",
+                    "text": "Insufficient data collected for forecast",
+                    "to": "10000000"
+                }, {
                     "from": "null",
                     "text": "N/A",
                     "to": "null"
@@ -1050,7 +1054,7 @@
                 ],
                 "datasource": null,
                 "description": "The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile.The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile”.",
-                "format": "none",
+                "format": "iops",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,

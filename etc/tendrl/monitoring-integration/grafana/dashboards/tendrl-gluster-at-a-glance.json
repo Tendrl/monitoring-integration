@@ -883,7 +883,7 @@
                 "datasource": null,
                 "decimals": 0,
                 "description": "The IOPS panel displays aggregated brick level read and write operations collected using “gluster volume profile info” over a period of time.",
-                "format": "none",
+                "format": "iops",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -1190,7 +1190,7 @@
                 "id": 31,
                 "interval": null,
                 "links": [],
-                "mappingType": 1,
+                "mappingType": 2,
                 "mappingTypes": [{
                     "name": "value to text",
                     "value": 1
@@ -1206,6 +1206,10 @@
                 "prefix": "",
                 "prefixFontSize": "50%",
                 "rangeMaps": [{
+                    "from": "520",
+                    "text": "Insufficient data collected for forecast",
+                    "to": "1000000"
+                }, {
                     "from": "null",
                     "text": "N/A",
                     "to": "null"
@@ -1266,13 +1270,13 @@
                 "title": "Weeks Remaining",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "70%",
+                "valueFontSize": "50%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
                     "value": "null"
                 }],
-                "valueName": "avg"
+                "valueName": "current"
             }, {
                 "aliasColors": {},
                 "bars": false,
