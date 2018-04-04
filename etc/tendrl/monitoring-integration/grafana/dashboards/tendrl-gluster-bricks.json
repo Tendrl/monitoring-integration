@@ -89,11 +89,11 @@
                 }, {
                     "op": "=",
                     "text": "Started",
-                    "value": "1"
+                    "value": "0"
                 }, {
                     "op": "=",
                     "text": "Stopped",
-                    "value": "10"
+                    "value": "8"
                 }],
                 "valueName": "current"
             }, {

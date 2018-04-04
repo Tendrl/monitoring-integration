@@ -564,7 +564,7 @@ class GraphitePlugin(object):
         return cluster_data
 
     def resource_status_mapper(self, status):
-        status_map = {"started": 1,
+        status_map = {"started": 0,
                       "up": 0,
                       "(degraded)": 3,
                       "degraded": 3,
@@ -574,7 +574,7 @@ class GraphitePlugin(object):
                       "failed": 7,
                       "down": 8,
                       "created": 9,
-                      "stopped": 10,
+                      "stopped": 8,
                       "completed": 12,
                       "not started": 13,
                       "not_started": 13,
