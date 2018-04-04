@@ -30,7 +30,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "description": "The Status panel displays the status for a given brick.",
                 "format": "none",
                 "gauge": {
@@ -105,7 +105,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "decimals": 1,
                 "description": "The Capacity Utilization panel displays the percentage of capacity utilization for a given brick.",
                 "format": "none",
@@ -168,7 +168,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "",
+                "datasource": null,
                 "decimals": 1,
                 "description": "The Capacity Utilization Trend panel displays the brick capacity utilization over a period of time.",
                 "fill": 1,
@@ -193,7 +193,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 3,
+                "span": 4,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -249,7 +249,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "decimals": 1,
                 "description": "The Capacity Available panel displays the available capacity for a given volume.",
                 "format": "bytes",
@@ -283,7 +283,7 @@
                     "text": "N/A",
                     "to": "null"
                 }],
-                "span": 1,
+                "span": 2,
                 "sparkline": {
                     "fillColor": "rgba(31, 118, 189, 0.18)",
                     "full": false,
@@ -327,7 +327,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "decimals": 1,
                 "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
                 "format": "bytes",
@@ -410,7 +410,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "decimals": null,
                 "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till brick reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
@@ -424,7 +424,7 @@
                 "id": 16,
                 "interval": null,
                 "links": [],
-                "mappingType": 1,
+                "mappingType": 2,
                 "mappingTypes": [{
                     "name": "value to text",
                     "value": 1
@@ -440,11 +440,15 @@
                 "prefix": "",
                 "prefixFontSize": "50%",
                 "rangeMaps": [{
+                    "from": "520",
+                    "text": "Insufficient data collected for forecast",
+                    "to": "1000000"
+                }, , {
                     "from": "null",
                     "text": "N/A",
                     "to": "null"
                 }],
-                "span": 1,
+                "span": 2,
                 "sparkline": {
                     "fillColor": "rgba(31, 118, 189, 0.18)",
                     "full": false,
@@ -501,7 +505,7 @@
                 "title": "Weeks Remaining",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "80%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -522,7 +526,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "cornerRadius": 0,
-                "datasource": "",
+                "datasource": null,
                 "description": "The Healing panel displays healing information for a given brick based on healinfo.  See https://gluster.readthedocs.io/en/latest/Troubleshooting/heal-info-and-split-brain-resolution/  \nfor how to troubleshoot healing and split brain issues",
                 "displayName": "Healing",
                 "flipCard": false,
@@ -532,7 +536,7 @@
                 "isHideAlertsOnDisable": false,
                 "isIgnoreOKColors": false,
                 "links": [],
-                "span": 1,
+                "span": 2,
                 "targets": [{
                     "aggregation": "Last",
                     "alias": "Pending Heal",
@@ -561,9 +565,9 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "description": "The IOPS panel displays the sum of IOPS (read + write) for a given brick path",
-                "format": "none",
+                "format": "iops",
                 "gauge": {
                     "maxValue": 100,
                     "minValue": 0,
@@ -594,7 +598,7 @@
                     "text": "N/A",
                     "to": "null"
                 }],
-                "span": 3,
+                "span": 4,
                 "sparkline": {
                     "fillColor": "rgba(31, 118, 189, 0.18)",
                     "full": false,
@@ -629,152 +633,6 @@
                 }],
                 "valueName": "current"
             }, {
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": "",
-                "decimals": 1,
-                "description": "The Inode Utilization panel displays inodes used for a given brick over a period of time.",
-                "fill": 1,
-                "id": 2,
-                "legend": {
-                    "avg": false,
-                    "current": false,
-                    "max": false,
-                    "min": false,
-                    "show": false,
-                    "total": false,
-                    "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "links": [],
-                "nullPointMode": "connected",
-                "percentage": false,
-                "pointradius": 5,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "span": 3,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [{
-                    "refId": "A",
-                    "target": "alias(averageSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.inode_utilization.percent-percent_bytes), '$brick_path')",
-                    "textEditor": true
-                }],
-                "thresholds": [],
-                "timeFrom": null,
-                "timeShift": null,
-                "title": "Inode Utilization",
-                "tooltip": {
-                    "shared": true,
-                    "sort": 0,
-                    "value_type": "individual"
-                },
-                "transparent": false,
-                "type": "graph",
-                "xaxis": {
-                    "buckets": null,
-                    "mode": "time",
-                    "name": null,
-                    "show": true,
-                    "values": []
-                },
-                "yaxes": [{
-                    "format": "percent",
-                    "label": "",
-                    "logBase": 1,
-                    "max": null,
-                    "min": "0",
-                    "show": true
-                }, {
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                }]
-            }, {
-                "cacheTimeout": null,
-                "colorBackground": false,
-                "colorValue": false,
-                "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
-                ],
-                "datasource": "",
-                "description": "The Inode Available panel displays inodes free for a given brick.",
-                "format": "none",
-                "gauge": {
-                    "maxValue": 100,
-                    "minValue": 0,
-                    "show": false,
-                    "thresholdLabels": false,
-                    "thresholdMarkers": true
-                },
-                "id": 12,
-                "interval": null,
-                "links": [],
-                "mappingType": 1,
-                "mappingTypes": [{
-                    "name": "value to text",
-                    "value": 1
-                }, {
-                    "name": "range to text",
-                    "value": 2
-                }],
-                "maxDataPoints": 100,
-                "nullPointMode": "connected",
-                "nullText": null,
-                "postfix": "",
-                "postfixFontSize": "50%",
-                "prefix": "",
-                "prefixFontSize": "50%",
-                "rangeMaps": [{
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }],
-                "span": 2,
-                "sparkline": {
-                    "fillColor": "rgba(31, 118, 189, 0.18)",
-                    "full": false,
-                    "lineColor": "rgb(31, 120, 193)",
-                    "show": false
-                },
-                "tableColumn": "",
-                "targets": [{
-                    "hide": true,
-                    "refId": "A",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.inode_utilization.gauge-total)",
-                    "textEditor": true
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.inode_utilization.gauge-used)",
-                    "textEditor": true
-                }, {
-                    "refId": "C",
-                    "target": "diffSeries(#A, #B)",
-                    "targetFull": "diffSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.inode_utilization.gauge-total), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.inode_utilization.gauge-used))"
-                }],
-                "thresholds": "",
-                "title": "Inode Available",
-                "transparent": false,
-                "type": "singlestat",
-                "valueFontSize": "80%",
-                "valueMaps": [{
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }],
-                "valueName": "avg"
-            }, {
                 "cacheTimeout": null,
                 "colorBackground": false,
                 "colorValue": false,
@@ -783,7 +641,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "decimals": 1,
                 "description": "The LVM Thin Pool Metadata % panel displays the utilization of LVM thin pool metadata for a given brick.",
                 "format": "none",
@@ -850,7 +708,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": "",
+                "datasource": null,
                 "decimals": 1,
                 "description": "The LVM Thin Pool Data Usage % panel displays the LVM thin pool data usage for a given brick.",
                 "format": "none",
@@ -923,7 +781,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "",
+                "datasource": null,
                 "description": "The Throughput panel displays brick-level read and write operations fetched using “gluster volume profile”.",
                 "fill": 1,
                 "id": 18,
@@ -996,7 +854,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "",
+                "datasource": null,
                 "description": "The IOPS panel displays IOPS for a brick  over a period of time.  IOPS is based on brick level read and write operations.",
                 "fill": 1,
                 "id": 19,
@@ -1069,7 +927,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "",
+                "datasource": null,
                 "description": "The Latency panel displays latency for a brick  over a period of time.  Latency is based on the average amount of time a brick spends doing a read or write operation.",
                 "fill": 1,
                 "id": 20,
@@ -1142,7 +1000,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "",
+                "datasource": null,
                 "description": "The Mount Point Utilization for a given brick over a period of time.",
                 "fill": 1,
                 "id": 21,
@@ -1330,4 +1188,3 @@
         "version": 9
     }
 }
-
