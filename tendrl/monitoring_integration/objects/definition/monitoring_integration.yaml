@@ -110,6 +110,7 @@ namespace.monitoring:
         usable_capacity:
         used_capacity:
         rebal_status:
+        rebal_estimated_time:
         pcnt_inode_used:
         total_inode_capacity:
         used_inode_capacity:
