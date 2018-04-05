@@ -32,7 +32,7 @@ dashboards:
     - tendrl-gluster-volumes
     - tendrl-gluster-bricks
 
-home_dashboard: tendrl-gluster-at-a-glance
+home_dashboard: cluster-dashboard
 
 # Grafana credentials
 credentials:
