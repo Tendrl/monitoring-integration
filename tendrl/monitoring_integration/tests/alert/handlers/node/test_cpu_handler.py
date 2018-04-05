@@ -8,9 +8,11 @@ from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.tests import test_init
 
 
+@patch.object(utils, "find_cluster_short_name")
 @patch.object(utils, "find_node_id")
 @patch.object(utils, "find_grafana_pid")
-def test_cpu_handler(pid, node_id):
+def test_cpu_handler(pid, node_id, short_name):
+    short_name.return_value = None
     node_id.return_value = "1"
     pid.return_value = "123"
     test_init.init()
@@ -36,6 +38,8 @@ def test_cpu_handler(pid, node_id):
                           '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d back to normal',
                           'integration_id': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d'
                           }
                  }
@@ -53,6 +57,8 @@ def test_cpu_handler(pid, node_id):
                           '85bb-c5aff4eef15d at 2.61 % and '
                           'running out of cpu',
                           'integration_id': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d'
                           },
                  'alert_id': None,

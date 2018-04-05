@@ -20,7 +20,7 @@ class MemoryHandler(AlertHandler):
     def __init__(self):
         AlertHandler.__init__(self)
         self.template = \
-            "tendrl.clusters.{integration_id}.nodes.{host_name}.memory"
+            "tendrl[.]name[.]{integration_id}[.]nodes[.]{host_name}[.]"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
@@ -132,5 +132,12 @@ class MemoryHandler(AlertHandler):
         # identifying integration_id and node_id from target
         result = utils.parse_target(target, self.template)
         alert['tags']['integration_id'] = result["integration_id"]
+        cluster_name = utils.find_cluster_short_name(
+            result["integration_id"]
+        )
+        if cluster_name:
+            alert['tags']['cluster_short_name'] = cluster_name
+        else:
+            alert['tags']['cluster_short_name'] = result["integration_id"]
         alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
         return alert

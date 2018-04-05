@@ -8,11 +8,13 @@ from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.tests import test_init
 
 
+@patch.object(utils, "find_cluster_short_name")
 @patch.object(utils, "find_node_id")
 @patch.object(utils, "find_grafana_pid")
 @patch.object(utils, "find_cluster_name")
 @patch.object(utils, "find_volume_name")
-def test_brick_handler(vol_name, cluster_name, pid, node_id):
+def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
+    s_name.return_value = None
     vol_name.return_value = "vol1"
     node_id.return_value = "1"
     pid.return_value = "123"
@@ -30,7 +32,7 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id):
                  'time_stamp': u'2018-02-07T17:24:16+05:30',
                  'alert_id': None,
                  'current_value': None,
-                 'tags': {'plugin_instance': u'tendrl.clusters.'
+                 'tags': {'plugin_instance': u'tendrl.name.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'nodes.dhcp122-234.bricks.|gluster|brick1'
                           '.utilization.percent-percent_bytes',
@@ -39,6 +41,8 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id):
                           'cluster_name': 'c1',
                           'integration_id': u'7616f2a4-6502-4222-85bb'
                           '-c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
                           'warning_max': 75,
                           'message': u'Brick utilization of dhcp122-234'
                           ':|gluster|brick1 in vol1 '
@@ -61,7 +65,7 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id):
                  'alert_type': 'UTILIZATION',
                  'alert_id': None,
                  'time_stamp': u'2018-02-12T13:13:03+05:30',
-                 'tags': {'plugin_instance': u'tendrl.clusters.7616f2a4'
+                 'tags': {'plugin_instance': u'tendrl.name.7616f2a4'
                           '-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-'
                           '234.bricks.|gluster|brick1.utilization.'
                           'percent-percent_bytes',
@@ -71,6 +75,8 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id):
                           'at 20.75 % and nearing full capacity',
                           'integration_id': u'7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
                           'cluster_name': 'c1',
                           'brick_path': u'|gluster|brick1',
                           'warning_max': 17,

@@ -19,8 +19,8 @@ class VolumeHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl.clusters.{integration_id}.volumes."\
-            "{volume_name}.pcnt_used"
+        self.template = "tendrl[.]name[.]{integration_id}[.]volumes[.]"\
+            "{volume_name}[.]"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
@@ -46,7 +46,7 @@ class VolumeHandler(AlertHandler):
                     "Volume utilization on %s in "
                     "%s at %s %% and nearing full capacity" % (
                         alert['tags']['volume_name'],
-                        alert['tags']['integration_id'],
+                        alert['tags']['cluster_short_name'],
                         alert['current_value']
                     )
                 )
@@ -63,7 +63,7 @@ class VolumeHandler(AlertHandler):
                     "Volume utilization on %s in "
                     "%s back to normal" % (
                         alert['tags']['volume_name'],
-                        alert['tags']['integration_id']
+                        alert['tags']['cluster_short_name']
                     )
                 )
             else:
@@ -135,5 +135,12 @@ class VolumeHandler(AlertHandler):
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         result = utils.parse_target(target, self.template)
         alert['tags']['integration_id'] = result["integration_id"]
+        cluster_name = utils.find_cluster_short_name(
+            result["integration_id"]
+        )
+        if cluster_name:
+            alert['tags']['cluster_short_name'] = cluster_name
+        else:
+            alert['tags']['cluster_short_name'] = result["integration_id"]
         alert['tags']['volume_name'] = result["volume_name"]
         return alert
