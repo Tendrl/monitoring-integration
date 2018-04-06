@@ -58,6 +58,7 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                 cluster_details = self.plugin_obj.get_central_store_data(
                     aggregate_gluster_objects
                 )
+                graphite_utils.create_cluster_alias(cluster_details)
                 metrics = graphite_utils.create_metrics(
                     aggregate_gluster_objects, cluster_details)
                 for metric in metrics:
