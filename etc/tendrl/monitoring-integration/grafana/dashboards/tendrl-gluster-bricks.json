@@ -443,7 +443,7 @@
                     "from": "520",
                     "text": "Insufficient data collected for forecast",
                     "to": "1000000"
-                }, , {
+                }, {
                     "from": "null",
                     "text": "N/A",
                     "to": "null"
