@@ -22,8 +22,9 @@ def test_memory_handler(pid, node_id):
     condition = {'pid': '123',
                  'tags': {'warning_max': 80,
                           'fqdn': u'dhcp122-234',
-                          'message': u'Memory utilization of '
-                          'node dhcp122-234 is back to normal',
+                          'message': u'Memory utilization on '
+                          'node dhcp122-234 in 7616f2a4-6502-4222-85bb-'
+                          'c5aff4eef15d back to normal',
                           'integration_id': '7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d'
                           },
@@ -51,10 +52,11 @@ def test_memory_handler(pid, node_id):
                  'current_value': '29.47',
                  'node_id': '1',
                  'tags': {'fqdn': u'dhcp122-234',
-                          'message': u'Memory utilization of '
-                          'node dhcp122-234 '
-                          'is 29.47 % which is above the WARNING '
-                          'threshold (23 %).',
+                          'message': u'Memory utilization on '
+                          'node dhcp122-234 in '
+                          '7616f2a4-6502-4222-85bb-'
+                          'c5aff4eef15d'
+                          'at 29.47 % and running out of memory',
                           'warning_max': 23,
                           'integration_id': '7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d'

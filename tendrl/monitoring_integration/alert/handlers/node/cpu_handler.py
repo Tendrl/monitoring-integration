@@ -45,12 +45,11 @@ class CpuHandler(AlertHandler):
                     alert['severity'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['tags']['message'] = (
-                    "Cpu utilization of node %s is"
-                    " %s %% which is above the %s threshold (%s %%)." % (
+                    "Cpu utilization on node %s in %s"
+                    " at %s %% and running out of cpu" % (
                         alert['tags']['fqdn'],
-                        alert['current_value'],
-                        alert['severity'],
-                        alert['tags']['warning_max']))
+                        alert['tags']['integration_id'],
+                        alert['current_value']))
             elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
                 # Identifying clear alert from which panel critical/warning
                 if "critical" in alert_json['Name'].lower():
@@ -60,15 +59,17 @@ class CpuHandler(AlertHandler):
                     alert['tags']['clear_alert'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
-                alert['tags']['message'] = ("Cpu utilization of node %s is"
-                                            " back to normal" % (
-                                                alert['tags']['fqdn']))
+                alert['tags']['message'] = \
+                    ("Cpu utilization on node %s in"
+                        " %s back to normal" % (
+                            alert['tags']['fqdn'],
+                            alert['tags']['integration_id']))
             else:
                 logger.log(
                     "error",
                     NS.publisher_id,
                     {
-                        "message": "Alert %s have unsupported alert"
+                        "message": "Unsupported alert %s "
                         "severity" % alert_json
                     }
                 )

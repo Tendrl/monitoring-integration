@@ -52,16 +52,12 @@ class BrickHandler(AlertHandler):
                     alert['severity'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['tags']['message'] = (
-                    "Brick utilization of %s:%s under volume %s in "
-                    "cluster %s is %s %% which is above %s"
-                    " threshold (%s %%)" % (
+                    "Brick utilization on %s:%s in %s "
+                    "at %s %% and nearing full capacity" % (
                         alert['tags']['fqdn'],
                         alert['tags']['brick_path'],
                         alert["tags"]["volume_name"],
-                        alert['tags']['integration_id'],
-                        alert['current_value'],
-                        alert['severity'],
-                        alert['tags']['warning_max']
+                        alert['current_value']
                     )
                 )
             elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
@@ -74,12 +70,11 @@ class BrickHandler(AlertHandler):
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
                 alert['tags']['message'] = (
-                    "Brick utilization of %s:%s under volume %s in "
-                    "cluster %s is back normal" % (
+                    "Brick utilization of %s:%s in %s "
+                    "back to normal" % (
                         alert['tags']['fqdn'],
                         alert['tags']['brick_path'],
-                        alert["tags"]["volume_name"],
-                        alert['tags']['integration_id']
+                        alert["tags"]["volume_name"]
                     )
                 )
             else:
@@ -87,7 +82,7 @@ class BrickHandler(AlertHandler):
                     "error",
                     NS.publisher_id,
                     {
-                        "message": "Alert %s have unsupported alert"
+                        "message": "Unsupported alert %s "
                         "severity" % alert_json
                     }
                 )
