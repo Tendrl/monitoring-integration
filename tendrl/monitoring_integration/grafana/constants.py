@@ -9,8 +9,8 @@ HEADERS = {"Accept": "application/json",
 GLUSTER_DASHBOARDS = ["volumes", "hosts", "bricks"]
 ALERT_SEVERITY = ["Warning", "Critical"]
 MAX_PANELS_IN_ROW = 7
-HOST_TEMPLATE = "tendrl[.]clusters[.]{integration_id}[.]nodes[.]{host_name}[.]"
-BRICK_TEMPLATE = "tendrl[.]clusters[.]{integration_id}[.]nodes[.]" \
+HOST_TEMPLATE = "tendrl[.]names[.]{integration_id}[.]nodes[.]{host_name}[.]"
+BRICK_TEMPLATE = "tendrl[.]names[.]{integration_id}[.]nodes[.]" \
     "{host_name}[.]bricks[.]{brick_path}[.]"
-VOLUME_TEMPLATE = "tendrl[.]clusters[.]{integration_id}[.]volumes[.]" \
+VOLUME_TEMPLATE = "tendrl[.]names[.]{integration_id}[.]volumes[.]" \
     "{volume_name}[.]"
