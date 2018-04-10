@@ -73,7 +73,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.nodes.$host_name.bricks.$brick_path.status",
+                    "target": "tendrl.names.$cluster_id.nodes.$host_name.bricks.$brick_path.status",
                     "textEditor": false
                 }],
                 "thresholds": "2,6",
@@ -149,7 +149,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes",
+                    "target": "tendrl.names.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes",
                     "textEditor": false
                 }],
                 "thresholds": "80, 90",
@@ -198,7 +198,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes, '$brick_path')",
+                    "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes, '$brick_path')",
                     "textEditor": false
                 }],
                 "thresholds": [{
@@ -294,18 +294,18 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total)",
+                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total)",
                     "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)",
+                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#A, #B)",
-                    "targetFull": "diffSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used))"
+                    "targetFull": "diffSeries(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total), sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used))"
                 }],
                 "thresholds": "",
                 "title": "Capacity Available",
@@ -372,18 +372,18 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max')",
                     "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max')",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max'))",
+                    "targetFull": "diffSeries(consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max'))",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -459,46 +459,46 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max')",
+                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "C",
                     "target": "keepLastValue(diffSeries(#B, #A))",
-                    "targetFull": "keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max')))",
+                    "targetFull": "keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max')))",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "D",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "E",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "F",
                     "target": "diffSeries(#D, #E)",
-                    "targetFull": "diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)",
+                    "targetFull": "diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "H",
                     "target": "consolidateBy(minSeries(#F), \"min\")",
-                    "targetFull": "consolidateBy(minSeries(diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)), \"min\")",
+                    "targetFull": "consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)), \"min\")",
                     "textEditor": true
                 }, {
                     "hide": false,
                     "refId": "G",
                     "target": "divideSeries(#H, #C)",
-                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)), \"min\"), keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max'))))",
+                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)), \"min\"), keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max'))))",
                     "textEditor": false
                 }],
                 "thresholds": "",
@@ -542,7 +542,7 @@
                     "alias": "Pending Heal",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.heal_pending_cnt, 'max'))), 'Pending Heal')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.heal_pending_cnt, 'max'))), 'Pending Heal')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -550,7 +550,7 @@
                     "alias": "Split Brain",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.split_brain_cnt, 'max'))), 'Split Brain')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.split_brain_cnt, 'max'))), 'Split Brain')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }],
@@ -609,17 +609,17 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-write",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-write",
                     "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-read",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-read",
                     "textEditor": false
                 }, {
                     "refId": "C",
                     "target": "sumSeries(#A, #B)",
-                    "targetFull": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-write, tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-read)"
+                    "targetFull": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-write, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-read)"
                 }],
                 "thresholds": "",
                 "title": "IOPS",
@@ -685,7 +685,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "averageSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.thin_pool_meta_data_utilization.percent-percent_bytes)",
+                    "target": "averageSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.thin_pool_meta_data_utilization.percent-percent_bytes)",
                     "textEditor": true
                 }],
                 "thresholds": "80, 90",
@@ -752,7 +752,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "averageSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.thin_pool_utilization.percent-percent_bytes)",
+                    "target": "averageSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.thin_pool_utilization.percent-percent_bytes)",
                     "textEditor": true
                 }],
                 "thresholds": "80, 90",
@@ -809,11 +809,11 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_octets.read, 10, 0), '.disk_octets.', '-')",
+                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_octets.read, 10, 0), '.disk_octets.', '-')",
                     "textEditor": false
                 }, {
                     "refId": "B",
-                    "target": "aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_octets.write, 10, 0), '.disk_octets.', '-')",
+                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_octets.write, 10, 0), '.disk_octets.', '-')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -882,11 +882,11 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_ops.read, 10, 0), '.disk_ops.', '-')",
+                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_ops.read, 10, 0), '.disk_ops.', '-')",
                     "textEditor": false
                 }, {
                     "refId": "B",
-                    "target": "aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_ops.write, 10, 0), '.disk_ops.', '-')",
+                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_ops.write, 10, 0), '.disk_ops.', '-')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -955,11 +955,11 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_time.read, 10, 0), '.disk_time.', '-')",
+                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_time.read, 10, 0), '.disk_time.', '-')",
                     "textEditor": false
                 }, {
                     "refId": "B",
-                    "target": "aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_time.write, 10, 0), '.disk_time', '-')",
+                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_time.write, 10, 0), '.disk_time', '-')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -1028,7 +1028,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.mount_utilization.percent_used, 10, 'maxSeries')",
+                    "target": "groupByNode(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.mount_utilization.percent_used, 10, 'maxSeries')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -1082,11 +1082,11 @@
                 "datasource": "",
                 "hide": 0,
                 "includeAll": false,
-                "label": "cluster Id",
+                "label": "cluster Name",
                 "multi": false,
                 "name": "cluster_id",
                 "options": [],
-                "query": "tendrl.clusters.*",
+                "query": "tendrl.names.*",
                 "refresh": 2,
                 "regex": "",
                 "sort": 0,
@@ -1105,7 +1105,7 @@
                 "multi": false,
                 "name": "volume_name",
                 "options": [],
-                "query": "tendrl.clusters.$cluster_id.volumes.*",
+                "query": "tendrl.names.$cluster_id.volumes.*",
                 "refresh": 1,
                 "regex": "",
                 "sort": 0,
@@ -1124,7 +1124,7 @@
                 "multi": false,
                 "name": "host_name",
                 "options": [],
-                "query": "tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*",
+                "query": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.*",
                 "refresh": 2,
                 "regex": "",
                 "sort": 0,
@@ -1143,7 +1143,7 @@
                 "multi": false,
                 "name": "brick_path",
                 "options": [],
-                "query": "tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.*",
+                "query": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.*",
                 "refresh": 2,
                 "regex": "",
                 "sort": 0,
