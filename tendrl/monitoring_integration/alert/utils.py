@@ -108,41 +108,16 @@ def find_grafana_pid():
 
 
 def find_node_id(integration_id, fqdn):
-    try:
-        nodes = etcd_utils.read(
-            "clusters/%s/nodes" % integration_id
-        )
-        for node in nodes.leaves:
-            node_id = node.key.split('/')[-1]
-            node_context = NS.tendrl.objects.ClusterNodeContext()
-            # formating value here because render populate integration_id
-            # from namespace
-            node_context.value = node_context.value.format(
-                integration_id, node_id
-            )
-            if fqdn == node_context.load().fqdn:
-                return node_id
-        raise NodeNotFound
-    except (EtcdKeyNotFound, NodeNotFound) as ex:
-        if type(ex) != EtcdKeyNotFound:
-            logger.log(
-                "error",
-                NS.publisher_id,
-                {
-                    "message": "Failed to fetch fqdn for node %s" %
-                    fqdn
-                }
-            )
-        else:
-            logger.log(
-                "error",
-                NS.publisher_id,
-                {
-                    "message": "Node with fqdn %s not found "
-                    "in cluster %s" % (fqdn, integration_id)
-                }
-            )
-        raise ex
+    _cluster_node_ids = etcd_utils.read(
+        "/clusters/%s/nodes" % integration_id
+    )
+    for _node_id in _cluster_node_ids.leaves:
+        _cnc = NS.tendrl.objects.ClusterNodeContext(
+            integration_id=integration_id,
+            node_id=_node_id.key.split('/')[-1]
+        ).load()
+        if _cnc.fqdn == fqdn:
+            return _cnc.node_id
 
 
 def find_cluster_name(integration_id):
@@ -197,40 +172,22 @@ def parse_target(target, template):
 
 
 def find_volume_name(integration_id, hostname, brick_path):
-    try:
-        vol_name = etcd_utils.read(
-            "clusters/%s/Bricks/all/%s/%s/vol_name" % (
-                integration_id, hostname, brick_path
-            )
-        ).value
-        return vol_name
-    except EtcdKeyNotFound as ex:
-        logger.log(
-            "debug",
-            NS.publisher_id,
-            {
-                "message": "Unable to find volume name for brick"
-                " %s:%s" % (hostname, brick_path)
-            }
-        )
-        raise ex
+    _brick = NS.tendrl.objects.GlusterBrick(
+        integration_id=integration_id,
+        fqdn=hostname,
+        brick_dir=brick_path
+    ).load()
+    if _brick:
+        return _brick.vol_name
+    else:
+       return None
 
 
 def find_cluster_short_name(integration_id):
-    try:
-        cluster = NS.tendrl.objects.Cluster(
-            integration_id=integration_id
-        ).load()
-        if cluster.short_name in [None, '']:
-            return cluster.integration_id
-        else:
-            return cluster.short_name
-    except EtcdKeyNotFound as ex:
-        logger.log(
-            "debug",
-            NS.publisher_id,
-            {
-                "message": "Unable to find cluster_short_name for "
-                "integration_id %s.err:%s" % (integration_id, ex)
-            }
-        )
+    cluster = NS.tendrl.objects.Cluster(
+        integration_id=integration_id
+    ).load()
+    if cluster:
+        return cluster.short_name
+    else:
+        return None
