@@ -35,7 +35,7 @@
           "datasourceId": 2,
           "model": {
             "refId": "A",
-            "target": "tendrl.name.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.swap.percent-used"
+            "target": "tendrl.names.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.swap.percent-used"
           },
           "params": [
             "A",

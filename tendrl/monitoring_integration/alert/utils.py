@@ -218,10 +218,10 @@ def find_volume_name(integration_id, hostname, brick_path):
 
 def find_cluster_short_name(integration_id):
     try:
-        cluster_name = etcd_utils.read(
-            "clusters/%s/short_name" % integration_id
-        ).value
-        return cluster_name
+        cluster = NS.tendrl.objects.Cluster(
+            integration_id=integration_id
+        ).load()
+        return cluster.short_name
     except EtcdKeyNotFound as ex:
         logger.log(
             "debug",

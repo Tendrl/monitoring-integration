@@ -14,7 +14,7 @@ from tendrl.monitoring_integration.tests import test_init
 @patch.object(utils, "find_cluster_name")
 @patch.object(utils, "find_volume_name")
 def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
-    s_name.return_value = None
+    s_name.return_value = '7616f2a4-6502-4222-85bb-c5aff4eef15d'
     vol_name.return_value = "vol1"
     node_id.return_value = "1"
     pid.return_value = "123"
@@ -32,7 +32,7 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                  'time_stamp': u'2018-02-07T17:24:16+05:30',
                  'alert_id': None,
                  'current_value': None,
-                 'tags': {'plugin_instance': u'tendrl.name.'
+                 'tags': {'plugin_instance': u'tendrl.names.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'nodes.dhcp122-234.bricks.|gluster|brick1'
                           '.utilization.percent-percent_bytes',
@@ -54,6 +54,7 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                  'pid': '123'
                  }
     if not result == condition:
+        raise ValueError(result)
         raise AssertionError()
     obj = brick_utilization_handler.BrickHandler()
     path = os.path.join(os.path.dirname(__file__),
@@ -65,12 +66,12 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                  'alert_type': 'UTILIZATION',
                  'alert_id': None,
                  'time_stamp': u'2018-02-12T13:13:03+05:30',
-                 'tags': {'plugin_instance': u'tendrl.name.7616f2a4'
+                 'tags': {'plugin_instance': u'tendrl.names.7616f2a4'
                           '-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-'
-                          '234.bricks.|gluster|brick1.utilization.'
-                          'percent-percent_bytes',
+                          '234.bricks.|gluster|brick1'
+                          '.utilization.percent-percent_bytes',
                           'fqdn': u'dhcp122-234',
-                          'message': u'Brick utilization of dhcp122-234:|'
+                          'message': u'Brick utilization on dhcp122-234:|'
                           'gluster|brick1 in vol1 '
                           'at 20.75 % and nearing full capacity',
                           'integration_id': u'7616f2a4-6502-4222-85bb-'

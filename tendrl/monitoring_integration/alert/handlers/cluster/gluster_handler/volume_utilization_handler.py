@@ -19,7 +19,7 @@ class VolumeHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl[.]name[.]{integration_id}[.]volumes[.]"\
+        self.template = "tendrl[.]names[.]{integration_id}[.]volumes[.]"\
             "{volume_name}[.]"
 
     def format_alert(self, alert_json):
@@ -138,9 +138,6 @@ class VolumeHandler(AlertHandler):
         cluster_name = utils.find_cluster_short_name(
             result["integration_id"]
         )
-        if cluster_name:
-            alert['tags']['cluster_short_name'] = cluster_name
-        else:
-            alert['tags']['cluster_short_name'] = result["integration_id"]
+        alert['tags']['cluster_short_name'] = cluster_name
         alert['tags']['volume_name'] = result["volume_name"]
         return alert

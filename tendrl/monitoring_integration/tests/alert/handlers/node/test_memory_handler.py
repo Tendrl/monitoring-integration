@@ -12,7 +12,7 @@ from tendrl.monitoring_integration.tests import test_init
 @patch.object(utils, "find_node_id")
 @patch.object(utils, "find_grafana_pid")
 def test_memory_handler(pid, node_id, short_name):
-    short_name.return_value = None
+    short_name.return_value = '7616f2a4-6502-4222-85bb-c5aff4eef15d'
     node_id.return_value = "1"
     pid.return_value = "123"
     test_init.init()
@@ -59,7 +59,7 @@ def test_memory_handler(pid, node_id, short_name):
                           'message': u'Memory utilization on '
                           'node dhcp122-234 in '
                           '7616f2a4-6502-4222-85bb-'
-                          'c5aff4eef15d'
+                          'c5aff4eef15d '
                           'at 29.47 % and running out of memory',
                           'warning_max': 23,
                           'integration_id': '7616f2a4-6502-4222-85bb-'

@@ -20,7 +20,7 @@ class CpuHandler(AlertHandler):
     def __init__(self):
         AlertHandler.__init__(self)
         self.template = \
-            "tendrl[.]name[.]{integration_id}[.]nodes[.]{host_name}[.]"
+            "tendrl[.]names[.]{integration_id}[.]nodes[.]{host_name}[.]"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
@@ -142,9 +142,6 @@ class CpuHandler(AlertHandler):
         cluster_name = utils.find_cluster_short_name(
             result["integration_id"]
         )
-        if cluster_name:
-            alert['tags']['cluster_short_name'] = cluster_name
-        else:
-            alert['tags']['cluster_short_name'] = result["integration_id"]
+        alert['tags']['cluster_short_name'] = cluster_name
         alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
         return alert
