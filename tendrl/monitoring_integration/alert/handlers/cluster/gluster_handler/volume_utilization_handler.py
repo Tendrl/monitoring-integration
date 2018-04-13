@@ -19,8 +19,8 @@ class VolumeHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl.clusters.{integration_id}.volumes."\
-            "{volume_name}.pcnt_used"
+        self.template = "tendrl[.]names[.]{integration_id}[.]volumes[.]"\
+            "{volume_name}[.]"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
@@ -43,14 +43,11 @@ class VolumeHandler(AlertHandler):
                     alert['severity'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['tags']['message'] = (
-                    "Volume utilization of %s in "
-                    "cluster %s is %s %% which is above %s"
-                    " threshold (%s %%)" % (
+                    "Volume utilization on %s in "
+                    "%s at %s %% and nearing full capacity" % (
                         alert['tags']['volume_name'],
-                        alert['tags']['integration_id'],
-                        alert['current_value'],
-                        alert['severity'],
-                        alert['tags']['warning_max']
+                        alert['tags']['cluster_short_name'],
+                        alert['current_value']
                     )
                 )
             elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
@@ -63,10 +60,10 @@ class VolumeHandler(AlertHandler):
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
                 alert['tags']['message'] = (
-                    "Volume utilization of %s in "
-                    "cluster %s is back normal" % (
+                    "Volume utilization on %s in "
+                    "%s back to normal" % (
                         alert['tags']['volume_name'],
-                        alert['tags']['integration_id']
+                        alert['tags']['cluster_short_name']
                     )
                 )
             else:
@@ -74,7 +71,7 @@ class VolumeHandler(AlertHandler):
                     "error",
                     NS.publisher_id,
                     {
-                        "message": "Alert %s have unsupported alert"
+                        "message": "Unsupported alert %s "
                         "severity" % alert_json
                     }
                 )
@@ -138,5 +135,9 @@ class VolumeHandler(AlertHandler):
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         result = utils.parse_target(target, self.template)
         alert['tags']['integration_id'] = result["integration_id"]
+        cluster_name = utils.find_cluster_short_name(
+            result["integration_id"]
+        )
+        alert['tags']['cluster_short_name'] = cluster_name
         alert['tags']['volume_name'] = result["volume_name"]
         return alert

@@ -146,7 +146,7 @@ class GraphitePlugin(object):
                         integration_id) + "/is_managed"
                     cluster_is_managed = etcd_utils.read(
                         cluster_key).value
-                    if cluster_is_managed.lower() == "no":
+                    if cluster_is_managed in [None, "", "no", "NO"]:
                         continue
                 except etcd.EtcdKeyNotFound:
                     continue

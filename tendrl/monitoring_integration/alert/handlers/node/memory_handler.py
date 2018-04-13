@@ -20,7 +20,7 @@ class MemoryHandler(AlertHandler):
     def __init__(self):
         AlertHandler.__init__(self)
         self.template = \
-            "tendrl.clusters.{integration_id}.nodes.{host_name}.memory"
+            "tendrl[.]names[.]{integration_id}[.]nodes[.]{host_name}[.]"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
@@ -45,12 +45,11 @@ class MemoryHandler(AlertHandler):
                     alert['severity'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['tags']['message'] = (
-                    "Memory utilization of node %s is"
-                    " %s %% which is above the %s threshold (%s %%)." % (
+                    "Memory utilization on node %s in "
+                    "%s at %s %% and running out of memory" % (
                         alert['tags']['fqdn'],
-                        alert['current_value'],
-                        alert['severity'],
-                        alert['tags']['warning_max']))
+                        alert['tags']['integration_id'],
+                        alert['current_value']))
             elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
                 # Identifying clear alert from which panel critical/warning
                 if "critical" in alert_json['Name'].lower():
@@ -61,15 +60,16 @@ class MemoryHandler(AlertHandler):
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
                 alert['tags']['message'] = (
-                    "Memory utilization of node %s is"
+                    "Memory utilization on node %s in %s"
                     " back to normal" % (
-                        alert['tags']['fqdn']))
+                        alert['tags']['fqdn'],
+                        alert['tags']['integration_id']))
             else:
                 logger.log(
                     "error",
                     NS.publisher_id,
                     {
-                        "message": "Alert %s have unsupported alert"
+                        "message": "Unsupported alert %s "
                         "severity" % alert_json
                     }
                 )
@@ -132,5 +132,9 @@ class MemoryHandler(AlertHandler):
         # identifying integration_id and node_id from target
         result = utils.parse_target(target, self.template)
         alert['tags']['integration_id'] = result["integration_id"]
+        cluster_name = utils.find_cluster_short_name(
+            result["integration_id"]
+        )
+        alert['tags']['cluster_short_name'] = cluster_name
         alert["tags"]["fqdn"] = result["host_name"].replace("_", ".")
         return alert

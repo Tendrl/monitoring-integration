@@ -8,9 +8,11 @@ from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.tests import test_init
 
 
+@patch.object(utils, "find_cluster_short_name")
 @patch.object(utils, "find_grafana_pid")
 @patch.object(utils, "find_cluster_name")
-def test_volume_handler(cluster_name, pid):
+def test_volume_handler(cluster_name, pid, short_name):
+    short_name.return_value = '7616f2a4-6502-4222-85bb-c5aff4eef15d'
     pid.return_value = "123"
     cluster_name.return_value = "c1"
     test_init.init()
@@ -30,14 +32,16 @@ def test_volume_handler(cluster_name, pid):
                  'node_id': None,
                  'alert_type': 'UTILIZATION',
                  'tags': {'cluster_name': 'c1',
-                          'message': u'Volume utilization of '
-                          'V1 in cluster 7616f2a4-6502-4222-'
-                          '85bb-c5aff4eef15d is back normal',
+                          'message': u'Volume utilization on '
+                          'V1 in 7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d back to normal',
                           'warning_max': 75,
                           'volume_name': u'V1',
                           'integration_id': u'7616f2a4-6502-4222'
                           '-85bb-c5aff4eef15d',
-                          'plugin_instance': u'tendrl.clusters.'
+                          'cluster_short_name': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
+                          'plugin_instance': u'tendrl.names.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'volumes.V1.pcnt_used'
                           }
@@ -57,16 +61,17 @@ def test_volume_handler(cluster_name, pid):
                  'pid': '123',
                  'tags': {'cluster_name': 'c1',
                           'volume_name': u'V1',
-                          'plugin_instance': u'tendrl.clusters.'
+                          'cluster_short_name': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
+                          'plugin_instance': u'tendrl.names.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'volumes.V1.pcnt_used',
                           'warning_max': 14,
                           'integration_id': u'7616f2a4-6502-4222'
                           '-85bb-c5aff4eef15d',
-                          'message': u'Volume utilization of V1 in'
-                          ' cluster 7616f2a4-6502-4222-85bb-c5aff4eef1'
-                          '5d is 20.86 % which is above WARNING '
-                          'threshold (14 %)'
+                          'message': u'Volume utilization on V1 in'
+                          ' 7616f2a4-6502-4222-85bb-c5aff4eef1'
+                          '5d at 20.86 % and nearing full capacity'
                           },
                  'source': 'GRAFANA',
                  'current_value': '20.86',

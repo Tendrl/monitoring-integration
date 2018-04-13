@@ -27,6 +27,40 @@ def archive(
                    {'message': msg})
 
 
+def create_cluster_alias(cluster_details):
+    for cluster in cluster_details:
+        integration_id = cluster.get("integration_id")
+        name = cluster.get("short_name")
+        alias_dir_path = "%snames" % get_data_dir_path()
+
+        short_name = name if name else integration_id
+
+        if not os.path.exists(alias_dir_path):
+            try:
+                os.makedirs(str(alias_dir_path))
+            except OSError as ex:
+                logger.log("debug", NS.get("publisher_id", None), {
+                    "message": str(ex)})
+                continue
+
+        if not os.path.exists("%s/%s" % (alias_dir_path, short_name)):
+            try:
+                os.symlink(
+                    "%s/clusters/%s" % (get_data_dir_path(), integration_id),
+                    "%s/%s" % (alias_dir_path, short_name)
+                )
+            except OSError as ex:
+                logger.log(
+                    "debug",
+                    NS.get("publisher_id", None),
+                    {
+                        'message': "Failed to create symlink \
+                        for %s/%s path"
+                        % (alias_dir_path, short_name) + str(ex)
+                    }
+                )
+
+
 def get_data_dir_path():
     carbon_path = "/etc/tendrl/monitoring-integration/carbon.conf"
     if not os.path.exists(carbon_path):

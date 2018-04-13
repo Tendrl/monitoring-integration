@@ -8,9 +8,11 @@ from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.tests import test_init
 
 
+@patch.object(utils, "find_cluster_short_name")
 @patch.object(utils, "find_node_id")
 @patch.object(utils, "find_grafana_pid")
-def test_cpu_handler(pid, node_id):
+def test_cpu_handler(pid, node_id, short_name):
+    short_name.return_value = '7616f2a4-6502-4222-85bb-c5aff4eef15d'
     node_id.return_value = "1"
     pid.return_value = "123"
     test_init.init()
@@ -31,9 +33,13 @@ def test_cpu_handler(pid, node_id):
                  'time_stamp': u'2018-02-07T17:28:05+05:30',
                  'tags': {'warning_max': 80,
                           'fqdn': u'dhcp122-234',
-                          'message': u'Cpu utilization of '
-                          'node dhcp122-234 is back to normal',
+                          'message': u'Cpu utilization on node '
+                          'dhcp122-234 in '
+                          '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d back to normal',
                           'integration_id': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d'
                           }
                  }
@@ -46,10 +52,13 @@ def test_cpu_handler(pid, node_id):
     condition = {'pid': '123',
                  'tags': {'fqdn': u'dhcp122-234',
                           'warning_max': 1,
-                          'message': u'Cpu utilization of node '
-                          'dhcp122-234 is 2.61 % which is above the '
-                          'WARNING threshold (1 %).',
+                          'message': u'Cpu utilization on node '
+                          'dhcp122-234 in 7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d at 2.61 % and '
+                          'running out of cpu',
                           'integration_id': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d'
                           },
                  'alert_id': None,

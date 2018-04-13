@@ -20,6 +20,18 @@ class DeleteMonitoringData(flows.BaseFlow):
         # Delete the cluster related alert dashboards
         grafana_utils.delete_panel(integration_id)
 
+        # Remove any symlink created for cluster
+        _cluster = NS.tendrl.objects.Cluster(
+            integration_id=integration_id
+        ).load()
+        if _cluster.short_name not in [None, ""]:
+            os.unlink(
+                "%snames/%s" % (
+                    graphite_utils.get_data_dir_path(),
+                    _cluster.short_name
+                )
+            )
+
         # Archive the carbon data for the cluster
         archive_base_path = "%s/clusters" % (
             NS.config.data.get(
@@ -59,8 +71,8 @@ class DeleteMonitoringData(flows.BaseFlow):
             "debug",
             NS.publisher_id,
             {
-                "message": "Cluster %s moved to un-managed state.\n"
-                "The archived monitoring data available at: %s" %
+                "message": "%s un-managed.\n"
+                "Archived monitoring data to %s" %
                 (integration_id, archive_path)
             }
         )
