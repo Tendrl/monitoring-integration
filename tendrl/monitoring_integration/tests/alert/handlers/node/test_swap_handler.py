@@ -8,9 +8,11 @@ from tendrl.monitoring_integration.alert import utils
 from tendrl.monitoring_integration.tests import test_init
 
 
+@patch.object(utils, "find_cluster_short_name")
 @patch.object(utils, "find_node_id")
 @patch.object(utils, "find_grafana_pid")
-def test_swap_handler(pid, node_id):
+def test_swap_handler(pid, node_id, short_name):
+    short_name.return_value = '7616f2a4-6502-4222-85bb-c5aff4eef15d'
     node_id.return_value = "1"
     pid.return_value = "123"
     test_init.init()
@@ -30,7 +32,9 @@ def test_swap_handler(pid, node_id):
                           '-c5aff4eef15d back to normal',
                           'fqdn': u'dhcp122-234',
                           'integration_id': '7616f2a4-6502-4222-85bb-'
-                          'c5aff4eef15d'
+                          'c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d'
                           },
                  'resource': 'swap_utilization',
                  'node_id': '1',
@@ -56,7 +60,9 @@ def test_swap_handler(pid, node_id):
                           'swap space',
                           'fqdn': u'dhcp122-234',
                           'integration_id': '7616f2a4-6502-4222-85bb-'
-                          'c5aff4eef15d'
+                          'c5aff4eef15d',
+                          'cluster_short_name': '7616f2a4-6502-4222-'
+                          '85bb-c5aff4eef15d'
                           },
                  'source': 'GRAFANA',
                  'significance': 'HIGH',

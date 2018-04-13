@@ -273,7 +273,7 @@ def check_duplicate(
                 if resource_name is not None:
                     if str(integration_id) in target["target"]:
                         if resource_type == "volumes":
-                            # tendrl.clusters.{cid}.volumes.{vol_name}.pcnt_used
+                            # tendrl.names.{integration_id}.volumes.{vol_name}.pcnt_used
                             vol_name = target["target"].split(
                                 "volumes."
                             )[1].split(".")[0]
@@ -281,7 +281,7 @@ def check_duplicate(
                                 existing_reource = True
                                 break
                         elif resource_type == "bricks":
-                            # tendrl.clusters.{cid}.nodes.{h_name}.bricks.{path}.
+                            # tendrl.names.{integration_id}.nodes.{h_name}.bricks.{path}.
                             # utilization.percent-percent_bytes
                             hostname = resource_name.split(":")[0].split(
                                 "|")[1].replace(".", "_")
@@ -298,7 +298,7 @@ def check_duplicate(
                                 existing_reource = True
                                 break
                         elif resource_type == "hosts":
-                            # tendrl.clusters.{cid}.nodes.{host_name}.
+                            # tendrl.names.{integration_id}.nodes.{host_name}.
                             # {memory/cpu/swap}.*
                             host_name = target["target"].split(
                                 "nodes."
@@ -329,7 +329,7 @@ def add_gluster_resource_panel(
                         panel_target = ("tendrl" + target["target"].split(
                             "tendrl")[1].split(")")[0]).split(".")
                         old_integration_id = panel_target[
-                            panel_target.index("clusters") + 1]
+                            panel_target.index("names") + 1]
                         target["target"] = target["target"].replace(
                             old_integration_id, str(integration_id))
                         if "volumes" in panel_target:
@@ -356,7 +356,7 @@ def add_gluster_resource_panel(
                         panel_target = ("tendrl" + target["target"].split(
                             "tendrl")[1].split(")")[0]).split(".")
                         old_integration_id = panel_target[
-                            panel_target.index("clusters") + 1]
+                            panel_target.index("names") + 1]
                         target["target"] = target["target"].replace(
                             old_integration_id, str(integration_id))
                         if resource_name is not None:

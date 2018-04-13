@@ -214,3 +214,20 @@ def find_volume_name(integration_id, hostname, brick_path):
             }
         )
         raise ex
+
+
+def find_cluster_short_name(integration_id):
+    try:
+        cluster = NS.tendrl.objects.Cluster(
+            integration_id=integration_id
+        ).load()
+        return cluster.short_name
+    except EtcdKeyNotFound as ex:
+        logger.log(
+            "debug",
+            NS.publisher_id,
+            {
+                "message": "Unable to find cluster_short_name for "
+                "integration_id %s.err:%s" % (integration_id, ex)
+            }
+        )
