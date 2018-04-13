@@ -43,6 +43,19 @@ namespace.monitoring:
       type: Update
       version: 1
       uuid: 1951e821-7aa9-4a91-8183-e73bc8275efb
+    SetupClusterAlias:
+      tags:
+        - tendrl/integration/monitoring
+      help: set cluster alias for graphite
+      enabled: true
+      inputs:
+        mandatory:
+          - TendrlContext.integration_id
+          - Cluster.short_name
+      run: monitoring.flows.SetupClusterAlias
+      type: Update
+      version: 1
+      uuid: 1951e821-7aa9-4a91-8183-e73bc827efb5
   objects:
     AlertTypes:
       enabled: True
