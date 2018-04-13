@@ -59,8 +59,8 @@ class DeleteMonitoringData(flows.BaseFlow):
             "debug",
             NS.publisher_id,
             {
-                "message": "Cluster %s moved to un-managed state.\n"
-                "The archived monitoring data available at: %s" %
+                "message": "%s un-managed.\n"
+                "Archived monitoring data to %s" %
                 (integration_id, archive_path)
             }
         )

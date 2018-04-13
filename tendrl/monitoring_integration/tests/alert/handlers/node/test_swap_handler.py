@@ -25,8 +25,9 @@ def test_swap_handler(pid, node_id):
                  'time_stamp': u'2018-02-07T17:40:02+05:30',
                  'pid': '123',
                  'tags': {'warning_max': 50,
-                          'message': u'Swap utilization of node '
-                          'dhcp122-234 is back to normal',
+                          'message': u'Swap utilization on node '
+                          'dhcp122-234 in 7616f2a4-6502-4222-85bb'
+                          '-c5aff4eef15d back to normal',
                           'fqdn': u'dhcp122-234',
                           'integration_id': '7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d'
@@ -49,9 +50,10 @@ def test_swap_handler(pid, node_id):
                  'time_stamp': u'2018-02-12T11:16:23+05:30',
                  'pid': '123',
                  'tags': {'warning_max': 70,
-                          'message': u'Swap utilization of node '
-                          'dhcp122-234 is 80.0 % which is above '
-                          'the WARNING threshold (70 %).',
+                          'message': u'Swap utilization on node '
+                          'dhcp122-234 in 7616f2a4-6502-4222-85bb-'
+                          'c5aff4eef15d at 80.0 % and running out of '
+                          'swap space',
                           'fqdn': u'dhcp122-234',
                           'integration_id': '7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d'

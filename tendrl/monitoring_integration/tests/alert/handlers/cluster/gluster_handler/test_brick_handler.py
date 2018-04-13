@@ -41,9 +41,8 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id):
                           '-c5aff4eef15d',
                           'warning_max': 75,
                           'message': u'Brick utilization of dhcp122-234'
-                          ':|gluster|brick1 under volume vol1 in cluster '
-                          '7616f2a4-6502-4222-85bb-c5aff4eef15d is back '
-                          'normal',
+                          ':|gluster|brick1 in vol1 '
+                          'back to normal',
                           'volume_name': 'vol1'
                           },
                  'source': 'GRAFANA',
@@ -68,9 +67,8 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id):
                           'percent-percent_bytes',
                           'fqdn': u'dhcp122-234',
                           'message': u'Brick utilization of dhcp122-234:|'
-                          'gluster|brick1 under volume vol1 in cluster '
-                          '7616f2a4-6502-4222-85bb-c5aff4eef15d is 20.75 % '
-                          'which is above WARNING threshold (17 %)',
+                          'gluster|brick1 in vol1 '
+                          'at 20.75 % and nearing full capacity',
                           'integration_id': u'7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d',
                           'cluster_name': 'c1',

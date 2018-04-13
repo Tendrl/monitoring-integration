@@ -30,9 +30,9 @@ def test_volume_handler(cluster_name, pid):
                  'node_id': None,
                  'alert_type': 'UTILIZATION',
                  'tags': {'cluster_name': 'c1',
-                          'message': u'Volume utilization of '
+                          'message': u'Volume utilization on '
                           'V1 in cluster 7616f2a4-6502-4222-'
-                          '85bb-c5aff4eef15d is back normal',
+                          '85bb-c5aff4eef15d back to normal',
                           'warning_max': 75,
                           'volume_name': u'V1',
                           'integration_id': u'7616f2a4-6502-4222'
@@ -63,10 +63,9 @@ def test_volume_handler(cluster_name, pid):
                           'warning_max': 14,
                           'integration_id': u'7616f2a4-6502-4222'
                           '-85bb-c5aff4eef15d',
-                          'message': u'Volume utilization of V1 in'
+                          'message': u'Volume utilization on V1 in'
                           ' cluster 7616f2a4-6502-4222-85bb-c5aff4eef1'
-                          '5d is 20.86 % which is above WARNING '
-                          'threshold (14 %)'
+                          '5d at 20.86 % and nearing full capacity'
                           },
                  'source': 'GRAFANA',
                  'current_value': '20.86',
