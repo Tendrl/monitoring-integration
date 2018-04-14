@@ -1,12 +1,10 @@
-import etcd
 import copy
-import os
+import etcd
 import socket
 import time
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.grafana import utils
 
 
 class GraphitePlugin(object):
@@ -112,19 +110,25 @@ class GraphitePlugin(object):
         resource_details["stopped"] = stopped
         return resource_details
 
-    def get_object_from_central_store(self, obj_cls, obj_attr, integration_id, vol_id):
-        _objs = NS.tendrl.objects[obj_cls](
-            vol_id,
-            integration_id=integration_id
-        ).load_all()
+    def get_object_from_central_store(
+        self,
+        obj_cls,
+        obj_attr,
+        integration_id,
+        vol_id
+    ):
         resource_details = {"details": []}
-        if _objs:
-            for _obj in _objs:
-                resource_detail = {}
-                for key, value in obj_attr['attrs'].items():
-                    resource_detail[key] = getattr(_obj, key)
-                resource_details["details"].append(resource_detail)
-
+        if obj_cls in NS.tendrl.objects:
+            _objs = NS.tendrl.objects[obj_cls](
+                vol_id,
+                integration_id=integration_id
+            ).load_all()
+            if _objs:
+                for _obj in _objs:
+                    resource_detail = {}
+                    for key, value in obj_attr['attrs'].items():
+                        resource_detail[key] = getattr(_obj, key)
+                    resource_details["details"].append(resource_detail)
         try:
             if obj_attr["count"]:
                 resource_details = self.get_resource_count(
@@ -133,6 +137,7 @@ class GraphitePlugin(object):
                 )
         except KeyError:
             pass
+
         return resource_details
 
     def get_central_store_data(self, objects):
@@ -256,7 +261,7 @@ class GraphitePlugin(object):
                         resource_detail[key] = resp_data
                     except (etcd.EtcdKeyNotFound,
                             AttributeError,
-                            KeyError) as ex:
+                            KeyError):
                         resource_detail[key] = {
                             "total": 0,
                             "up": 0,

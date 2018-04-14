@@ -1,8 +1,6 @@
 import datetime
-import etcd
 import os
 
-from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.graphite.graphite_utils import \
     archive
 from tendrl.monitoring_integration.graphite.graphite_utils import \

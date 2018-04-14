@@ -34,15 +34,16 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                         "_NS/gluster/config/data"
                     ).value)
                     try:
-                        self.sync_interval = int(config_data['data']['sync_interval'])
+                        self.sync_interval = int(
+                            config_data['data']['sync_interval']
+                        )
                     except ValueError as ex:
                         logger.log(
                             "error",
                             NS.get("publisher_id", None),
                             {
                                 'message': "Unable to parse tendrl-gluster-" +
-                                "integration config 'sync_interval' " +
-                                "(value: %s)" % interval.value
+                                "integration config 'sync_interval'"
                             }
                         )
                         raise ex

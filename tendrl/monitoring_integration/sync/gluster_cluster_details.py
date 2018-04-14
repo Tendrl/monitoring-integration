@@ -53,8 +53,8 @@ def get_node_details(integration_id):
             "debug",
             NS.get("publisher_id", None),
             {
-                'message': "Error while fetching node details."
-                " Error: " % str(ex)
+                "message": "Error while fetching node details."
+                " Error: %s" % str(ex)
             }
         )
     return node_details
@@ -85,7 +85,7 @@ def get_brick_details(volumes, integration_id):
                         integration_id
                     )
                     brick["sds_name"] = constants.GLUSTER
-                    brick["integration_id"] = cluster_key.split("/")[-1]
+                    brick["integration_id"] = integration_id
                     brick["resource_name"] = "%s|%s:%s" % (
                         str(brick["vol_name"]),
                         brick["hostname"],

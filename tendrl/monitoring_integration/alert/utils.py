@@ -8,7 +8,6 @@ from subprocess import check_output
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert.exceptions import AlertNotFound
-from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.alert.exceptions import PermissionDenied
 from tendrl.monitoring_integration.alert.exceptions import Unauthorized
 from tendrl.monitoring_integration.grafana import alert_utils
@@ -180,7 +179,7 @@ def find_volume_name(integration_id, hostname, brick_path):
     if _brick:
         return _brick.vol_name
     else:
-       return None
+        return None
 
 
 def find_cluster_short_name(integration_id):
