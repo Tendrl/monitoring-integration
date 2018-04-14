@@ -2,7 +2,6 @@ import copy
 import etcd
 from requests import exceptions as req_excep
 
-from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import alert_dashboard
 from tendrl.monitoring_integration.grafana import \
@@ -10,7 +9,6 @@ from tendrl.monitoring_integration.grafana import \
 from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
-from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.sync import gluster_cluster_details
 
 
@@ -23,9 +21,10 @@ class SyncAlertDashboard(object):
                 integration_ids = self.get_managed_clusters_integration_id()
                 if len(integration_ids) > 0:
                     for integration_id in integration_ids:
-                        key = "/clusters/%s/TendrlContext/sds_name" % \
-                            integration_id
-                        sds_name = etcd_utils.read(key).value
+                        cluster_obj = NS.tendrl.objects.ClusterTendrlContext(
+                            integration_id=integration_id
+                        ).load()
+                        sds_name = cluster_obj.sds_name
                         if sds_name == constants.GLUSTER:
                             all_cluster_details.update(
                                 gluster_cluster_details.get_cluster_details(
@@ -75,14 +74,13 @@ class SyncAlertDashboard(object):
                     rows_len = len(
                         resource_json["dashboard"]["rows"]
                     )
+                    panels_len = 0
                     if rows_len > 0 and "panels" in resource_json[
                             "dashboard"]["rows"][0]:
                         panels_len = len(
                             resource_json["dashboard"][
                                 "rows"][0]["panels"]
                         )
-                    else:
-                        panels_len = 0
                     if rows_len == 0 or panels_len == 0:
                         alert_utils.delete_alert_dashboard(dashboard_name)
                         if cluster_details[dashboard_name]:
@@ -166,24 +164,22 @@ class SyncAlertDashboard(object):
 
     def get_managed_clusters_integration_id(self):
         managed_clusters_integration_id = []
-        integration_ids = utils.get_resource_keys("", "clusters")
-        for integration_id in integration_ids:
-            cluster_key = "/clusters/%s" % integration_id
-            cluster_is_managed = etcd_utils.read(
-                cluster_key + "/is_managed"
-            ).value
-            if cluster_is_managed.lower() == "yes":
-                managed_clusters_integration_id.append(integration_id)
+        clusters = NS.tendrl.objects.Cluster().load_all()
+        for cluster in clusters:
+            if cluster.is_managed in ['yes', 'Yes', 'YES']:
+                managed_clusters_integration_id.append(
+                    cluster.integration_id
+                )
         return managed_clusters_integration_id
 
     def log_message(self, response, resource_type):
         try:
             if response.status_code == 200:
-                msg = "Dashboard for {0} uploaded successfully".format(
+                msg = "{0} dashboard uploaded successfully".format(
                     resource_type
                 )
             else:
-                msg = "Dashboard upload failed for {0}".format(
+                msg = "{0} dashboard upload failed".format(
                     resource_type
                 )
 
