@@ -25,12 +25,12 @@ class DeleteMonitoringData(flows.BaseFlow):
             integration_id=integration_id
         ).load()
         if _cluster.short_name not in [None, ""]:
-            os.unlink(
-                "%snames/%s" % (
-                    graphite_utils.get_data_dir_path(),
-                    _cluster.short_name
-                )
+            symlink_path = "%snames/%s" % (
+                graphite_utils.get_data_dir_path(),
+                _cluster.short_name
             )
+            if os.path.exists(symlink_path):
+                os.unlink(symlink_path)
 
         # Archive the carbon data for the cluster
         archive_base_path = "%s/clusters" % (

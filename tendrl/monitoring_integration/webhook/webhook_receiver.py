@@ -1,4 +1,5 @@
 import json
+import socket
 import threading
 
 from werkzeug.serving import run_simple
@@ -63,7 +64,7 @@ class WebhookReceiver(threading.Thread):
     def run(self):
         try:
             run_simple(
-                NS.node_context.fqdn,
+                socket.gethostbyname(socket.gethostname()),
                 PORT,
                 self._application, threaded=True
             )

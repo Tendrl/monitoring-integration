@@ -73,7 +73,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.status"
+                    "target": "tendrl.names.$cluster_id.nodes.$host_name.status"
                 }],
                 "thresholds": "2,6",
                 "timeFrom": "15m",
@@ -129,7 +129,7 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.total), \"max\")),\"Total\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.nodes.$host_name.brick_count.total), \"max\")),\"Total\")",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
@@ -137,7 +137,7 @@
                     "alias": "Up",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.up), \"max\")),\"Up\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.nodes.$host_name.brick_count.up), \"max\")),\"Up\")",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
@@ -149,7 +149,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Down\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Down\")",
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
@@ -211,7 +211,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.status, 6, 'maxSeries'), '\\|', '/')"
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.status, 6, 'maxSeries'), '\\|', '/')"
                 }],
                 "title": "Brick Status",
                 "transform": "timeseries_aggregations",
@@ -271,17 +271,17 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-cached",
+                    "target": "tendrl.names.$cluster_id.nodes.$host_name.memory.memory-cached",
                     "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-free",
+                    "target": "tendrl.names.$cluster_id.nodes.$host_name.memory.memory-free",
                     "textEditor": false
                 }, {
                     "refId": "C",
                     "target": "sumSeries(#A, #B)",
-                    "targetFull": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-cached, $my_app.clusters.$cluster_id.nodes.$host_name.memory.memory-free)"
+                    "targetFull": "sumSeries(tendrl.names.$cluster_id.nodes.$host_name.memory.memory-cached, tendrl.names.$cluster_id.nodes.$host_name.memory.memory-free)"
                 }],
                 "thresholds": "",
                 "title": "Memory Available",
@@ -333,27 +333,27 @@
                 "targets": [{
                     "hide": false,
                     "refId": "A",
-                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-buffered, 'Buffered')",
+                    "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.memory.percent-buffered, 'Buffered')",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "B",
-                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-cached, 'Cached')",
+                    "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.memory.percent-cached, 'Cached')",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
-                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_recl, 'Slab Recl')",
+                    "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.memory.percent-slab_recl, 'Slab Recl')",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "D",
-                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-slab_unrecl, 'Slab Unrecl')",
+                    "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.memory.percent-slab_unrecl, 'Slab Unrecl')",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "E",
-                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.memory.percent-used, 'Used')",
+                    "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.memory.percent-used, 'Used')",
                     "textEditor": false
                 }],
                 "thresholds": [{
@@ -448,7 +448,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "$my_app.clusters.$cluster_id.nodes.$host_name.swap.percent-free"
+                    "target": "tendrl.names.$cluster_id.nodes.$host_name.swap.percent-free"
                 }],
                 "thresholds": "10,20",
                 "title": "Swap Free",
@@ -495,7 +495,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias($my_app.clusters.$cluster_id.nodes.$host_name.swap.percent-used, '$host_name')"
+                    "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.swap.percent-used, '$host_name')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -566,12 +566,12 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}, 6, 'sum'), 'percent-', ' ')",
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}, 6, 'sum'), 'percent-', ' ')",
                     "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "alias(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}), 'Total')",
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.cpu.{percent-user,percent-system}), 'Total')",
                     "textEditor": false
                 }],
                 "thresholds": [{
@@ -646,10 +646,10 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-read), 8)"
+                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-read), 8)"
                 }, {
                     "refId": "B",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-write), 8)"
+                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-write), 8)"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -729,15 +729,15 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
                 }, {
                     "refId": "C",
                     "target": "alias(asPercent(#B, #A), 'Utilization')",
-                    "targetFull": "alias(asPercent(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)), 'Utilization')"
+                    "targetFull": "alias(asPercent(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)), 'Utilization')"
                 }],
                 "thresholds": [{
                     "colorMode": "warning",
@@ -832,15 +832,15 @@
                 "targets": [{
                     "hide": true,
                     "refId": "B",
-                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
                 }, {
                     "hide": true,
                     "refId": "C",
-                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
                 }, {
                     "refId": "A",
                     "target": "asPercent(#C, #B)",
-                    "targetFull": "asPercent(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total))"
+                    "targetFull": "asPercent(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total))"
                 }],
                 "thresholds": "80, 90",
                 "title": "Total Brick Capacity Utilization",
@@ -907,15 +907,15 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)"
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)"
                 }, {
                     "refId": "C",
                     "target": "diffSeries(#A, #B)",
-                    "targetFull": "diffSeries(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))"
+                    "targetFull": "diffSeries(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))"
                 }],
                 "thresholds": "",
                 "title": "Total Brick Capacity Available",
@@ -982,18 +982,18 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
                     "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))",
+                    "targetFull": "diffSeries(consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -1065,46 +1065,46 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
+                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "C",
                     "target": "keepLastValue(diffSeries(#B, #A))",
-                    "targetFull": "keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')))",
+                    "targetFull": "keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max')))",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "D",
-                    "target": "sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)",
+                    "target": "sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "E",
-                    "target": "sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)",
+                    "target": "sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "F",
                     "target": "diffSeries(#D, #E)",
-                    "targetFull": "diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))",
+                    "targetFull": "diffSeries(sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "G",
                     "target": "consolidateBy(minSeries(#F), \"min\")",
-                    "targetFull": "consolidateBy(minSeries(diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\")",
+                    "targetFull": "consolidateBy(minSeries(diffSeries(sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\")",
                     "textEditor": true
                 }, {
                     "hide": false,
                     "refId": "H",
                     "target": "divideSeries(#G, #C)",
-                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\"), keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))))",
+                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\"), keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d')), 'max'))))",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -1170,7 +1170,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.percent-percent_bytes, 6, 'maxSeries'), '\\|', '/')"
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.percent-percent_bytes, 6, 'maxSeries'), '\\|', '/')"
                 }],
                 "title": "Top Bricks by Capacity Percent Utilized",
                 "transform": "timeseries_aggregations",
@@ -1225,7 +1225,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total, 6, 'maxSeries'), '\\|', '/')",
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total, 6, 'maxSeries'), '\\|', '/')",
                     "textEditor": false
                 }],
                 "title": "Top Bricks by Total Capacity",
@@ -1281,7 +1281,7 @@
                 "targets": [{
                     "hide": false,
                     "refId": "B",
-                    "target": "aliasSub(groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used, 6, 'maxSeries'), '\\|', '/')",
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used, 6, 'maxSeries'), '\\|', '/')",
                     "textEditor": false
                 }],
                 "title": "Top Bricks by Capacity Utilized",
@@ -1321,10 +1321,10 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_octets.read), 7)"
+                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_octets.read), 7)"
                 }, {
                     "refId": "B",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_octets.write), 7)"
+                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_octets.write), 7)"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1392,10 +1392,10 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_ops.read), 7)"
+                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_ops.read), 7)"
                 }, {
                     "refId": "B",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_ops.write), 7)"
+                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_ops.write), 7)"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1463,7 +1463,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasByNode(sumSeries($my_app.clusters.$cluster_id.nodes.$host_name.disk-*.disk_io_time.io_time), 7)"
+                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_io_time.io_time), 7)"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1541,7 +1541,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "B",
-                    "target": "groupByNode($my_app.clusters.$cluster_id.nodes.$host_name.interface-*.if_octets.*, 7, 'maxSeries')",
+                    "target": "groupByNode(tendrl.names.$cluster_id.nodes.$host_name.interface-*.if_octets.*, 7, 'maxSeries')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -1610,7 +1610,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.interface-*.if_dropped.*, 7, 'maxSeries')"
+                    "target": "groupByNode(tendrl.names.$cluster_id.nodes.$host_name.interface-*.if_dropped.*, 7, 'maxSeries')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1678,7 +1678,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "groupByNode(tendrl.clusters.$cluster_id.nodes.$host_name.interface-*.if_errors.*, 7, 'maxSeries')"
+                    "target": "groupByNode(tendrl.names.$cluster_id.nodes.$host_name.interface-*.if_errors.*, 7, 'maxSeries')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1750,11 +1750,11 @@
                 "datasource": "",
                 "hide": 0,
                 "includeAll": false,
-                "label": "Cluster Id",
+                "label": "Cluster Name",
                 "multi": false,
                 "name": "cluster_id",
                 "options": [],
-                "query": "tendrl.clusters.*",
+                "query": "tendrl.names.*",
                 "refresh": 1,
                 "regex": "",
                 "sort": 0,
@@ -1773,7 +1773,7 @@
                 "multi": false,
                 "name": "host_name",
                 "options": [],
-                "query": "tendrl.clusters.$cluster_id.nodes.*",
+                "query": "tendrl.names.$cluster_id.nodes.*",
                 "refresh": 2,
                 "regex": "",
                 "sort": 0,

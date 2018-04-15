@@ -74,7 +74,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.state"
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.state"
                 }],
                 "thresholds": "2,6",
                 "timeFrom": "15m",
@@ -146,7 +146,7 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.total), \"max\")),\"Total\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.brick_count.total), \"max\")),\"Total\")",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
@@ -155,7 +155,7 @@
                     "decimals": 0,
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.up), \"max\")),\"Up\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.brick_count.up), \"max\")),\"Up\")",
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Text Only"
@@ -168,7 +168,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.brick_count.down), \"max\")),\"Down\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.brick_count.down), \"max\")),\"Down\")",
                     "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
@@ -229,7 +229,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(aliasSub(substr(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.status, 6, -1), '(\\.bricks\\.)', ':'), '\\|', '/')"
+                    "target": "aliasSub(aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.status, 6, -1), '(\\.bricks\\.)', ':'), '\\|', '/')"
                 }],
                 "timeFrom": null,
                 "timeShift": null,
@@ -262,7 +262,7 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.subvol_count), \"max\")),\"Total\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.subvol_count), \"max\")),\"Total\")",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }],
@@ -294,7 +294,7 @@
                     "alias": "Total",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.total), 'max')), 'Total')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.geo_rep_session.total), 'max')), 'Total')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -306,7 +306,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "F",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.created), 'max')), 'Created')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.geo_rep_session.created), 'max')), 'Created')",
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Text Only",
@@ -316,7 +316,7 @@
                     "alias": "Up",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.up), 'max')), 'Up')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.geo_rep_session.up), 'max')), 'Up')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -328,7 +328,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "D",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.partial), 'max')), 'Partial')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.geo_rep_session.partial), 'max')), 'Partial')",
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
@@ -342,7 +342,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "G",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.paused), 'max')), 'Paused')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.geo_rep_session.paused), 'max')), 'Paused')",
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
@@ -356,7 +356,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "E",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.stopped), 'max')), 'Stopped')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.geo_rep_session.stopped), 'max')), 'Stopped')",
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
@@ -370,7 +370,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.geo_rep_session.down), 'max')), 'Down')",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.geo_rep_session.down), 'max')), 'Down')",
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
@@ -404,7 +404,7 @@
                     "alias": "Rebalanced Files",
                     "displayType": "Regular",
                     "refId": "A",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_files, 'max'))), 'Rebalanced Files')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.rebalance_files, 'max'))), 'Rebalanced Files')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -415,7 +415,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "B",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
                     "textEditor": false,
                     "units": "mbytes",
                     "valueHandler": "Number Threshold"
@@ -424,7 +424,7 @@
                     "alias": "Skipped",
                     "displayType": "Regular",
                     "refId": "C",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_skipped, 'max'))), 'Skipped')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.rebalance_skipped, 'max'))), 'Skipped')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }, {
@@ -432,7 +432,7 @@
                     "alias": "Failure",
                     "displayType": "Regular",
                     "refId": "D",
-                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.rebalance_failures, 'max'))), 'Failure')",
+                    "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.rebalance_failures, 'max'))), 'Failure')",
                     "textEditor": false,
                     "valueHandler": "Text Only"
                 }],
@@ -491,7 +491,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.rebal_status",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.rebal_status",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -598,7 +598,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.snap_count"
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.snap_count"
                 }],
                 "thresholds": "",
                 "title": "Snapshots",
@@ -674,7 +674,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.pcnt_used",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.pcnt_used",
                     "textEditor": true
                 }],
                 "thresholds": "80,90",
@@ -742,15 +742,15 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity"
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity"
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity"
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.used_capacity"
                 }, {
                     "refId": "C",
                     "target": "diffSeries(#A, #B)",
-                    "targetFull": "diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)"
+                    "targetFull": "diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)"
                 }],
                 "thresholds": "",
                 "title": "Capacity Available",
@@ -817,18 +817,18 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": false,
                     "refId": "B",
-                    "target": "consolidateBy(sumSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
+                    "target": "consolidateBy(sumSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "C",
                     "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))"
+                    "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))"
                 }],
                 "thresholds": "",
                 "title": "Weekly Growth Rate",
@@ -902,46 +902,46 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
+                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "C",
                     "target": "keepLastValue(diffSeries(#B, #A))",
-                    "targetFull": "keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')))",
+                    "targetFull": "keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')))",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "D",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "E",
-                    "target": "tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity",
+                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.used_capacity",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "F",
                     "target": "diffSeries(#D, #E)",
-                    "targetFull": "diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)",
+                    "targetFull": "diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)",
                     "textEditor": true
                 }, {
                     "hide": true,
                     "refId": "G",
                     "target": "consolidateBy(minSeries(#F), \"min\")",
-                    "targetFull": "consolidateBy(minSeries(diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)), \"min\")",
+                    "targetFull": "consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)), \"min\")",
                     "textEditor": true
                 }, {
                     "hide": false,
                     "refId": "H",
                     "target": "divideSeries(#G, #C)",
-                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity)), \"min\"), keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.clusters.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))))",
+                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)), \"min\"), keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))))",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -992,7 +992,7 @@
                 "targets": [{
                     "hide": false,
                     "refId": "A",
-                    "target": "alias(tendrl.clusters.$cluster_id.volumes.$volume_name.pcnt_used, '$volume_name')"
+                    "target": "alias(tendrl.names.$cluster_id.volumes.$volume_name.pcnt_used, '$volume_name')"
                 }],
                 "thresholds": [{
                     "colorMode": "warning",
@@ -1096,15 +1096,15 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read)"
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write)"
                 }, {
                     "refId": "C",
                     "target": "sumSeries(#A, #B)",
-                    "targetFull": "sumSeries(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write))"
+                    "targetFull": "sumSeries(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read), sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write))"
                 }],
                 "thresholds": "",
                 "title": "Throughput",
@@ -1169,7 +1169,7 @@
                 "tableColumn": "",
                 "targets": [{
                     "refId": "A",
-                    "target": "averageSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_meta_data_utilization.percent-percent_bytes)",
+                    "target": "averageSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_meta_data_utilization.percent-percent_bytes)",
                     "textEditor": true
                 }],
                 "thresholds": "",
@@ -1237,15 +1237,15 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-total)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-total)"
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-used)"
+                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-used)"
                 }, {
                     "refId": "C",
                     "target": "asPercent(#B, #A)",
-                    "targetFull": "asPercent(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-used), sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-total))"
+                    "targetFull": "asPercent(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-used), sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.thin_pool_utilization.gauge-total))"
                 }],
                 "thresholds": "",
                 "title": "LVM Thin Pool Data Usage %",
@@ -1317,7 +1317,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "limit(sortByMaxima(groupByNode(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.fop.*.hits, 10, 'maxSeries')), 5)"
+                    "target": "limit(sortByMaxima(groupByNode(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.fop.*.hits, 10, 'maxSeries')), 5)"
                 }],
                 "title": "Top File Operations",
                 "transform": "timeseries_aggregations",
@@ -1356,7 +1356,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.lock_ops), 'lock_ops')",
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.lock_ops), 'lock_ops')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -1425,7 +1425,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.read_write_ops), 'read_write_ops')"
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.read_write_ops), 'read_write_ops')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1493,7 +1493,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_ops), 'inode_ops')",
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.inode_ops), 'inode_ops')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -1562,7 +1562,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "alias(sumSeries(tendrl.clusters.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.entry_ops), 'entry_ops')"
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.entry_ops), 'entry_ops')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
@@ -1615,11 +1615,11 @@
                 "datasource": "",
                 "hide": 0,
                 "includeAll": false,
-                "label": "Cluster Id",
+                "label": "Cluster Name",
                 "multi": false,
                 "name": "cluster_id",
                 "options": [],
-                "query": "tendrl.clusters.*",
+                "query": "tendrl.names.*",
                 "refresh": 2,
                 "regex": "",
                 "sort": 0,
@@ -1641,7 +1641,7 @@
                 "multi": false,
                 "name": "volume_name",
                 "options": [],
-                "query": "tendrl.clusters.$cluster_id.volumes.*",
+                "query": "tendrl.names.$cluster_id.volumes.*",
                 "refresh": 2,
                 "regex": "",
                 "sort": 0,
