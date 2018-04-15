@@ -51,6 +51,7 @@ namespace.monitoring:
       inputs:
         mandatory:
           - TendrlContext.integration_id
+        optional:
           - Cluster.short_name
       run: monitoring.flows.SetupClusterAlias
       type: Update
