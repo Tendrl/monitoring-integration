@@ -16,7 +16,7 @@ clean:
 	rm -rf $(NAME)-$(VERSION)-$(RELEASE).el7.src.rpm
 
 dist:
-	wget https://grafana.com/api/plugins/vonage-status-panel/versions/$(LATESTVERSION)/download \
+	wget https://grafana.com/api/plugins/vonage-status-panel/versions/1.0.6/download \
 	  --output-document=vonage-status-panel.zip
 	python setup.py sdist \
 	  && mv dist/$(NAME)-$(VERSION).tar.gz .
