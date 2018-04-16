@@ -1,6 +1,7 @@
 import json
 import maps
 from requests import post
+import socket
 
 from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
@@ -11,7 +12,8 @@ PORT = 8789
 
 
 def create_notification_channel():
-    url = "http://" + str(NS.node_context.fqdn) + \
+    ip = socket.gethostbyname(socket.gethostname())
+    url = "http://" + str(ip) + \
           ":" + str(PORT) + "/grafana_callback"
     channel_details = json.dumps({"name": NOTIFICATION_CHANNEL,
                                   "type": "webhook",

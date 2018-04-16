@@ -221,7 +221,10 @@ def find_cluster_short_name(integration_id):
         cluster = NS.tendrl.objects.Cluster(
             integration_id=integration_id
         ).load()
-        return cluster.short_name
+        if cluster.short_name in [None, '']:
+            return cluster.integration_id
+        else:
+            return cluster.short_name
     except EtcdKeyNotFound as ex:
         logger.log(
             "debug",

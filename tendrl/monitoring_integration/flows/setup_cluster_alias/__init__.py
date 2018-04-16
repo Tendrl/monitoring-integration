@@ -11,7 +11,7 @@ class SetupClusterAlias(flows.BaseFlow):
     def run(self):
         super(SetupClusterAlias, self).run()
         integration_id = self.parameters["TendrlContext.integration_id"]
-        short_name = self.parameters["Cluster.short_name"]
+        short_name = self.parameters.get("Cluster.short_name")
         alias_dir_path = "%snames" % graphite_utils.get_data_dir_path()
         if not os.path.exists(alias_dir_path):
             try:
