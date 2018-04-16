@@ -1,4 +1,5 @@
 import json
+import re
 
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import constants
@@ -81,24 +82,35 @@ def remove_row(alert_dashboard, integration_id, resource_type, resource_name):
     flag = True
     for row in rows:
         for target in row["panels"][0]["targets"]:
-            resource = resource_name
             if resource_type == "bricks":
-                hostname = resource.split(":")[0].split(
+                result = parse_target(
+                    target['target'],
+                    constants.BRICK_TEMPLATE
+                )
+                hostname = resource_name.split(":")[0].split(
                     "|")[1].replace(".", "_")
-                resource = "." + resource.split(
-                    ":", 1)[1].replace("/", "|") + "."
-            if resource is not None:
-                if str(integration_id) in target["target"] and str(
-                        resource) in str(target["target"]):
-                    if resource_type == "bricks":
-                        if hostname in target["target"]:
-                            flag = False
-                            break
-                    else:
-                        flag = False
-                        break
-            else:
-                if str(integration_id) in target["target"]:
+                brick_path = resource_name.split(
+                    ":", 1)[1].replace("/", "|")
+                if result['integration_id'] == integration_id and \
+                        hostname == result["host_name"] and \
+                        brick_path == result["brick_path"]:
+                    flag = False
+                    break
+            elif resource_type == "nodes":
+                result = parse_target(
+                    target['target'],
+                    constants.HOST_TEMPLATE
+                )
+                if result['integration_id'] == integration_id and \
+                        resource_name == result["host_name"]:
+                    flag = False
+                    break
+            elif resource_type == "volumes":
+                result = parse_target(
+                    target['target'],
+                    constants.VOLUME_TEMPLATE
+                )
+                if resource_name == result["volume_name"]:
                     flag = False
                     break
         if flag:
@@ -108,7 +120,6 @@ def remove_row(alert_dashboard, integration_id, resource_type, resource_name):
 
 
 def remove_cluster_rows(integration_id, dashboard_name):
-
     alert_dashboard = get_alert_dashboard(dashboard_name)
     new_rows = []
     flag = True
@@ -121,7 +132,8 @@ def remove_cluster_rows(integration_id, dashboard_name):
         if flag:
             new_rows.append(row)
         flag = True
-    return {"dashboard": {"rows": new_rows}}
+    alert_dashboard["dashboard"]["rows"] = new_rows
+    return alert_dashboard
 
 
 def delete_panel(
@@ -156,3 +168,11 @@ def delete_panel(
         )
         resp = post_dashboard(alert_dashboard)
     return resp
+
+
+def parse_target(target, template):
+    regex = re.sub(r'{(.+?)}', r'(?P<\1>.+?)', template)
+    values = list(re.search(regex, target).groups())
+    keys = re.findall(r'{(.+?)}', template)
+    _dict = dict(zip(keys, values))
+    return _dict

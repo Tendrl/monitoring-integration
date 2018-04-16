@@ -1,7 +1,7 @@
+import copy
 import etcd
 from requests import exceptions as req_excep
 
-from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.grafana import alert_dashboard
 from tendrl.monitoring_integration.grafana import \
@@ -9,7 +9,6 @@ from tendrl.monitoring_integration.grafana import \
 from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
-from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.sync import gluster_cluster_details
 
 
@@ -18,20 +17,32 @@ class SyncAlertDashboard(object):
         try:
             # check alert organization is exist
             if NS.config.data["org_id"]:
-                cluster_details = {}
-                dashboards = []
-                integration_ids = utils.get_resource_keys("", "clusters")
-                for integration_id in integration_ids:
-                    key = "/clusters/%s/TendrlContext/sds_name" % \
-                        integration_id
-                    sds_name = etcd_utils.read(key).value
-                    if sds_name == constants.GLUSTER:
-                        cluster_details, dashboards = gluster_cluster_details.\
-                            get_cluster_details(
-                                integration_id
+                all_cluster_details = {}
+                integration_ids = self.get_managed_clusters_integration_id()
+                if len(integration_ids) > 0:
+                    for integration_id in integration_ids:
+                        cluster_obj = NS.tendrl.objects.ClusterTendrlContext(
+                            integration_id=integration_id
+                        ).load()
+                        sds_name = cluster_obj.sds_name
+                        if sds_name == constants.GLUSTER:
+                            all_cluster_details.update(
+                                gluster_cluster_details.get_cluster_details(
+                                    integration_id
+                                )
                             )
-                        cluster_details["sds_name"] = constants.GLUSTER
-                    self.update_dashboard(cluster_details, dashboards)
+                        else:
+                            # In future collecte other sds type cluster details
+                            # Add all cluster details in all_cluster_details
+                            pass
+                    self.create_alert_dashboard(all_cluster_details)
+                else:
+                    # no cluster is managed
+                    # delete all dashbaords
+                    dashboards = constants.GLUSTER_DASHBOARDS
+                    # In future append other dashbaords also
+                    for dashboard in dashboards:
+                        alert_utils.delete_alert_dashboard(dashboard)
             else:
                 # try to create alert organization once again
                 alert_organization.create()
@@ -47,120 +58,132 @@ class SyncAlertDashboard(object):
                        {'message': "Failed to update cluster "
                        "dashboard.err: %s" % str(ex)})
 
-    def update_dashboard(self, cluster_details, dashboards):
-        for dashboard_name in dashboards:
-            if dashboard_name in cluster_details and \
-                    cluster_details[dashboard_name]:
-                # check alert dashboard exist
-                alert_dashboard = alert_utils.get_alert_dashboard(
-                    dashboard_name
-                )
-                flag = True
-                if "message" in alert_dashboard and \
-                        alert_dashboard["message"] == "Dashboard not found":
-                    flag = False
-                if flag:
-                    try:
-                        rows_len = len(
-                            alert_dashboard["dashboard"]["rows"]
-                        )
-                        if rows_len > 0 and "panels" in alert_dashboard[
-                                "dashboard"]["rows"][0]:
-                            panels_len = len(
-                                alert_dashboard["dashboard"][
-                                    "rows"][0]["panels"]
-                            )
-                        else:
-                            panels_len = 0
-                        if rows_len == 0 or panels_len == 0:
-                            alert_utils.delete_alert_dashboard(dashboard_name)
-                            self.create_dashboard(
-                                dashboard_name,
-                                cluster_details
-                            )
-                        else:
-                            if cluster_details["sds_name"] == \
-                                    constants.GLUSTER:
-                                self.create_gluster_resource(
-                                    cluster_details[dashboard_name],
-                                    dashboard_name,
-                                    cluster_details["integration_id"],
-                                    cluster_details["sds_name"]
-                                )
-                    except (KeyError, AttributeError):
-                        alert_utils.delete_alert_dashboard(dashboard_name)
-                        self.create_dashboard(
-                            dashboard_name,
-                            cluster_details
-                        )
-
-                else:
-                    self.create_dashboard(
-                        dashboard_name,
-                        cluster_details
-                    )
-
-    def create_dashboard(self, resource_name, cluster_details):
-        flag = False
-        for resource in cluster_details[resource_name]:
-            if not flag:
-                # create dashboard
-                alert_dashboard.create_resource_dashboard(
-                    resource_name,
-                    resource,
-                    cluster_details["sds_name"],
-                    cluster_details["integration_id"]
-                )
-                flag = True
-            else:
-                # update dashboard
-                self.create_gluster_resource(
-                    [resource],
-                    resource_name,
-                    cluster_details["integration_id"],
-                    cluster_details["sds_name"]
-                )
-
-    def create_gluster_resource(self, resources, resource_type,
-                                integration_id, sds_name):
-        for resource in resources:
-            try:
-                if resource_type == "volumes":
-                    resource_name = str(resource["name"])
-                elif resource_type == "hosts":
-                    resource_name = str(resource["fqdn"]).replace(".", "_")
-                elif resource_type == "bricks":
-                    resource_name = "%s|%s:%s" % (
-                        str(resource["vol_name"]),
-                        resource["hostname"],
-                        resource["brick_path"].replace("|", "/")
-                    )
-            except KeyError:
-                logger.log("debug", NS.get("publisher_id", None),
-                           {'message': "Failed to get resource {} "
-                            "details".format(resource)})
-                continue
-            response = alert_dashboard.add_panel(
-                integration_id,
-                resource_type,
-                resource_name,
-                sds_name
+    def create_alert_dashboard(self, cluster_details):
+        for dashboard_name in cluster_details:
+            no_changes_in_dashboard = False
+            # check alert dashboard exist
+            resource_json = alert_utils.get_alert_dashboard(
+                dashboard_name
             )
-            if response:
-                self.log_message(response, resource_name, resource_type)
+            dashboard_found = True
+            if "message" in resource_json and \
+                    "Dashboard not found" in resource_json["message"]:
+                dashboard_found = False
+            if dashboard_found:
+                try:
+                    rows_len = len(
+                        resource_json["dashboard"]["rows"]
+                    )
+                    panels_len = 0
+                    if rows_len > 0 and "panels" in resource_json[
+                            "dashboard"]["rows"][0]:
+                        panels_len = len(
+                            resource_json["dashboard"][
+                                "rows"][0]["panels"]
+                        )
+                    if rows_len == 0 or panels_len == 0:
+                        alert_utils.delete_alert_dashboard(dashboard_name)
+                        if cluster_details[dashboard_name]:
+                            resource_json = self.create_dashboard(
+                                dashboard_name,
+                                cluster_details[dashboard_name]
+                            )
+                    else:
+                        resource_json, no_changes_in_dashboard = \
+                            self.update_dashboard(
+                                dashboard_name,
+                                cluster_details[dashboard_name],
+                                resource_json
+                            )
+                except (KeyError, AttributeError) as ex:
+                    logger.log(
+                        "error",
+                        NS.publisher_id,
+                        {
+                            "message": "Failed to update alert "
+                            "dashboard %s err: %s" % (dashboard_name, ex)
+                        }
+                    )
+                    raise ex
+            else:
+                if cluster_details[dashboard_name]:
+                    resource_json = self.create_dashboard(
+                        dashboard_name,
+                        cluster_details[dashboard_name]
+                    )
+            if resource_json and not no_changes_in_dashboard:
+                resp = alert_utils.post_dashboard(resource_json)
+                self.log_message(resp, dashboard_name)
 
-    def log_message(self, response, resource_name, resource_type):
+    def create_dashboard(self, resource_type, resources):
+        resource_json = {}
+        # create dashboard
+        if resources:
+            # Create operation takes more excution time than update
+            # Create dashboard for one resource using that do update for
+            # other resources
+            resource = resources.pop()
+            resource_json = alert_dashboard.create_resource_dashboard(
+                resource_type,
+                resource
+            )
+        # After creating first panel update the other panels
+        if resources and resource_json:
+            # update dashboard
+            rows = resource_json["dashboard"]["rows"]
+            most_recent_panel_id = rows[-1]["panels"][-1]["id"]
+            resource_json = alert_dashboard.add_panel(
+                resources,
+                resource_type,
+                resource_json,
+                most_recent_panel_id
+            )
+        return resource_json
+
+    def update_dashboard(self, resource_type, resources, resource_json):
+        no_changes_in_dashboard = False
+        new_resources, alert_dashboard_json, most_recent_panel_id = \
+            alert_dashboard.check_duplicate(
+                copy.deepcopy(resource_json),
+                resources,
+                resource_type
+            )
+        if new_resources and len(
+            alert_dashboard_json["dashboard"]["rows"]
+        ) > 0:
+            alert_dashboard_json = alert_dashboard.add_panel(
+                new_resources,
+                resource_type,
+                alert_dashboard_json,
+                most_recent_panel_id
+            )
+        elif len(resource_json["dashboard"]["rows"]) == \
+                len(alert_dashboard_json["dashboard"]["rows"]):
+            no_changes_in_dashboard = True
+        return alert_dashboard_json, no_changes_in_dashboard
+
+    def get_managed_clusters_integration_id(self):
+        managed_clusters_integration_id = []
+        clusters = NS.tendrl.objects.Cluster().load_all()
+        for cluster in clusters:
+            if cluster.is_managed in ['yes', 'Yes', 'YES']:
+                managed_clusters_integration_id.append(
+                    cluster.integration_id
+                )
+        return managed_clusters_integration_id
+
+    def log_message(self, response, resource_type):
         try:
             if response.status_code == 200:
-                msg = '\n' + "Dashboard for resource {0} uploaded " + \
-                    "successfully for resource type {1}".format(resource_name,
-                                                                resource_type)
+                msg = "{0} dashboard uploaded successfully".format(
+                    resource_type
+                )
             else:
-                msg = '\n' + "Dashboard for resource {0} upload failed  " + \
-                    "for resource type {1}".format(resource_name,
-                                                   resource_type)
+                msg = "{0} dashboard upload failed".format(
+                    resource_type
+                )
 
-            logger.log("info", NS.get("publisher_id", None),
+            logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
         except (KeyError, AttributeError):
             pass
