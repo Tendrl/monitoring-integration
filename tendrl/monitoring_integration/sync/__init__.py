@@ -30,6 +30,13 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
         while not self._complete.is_set():
             if self.sync_interval is None:
                 try:
+                    # Adding monitoring tag in node_context
+                    NS.node_context = NS.node_context.load()
+                    current_tags = list(NS.node_context.tags)
+                    current_tags += ["tendrl/integration/monitoring"]
+                    NS.node_context.tags = list(set(current_tags))
+                    NS.node_context.save()
+
                     config_data = json.loads(etcd_utils.read(
                         "_NS/gluster/config/data"
                     ).value)
