@@ -1,9 +1,6 @@
 import datetime
-import etcd
 import os
 
-from tendrl.commons.utils import etcd_utils
-from tendrl.monitoring_integration.grafana import utils
 from tendrl.monitoring_integration.graphite.graphite_utils import \
     archive
 from tendrl.monitoring_integration.graphite.graphite_utils import \
@@ -178,23 +175,14 @@ def delete_host_details(
     resource_type
 ):
     volume_affected_list = []
-    try:
-        volume_affected_list = []
-        bricks_key = "/clusters/%s/Bricks/all/%s" % (
-            integration_id,
-            resource_name
-        )
-        bricks = utils.get_resource_keys("", bricks_key)
-        for brick in bricks:
-            volume_key = os.path.join(
-                bricks_key,
-                brick,
-                "vol_name"
-            )
-            volume_name = etcd_utils.read(volume_key).value
-            volume_affected_list.append(volume_name)
-    except etcd.EtcdKeyNotFound:
-        pass
+    _bricks = NS.tendrl.objects.GlusterBrick(
+        integration_id=integration_id,
+        fqdn=resource_name
+    ).load_all()
+    for _brick in _bricks:
+        if _brick.vol_name not in volume_affected_list:
+            volume_affected_list.append(_brick.vol_name)
+
     remove_host(
         integration_id,
         whisper_path,

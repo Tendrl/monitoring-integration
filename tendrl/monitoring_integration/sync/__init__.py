@@ -1,8 +1,7 @@
+import etcd
+import json
 import threading
 import time
-
-import etcd
-
 
 from tendrl.commons import sds_sync
 from tendrl.commons.utils import etcd_utils
@@ -31,18 +30,20 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
         while not self._complete.is_set():
             if self.sync_interval is None:
                 try:
-                    interval = etcd_utils.read(
-                        "_NS/gluster/config/data/sync_interval")
+                    config_data = json.loads(etcd_utils.read(
+                        "_NS/gluster/config/data"
+                    ).value)
                     try:
-                        self.sync_interval = int(interval.value)
+                        self.sync_interval = int(
+                            config_data['data']['sync_interval']
+                        )
                     except ValueError as ex:
                         logger.log(
                             "error",
                             NS.get("publisher_id", None),
                             {
                                 'message': "Unable to parse tendrl-gluster-" +
-                                "integration config 'sync_interval' " +
-                                "(value: %s)" % interval.value
+                                "integration config 'sync_interval'"
                             }
                         )
                         raise ex

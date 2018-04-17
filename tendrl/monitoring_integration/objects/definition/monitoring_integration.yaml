@@ -128,7 +128,7 @@ namespace.monitoring:
         pcnt_inode_used:
         total_inode_capacity:
         used_inode_capacity:
-        geo_rep_session:
+        GeoReplicationSession:
           attrs:
             session_status:
           count:
