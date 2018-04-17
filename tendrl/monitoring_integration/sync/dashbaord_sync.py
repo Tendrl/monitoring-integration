@@ -106,11 +106,15 @@ class SyncAlertDashboard(object):
                     )
                     raise ex
             else:
-                if cluster_details[dashboard_name]:
+                if len(cluster_details[dashboard_name]) > 0:
                     resource_json = self.create_dashboard(
                         dashboard_name,
                         cluster_details[dashboard_name]
                     )
+                else:
+                    # no detail present then no need to create
+                    # alert dashboard
+                    continue
             if resource_json and not no_changes_in_dashboard:
                 resp = alert_utils.post_dashboard(resource_json)
                 self.log_message(resp, dashboard_name)
