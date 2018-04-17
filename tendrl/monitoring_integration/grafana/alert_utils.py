@@ -121,6 +121,10 @@ def remove_row(alert_dashboard, integration_id, resource_type, resource_name):
 
 def remove_cluster_rows(integration_id, dashboard_name):
     alert_dashboard = get_alert_dashboard(dashboard_name)
+    if 'message' in alert_dashboard and \
+            'Dashboard not found' in alert_dashboard["message"]:
+        return
+
     new_rows = []
     flag = True
     rows = alert_dashboard.get("dashboard", {}).get("rows", [])
