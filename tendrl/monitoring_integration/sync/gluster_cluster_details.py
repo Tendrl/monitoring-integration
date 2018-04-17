@@ -10,20 +10,15 @@ from tendrl.monitoring_integration.grafana import utils
 def get_cluster_details(integration_id):
     cluster_details = {}
     try:
-        _cluster = NS.tendrl.objects.Cluster(
-            integration_id=integration_id
-        ).load()
-        if _cluster.is_managed in ["yes", "YES"]:
-            cluster_details["integration_id"] = integration_id
-            # Get node details
-            cluster_details["hosts"] = get_node_details(integration_id)
-            # Get volume details
-            cluster_details["volumes"] = get_volumes_details(integration_id)
-            # Get brick details from subvolumes
-            cluster_details["bricks"] = get_brick_details(
-                cluster_details["volumes"],
-                integration_id
-            )
+        # Get node details
+        cluster_details["hosts"] = get_node_details(integration_id)
+        # Get volume details
+        cluster_details["volumes"] = get_volumes_details(integration_id)
+        # Get brick details from subvolumes
+        cluster_details["bricks"] = get_brick_details(
+            cluster_details["volumes"],
+            integration_id
+        )
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
         logger.log(
             "debug",
@@ -47,6 +42,9 @@ def get_node_details(integration_id):
             node = {
                 "fqdn": _cnc.fqdn
             }
+            node["integration_id"] = integration_id
+            node["sds_name"] = constants.GLUSTER
+            node["resource_name"] = str(node["fqdn"]).replace(".", "_")
             node_details.append(node)
     except etcd.EtcdKeyNotFound as ex:
         logger.log(
@@ -121,6 +119,9 @@ def get_volumes_details(integration_id):
             )
             subvolume_details = get_subvolume_details(subvolume_key)
             volume_data['subvolume'] = subvolume_details
+            volume_data["sds_name"] = constants.GLUSTER
+            volume_data["integration_id"] = integration_id
+            volume_data["resource_name"] = str(volume_data["name"])
             volume_details.append(volume_data)
     return volume_details
 
