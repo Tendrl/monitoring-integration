@@ -61,7 +61,8 @@ def get_node_details(integration_id):
 def get_brick_path(brick_info, integration_id):
     _brick = NS.tendrl.objects.GlusterBrick(
         integration_id=integration_id,
-        brick_dir=brick_info.replace(":_", "/")
+        fqdn=brick_info.split(":")[0],
+        brick_dir=brick_info.split(":_")[-1]
     ).load()
     return _brick.brick_path.split(":")[1].replace(
         "/", "|"
