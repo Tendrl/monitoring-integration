@@ -154,7 +154,10 @@ def create_resource_dashboard(resource_name, resource):
                                 panel_title.replace("_", " ")):
                             targets = panel["targets"]
                             for target in targets:
-                                if sds_name == constants.GLUSTER:
+                                if sds_name in [
+                                    constants.GLUSTER,
+                                    constants.RHGS
+                                ]:
                                     new_title = set_gluster_target(
                                         target,
                                         integration_id,
@@ -215,7 +218,7 @@ def add_panel(resources, resource_type, alert_dashboard, most_recent_panel_id):
         sds_name = resource["sds_name"]
         integration_id = resource["integration_id"]
         resource_name = resource["resource_name"]
-        if sds_name == constants.GLUSTER:
+        if sds_name in [constants.GLUSTER, constants.RHGS]:
             alert_rows = fetch_rows(alert_dashboard)
             add_gluster_resource_panel(
                 alert_rows,
