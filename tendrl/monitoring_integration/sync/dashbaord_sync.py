@@ -25,7 +25,7 @@ class SyncAlertDashboard(object):
                             integration_id=integration_id
                         ).load()
                         sds_name = cluster_obj.sds_name
-                        if sds_name == constants.GLUSTER:
+                        if sds_name in [constants.GLUSTER, constants.RHGS]:
                             all_cluster_details.update(
                                 gluster_cluster_details.get_cluster_details(
                                     integration_id

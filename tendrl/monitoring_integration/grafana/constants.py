@@ -3,6 +3,7 @@ MAIN_ORG = "Main Org."
 PATH_PREFIX = "/etc/tendrl/monitoring-integration"
 DASHBOARD_PATH = '/grafana/dashboards'
 GLUSTER = "gluster"
+RHGS = "RHGS"
 HEADERS = {"Accept": "application/json",
            "Content-Type": "application/json"
            }
