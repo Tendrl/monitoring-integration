@@ -39,6 +39,8 @@ def get_node_details(integration_id):
                 integration_id=integration_id,
                 node_id=_node_id.key.split('/')[-1]
             ).load()
+            if _cnc.is_managed != "yes":
+                continue
             node = {
                 "fqdn": _cnc.fqdn
             }
