@@ -109,7 +109,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
-* Wwd Apr 18 2018 Rohan Kanade <rkanade@redhat.com> - 1.6.3-1
+* Wed Apr 18 2018 Rohan Kanade <rkanade@redhat.com> - 1.6.3-1
 - Bugfixes
 - Support gluster nodes/bricks with fqdn, IP, short name
 
