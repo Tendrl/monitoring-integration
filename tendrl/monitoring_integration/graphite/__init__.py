@@ -149,6 +149,7 @@ class GraphitePlugin(object):
                     continue
                 cluster_details = {}
                 cluster_details["integration_id"] = _cluster.integration_id
+                cluster_details["short_name"] = _cluster.short_name
                 cluster_details["Cluster"] = self.get_cluster_details(
                     objects, _cluster.integration_id
                 )
