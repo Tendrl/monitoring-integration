@@ -33,10 +33,10 @@ class DeleteMonitoringData(flows.BaseFlow):
                 os.unlink(symlink_path)
 
         # Archive the carbon data for the cluster
-        archive_base_path = "%s/clusters" % (
+        archive_base_path = "%s/archive/clusters" % (
             NS.config.data.get(
                 "graphite_archive_path",
-                "/usr/share/tendrl/graphite/archive"
+                graphite_utils.get_data_dir_path(),
             )
         )
         if not os.path.exists(archive_base_path):
@@ -48,10 +48,16 @@ class DeleteMonitoringData(flows.BaseFlow):
                     "for monitoring data. Error: (%s)" %
                     (str(archive_base_path), ex)
                 )
+        if _cluster.short_name not in [None, ""]:
+            cluster_short_name = _cluster.short_name
+        else:
+            cluster_short_name = integration_id
         archive_path = "%s/%s_%s" % (
             archive_base_path,
-            integration_id,
-            str(datetime.datetime.now().isoformat())
+            cluster_short_name,
+            str(
+                datetime.datetime.now().isoformat()
+            ).replace(".", ":")
         )
         resource_path = "%s/clusters/%s" % \
             (
