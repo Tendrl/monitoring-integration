@@ -30,13 +30,14 @@ class SyncAlertDashboard(object):
                                 gluster_cluster_details.get_cluster_details(
                                     integration_id
                                 )
-                            for key in cluster_details:
-                                if key in all_cluster_details:
-                                    all_cluster_details[key].extend(
-                                        cluster_details[key]
+                            for dashboard_name in cluster_details:
+                                if dashboard_name in all_cluster_details:
+                                    all_cluster_details[dashboard_name].extend(
+                                        cluster_details[dashboard_name]
                                     )
                                 else:
-                                    all_cluster_details[key] = cluster_details[key]
+                                    all_cluster_details[dashboard_name] = \
+                                        cluster_details[dashboard_name]
                         else:
                             # In future collecte other sds type cluster details
                             # Add all cluster details in all_cluster_details
