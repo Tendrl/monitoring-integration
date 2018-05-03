@@ -23,7 +23,10 @@ tags:
 grafana_host: 127.0.0.1
 
 # Grafana port
-grafana_port: 3000 
+grafana_port: 3000
+
+# Graphite data archive path 
+# graphite_archive_path: /var/lib/carbon/whisper/tendrl/ 
 
 # List of dashboards to be uploaded
 dashboards:
