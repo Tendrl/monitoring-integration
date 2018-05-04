@@ -19,7 +19,7 @@ class BrickHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl[.]names[.]{integration_id}[.]nodes[.]"\
+        self.template = "tendrl[.]clusters[.]{integration_id}[.]nodes[.]"\
             "{host_name}[.]bricks[.]{brick_path}[.]"
 
     def format_alert(self, alert_json):
