@@ -1,6 +1,6 @@
 Name: tendrl-monitoring-integration
 Version: 1.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
 Source0: %{name}-%{version}.tar.gz
@@ -109,6 +109,9 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
+* Fri May 04 2018 Rohan Kanade <rkanade@redhat.com> - 1.6.3-2
+- Bugfixes (https://github.com/Tendrl/monitoring-integration/milestone/6)
+
 * Wed Apr 18 2018 Rohan Kanade <rkanade@redhat.com> - 1.6.3-1
 - Bugfixes
 - Support gluster nodes/bricks with fqdn, IP, short name
