@@ -149,6 +149,7 @@ class GraphitePlugin(object):
                     continue
                 cluster_details = {}
                 cluster_details["integration_id"] = _cluster.integration_id
+                cluster_details["short_name"] = _cluster.short_name
                 cluster_details["Cluster"] = self.get_cluster_details(
                     objects, _cluster.integration_id
                 )
@@ -285,6 +286,8 @@ class GraphitePlugin(object):
                 integration_id=integration_id,
                 node_id=_node_id.key.split('/')[-1]
             ).load()
+            if _cnc.is_managed != "yes":
+                continue
             resource_detail = {}
             for key, value in objects["Node"]["attrs"].items():
                 if value is None:

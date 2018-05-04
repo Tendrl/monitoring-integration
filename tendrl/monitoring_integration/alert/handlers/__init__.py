@@ -59,7 +59,8 @@ class AlertHandler(object):
                     "alert_condition_status": alert["resource"],
                     "alert_condition_state": alert["severity"],
                     "alert_condition_unset": unset
-                }
+                },
+                integration_id=alert["tags"].get("integration_id", None)
             )
 
 

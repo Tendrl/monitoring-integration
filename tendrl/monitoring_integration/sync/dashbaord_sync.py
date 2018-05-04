@@ -26,11 +26,18 @@ class SyncAlertDashboard(object):
                         ).load()
                         sds_name = cluster_obj.sds_name
                         if sds_name in [constants.GLUSTER, constants.RHGS]:
-                            all_cluster_details.update(
+                            cluster_details = \
                                 gluster_cluster_details.get_cluster_details(
                                     integration_id
                                 )
-                            )
+                            for dashboard_name in cluster_details:
+                                if dashboard_name in all_cluster_details:
+                                    all_cluster_details[dashboard_name].extend(
+                                        cluster_details[dashboard_name]
+                                    )
+                                else:
+                                    all_cluster_details[dashboard_name] = \
+                                        cluster_details[dashboard_name]
                         else:
                             # In future collecte other sds type cluster details
                             # Add all cluster details in all_cluster_details
