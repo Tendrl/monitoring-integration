@@ -172,7 +172,8 @@
                     "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -332,7 +333,8 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Paused",
@@ -346,7 +348,8 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Stopped",
@@ -360,7 +363,8 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Down",
@@ -374,7 +378,8 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -418,7 +423,8 @@
                     "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
                     "textEditor": false,
                     "units": "mbytes",
-                    "valueHandler": "Number Threshold"
+                    "valueHandler": "Number Threshold",
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Skipped",
