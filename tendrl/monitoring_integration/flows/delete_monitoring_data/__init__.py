@@ -16,7 +16,6 @@ class DeleteMonitoringData(flows.BaseFlow):
 
     def run(self):
         integration_id = self.parameters.get("TendrlContext.integration_id")
-
         # Delete the cluster related alert dashboards
         grafana_utils.delete_panel(integration_id)
 
@@ -43,6 +42,17 @@ class DeleteMonitoringData(flows.BaseFlow):
             try:
                 os.makedirs(str(archive_base_path))
             except OSError as ex:
+                logger.log(
+                    "error",
+                    NS.publisher_id,
+                    {
+                        "message": "Failed to create archive dir:"
+                        " (%s)" % ex
+                    },
+                    job_id=self.parameters.get('job_id'),
+                    flow_id=self.parameters.get('flow_id'),
+                    integration_id=integration_id
+                )
                 raise FlowExecutionFailedError(
                     "Failed to create archive dir: (%s)"
                     "for monitoring data. Error: (%s)" %
@@ -71,6 +81,19 @@ class DeleteMonitoringData(flows.BaseFlow):
             try:
                 shutil.move(resource_path, archive_path)
             except Exception as ex:
+                if type(ex) == IOError:
+                    logger.log(
+                        "error",
+                        NS.publisher_id,
+                        {
+                            "message": "Failed to archive the monitoring "
+                            "data. Error: (%s)" % ex
+
+                        },
+                        job_id=self.parameters.get('job_id'),
+                        flow_id=self.parameters.get('flow_id'),
+                        integration_id=integration_id
+                    )
                 raise FlowExecutionFailedError(
                     "Failed to archive the monitoring data. Error: (%s)" %
                     ex
