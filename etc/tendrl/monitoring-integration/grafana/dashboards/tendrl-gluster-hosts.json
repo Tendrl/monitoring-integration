@@ -153,7 +153,8 @@
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
