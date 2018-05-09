@@ -20,7 +20,7 @@ class SwapHandler(AlertHandler):
     def __init__(self):
         AlertHandler.__init__(self)
         self.template = \
-            "tendrl[.]names[.]{integration_id}[.]nodes[.]{host_name}[.]"
+            "tendrl[.]clusters[.]{integration_id}[.]nodes[.]{host_name}[.]"
 
     def format_alert(self, alert_json):
         alert = self.parse_alert_metrics(alert_json)
