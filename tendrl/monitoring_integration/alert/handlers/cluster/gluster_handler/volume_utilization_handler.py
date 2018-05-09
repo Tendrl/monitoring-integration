@@ -19,7 +19,7 @@ class VolumeHandler(AlertHandler):
 
     def __init__(self):
         AlertHandler.__init__(self)
-        self.template = "tendrl[.]names[.]{integration_id}[.]volumes[.]"\
+        self.template = "tendrl[.]clusters[.]{integration_id}[.]volumes[.]"\
             "{volume_name}[.]"
 
     def format_alert(self, alert_json):
