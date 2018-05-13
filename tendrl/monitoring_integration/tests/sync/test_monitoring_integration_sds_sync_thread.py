@@ -101,12 +101,9 @@ class TestMonitoringIntegrationSdsSyncThread(object):
 
         self.__sync_thread.run()
 
-        assert True
-
     def test_stop(self):
         self.__sync_thread.stop()
 
-        assert True
-
-    def __etcd_read_json_valid_config_data(self, sync_interval=0):
+    @staticmethod
+    def __etcd_read_json_valid_config_data(sync_interval=0):
         return json.dumps({'data': {'sync_interval': sync_interval}})
