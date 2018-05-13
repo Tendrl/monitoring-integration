@@ -243,7 +243,8 @@ class GraphitePlugin(object):
         ).load_all() or []
         for _volume in _volumes:
             resource_detail = {}
-            if _volume.deleted in ['true', 'True', 'TRUE']:
+            if _volume.deleted in ['true', 'True', 'TRUE'] or \
+                    _volume.name is None:
                 continue
             for key, value in objects["Volume"]["attrs"].items():
                 if value is None:
