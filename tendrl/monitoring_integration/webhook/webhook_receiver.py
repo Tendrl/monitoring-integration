@@ -70,3 +70,5 @@ class WebhookReceiver(threading.Thread):
 
     def stop(self):
         cherrypy.engine.exit()
+        super(WebhookReceiver, self).stop()
+
