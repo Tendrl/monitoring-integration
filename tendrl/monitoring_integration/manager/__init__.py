@@ -77,6 +77,7 @@ def main():
 
     def shutdown(signum, frame):
         complete.set()
+        monitoring_integration_manager.stop()
         NS.sync_thread.stop()
 
     def reload_config(signum, frame):
