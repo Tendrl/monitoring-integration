@@ -63,7 +63,7 @@ class GraphitePlugin(object):
                 logger.log(
                     "error",
                     NS.get("publisher_id", None),
-                    {'message': "Unable to send data to graphite %s" % ex}
+                    {'message': "Unable to close graphite socket %s" % ex}
                 )
         return response
 
