@@ -35,6 +35,9 @@ class MonitoringIntegrationManager(common_manager.Manager):
         # start webhook for receive alert from grafana
         self.webhook_receiver.start()
 
+    def stop(self):
+        self.webhook_receiver.stop()
+        super(MonitoringIntegrationManager, self).stop()
 
 def main():
     monitoring_integration.MonitoringIntegrationNS()
