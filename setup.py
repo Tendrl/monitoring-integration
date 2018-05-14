@@ -125,7 +125,10 @@ setup(
         "requests",
         "urllib3",
         "werkzeug",
-        "tendrl-commons"
+        "tendrl-commons",
+        "flask",
+        "cherrypy",
+        "paste"
         ],
     include_package_data=True,
     cmdclass={'bumpversion': BumpVersionCommand, 'release': ReleaseCommand}

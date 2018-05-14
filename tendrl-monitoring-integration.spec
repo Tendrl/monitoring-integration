@@ -18,6 +18,9 @@ Requires: python-setuptools
 Requires: python-urllib3
 Requires: tendrl-grafana-plugins
 Requires: python-werkzeug
+Requires: python-flask
+Requires: python-cherrypy
+Requires: python-paste
 
 BuildRequires: python-setuptools
 BuildRequires: systemd
