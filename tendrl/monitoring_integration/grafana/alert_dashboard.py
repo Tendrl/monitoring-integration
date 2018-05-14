@@ -21,8 +21,8 @@ def set_alert(panel, thresholds, severity, resource_name, title):
         panel["alert"] = ({"conditions": [
             {"evaluator": {"params": [thresholds[severity]], "type": "gt"},
              "operator": {"type": "and"},
-             "query": {"params": [panel["targets"][-1]["refId"], "3m", "now"]},
-             "reducer": {"params": [], "type": "avg"},
+             "query": {"params": [panel["targets"][-1]["refId"], "4m", "now"]},
+             "reducer": {"params": [], "type": "last"},
              "type": "query"
              }],
             "executionErrorState": "keep_state",
@@ -53,9 +53,9 @@ def set_alert(panel, thresholds, severity, resource_name, title):
                                "type": "within_range"},
                  "operator": {"type": "and"},
                  "query": {"params": [panel["targets"][-1]["refId"],
-                                      "3m",
+                                      "4m",
                                       "now"]},
-                 "reducer": {"params": [], "type": "avg"},
+                 "reducer": {"params": [], "type": "last"},
                  "type": "query"
                  }],
              "executionErrorState": "keep_state",
