@@ -69,4 +69,4 @@ class WebhookReceiver(threading.Thread):
         cherrypy.engine.block()
 
     def stop(self):
-        pass
+        cherrypy.engine.exit()
