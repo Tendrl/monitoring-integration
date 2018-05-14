@@ -3,6 +3,7 @@ from setuptools import Command
 from setuptools import find_packages
 from setuptools import setup
 import subprocess
+
 try:
     # Python 2 backwards compat
     from __builtin__ import raw_input as input
@@ -18,6 +19,7 @@ def read_module_contents():
 def read_spec_contents():
     with open('monitoring-integration.spec') as spec:
         return spec.read()
+
 
 module_file = read_module_contents()
 metadata = dict(re.findall("__([a-z]+)__\s*=\s*'([^']+)'", module_file))
@@ -95,6 +97,8 @@ class ReleaseCommand(Command):
         #    cmd.append('--sign')
         # print(' '.join(cmd))
         # subprocess.check_call(cmd)
+
+
 setup(
     name="tendrl-monitoring-integration",
     version=version,
@@ -108,7 +112,8 @@ setup(
                                     "tests"]),
     entry_points={
         'console_scripts': [
-            'tendrl-monitoring-integration = tendrl.monitoring_integration.manager:main',
+            'tendrl-monitoring-integration = \
+            tendrl.monitoring_integration.manager:main',
         ],
     },
     url="http://www.redhat.com",
@@ -129,7 +134,7 @@ setup(
         "flask",
         "cherrypy",
         "paste"
-        ],
+    ],
     include_package_data=True,
     cmdclass={'bumpversion': BumpVersionCommand, 'release': ReleaseCommand}
 )
