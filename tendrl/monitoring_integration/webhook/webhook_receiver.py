@@ -1,9 +1,12 @@
+import socket
+import threading
+
+
 import cherrypy
 from flask import Flask
 from flask import request
 from paste.translogger import TransLogger
-import socket
-import threading
+
 
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
