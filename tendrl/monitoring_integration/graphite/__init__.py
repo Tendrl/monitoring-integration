@@ -58,6 +58,7 @@ class GraphitePlugin(object):
             response = self._resend(message)
         finally:
             try:
+                self.graphite_sock.shutdown(1)
                 self.graphite_sock.close()
             except(AttributeError, socket.error) as ex:
                 logger.log(
