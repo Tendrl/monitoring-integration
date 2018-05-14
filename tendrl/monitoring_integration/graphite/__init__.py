@@ -15,7 +15,6 @@ class GraphitePlugin(object):
         self.port = NS.config.data["datasource_port"]
         self.carbon_port = NS.config.data["carbon_port"]
         self.prefix = 'tendrl'
-        self._connect()
 
     def _connect(self):
 
@@ -42,7 +41,6 @@ class GraphitePlugin(object):
                 NS.get("publisher_id", None),
                 {'message': "Cannot send data to graphite "
                  "socket" + str(ex)})
-            raise ex
 
     def push_metrics(self, metric_name, metric_value):
 
@@ -54,9 +52,19 @@ class GraphitePlugin(object):
             int(time.time())
         )
         try:
+            self._connect()
             response = self.graphite_sock.sendall(message)
         except socket.error:
             response = self._resend(message)
+        finally:
+            try:
+                self.graphite_sock.close()
+            except(AttributeError, socket.error) as ex:
+                logger.log(
+                    "error",
+                    NS.get("publisher_id", None),
+                    {'message': "Unable to close graphite socket %s" % ex}
+                )
         return response
 
     def get_resource_count(self, resource_details, obj_attr):
