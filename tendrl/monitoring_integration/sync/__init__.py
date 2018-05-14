@@ -74,8 +74,3 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                 logger.log("error", NS.get("publisher_id", None),
                            {'message': str(ex)})
                 time.sleep(_sleep)
-
-    def stop(self):
-        super(MonitoringIntegrationSdsSyncThread, self).stop()
-        self.plugin_obj.graphite_sock.shutdown(1)
-        self.plugin_obj.graphite_sock.close()
