@@ -533,7 +533,8 @@
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -607,7 +608,8 @@
                     "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Degraded",
@@ -621,7 +623,8 @@
                     "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Down",
@@ -635,7 +638,8 @@
                     "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -689,7 +693,8 @@
                     "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -735,7 +740,8 @@
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Created",
@@ -771,7 +777,8 @@
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Down",
@@ -785,7 +792,8 @@
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }, {
                     "aggregation": "Last",
                     "alias": "Partial",
@@ -799,7 +807,8 @@
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
-                    "warn": 1
+                    "warn": 1,
+                    "display": true
                 }],
                 "title": "",
                 "type": "vonage-status-panel"

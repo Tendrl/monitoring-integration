@@ -21,8 +21,8 @@ def set_alert(panel, thresholds, severity, resource_name, title):
         panel["alert"] = ({"conditions": [
             {"evaluator": {"params": [thresholds[severity]], "type": "gt"},
              "operator": {"type": "and"},
-             "query": {"params": [panel["targets"][-1]["refId"], "3m", "now"]},
-             "reducer": {"params": [], "type": "avg"},
+             "query": {"params": [panel["targets"][-1]["refId"], "4m", "now"]},
+             "reducer": {"params": [], "type": "last"},
              "type": "query"
              }],
             "executionErrorState": "keep_state",
@@ -53,9 +53,9 @@ def set_alert(panel, thresholds, severity, resource_name, title):
                                "type": "within_range"},
                  "operator": {"type": "and"},
                  "query": {"params": [panel["targets"][-1]["refId"],
-                                      "3m",
+                                      "4m",
                                       "now"]},
-                 "reducer": {"params": [], "type": "avg"},
+                 "reducer": {"params": [], "type": "last"},
                  "type": "query"
                  }],
              "executionErrorState": "keep_state",
@@ -87,6 +87,7 @@ def get_panels(resource_rows):
 
 
 def set_gluster_target(target, integration_id, resource, resource_name):
+    target["target"] = target["target"].replace('names', 'clusters')
     target["target"] = target["target"].replace('$interval', '1m')
     target["target"] = target["target"].replace('$my_app', 'tendrl')
     target["target"] = target["target"].replace(
@@ -319,7 +320,7 @@ def add_gluster_resource_panel(
                         panel_target = ("tendrl" + target["target"].split(
                             "tendrl")[1].split(")")[0]).split(".")
                         old_integration_id = panel_target[
-                            panel_target.index("names") + 1]
+                            panel_target.index("clusters") + 1]
                         target["target"] = target["target"].replace(
                             old_integration_id, str(integration_id))
                         if "volumes" in panel_target:
@@ -346,7 +347,7 @@ def add_gluster_resource_panel(
                         panel_target = ("tendrl" + target["target"].split(
                             "tendrl")[1].split(")")[0]).split(".")
                         old_integration_id = panel_target[
-                            panel_target.index("names") + 1]
+                            panel_target.index("clusters") + 1]
                         target["target"] = target["target"].replace(
                             old_integration_id, str(integration_id))
                         if resource_name is not None:

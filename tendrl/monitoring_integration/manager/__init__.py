@@ -35,6 +35,9 @@ class MonitoringIntegrationManager(common_manager.Manager):
         # start webhook for receive alert from grafana
         self.webhook_receiver.start()
 
+    def stop(self):
+        self.webhook_receiver.stop()
+        super(MonitoringIntegrationManager, self).stop()
 
 def main():
     monitoring_integration.MonitoringIntegrationNS()
@@ -74,6 +77,7 @@ def main():
 
     def shutdown(signum, frame):
         complete.set()
+        monitoring_integration_manager.stop()
         NS.sync_thread.stop()
 
     def reload_config(signum, frame):

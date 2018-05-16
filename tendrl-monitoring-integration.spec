@@ -1,6 +1,6 @@
 Name: tendrl-monitoring-integration
 Version: 1.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
 Source0: %{name}-%{version}.tar.gz
@@ -18,6 +18,9 @@ Requires: python-setuptools
 Requires: python-urllib3
 Requires: tendrl-grafana-plugins
 Requires: python-werkzeug
+Requires: python-flask
+Requires: python-cherrypy
+Requires: python-paste
 
 BuildRequires: python-setuptools
 BuildRequires: systemd
@@ -109,6 +112,9 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
+* Wed May 16 2018 Rohan Kanade <rkanade@redhat.com> - 1.6.3-3
+- Bugfixes (https://github.com/Tendrl/monitoring-integration/milestone/6)
+
 * Fri May 04 2018 Rohan Kanade <rkanade@redhat.com> - 1.6.3-2
 - Bugfixes (https://github.com/Tendrl/monitoring-integration/milestone/6)
 
