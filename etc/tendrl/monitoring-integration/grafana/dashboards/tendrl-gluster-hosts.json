@@ -164,7 +164,7 @@
                     "value": "current"
                 }],
                 "datasource": "",
-                "description": "The Brick Status panel displays the status code of each brick for a given host.  \n1 = Started  \n10 = Stopped",
+                "description": "The Brick Status panel displays the status code of each brick for a given host.  \n0 = Started  \n8 = Stopped",
                 "fontSize": "100%",
                 "id": 29,
                 "links": [],
