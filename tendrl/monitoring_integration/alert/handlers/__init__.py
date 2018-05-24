@@ -100,9 +100,11 @@ class AlertHandlerManager(object):
             self.alert_types
         )
 
-    def handle_alert(self, alert_id):
+    def handle_alert(self, alert_id, state):
         try:
             alert_json = utils.get_alert_info(alert_id)
+            if state != alert_json["State"]:
+                return
             handled_alert = False
             for handler in AlertHandler.handlers:
                 if handler.handles in alert_json['Name'].lower():
