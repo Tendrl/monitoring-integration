@@ -183,7 +183,7 @@
                     "value": "current"
                 }],
                 "datasource": null,
-                "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n1 = Started  \n10 = Stopped",
+                "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n0 = Started  \n8 = Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 41,
