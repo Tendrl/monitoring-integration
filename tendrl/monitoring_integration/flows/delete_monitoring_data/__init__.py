@@ -28,7 +28,7 @@ class DeleteMonitoringData(flows.BaseFlow):
                 graphite_utils.get_data_dir_path(),
                 _cluster.short_name
             )
-            if os.path.exists(symlink_path):
+            if os.path.islink(symlink_path):
                 os.unlink(symlink_path)
 
         # Archive the carbon data for the cluster
