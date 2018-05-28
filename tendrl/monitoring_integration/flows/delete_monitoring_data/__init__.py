@@ -17,7 +17,9 @@ class DeleteMonitoringData(flows.BaseFlow):
 
     def run(self):
         integration_id = self.parameters.get("TendrlContext.integration_id")
-        delete_telemetry_data = self.parameters.get("Cluster.delete_telemetry_data")
+        delete_telemetry_data = self.parameters.get(
+            "Cluster.delete_telemetry_data"
+        )
         # Delete the cluster related alert dashboards
         grafana_utils.delete_panel(integration_id)
 
@@ -81,22 +83,8 @@ class DeleteMonitoringData(flows.BaseFlow):
                         "for monitoring data. Error: (%s)" %
                         (str(archive_base_path), ex)
                     )
-            if delete_telemetry_data and delete_telemetry_data == "yes":
-                def remove_readonly(func, path, excinfo):
-                    os.chmod(path, stat.S_IWRITE)
-                    func(path)
-                shutil.rmtree(resource_path, onerror=remove_readonly)
-                # Log an event mentioning the removal
-                logger.log(
-                    "debug",
-                    NS.publisher_id,
-                    {
-                        "message": "%s un-managed.\n"
-                        "Removed monitoring data %s" %
-                        (integration_id, resource_path)
-                    }
-                )
-            else:
+
+            if delete_telemetry_data and delete_telemetry_data == "no":
                 try:
                     shutil.move(resource_path, archive_path)
                 except Exception as ex:
@@ -125,6 +113,21 @@ class DeleteMonitoringData(flows.BaseFlow):
                         "message": "%s un-managed.\n"
                         "Archived monitoring data to %s" %
                         (integration_id, archive_path)
+                    }
+                )
+            else:
+                def remove_readonly(func, path, excinfo):
+                    os.chmod(path, stat.S_IWRITE)
+                    func(path)
+                shutil.rmtree(resource_path, onerror=remove_readonly)
+                # Log an event mentioning the removal
+                logger.log(
+                    "debug",
+                    NS.publisher_id,
+                    {
+                        "message": "%s un-managed.\n"
+                        "Removed monitoring data %s" %
+                        (integration_id, resource_path)
                     }
                 )
 
