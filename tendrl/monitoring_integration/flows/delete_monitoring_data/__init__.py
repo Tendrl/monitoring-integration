@@ -1,6 +1,7 @@
 import datetime
 import os
 import shutil
+import stat
 
 from tendrl.commons import flows
 from tendrl.commons.flows.exceptions import FlowExecutionFailedError
@@ -16,6 +17,9 @@ class DeleteMonitoringData(flows.BaseFlow):
 
     def run(self):
         integration_id = self.parameters.get("TendrlContext.integration_id")
+        delete_telemetry_data = self.parameters.get(
+            "Cluster.delete_telemetry_data"
+        )
         # Delete the cluster related alert dashboards
         grafana_utils.delete_panel(integration_id)
 
@@ -38,26 +42,7 @@ class DeleteMonitoringData(flows.BaseFlow):
                 graphite_utils.get_data_dir_path(),
             )
         )
-        if not os.path.exists(archive_base_path):
-            try:
-                os.makedirs(str(archive_base_path))
-            except OSError as ex:
-                logger.log(
-                    "error",
-                    NS.publisher_id,
-                    {
-                        "message": "Failed to create archive dir:"
-                        " (%s)" % ex
-                    },
-                    job_id=self.parameters.get('job_id'),
-                    flow_id=self.parameters.get('flow_id'),
-                    integration_id=integration_id
-                )
-                raise FlowExecutionFailedError(
-                    "Failed to create archive dir: (%s)"
-                    "for monitoring data. Error: (%s)" %
-                    (str(archive_base_path), ex)
-                )
+
         if _cluster.short_name not in [None, ""]:
             cluster_short_name = _cluster.short_name
         else:
@@ -78,36 +63,72 @@ class DeleteMonitoringData(flows.BaseFlow):
         # exception, because it will affect when user try to do
         # unmanage flow after import flow fail
         if os.path.exists(resource_path):
-            try:
-                shutil.move(resource_path, archive_path)
-            except Exception as ex:
-                if type(ex) == IOError:
+            if not os.path.exists(archive_base_path):
+                try:
+                    os.makedirs(str(archive_base_path))
+                except OSError as ex:
                     logger.log(
                         "error",
                         NS.publisher_id,
                         {
-                            "message": "Failed to archive the monitoring "
-                            "data. Error: (%s)" % ex
-
+                            "message": "Failed to create archive dir:"
+                            " (%s)" % ex
                         },
                         job_id=self.parameters.get('job_id'),
                         flow_id=self.parameters.get('flow_id'),
                         integration_id=integration_id
                     )
-                raise FlowExecutionFailedError(
-                    "Failed to archive the monitoring data. Error: (%s)" %
-                    ex
-                )
+                    raise FlowExecutionFailedError(
+                        "Failed to create archive dir: (%s)"
+                        "for monitoring data. Error: (%s)" %
+                        (str(archive_base_path), ex)
+                    )
 
-            # Log an event mentioning the archive data location
-            logger.log(
-                "debug",
-                NS.publisher_id,
-                {
-                    "message": "%s un-managed.\n"
-                    "Archived monitoring data to %s" %
-                    (integration_id, archive_path)
-                }
-            )
+            if delete_telemetry_data and delete_telemetry_data == "no":
+                try:
+                    shutil.move(resource_path, archive_path)
+                except Exception as ex:
+                    if type(ex) == IOError:
+                        logger.log(
+                            "error",
+                            NS.publisher_id,
+                            {
+                                "message": "Failed to archive the monitoring "
+                                "data. Error: (%s)" % ex
+                            },
+                            job_id=self.parameters.get('job_id'),
+                            flow_id=self.parameters.get('flow_id'),
+                            integration_id=integration_id
+                        )
+                    raise FlowExecutionFailedError(
+                        "Failed to archive the monitoring data. Error: (%s)" %
+                        ex
+                    )
+
+                # Log an event mentioning the archive data location
+                logger.log(
+                    "debug",
+                    NS.publisher_id,
+                    {
+                        "message": "%s un-managed.\n"
+                        "Archived monitoring data to %s" %
+                        (integration_id, archive_path)
+                    }
+                )
+            else:
+                def remove_readonly(func, path, excinfo):
+                    os.chmod(path, stat.S_IWRITE)
+                    func(path)
+                shutil.rmtree(resource_path, onerror=remove_readonly)
+                # Log an event mentioning the removal
+                logger.log(
+                    "debug",
+                    NS.publisher_id,
+                    {
+                        "message": "%s un-managed.\n"
+                        "Removed monitoring data %s" %
+                        (integration_id, resource_path)
+                    }
+                )
 
         return True
