@@ -49,7 +49,7 @@ class SwapHandler(AlertHandler):
                         " %s at %s %% and running out of "
                         "swap space" % (
                             alert['tags']['fqdn'],
-                            alert['tags']['integration_id'],
+                            alert['tags']['cluster_short_name'],
                             alert['current_value']
                             ))
             elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
@@ -65,7 +65,7 @@ class SwapHandler(AlertHandler):
                     ("Swap utilization on node %s in"
                         " %s back to normal" % (
                             alert['tags']['fqdn'],
-                            alert['tags']['integration_id']
+                            alert['tags']['cluster_short_name']
                             ))
             else:
                 logger.log(
