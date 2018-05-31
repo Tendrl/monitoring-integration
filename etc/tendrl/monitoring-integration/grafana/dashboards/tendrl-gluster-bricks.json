@@ -170,7 +170,7 @@
                 "dashes": false,
                 "datasource": null,
                 "decimals": 1,
-                "description": "The Capacity Utilization Trend panel displays the brick capacity utilization over a period of time.",
+                "description": "The Capacity Utilization panel displays the brick capacity utilization over a period of time.",
                 "fill": 1,
                 "id": 17,
                 "legend": {
@@ -210,7 +210,7 @@
                 }],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Capacity Utilization Trend",
+                "title": "Capacity Utilization",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,

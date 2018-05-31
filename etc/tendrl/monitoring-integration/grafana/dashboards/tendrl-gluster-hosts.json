@@ -702,7 +702,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
-                "description": "The Total Brick Capacity Utilization Trend panel displays the capacity utilization for all bricks on a given for a period of time.",
+                "description": "The Total Brick Capacity Utilization panel displays the capacity utilization for all bricks on a given for a period of time.",
                 "fill": 1,
                 "id": 28,
                 "legend": {
@@ -749,7 +749,7 @@
                 }],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Total Brick Capacity Utilization Trend",
+                "title": "Total Brick Capacity Utilization",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
