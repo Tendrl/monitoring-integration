@@ -84,7 +84,26 @@ class DeleteMonitoringData(flows.BaseFlow):
                         (str(archive_base_path), ex)
                     )
 
-            if delete_telemetry_data and delete_telemetry_data == "no":
+            # Currently default is not to delete the telemetry data
+            # This is a stop gap and ideally delete_telemetry_data
+            # should be set as yes by default. This logic should be
+            # changed later to make the same in effect.
+            if delete_telemetry_data and delete_telemetry_data == "yes":
+                def remove_readonly(func, path, excinfo):
+                    os.chmod(path, stat.S_IWRITE)
+                    func(path)
+                shutil.rmtree(resource_path, onerror=remove_readonly)
+                # Log an event mentioning the removal
+                logger.log(
+                    "debug",
+                    NS.publisher_id,
+                    {
+                        "message": "%s un-managed.\n"
+                        "Removed monitoring data %s" %
+                        (integration_id, resource_path)
+                    }
+                )
+            else:
                 try:
                     shutil.move(resource_path, archive_path)
                 except Exception as ex:
@@ -113,21 +132,6 @@ class DeleteMonitoringData(flows.BaseFlow):
                         "message": "%s un-managed.\n"
                         "Archived monitoring data to %s" %
                         (integration_id, archive_path)
-                    }
-                )
-            else:
-                def remove_readonly(func, path, excinfo):
-                    os.chmod(path, stat.S_IWRITE)
-                    func(path)
-                shutil.rmtree(resource_path, onerror=remove_readonly)
-                # Log an event mentioning the removal
-                logger.log(
-                    "debug",
-                    NS.publisher_id,
-                    {
-                        "message": "%s un-managed.\n"
-                        "Removed monitoring data %s" %
-                        (integration_id, resource_path)
                     }
                 )
 
