@@ -1368,8 +1368,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "File Operations For Locks
-                ",
+                "title": "File Operations For Locks",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
