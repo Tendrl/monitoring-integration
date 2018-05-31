@@ -48,7 +48,7 @@ class CpuHandler(AlertHandler):
                     "Cpu utilization on node %s in %s"
                     " at %s %% and running out of cpu" % (
                         alert['tags']['fqdn'],
-                        alert['tags']['integration_id'],
+                        alert['tags']['cluster_short_name'],
                         alert['current_value']))
             elif alert_json['State'] == constants.GRAFANA_CLEAR_ALERT:
                 # Identifying clear alert from which panel critical/warning
@@ -63,7 +63,7 @@ class CpuHandler(AlertHandler):
                     ("Cpu utilization on node %s in"
                         " %s back to normal" % (
                             alert['tags']['fqdn'],
-                            alert['tags']['integration_id']))
+                            alert['tags']['cluster_short_name']))
             else:
                 logger.log(
                     "error",

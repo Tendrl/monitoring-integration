@@ -29,7 +29,7 @@ class WebhookReceiver(threading.Thread):
             data = request.json
             if "ruleId" in data:
                 alert_handler.handle_alert(
-                    data["ruleId"]
+                    data["ruleId"], data["state"]
                 )
             else:
                 logger.log(
@@ -70,5 +70,3 @@ class WebhookReceiver(threading.Thread):
 
     def stop(self):
         cherrypy.engine.exit()
-        super(WebhookReceiver, self).stop()
-

@@ -39,6 +39,7 @@ class MonitoringIntegrationManager(common_manager.Manager):
         self.webhook_receiver.stop()
         super(MonitoringIntegrationManager, self).stop()
 
+
 def main():
     monitoring_integration.MonitoringIntegrationNS()
 
