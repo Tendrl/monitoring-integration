@@ -317,8 +317,7 @@ def add_gluster_resource_panel(
             for target in targets:
                 try:
                     if resource_type == "bricks":
-                        panel_target = ("tendrl" + target["target"].split(
-                            "tendrl")[1].split(")")[0]).split(".")
+                        panel_target = target["target"].split(".")
                         old_integration_id = panel_target[
                             panel_target.index("clusters") + 1]
                         target["target"] = target["target"].replace(
@@ -344,8 +343,7 @@ def add_gluster_resource_panel(
                                 str(resource_name.split("|", 1)[1].split(
                                     ":", 1)[1].replace("/", "|")))
                     else:
-                        panel_target = ("tendrl" + target["target"].split(
-                            "tendrl")[1].split(")")[0]).split(".")
+                        panel_target = target["target"].split(".")
                         old_integration_id = panel_target[
                             panel_target.index("clusters") + 1]
                         target["target"] = target["target"].replace(
