@@ -1,9 +1,12 @@
-import json
 import socket
 import threading
 
-from werkzeug.serving import run_simple
-from werkzeug.wrappers import Response
+
+import cherrypy
+from flask import Flask
+from flask import request
+from paste.translogger import TransLogger
+
 
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
@@ -11,75 +14,59 @@ from tendrl.commons.utils import log_utils as logger
 from tendrl.monitoring_integration.alert.handlers import AlertHandlerManager
 
 PORT = 8789
+app = Flask(__name__)
 
 
 class WebhookReceiver(threading.Thread):
     def __init__(self):
         super(WebhookReceiver, self).__init__()
         self.daemon = True
-        self.alert_handler = AlertHandlerManager()
 
-    def _application(self, env, start_response):
+    @app.route('/grafana_callback', methods=["POST"])
+    def _application():
         try:
-            if env['PATH_INFO'] != '/grafana_callback':
-                response = Response('Alert not found')
-                response.headers['content-length'] = len(response.data)
-                response.status_code = 404
-            else:
-                data = env['wsgi.input'].read(
-                    int(env['CONTENT_LENGTH'])
+            alert_handler = AlertHandlerManager()
+            data = request.json
+            if "ruleId" in data:
+                alert_handler.handle_alert(
+                    data["ruleId"], data["state"]
                 )
-                data = json.loads(data)
-                if "ruleId" in data:
-                    self.alert_handler.handle_alert(
-                        data["ruleId"]
-                    )
-                    response = Response('Alert received successfully')
-                    response.headers['content-length'] = len(response.data)
-                    response.status_code = 200
-                else:
-                    logger.log(
-                        "debug",
-                        NS.publisher_id,
-                        {
-                            "message": "Unable to find ruleId %s" % data
-                        }
-                    )
+            else:
+                logger.log(
+                    "debug",
+                    NS.publisher_id,
+                    {
+                        "message": "Unable to find ruleId %s" % data
+                    }
+                )
         except (IOError, AssertionError, KeyError) as ex:
             Event(
                 ExceptionMessage(
                     priority="debug",
                     publisher=NS.publisher_id,
                     payload={
-                        "message": "Unable to read alert from socket",
+                        "message": "Unable to handle grafana alert",
                         "exception": ex
                     }
                 )
             )
-            response = Response('Error in reading alert from socket')
-            response.headers['content-length'] = len(response.data)
-            response.status_code = 500
-        return response(env, start_response)
+        return "OK"
 
     def run(self):
-        try:
-            run_simple(
-                socket.gethostbyname(socket.gethostname()),
-                PORT,
-                self._application, threaded=True
-            )
-        except (TypeError,
-                ValueError) as ex:
-            Event(
-                ExceptionMessage(
-                    priority="debug",
-                    publisher=NS.publisher_id,
-                    payload={
-                        "message": "Unable to start wehook receiver",
-                        "exception": ex
-                    }
-                )
-            )
+        app_logged = TransLogger(app)
+        cherrypy.tree.graft(app_logged, '/')
+        cherrypy.config.update({
+            'engine.autoreload_on': False,
+            'log.screen': True,
+            'server.socket_port': PORT,
+            'server.socket_host': socket.gethostbyname(
+                socket.gethostname()),
+            'log.access_file': '',
+            'log.error_file': ''
+        })
+        # Start the CherryPy WSGI web server
+        cherrypy.engine.start()
+        cherrypy.engine.block()
 
     def stop(self):
-        pass
+        cherrypy.engine.exit()

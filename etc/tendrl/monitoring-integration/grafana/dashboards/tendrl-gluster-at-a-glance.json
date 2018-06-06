@@ -818,7 +818,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
-                "description": "The Connection Trend panel displays the total number of client connections to bricks in the volumes of a given cluster over a period of time.",
+                "description": "The Connection panel displays the total number of client connections to bricks in the volumes of a given cluster over a period of time.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
@@ -850,7 +850,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Connection Trend",
+                "title": "Connection",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1293,7 +1293,7 @@
                 "dashes": false,
                 "datasource": null,
                 "decimals": 1,
-                "description": "The Throughput Trend panel displays the network throughput for a given cluster over a period of time.",
+                "description": "The Throughput panel displays the network throughput for a given cluster over a period of time.",
                 "fill": 1,
                 "id": 33,
                 "legend": {
@@ -1329,7 +1329,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Throughput Trend",
+                "title": "Throughput",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1611,7 +1611,7 @@
                 "dashes": false,
                 "datasource": null,
                 "decimals": 1,
-                "description": "The Ping Latency Trend panel displays the ping latency for each host in a given cluster.",
+                "description": "The Ping Latency panel displays the ping latency for each host in a given cluster.",
                 "fill": 1,
                 "id": 36,
                 "legend": {
@@ -1643,7 +1643,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Ping Latency Trend",
+                "title": "Ping Latency",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1810,7 +1810,7 @@
                     "value": "current"
                 }],
                 "datasource": null,
-                "description": "The Brick Status Panel display the status of each brick in a given cluster, whereby the status is as follow:  \n1 = Started  \n10 = Stopped",
+                "description": "The Brick Status Panel display the status of each brick in a given cluster, whereby the status is as follow:  \n0 = Started  \n8 = Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 47,

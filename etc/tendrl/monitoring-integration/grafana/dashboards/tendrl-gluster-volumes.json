@@ -183,7 +183,7 @@
                     "value": "current"
                 }],
                 "datasource": null,
-                "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n1 = Started  \n10 = Stopped",
+                "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n0 = Started  \n8 = Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
                 "id": 41,
@@ -968,7 +968,7 @@
                 "dashes": false,
                 "datasource": null,
                 "decimals": 1,
-                "description": "The Capacity Utilization Trend panel displays the volume capacity utilization over a period of time.",
+                "description": "The Capacity Utilization panel displays the volume capacity utilization over a period of time.",
                 "fill": 1,
                 "id": 34,
                 "legend": {
@@ -1009,7 +1009,7 @@
                 }],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Capacity Utilization Trend",
+                "title": "Capacity Utilization",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1335,7 +1335,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
-                "description": "The File Operations for Locks Trend panel displays the average latency, maximum latency, call rate for each FOP for Locks over a period of time.",
+                "description": "The File Operations for Locks panel displays the average latency, maximum latency, call rate for each FOP for Locks over a period of time.",
                 "fill": 1,
                 "id": 30,
                 "legend": {
@@ -1368,7 +1368,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "File Operations For Locks Trend",
+                "title": "File Operations For Locks",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
