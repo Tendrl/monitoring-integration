@@ -30,7 +30,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "description": "The Status panel displays the status for a given brick.",
                 "format": "none",
                 "gauge": {
@@ -105,7 +105,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Capacity Utilization panel displays the percentage of capacity utilization for a given brick.",
                 "format": "none",
@@ -168,7 +168,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Capacity Utilization panel displays the brick capacity utilization over a period of time.",
                 "fill": 1,
@@ -249,7 +249,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Capacity Available panel displays the available capacity for a given volume.",
                 "format": "bytes",
@@ -327,7 +327,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
                 "format": "bytes",
@@ -410,7 +410,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": null,
                 "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till brick reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
@@ -526,7 +526,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "cornerRadius": 0,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Healing panel displays healing information for a given brick based on healinfo.  See https://gluster.readthedocs.io/en/latest/Troubleshooting/heal-info-and-split-brain-resolution/  \nfor how to troubleshoot healing and split brain issues",
                 "displayName": "Healing",
                 "flipCard": false,
@@ -557,81 +557,73 @@
                 "title": "",
                 "type": "vonage-status-panel"
             }, {
-                "cacheTimeout": null,
-                "colorBackground": false,
-                "colorValue": false,
-                "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
-                ],
-                "datasource": null,
-                "description": "The IOPS panel displays the sum of IOPS (read + write) for a given brick path",
-                "format": "iops",
-                "gauge": {
-                    "maxValue": 100,
-                    "minValue": 0,
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "description": "The IOPS panel displays the sum of IOPS (read + write) for a given brick path.",
+                "fill": 1,
+                "id": 23,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
                     "show": false,
-                    "thresholdLabels": false,
-                    "thresholdMarkers": true
+                    "total": false,
+                    "values": false
                 },
-                "id": 15,
-                "interval": null,
+                "lines": true,
+                "linewidth": 1,
                 "links": [],
-                "mappingType": 1,
-                "mappingTypes": [{
-                    "name": "value to text",
-                    "value": 1
-                }, {
-                    "name": "range to text",
-                    "value": 2
-                }],
-                "maxDataPoints": 100,
                 "nullPointMode": "connected",
-                "nullText": null,
-                "postfix": "",
-                "postfixFontSize": "50%",
-                "prefix": "",
-                "prefixFontSize": "50%",
-                "rangeMaps": [{
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }],
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
                 "span": 4,
-                "sparkline": {
-                    "fillColor": "rgba(31, 118, 189, 0.18)",
-                    "full": false,
-                    "lineColor": "rgb(31, 120, 193)",
-                    "show": true
-                },
-                "tableColumn": "",
+                "stack": false,
+                "steppedLine": false,
                 "targets": [{
-                    "hide": true,
                     "refId": "A",
-                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-write",
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.*), '$brick_path')",
                     "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-read",
-                    "textEditor": false
-                }, {
-                    "refId": "C",
-                    "target": "sumSeries(#A, #B)",
-                    "targetFull": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-write, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.iops.gauge-read)"
                 }],
-                "thresholds": "",
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
                 "title": "IOPS",
-                "transparent": false,
-                "type": "singlestat",
-                "valueFontSize": "80%",
-                "valueMaps": [{
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }],
-                "valueName": "current"
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "iops",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
             }, {
                 "cacheTimeout": null,
                 "colorBackground": false,
@@ -641,7 +633,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The LVM Thin Pool Metadata % panel displays the utilization of LVM thin pool metadata for a given brick.",
                 "format": "none",
@@ -708,7 +700,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The LVM Thin Pool Data Usage % panel displays the LVM thin pool data usage for a given brick.",
                 "format": "none",
@@ -781,7 +773,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Throughput panel displays brick-level read and write operations fetched using “gluster volume profile”.",
                 "fill": 1,
                 "id": 18,
@@ -854,7 +846,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The IOPS panel displays IOPS for a brick  over a period of time.  IOPS is based on brick level read and write operations.",
                 "fill": 1,
                 "id": 19,
@@ -927,7 +919,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Latency panel displays latency for a brick  over a period of time.  Latency is based on the average amount of time a brick spends doing a read or write operation.",
                 "fill": 1,
                 "id": 20,
@@ -1000,7 +992,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Mount Point Utilization for a given brick over a period of time.",
                 "fill": 1,
                 "id": 21,
@@ -1185,6 +1177,7 @@
         },
         "timezone": "browser",
         "title": "Brick Dashboard",
-        "version": 9
+        "version": 10
     }
 }
+
