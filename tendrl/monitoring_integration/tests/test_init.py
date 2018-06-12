@@ -2,12 +2,15 @@ import etcd
 from etcd import Client
 import maps
 import mock
+from mock import MagicMock
 from mock import patch
 
 from tendrl.commons import config as cmn_config
+from tendrl.commons.objects import BaseObject
 import tendrl.commons.objects.node_context as node
 from tendrl.commons import TendrlNS
 from tendrl.commons.utils.central_store import utils as cs_utils
+from tendrl.commons.utils import etcd_utils
 
 
 def init():
@@ -81,4 +84,15 @@ def init():
                                 setattr(NS.config.data,
                                         "isDefault",
                                         True)
-                                TendrlNS()
+                                with patch.object(
+                                    etcd_utils, "read"
+                                ) as utils_read:
+                                    utils_read.return_value = maps.NamedDict(
+                                        value='{"tags":[]}'
+                                    )
+                                    with patch.object(
+                                        BaseObject, "load"
+                                    ) as node_load:
+                                        node.load = MagicMock()
+                                        node_load.return_value = node
+                                        TendrlNS()
