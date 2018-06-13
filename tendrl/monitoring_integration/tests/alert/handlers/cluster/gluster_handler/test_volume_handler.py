@@ -21,6 +21,7 @@ def test_volume_handler(cluster_name, pid, short_name):
                         "volume_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-07T17:30:08+05:30'
     condition = {'severity': 'INFO',
                  'source': 'GRAFANA',
                  'pid': '123',
@@ -41,7 +42,7 @@ def test_volume_handler(cluster_name, pid, short_name):
                           '-85bb-c5aff4eef15d',
                           'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d',
-                          'plugin_instance': u'tendrl.names.'
+                          'plugin_instance': u'tendrl.clusters.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'volumes.V1.pcnt_used'
                           }
@@ -52,6 +53,7 @@ def test_volume_handler(cluster_name, pid, short_name):
                         "volume_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-12T13:36:25+05:30'
     condition = {'time_stamp': u'2018-02-12T13:36:25+05:30',
                  'significance': 'HIGH',
                  'alert_type': 'UTILIZATION',
@@ -63,7 +65,7 @@ def test_volume_handler(cluster_name, pid, short_name):
                           'volume_name': u'V1',
                           'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d',
-                          'plugin_instance': u'tendrl.names.'
+                          'plugin_instance': u'tendrl.clusters.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'volumes.V1.pcnt_used',
                           'warning_max': 14,
