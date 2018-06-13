@@ -111,7 +111,8 @@ def get_volumes_details(integration_id):
         integration_id=integration_id
     ).load_all()
     for _volume in _volumes:
-        if _volume.deleted not in ['true', 'True', 'TRUE']:
+        if str(_volume.deleted).lower() != 'true' and \
+                _volume.name is not None:
             volume_data = {
                 'name': _volume.name,
                 'vol_id': _volume.vol_id
