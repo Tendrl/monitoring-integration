@@ -4,6 +4,7 @@ from subprocess import CalledProcessError
 from tendrl.commons.event import Event
 from tendrl.commons.message import ExceptionMessage
 from tendrl.commons.utils import log_utils as logger
+from tendrl.commons.utils.time_utils import now as tendrl_now
 from tendrl.monitoring_integration.alert.exceptions import InvalidAlertSeverity
 from tendrl.monitoring_integration.alert.exceptions import NodeNotFound
 from tendrl.monitoring_integration.alert.handlers import AlertHandler
@@ -27,7 +28,7 @@ class VolumeHandler(AlertHandler):
         try:
             alert["alert_id"] = None
             alert["node_id"] = None
-            alert["time_stamp"] = alert_json['NewStateDate']
+            alert["time_stamp"] = tendrl_now().isoformat()
             alert["resource"] = self.representive_name
             alert['alert_type'] = constants.ALERT_TYPE
             alert['significance'] = constants.SIGNIFICANCE_HIGH
