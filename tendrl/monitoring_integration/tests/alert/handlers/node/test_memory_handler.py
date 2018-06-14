@@ -21,6 +21,7 @@ def test_memory_handler(pid, node_id, short_name):
                         "memory_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-07T17:29:01+05:30'
     condition = {'pid': '123',
                  'tags': {'warning_max': 80,
                           'fqdn': u'dhcp122-234',
@@ -48,6 +49,7 @@ def test_memory_handler(pid, node_id, short_name):
                         "memory_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-12T11:30:19+05:30'
     condition = {'resource': 'memory_utilization',
                  'source': 'GRAFANA',
                  'significance': 'HIGH',

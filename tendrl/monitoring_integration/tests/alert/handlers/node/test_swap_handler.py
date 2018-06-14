@@ -21,6 +21,7 @@ def test_swap_handler(pid, node_id, short_name):
                         "swap_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-07T17:40:02+05:30'
     condition = {'alert_id': None,
                  'alert_type': 'UTILIZATION',
                  'severity': 'INFO',
@@ -48,6 +49,7 @@ def test_swap_handler(pid, node_id, short_name):
                         "swap_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-12T11:16:23+05:30'
     condition = {'alert_type': 'UTILIZATION',
                  'alert_id': None,
                  'resource': 'swap_utilization',

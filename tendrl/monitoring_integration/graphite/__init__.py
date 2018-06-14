@@ -234,7 +234,7 @@ class GraphitePlugin(object):
             for _brick in _bricks:
                 resource_detail = {}
                 resource_detail["host_name"] = _cnc.fqdn.replace(".", "_")
-                if _brick.deleted in ['true', 'True', 'TRUE']:
+                if str(_brick.deleted).lower() == 'true':
                     continue
                 for key, _ in objects["Brick"]["attrs"].items():
                     brick_attr_value = self.resource_status_mapper(
@@ -252,7 +252,7 @@ class GraphitePlugin(object):
         ).load_all() or []
         for _volume in _volumes:
             resource_detail = {}
-            if _volume.deleted in ['true', 'True', 'TRUE'] or \
+            if str(_volume.deleted).lower() == 'true' or \
                     _volume.name is None:
                 continue
             for key, value in objects["Volume"]["attrs"].items():
