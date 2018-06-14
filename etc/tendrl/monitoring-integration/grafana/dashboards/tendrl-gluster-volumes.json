@@ -30,7 +30,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 0,
                 "description": "The Health panel displays the overall health for a given volume.",
                 "format": "short",
@@ -122,7 +122,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "cornerRadius": 0,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Bricks panel displays brick status information for a given volume, including the total number of bricks in the volume, and a count of bricks by status. For details, go to the Bricks Dashboard.",
                 "displayName": "Bricks",
                 "flipCard": false,
@@ -164,6 +164,7 @@
                     "alias": "Down",
                     "crit": 1,
                     "decimals": 0,
+                    "display": true,
                     "displayAliasType": "Always",
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
@@ -172,8 +173,7 @@
                     "textEditor": true,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1,
-                    "display": true
+                    "warn": 1
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -182,7 +182,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "datasource": null,
+                "datasource": "",
                 "description": "The Brick Status panel displays the status code of each brick for a given volume.  \n0 = Started  \n8 = Stopped",
                 "fontSize": "80%",
                 "hideTimeOverride": false,
@@ -247,7 +247,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "cornerRadius": 0,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Subvolumes panel displays subvolume status information for a given volume.",
                 "displayName": "Subvolume",
                 "flipCard": false,
@@ -279,7 +279,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "cornerRadius": 0,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Geo-Replication Session panel displays geo-replication session information from a given volume.",
                 "displayName": "Geo-Replication Sessions",
                 "flipCard": false,
@@ -325,6 +325,7 @@
                     "alias": "Partial",
                     "crit": 999,
                     "decimals": 0,
+                    "display": true,
                     "displayAliasType": "Always",
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
@@ -333,13 +334,13 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1,
-                    "display": true
+                    "warn": 1
                 }, {
                     "aggregation": "Last",
                     "alias": "Paused",
                     "crit": 999,
                     "decimals": 0,
+                    "display": true,
                     "displayAliasType": "Always",
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
@@ -348,13 +349,13 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1,
-                    "display": true
+                    "warn": 1
                 }, {
                     "aggregation": "Last",
                     "alias": "Stopped",
                     "crit": 1,
                     "decimals": 0,
+                    "display": true,
                     "displayAliasType": "Always",
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
@@ -363,13 +364,13 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1,
-                    "display": true
+                    "warn": 1
                 }, {
                     "aggregation": "Last",
                     "alias": "Down",
                     "crit": 1,
                     "decimals": 0,
+                    "display": true,
                     "displayAliasType": "Always",
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
@@ -378,8 +379,7 @@
                     "textEditor": false,
                     "units": "short",
                     "valueHandler": "Number Threshold",
-                    "warn": 1,
-                    "display": true
+                    "warn": 1
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -393,7 +393,7 @@
                     "warn": "rgba(237, 129, 40, 0.9)"
                 },
                 "cornerRadius": 0,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Rebalance panel displays rebalance progress information for a given volume, which is applicable when rebalancing is underway.",
                 "displayName": "Rebalance",
                 "flipCard": false,
@@ -416,6 +416,7 @@
                     "aggregation": "Last",
                     "alias": "Size",
                     "decimals": 2,
+                    "display": true,
                     "displayAliasType": "Always",
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
@@ -423,8 +424,7 @@
                     "target": "alias(sumSeries(keepLastValue(consolidateBy(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.rebalance_bytes, 'max'))), 'Size')",
                     "textEditor": false,
                     "units": "mbytes",
-                    "valueHandler": "Number Threshold",
-                    "display": true
+                    "valueHandler": "Number Threshold"
                 }, {
                     "aggregation": "Last",
                     "alias": "Skipped",
@@ -453,7 +453,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 0,
                 "description": "The Rebalance Status panel displays the status of rebalancing for a given volume, which is applicable when rebalancing is underway.",
                 "format": "none",
@@ -560,7 +560,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 0,
                 "description": "The Snapshots panel displays the count of active snapshots for a given cluster.",
                 "format": "none",
@@ -636,7 +636,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(245, 54, 54, 0.9)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Capacity Utilization panel displays the used capacity for a given volume.",
                 "format": "none",
@@ -703,7 +703,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Capacity Available panel displays the available capacity for a given volume.",
                 "format": "kbytes",
@@ -778,7 +778,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
                 "format": "kbytes",
@@ -860,7 +860,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till volume reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
                 "gauge": {
@@ -966,7 +966,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The Capacity Utilization panel displays the volume capacity utilization over a period of time.",
                 "fill": 1,
@@ -1050,79 +1050,73 @@
             "collapse": true,
             "height": 250,
             "panels": [{
-                "cacheTimeout": null,
-                "colorBackground": false,
-                "colorValue": false,
-                "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
-                ],
-                "datasource": null,
-                "description": "The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile.The Throughput panel displays volume throughput based on brick-level read and write operations fetched using “gluster volume profile”.",
-                "format": "iops",
-                "gauge": {
-                    "maxValue": 100,
-                    "minValue": 0,
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "",
+                "description": "The IOPS panel displays volume IOPS based on brick-level read and write operations fetched using “gluster volume profile\".",
+                "fill": 1,
+                "id": 42,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
                     "show": false,
-                    "thresholdLabels": false,
-                    "thresholdMarkers": true
+                    "total": false,
+                    "values": false
                 },
-                "id": 26,
-                "interval": null,
+                "lines": true,
+                "linewidth": 1,
                 "links": [],
-                "mappingType": 1,
-                "mappingTypes": [{
-                    "name": "value to text",
-                    "value": 1
-                }, {
-                    "name": "range to text",
-                    "value": 2
-                }],
-                "maxDataPoints": 100,
                 "nullPointMode": "connected",
-                "nullText": null,
-                "postfix": "",
-                "postfixFontSize": "50%",
-                "prefix": "",
-                "prefixFontSize": "50%",
-                "rangeMaps": [{
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }],
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
                 "span": 4,
-                "sparkline": {
-                    "fillColor": "rgba(31, 118, 189, 0.18)",
-                    "full": false,
-                    "lineColor": "rgb(31, 120, 193)",
-                    "show": true
-                },
-                "tableColumn": "",
+                "stack": false,
+                "steppedLine": false,
                 "targets": [{
-                    "hide": true,
                     "refId": "A",
-                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read)"
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write)"
-                }, {
-                    "refId": "C",
-                    "target": "sumSeries(#A, #B)",
-                    "targetFull": "sumSeries(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-read), sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.gauge-write))"
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.iops.*), '$volume_name')",
+                    "textEditor": false
                 }],
-                "thresholds": "",
-                "title": "Throughput",
-                "transparent": false,
-                "type": "singlestat",
-                "valueFontSize": "80%",
-                "valueMaps": [{
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }],
-                "valueName": "current"
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "IOPS",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [{
+                    "format": "iops",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                }, {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }]
             }, {
                 "cacheTimeout": null,
                 "colorBackground": false,
@@ -1132,7 +1126,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "description": "The LVM Thin Pool Metadata % panel displays the utilization of LVM thin pool metadata for a given volume.",
                 "format": "none",
                 "gauge": {
@@ -1198,7 +1192,7 @@
                     "rgba(237, 129, 40, 0.89)",
                     "rgba(50, 172, 45, 0.97)"
                 ],
-                "datasource": null,
+                "datasource": "",
                 "decimals": 1,
                 "description": "The LVM Thin Pool Data Usage % panel displays the LVM thin pool data usage for a given volume.",
                 "format": "none",
@@ -1279,7 +1273,7 @@
                     "text": "Current",
                     "value": "current"
                 }],
-                "datasource": null,
+                "datasource": "",
                 "description": "The Top File Operations panel displays the top 5 FOP (file operations) with the highest % latency, wherein the % latency is the fraction of the FOP response time that is consumed by the FOP.",
                 "fontSize": "100%",
                 "id": 29,
@@ -1334,7 +1328,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The File Operations for Locks panel displays the average latency, maximum latency, call rate for each FOP for Locks over a period of time.",
                 "fill": 1,
                 "id": 30,
@@ -1403,7 +1397,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The File Operations for Read/Write panel displays the average latency, maximum latency, call rate for each FOP for Read/Write Operations over a period of time.",
                 "fill": 1,
                 "id": 31,
@@ -1471,7 +1465,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The File Operations for Inode Operations panel displays the average latency, maximum latency, call rate for each FOP for Inode Operations over a period of time.",
                 "fill": 1,
                 "id": 32,
@@ -1540,7 +1534,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The File Operations for Entry Operations panel displays the average latency, maximum latency, call rate for each FOP for Entry Operations over a period of time.",
                 "fill": 1,
                 "id": 33,
@@ -1636,10 +1630,7 @@
                 "useTags": false
             }, {
                 "allValue": null,
-                "current": {
-                    "text": "vol1",
-                    "value": "vol1"
-                },
+                "current": {},
                 "datasource": "",
                 "hide": 0,
                 "includeAll": false,
@@ -1689,6 +1680,7 @@
         },
         "timezone": "browser",
         "title": "Volume Dashboard",
-        "version": 9
+        "version": 10
     }
 }
+
