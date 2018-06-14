@@ -58,6 +58,7 @@ install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-in
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
 install -d %{buildroot}%{_localstatedir}/lib/grafana/plugins/
+install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/systemd/system/carbon-cache.service.d
 install -Dm 0644 firewalld/tendrl-monitoring-integration.xml $RPM_BUILD_ROOT%{_prefix}/lib/firewalld/services/tendrl-monitoring-integration.xml
 install -Dm 0640 etc/tendrl/monitoring-integration/monitoring-integration.conf.yaml.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/monitoring-integration.conf.yaml
 install -Dm 0640 etc/grafana/grafana.ini $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
@@ -65,6 +66,7 @@ install -Dm 0644 tendrl-monitoring-integration.service $RPM_BUILD_ROOT%{_unitdir
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/graphite-web.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/graphite-web.conf
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/carbon.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/carbon.conf
 install -Dm 0644 etc/tendrl/monitoring-integration/graphite/storage-schemas.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/storage-schemas.conf
+install -Dm 644 etc/systemd/system/carbon-cache.service.d/serviceparam.conf $RPM_BUILD_ROOT/%{_sysconfdir}/systemd/system/carbon-cache.service.d/serviceparam.conf
 cp -a etc/tendrl/monitoring-integration/grafana/dashboards/*.json $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards/
 cp -r Vonage-Grafana_Status_panel %{buildroot}%{_localstatedir}/lib/grafana/plugins/
 
@@ -98,6 +100,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 %files -f INSTALLED_FILES
 %dir %{_sysconfdir}/tendrl/monitoring-integration
+%dir %{_sysconfdir}/systemd/system/carbon-cache.service.d
 %doc README.rst
 %license LICENSE
 %config(noreplace) %{_prefix}/lib/firewalld/services/tendrl-monitoring-integration.xml
@@ -109,6 +112,7 @@ py.test -v tendrl/monitoring_integration/tests || :
 %config(noreplace) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 %attr(-, root, grafana) %{_sysconfdir}/tendrl/monitoring-integration/grafana/grafana.ini
 %{_unitdir}/tendrl-monitoring-integration.service
+%config %{_sysconfdir}/systemd/system/carbon-cache.service.d/serviceparam.conf
 
 
 %changelog
