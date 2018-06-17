@@ -2,7 +2,6 @@ import copy
 import etcd
 import socket
 
-from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
 
 
@@ -142,27 +141,27 @@ class GraphitePlugin(object):
 
         return resource_details
 
-    def get_central_store_data(self, objects):
+    def get_central_store_data(self, objects, all_cluster_details):
         try:
-            _clusters = NS.tendrl.objects.Cluster().load_all()
             cluster_data = []
-            for _cluster in _clusters:
-                if _cluster.is_managed in [None, "no"]:
-                    continue
+            for integration_id in all_cluster_details:
                 cluster_details = {}
-                cluster_details["integration_id"] = _cluster.integration_id
-                cluster_details["short_name"] = _cluster.short_name
+                cluster_details["integration_id"] = integration_id
                 cluster_details["Cluster"] = self.get_cluster_details(
-                    objects, _cluster.integration_id
+                    objects, integration_id
                 )
                 cluster_details["Brick"] = self.get_brick_details(
-                    objects, _cluster.integration_id
+                    objects,
+                    all_cluster_details[integration_id]["bricks"]
                 )
                 cluster_details["Volume"] = self.get_volume_details(
-                    objects, _cluster.integration_id
+                    objects,
+                    integration_id,
+                    all_cluster_details[integration_id]["volumes"]
                 )
                 cluster_details["Node"] = self.get_node_details(
-                    objects, _cluster.integration_id
+                    objects,
+                    all_cluster_details[integration_id]["hosts"]
                 )
                 cluster_data.append(copy.deepcopy(cluster_details))
             try:
@@ -210,44 +209,24 @@ class GraphitePlugin(object):
                 cluster_detail.append(resource_detail)
         return cluster_detail
 
-    def get_brick_details(self, objects, integration_id):
+    def get_brick_details(self, objects, bricks):
         brick_detail = []
-        _cluster_node_ids = etcd_utils.read(
-            "/clusters/%s/nodes" % integration_id
-        )
-        for _node_id in _cluster_node_ids.leaves:
-            _cnc = NS.tendrl.objects.ClusterNodeContext(
-                integration_id=integration_id,
-                node_id=_node_id.key.split('/')[-1]
-            ).load()
-            _bricks = NS.tendrl.objects.GlusterBrick(
-                integration_id,
-                _cnc.fqdn
-            ).load_all() or []
-            for _brick in _bricks:
-                resource_detail = {}
-                resource_detail["host_name"] = _cnc.fqdn.replace(".", "_")
-                if str(_brick.deleted).lower() == 'true':
-                    continue
-                for key, _ in objects["Brick"]["attrs"].items():
-                    brick_attr_value = self.resource_status_mapper(
-                        str(getattr(_brick, key))
-                    )
-                    resource_detail[key] = brick_attr_value
-                if not resource_detail == {}:
-                    brick_detail.append(resource_detail)
+        for _brick in bricks:
+            resource_detail = {}
+            resource_detail["host_name"] = _brick.fqdn.replace(".", "_")
+            for key, _ in objects["Brick"]["attrs"].items():
+                brick_attr_value = self.resource_status_mapper(
+                    str(getattr(_brick, key))
+                )
+                resource_detail[key] = brick_attr_value
+            if not resource_detail == {}:
+                brick_detail.append(resource_detail)
         return brick_detail
 
-    def get_volume_details(self, objects, integration_id):
+    def get_volume_details(self, objects, integration_id, volumes):
         volume_detail = []
-        _volumes = NS.tendrl.objects.GlusterVolume(
-            integration_id=integration_id
-        ).load_all() or []
-        for _volume in _volumes:
+        for _volume in volumes:
             resource_detail = {}
-            if str(_volume.deleted).lower() == 'true' or \
-                    _volume.name is None:
-                continue
             for key, value in objects["Volume"]["attrs"].items():
                 if value is None:
                     attr_value = self.resource_status_mapper(
@@ -279,18 +258,9 @@ class GraphitePlugin(object):
                 volume_detail.append(resource_detail)
         return volume_detail
 
-    def get_node_details(self, objects, integration_id):
+    def get_node_details(self, objects, nodes):
         node_detail = []
-        _cluster_node_ids = etcd_utils.read(
-            "/clusters/%s/nodes" % integration_id
-        )
-        for _node_id in _cluster_node_ids.leaves:
-            _cnc = NS.tendrl.objects.ClusterNodeContext(
-                integration_id=integration_id,
-                node_id=_node_id.key.split('/')[-1]
-            ).load()
-            if _cnc.is_managed != "yes":
-                continue
+        for _cnc in nodes:
             resource_detail = {}
             for key, value in objects["Node"]["attrs"].items():
                 if value is None:

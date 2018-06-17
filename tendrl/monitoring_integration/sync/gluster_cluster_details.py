@@ -1,24 +1,32 @@
-import copy
 import etcd
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
-from tendrl.monitoring_integration.grafana import constants
-from tendrl.monitoring_integration.grafana import utils
 
 
-def get_cluster_details(integration_id):
+def get_cluster_details():
     cluster_details = {}
     try:
-        # Get node details
-        cluster_details["hosts"] = get_node_details(integration_id)
-        # Get volume details
-        cluster_details["volumes"] = get_volumes_details(integration_id)
-        # Get brick details from subvolumes
-        cluster_details["bricks"] = get_brick_details(
-            cluster_details["volumes"],
-            integration_id
-        )
+        clusters = NS.tendrl.objects.Cluster().load_all()
+        for cluster in clusters:
+            if cluster.is_managed in ['yes', 'Yes', 'YES']:
+                integration_id = cluster.integration_id
+                cluster_details[integration_id] = {}
+                # Get node details
+                cluster_details[integration_id]["hosts"] = get_node_details(
+                    integration_id
+                )
+                # Get volume details
+                cluster_details[integration_id]["volumes"] = \
+                    get_volumes_details(
+                        integration_id
+                    )
+                # Get brick details from subvolumes
+                cluster_details[integration_id]["bricks"] = get_brick_details(
+                    integration_id
+                )
+                cluster_details[integration_id]["short_name"] = \
+                    cluster.short_name
     except (etcd.EtcdKeyNotFound, KeyError) as ex:
         logger.log(
             "debug",
@@ -39,15 +47,8 @@ def get_node_details(integration_id):
                 integration_id=integration_id,
                 node_id=_node_id.key.split('/')[-1]
             ).load()
-            if _cnc.is_managed != "yes":
-                continue
-            node = {
-                "fqdn": _cnc.fqdn
-            }
-            node["integration_id"] = integration_id
-            node["sds_name"] = constants.GLUSTER
-            node["resource_name"] = str(node["fqdn"]).replace(".", "_")
-            node_details.append(node)
+            if _cnc.is_managed.lower() == "yes":
+                node_details.append(_cnc)
     except etcd.EtcdKeyNotFound as ex:
         logger.log(
             "debug",
@@ -60,46 +61,27 @@ def get_node_details(integration_id):
     return node_details
 
 
-def get_brick_path(brick_info, integration_id):
-    _brick = NS.tendrl.objects.GlusterBrick(
-        integration_id=integration_id,
-        fqdn=brick_info.split(":")[0],
-        brick_dir=brick_info.split(":_")[-1]
-    ).load()
-    return _brick.brick_path.split(":")[1].replace(
-        "/", "|"
-    )
-
-
-def get_brick_details(volumes, integration_id):
+def get_brick_details(integration_id):
     brick_details = []
     try:
-        for volume in volumes:
-            for subvolume in volume["subvolume"]:
-                for brick_info in subvolume["bricks"]:
-                    brick = {}
-                    brick["hostname"] = brick_info.split(":")[0]
-                    brick["vol_id"] = volume["vol_id"]
-                    brick["vol_name"] = volume["name"]
-                    brick["brick_path"] = get_brick_path(
-                        brick_info,
-                        integration_id
-                    )
-                    brick["sds_name"] = constants.GLUSTER
-                    brick["integration_id"] = integration_id
-                    brick["resource_name"] = "%s|%s:%s" % (
-                        str(brick["vol_name"]),
-                        brick["hostname"],
-                        brick["brick_path"].replace("|", "/")
-                    )
+        nodes = etcd_utils.read(
+            "/clusters/%s/Bricks/all" % integration_id
+        )
+        for node in nodes.leaves:
+            bricks = NS.tendrl.objects.GlusterBrick(
+                integration_id,
+                fqdn=node.key.split("/")[-1]
+            ).load_all()
+            for brick in bricks:
+                if str(brick.deleted).lower() != 'true':
                     brick_details.append(brick)
     except (KeyError, etcd.EtcdKeyNotFound) as ex:
         logger.log(
             "debug",
             NS.get("publisher_id", None),
             {
-                'message': "Error while brick details for"
-                "brick {}".format(subvolume) + str(ex)
+                'message': "Error while fetching brick details for"
+                "cluster {}".format(integration_id) + str(ex)
             }
         )
     return brick_details
@@ -113,49 +95,5 @@ def get_volumes_details(integration_id):
     for _volume in _volumes:
         if str(_volume.deleted).lower() != 'true' and \
                 _volume.name is not None:
-            volume_data = {
-                'name': _volume.name,
-                'vol_id': _volume.vol_id
-            }
-            subvolume_key = 'clusters/%s/Volumes/%s' % (
-                integration_id,
-                _volume.vol_id
-            )
-            subvolume_details = get_subvolume_details(subvolume_key)
-            volume_data['subvolume'] = subvolume_details
-            volume_data["sds_name"] = constants.GLUSTER
-            volume_data["integration_id"] = integration_id
-            volume_data["resource_name"] = str(volume_data["name"])
-            volume_details.append(volume_data)
+            volume_details.append(_volume)
     return volume_details
-
-
-def get_subvolume_details(key):
-    subvolume_brick_details = []
-    try:
-        subvolumes = utils.get_resource_keys(key, "Bricks")
-        for subvolume in subvolumes:
-            try:
-                subvolume_details = {}
-                subvolume_details["subvolume"] = ""
-                subvolume_details["bricks"] = []
-                subvolume_details["subvolume"] = subvolume
-                brick_list = utils.get_resource_keys(
-                    key + "/" + "Bricks", subvolume
-                )
-                subvolume_details["bricks"] = brick_list
-                subvolume_brick_details.append(
-                    copy.deepcopy(subvolume_details)
-                )
-            except (etcd.EtcdKeyNotFound, KeyError):
-                continue
-    except etcd.EtcdKeyNotFound as ex:
-        logger.log(
-            "debug",
-            NS.get("publisher_id", None),
-            {
-                'message': "Error while fetching "
-                "subvolumes" + str(ex)
-            }
-        )
-    return subvolume_brick_details

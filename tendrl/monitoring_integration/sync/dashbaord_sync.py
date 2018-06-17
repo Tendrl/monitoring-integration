@@ -9,40 +9,66 @@ from tendrl.monitoring_integration.grafana import \
 from tendrl.monitoring_integration.grafana import alert_utils
 from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.grafana import exceptions
-from tendrl.monitoring_integration.sync import gluster_cluster_details
 
 
 class SyncAlertDashboard(object):
-    def refresh_dashboard(self):
+    def refresh_dashboard(
+        self, all_cluster_details, prev_cluster_details
+    ):
+        cluster_details = {}
+        change_in_clusters_details = {"hosts": False,
+                                      "volumes": False,
+                                      "bricks": False}
         try:
             # check alert organization is exist
             if NS.config.data["org_id"]:
-                all_cluster_details = {}
-                integration_ids = self.get_managed_clusters_integration_id()
-                if len(integration_ids) > 0:
-                    for integration_id in integration_ids:
-                        cluster_obj = NS.tendrl.objects.ClusterTendrlContext(
-                            integration_id=integration_id
-                        ).load()
-                        sds_name = cluster_obj.sds_name
-                        if sds_name in [constants.GLUSTER, constants.RHGS]:
-                            cluster_details = \
-                                gluster_cluster_details.get_cluster_details(
-                                    integration_id
-                                )
-                            for dashboard_name in cluster_details:
-                                if dashboard_name in all_cluster_details:
-                                    all_cluster_details[dashboard_name].extend(
-                                        cluster_details[dashboard_name]
-                                    )
-                                else:
-                                    all_cluster_details[dashboard_name] = \
-                                        cluster_details[dashboard_name]
-                        else:
-                            # In future collecte other sds type cluster details
-                            # Add all cluster details in all_cluster_details
-                            pass
-                    self.create_alert_dashboard(all_cluster_details)
+                if len(all_cluster_details.keys()) > 0:
+                    for integration_id in all_cluster_details:
+                        cluster_details['hosts'] = []
+                        cluster_details['volumes'] = []
+                        cluster_details['bricks'] = []
+                        node_details, changed = self.get_node_details(
+                            all_cluster_details[integration_id]["hosts"],
+                            integration_id,
+                            prev_cluster_details
+                        )
+                        cluster_details['hosts'].extend(
+                            node_details
+                        )
+                        if changed:
+                            change_in_clusters_details["hosts"] = True
+                        volume_details, changed = self.get_volume_details(
+                            all_cluster_details[integration_id]["volumes"],
+                            integration_id,
+                            prev_cluster_details
+                        )
+                        cluster_details['volumes'].extend(
+                            volume_details
+                        )
+                        if changed:
+                            change_in_clusters_details["volumes"] = True
+                        brick_details, changed = self.get_brick_details(
+                            all_cluster_details[integration_id]["bricks"],
+                            integration_id,
+                            prev_cluster_details
+                        )
+                        cluster_details['bricks'].extend(
+                            brick_details
+                        )
+                        if changed:
+                            change_in_clusters_details["bricks"] = True
+                    if len(prev_cluster_details.get("hosts", [])) != len(
+                            cluster_details.get("hosts", [])):
+                        change_in_clusters_details["hosts"] = True
+                    if len(prev_cluster_details.get("volumes", [])) != len(
+                            cluster_details.get("volumes", [])):
+                        change_in_clusters_details["volumes"] = True
+                    if len(prev_cluster_details.get("bricks", [])) != len(
+                            cluster_details.get("bricks", [])):
+                        change_in_clusters_details["bricks"] = True
+                    self.create_alert_dashboard(
+                        cluster_details, change_in_clusters_details
+                    )
                 else:
                     # no cluster is managed
                     # delete all dashbaords
@@ -64,9 +90,14 @@ class SyncAlertDashboard(object):
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': "Failed to update cluster "
                        "dashboard.err: %s" % str(ex)})
+        return cluster_details
 
-    def create_alert_dashboard(self, cluster_details):
+    def create_alert_dashboard(
+        self, cluster_details, change_in_cluster_details
+    ):
         for dashboard_name in cluster_details:
+            if not change_in_cluster_details.get(dashboard_name, False):
+                continue
             no_changes_in_dashboard = False
             # check alert dashboard exist
             resource_json = alert_utils.get_alert_dashboard(
@@ -173,15 +204,64 @@ class SyncAlertDashboard(object):
             no_changes_in_dashboard = True
         return alert_dashboard_json, no_changes_in_dashboard
 
-    def get_managed_clusters_integration_id(self):
-        managed_clusters_integration_id = []
-        clusters = NS.tendrl.objects.Cluster().load_all()
-        for cluster in clusters:
-            if cluster.is_managed in ['yes', 'Yes', 'YES']:
-                managed_clusters_integration_id.append(
-                    cluster.integration_id
-                )
-        return managed_clusters_integration_id
+    def get_node_details(self, nodes, integration_id, prev_cluster_details):
+        node_details = []
+        change_in_node_details = False
+        for node in nodes:
+            node_detail = (
+                {"fqdn": node.fqdn,
+                 "integration_id": integration_id,
+                 "resource_name": str(node.fqdn).replace(".", "_"),
+                 "sds_name": constants.GLUSTER
+                 }
+            )
+            node_details.append(node_detail)
+            if node_detail not in prev_cluster_details.get("hosts", []):
+                change_in_node_details = True
+        return node_details, change_in_node_details
+
+    def get_volume_details(
+        self, volumes, integration_id, prev_cluster_details
+    ):
+        volume_details = []
+        change_in_volume_details = False
+        for volume in volumes:
+            volume_detail = (
+                {"name": volume.name,
+                 "vol_id": volume.vol_id,
+                 "integration_id": integration_id,
+                 "resource_name": str(volume.name),
+                 "sds_name": constants.GLUSTER
+                 }
+            )
+            volume_details.append(volume_detail)
+            if volume_detail not in prev_cluster_details.get("volumes", []):
+                change_in_volume_details = True
+        return volume_details, change_in_volume_details
+
+    def get_brick_details(self, bricks, integration_id, prev_cluster_details):
+        brick_details = []
+        change_in_brick_details = False
+        for brick in bricks:
+            brick_detail = (
+                {"hostname": brick.fqdn,
+                 "vol_id": brick.vol_id,
+                 "vol_name": brick.vol_name,
+                 "brick_path": brick.brick_path.split(
+                     ":")[1].replace("/", "|"),
+                 "integration_id": integration_id,
+                 "sds_name": constants.GLUSTER,
+                 "resource_name": "%s|%s:%s" % (
+                     str(brick.vol_name),
+                     brick.fqdn,
+                     brick.brick_path.split(":")[1].replace("/", "|")
+                 )
+                 }
+            )
+            brick_details.append(brick_detail)
+            if brick_detail not in prev_cluster_details.get("bricks", []):
+                change_in_brick_details = True
+        return brick_details, change_in_brick_details
 
     def log_message(self, response, resource_type):
         try:

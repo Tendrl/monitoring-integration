@@ -28,9 +28,8 @@ def archive(
 
 
 def create_cluster_alias(cluster_details):
-    for cluster in cluster_details:
-        integration_id = cluster.get("integration_id")
-        name = cluster.get("short_name")
+    for integration_id in cluster_details:
+        name = cluster_details[integration_id].get("short_name")
         alias_dir_path = "%snames" % get_data_dir_path()
 
         short_name = name if name else integration_id
