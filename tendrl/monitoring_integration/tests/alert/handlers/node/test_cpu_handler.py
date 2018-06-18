@@ -21,6 +21,7 @@ def test_cpu_handler(pid, node_id, short_name):
                         "cpu_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = u'2018-02-07T17:28:05+05:30'
     condition = {'alert_id': None,
                  'alert_type': 'UTILIZATION',
                  'severity': 'INFO',
@@ -49,6 +50,7 @@ def test_cpu_handler(pid, node_id, short_name):
                         "cpu_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = u'2018-02-12T10:53:03+05:30'
     condition = {'pid': '123',
                  'tags': {'fqdn': u'dhcp122-234',
                           'warning_max': 1,

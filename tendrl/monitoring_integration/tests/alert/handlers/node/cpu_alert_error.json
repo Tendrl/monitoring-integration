@@ -15,7 +15,7 @@
   "EvalData": {
     "evalMatches": [
       {
-        "metric": "sumSeries(tendrl.names.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.cpu.{percent-user,percent-system})",
+        "metric": "sumSeries(tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.cpu.{percent-user,percent-system})",
         "tags": null,
         "value": 2.6086266657247665
       }
@@ -42,7 +42,7 @@
           "model": {
             "hide": true,
             "refId": "B",
-            "target": "sumSeries(tendrl.names.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.cpu.{percent-user,percent-system})",
+            "target": "sumSeries(tendrl.clusters.7616f2a4-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-234.cpu.{percent-user,percent-system})",
             "textEditor": false
           },
           "params": [

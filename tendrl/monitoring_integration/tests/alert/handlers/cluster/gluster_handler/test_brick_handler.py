@@ -25,6 +25,7 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                         "brick_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-07T17:24:16+05:30'
     condition = {'significance': 'HIGH',
                  'alert_type': 'UTILIZATION',
                  'node_id': '1',
@@ -32,7 +33,7 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                  'time_stamp': u'2018-02-07T17:24:16+05:30',
                  'alert_id': None,
                  'current_value': None,
-                 'tags': {'plugin_instance': u'tendrl.names.'
+                 'tags': {'plugin_instance': u'tendrl.clusters.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'nodes.dhcp122-234.bricks.|gluster|brick1'
                           '.utilization.percent-percent_bytes',
@@ -61,12 +62,13 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                         "brick_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
+    result['time_stamp'] = '2018-02-12T13:13:03+05:30'
     condition = {'severity': 'WARNING',
                  'significance': 'HIGH',
                  'alert_type': 'UTILIZATION',
                  'alert_id': None,
                  'time_stamp': u'2018-02-12T13:13:03+05:30',
-                 'tags': {'plugin_instance': u'tendrl.names.7616f2a4'
+                 'tags': {'plugin_instance': u'tendrl.clusters.7616f2a4'
                           '-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-'
                           '234.bricks.|gluster|brick1'
                           '.utilization.percent-percent_bytes',
