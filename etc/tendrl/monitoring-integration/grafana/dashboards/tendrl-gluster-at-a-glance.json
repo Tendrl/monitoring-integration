@@ -818,7 +818,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": null,
-                "description": "The Connection panel displays the total number of client connections and Gluster services connected to the bricks in the volumes of a given cluster over a period of time.",
+                "description": "The Connections panel displays the total number of client connections and Gluster services connected to the bricks in the volumes of a given cluster over a period of time.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
@@ -850,7 +850,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Connection",
+                "title": "Connections",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
