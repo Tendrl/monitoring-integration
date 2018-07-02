@@ -1295,7 +1295,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk Load panel shows the host’s aggregated read and writes from/to disks over a period of time.",
+                "description": "The Disk Throughput panel shows the host’s aggregated read and writes from/to disks over a period of time.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
@@ -1330,7 +1330,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Disk Load",
+                "title": "Disk Throughput",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
