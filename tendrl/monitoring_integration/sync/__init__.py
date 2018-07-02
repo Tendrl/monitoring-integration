@@ -62,10 +62,16 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                 graphite_utils.create_cluster_alias(cluster_details)
                 metrics = graphite_utils.create_metrics(
                     aggregate_gluster_objects, cluster_details)
+                metric_list = []
                 for metric in metrics:
                     for key, value in metric.items():
                         if value:
-                            self.plugin_obj.push_metrics(key, value)
+                            metric_list.append("tendrl.%s %s %d" % (
+                                key,
+                                value,
+                                int(time.time())
+                            ))
+                self.plugin_obj.push_metrics(metric_list)
                 # Creating or refreshing alert dashboard
                 if _sleep > 5:
                     SyncAlertDashboard().refresh_dashboard()
