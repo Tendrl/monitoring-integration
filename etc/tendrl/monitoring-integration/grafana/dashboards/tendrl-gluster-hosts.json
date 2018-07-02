@@ -1437,7 +1437,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk IO panel shows the host’s aggregated I/O time over a period of time.",
+                "description": "The Disk IO Latency panel shows the host’s aggregated I/O time over a period of time.",
                 "fill": 1,
                 "id": 25,
                 "legend": {
@@ -1469,7 +1469,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Disk IO",
+                "title": "Disk IO Latency",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
