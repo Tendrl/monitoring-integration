@@ -620,7 +620,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The IOPS panel displays IOPS for a given host over a period of time.  IOPS is based on the aggregated brick level read and write operations.",
+                "description": "The Brick IOPS panel displays IOPS for a given host over a period of time. Brick IOPS is based on the aggregated brick level read and write operations.",
                 "fill": 1,
                 "id": 14,
                 "legend": {
@@ -628,7 +628,7 @@
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": true,
+                    "show": false,
                     "total": false,
                     "values": false
                 },
@@ -647,15 +647,12 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-read), 8)"
-                }, {
-                    "refId": "B",
-                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.iops.gauge-write), 8)"
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.iops.*), '$host_name')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "IOPS",
+                "title": "Brick IOPS",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1295,7 +1292,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk Load panel shows the host’s aggregated read and writes from/to disks over a period of time.",
+                "description": "The Disk Throughput panel shows the host’s aggregated read and writes from/to disks over a period of time.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
@@ -1330,7 +1327,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Disk Load",
+                "title": "Disk Throughput",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1366,7 +1363,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk Operations panel shows the host’s aggregated read and writes disk operations over a period of time.",
+                "description": "The Disk IOPS panel shows the host’s aggregated read and writes disk IOPS over a period of time.",
                 "fill": 1,
                 "id": 24,
                 "legend": {
@@ -1374,7 +1371,7 @@
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": true,
+                    "show": false,
                     "total": false,
                     "values": false
                 },
@@ -1393,15 +1390,12 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_ops.read), 7)"
-                }, {
-                    "refId": "B",
-                    "target": "aliasByNode(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_ops.write), 7)"
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.disk-*.disk_ops.*), '$host_name')"
                 }],
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Disk Operation",
+                "title": "Disk IOPS",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1437,7 +1431,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk IO panel shows the host’s aggregated I/O time over a period of time.",
+                "description": "The Disk IO Latency panel shows the host’s aggregated I/O time over a period of time.",
                 "fill": 1,
                 "id": 25,
                 "legend": {
@@ -1469,7 +1463,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "Disk IO",
+                "title": "Disk IO Latency",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,

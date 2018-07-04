@@ -1,7 +1,6 @@
 import copy
 import etcd
 import socket
-import time
 
 from tendrl.commons.utils import etcd_utils
 from tendrl.commons.utils import log_utils as logger
@@ -42,31 +41,25 @@ class GraphitePlugin(object):
                 {'message': "Cannot send data to graphite "
                  "socket" + str(ex)})
 
-    def push_metrics(self, metric_name, metric_value):
-
-        message = '%s%s%s %s %d\n' % (
-            self.prefix,
-            str("."),
-            metric_name,
-            str(metric_value),
-            int(time.time())
-        )
-        try:
-            self._connect()
-            response = self.graphite_sock.sendall(message)
-        except socket.error:
-            response = self._resend(message)
-        finally:
+    def push_metrics(self, metric_list):
+        if len(metric_list) > 0:
+            message = '\n'.join(metric_list) + '\n'
             try:
-                self.graphite_sock.shutdown(1)
-                self.graphite_sock.close()
-            except(AttributeError, socket.error) as ex:
-                logger.log(
-                    "error",
-                    NS.get("publisher_id", None),
-                    {'message': "Unable to close graphite socket %s" % ex}
-                )
-        return response
+                self._connect()
+                response = self.graphite_sock.sendall(message)
+            except socket.error:
+                response = self._resend(message)
+            finally:
+                try:
+                    self.graphite_sock.shutdown(1)
+                    self.graphite_sock.close()
+                except(AttributeError, socket.error) as ex:
+                    logger.log(
+                        "error",
+                        NS.get("publisher_id", None),
+                        {'message': "Unable to close graphite socket %s" % ex}
+                    )
+            return response
 
     def get_resource_count(self, resource_details, obj_attr):
         total = 0
