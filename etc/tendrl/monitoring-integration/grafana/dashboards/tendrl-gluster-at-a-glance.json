@@ -1613,7 +1613,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": 1,
-                "description": "The Ping Latency panel displays the ping latency for each host in a given cluster.",
+                "description": "The Ping Latency panel displays the ping latency from the management server to each host in a given cluster being monitored. This provides insights into the quality of your network connection between the management server and the hosts being monitored.",
                 "fill": 1,
                 "id": 36,
                 "legend": {
