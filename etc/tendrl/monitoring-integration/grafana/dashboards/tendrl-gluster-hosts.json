@@ -620,7 +620,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Brick IOPS panel displays IOPS for a given host over a period of time. Brick IOPS is based on the aggregated brick level read and write operations.",
+                "description": "The Brick IOPS panel displays aggregated brick level read and write operations collected using “gluster volume profile info” over a period of time. The IOPS value is aggregated from bricks which are part of volumes that have volume profiling enabled. No data will be shown unless at least one brick is part of a volume that has volume profiling enabled.",
                 "fill": 1,
                 "id": 14,
                 "legend": {
