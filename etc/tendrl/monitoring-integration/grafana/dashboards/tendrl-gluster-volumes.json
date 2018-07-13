@@ -1280,7 +1280,7 @@
                     "value": "current"
                 }],
                 "datasource": "",
-                "description": "The Top File Operations panel displays the top 5 FOP (file operations) with the highest % latency, wherein the % latency is the fraction of the FOP response time that is consumed by the FOP.",
+                "description": "The Top File Operations panel displays the top 5 FOP (file operations) with the highest Avg. latency, wherein the Avg. latency is the fraction of the FOP response time that is consumed by the FOP.",
                 "fontSize": "100%",
                 "id": 29,
                 "links": [],
@@ -1307,7 +1307,7 @@
                     "type": "number",
                     "unit": "short"
                 }, {
-                    "alias": "% Latency",
+                    "alias": "Avg. Latency",
                     "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
@@ -1319,11 +1319,11 @@
                     "pattern": "Current",
                     "thresholds": [],
                     "type": "number",
-                    "unit": "short"
+                    "unit": "µs"
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "limit(sortByMaxima(groupByNode(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.fop.*.hits, 10, 'maxSeries')), 5)"
+                    "target": "limit(sortByMaxima(groupByNode(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.fop.*.latencyAvg, 10, 'maxSeries')), 5)"
                 }],
                 "title": "Top File Operations",
                 "transform": "timeseries_aggregations",
