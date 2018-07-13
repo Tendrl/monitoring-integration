@@ -145,6 +145,7 @@
                     "alias": "Down",
                     "crit": 1,
                     "decimals": 0,
+                    "display": true,
                     "displayAliasType": "Always",
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
@@ -153,8 +154,7 @@
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
-                    "warn": 1,
-                    "display": true
+                    "warn": 1
                 }],
                 "title": "",
                 "type": "vonage-status-panel"
@@ -363,6 +363,12 @@
                     "line": true,
                     "op": "gt",
                     "value": 80
+                }, {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 90
                 }],
                 "timeFrom": null,
                 "timeShift": null,
@@ -451,7 +457,7 @@
                     "refId": "A",
                     "target": "tendrl.names.$cluster_id.nodes.$host_name.swap.percent-free"
                 }],
-                "thresholds": "10,20",
+                "thresholds": "10,50",
                 "title": "Swap Free",
                 "transparent": false,
                 "type": "singlestat",
@@ -498,7 +504,19 @@
                     "refId": "A",
                     "target": "alias(tendrl.names.$cluster_id.nodes.$host_name.swap.percent-used, '$host_name')"
                 }],
-                "thresholds": [],
+                "thresholds": [{
+                    "colorMode": "warning",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 50
+                }, {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 90
+                }],
                 "timeFrom": null,
                 "timeShift": null,
                 "title": "Swap Utilization",
@@ -581,6 +599,12 @@
                     "line": true,
                     "op": "gt",
                     "value": 80
+                }, {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 90
                 }],
                 "timeFrom": null,
                 "timeShift": null,
@@ -742,7 +766,13 @@
                     "fill": true,
                     "line": true,
                     "op": "gt",
-                    "value": 80
+                    "value": 75
+                }, {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 90
                 }],
                 "timeFrom": null,
                 "timeShift": null,
@@ -840,7 +870,7 @@
                     "target": "asPercent(#C, #B)",
                     "targetFull": "asPercent(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total))"
                 }],
-                "thresholds": "80, 90",
+                "thresholds": "75, 90",
                 "title": "Total Brick Capacity Utilization",
                 "transparent": false,
                 "type": "singlestat",
@@ -1145,7 +1175,7 @@
                     "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [
-                        "80",
+                        "75",
                         "90"
                     ],
                     "type": "number",
@@ -1411,7 +1441,7 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
+                    "format": "iops",
                     "label": null,
                     "logBase": 1,
                     "max": null,
