@@ -152,7 +152,7 @@
                     "target": "tendrl.names.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes",
                     "textEditor": false
                 }],
-                "thresholds": "80, 90",
+                "thresholds": "75, 90",
                 "title": "Capacity Utilization",
                 "transparent": false,
                 "type": "singlestat",
@@ -206,7 +206,13 @@
                     "fill": true,
                     "line": true,
                     "op": "gt",
-                    "value": 80
+                    "value": 75
+                }, {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 90
                 }],
                 "timeFrom": null,
                 "timeShift": null,
@@ -782,7 +788,7 @@
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": true,
+                    "show": false,
                     "total": false,
                     "values": false
                 },
@@ -827,7 +833,7 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
+                    "format": "bps",
                     "label": null,
                     "logBase": 1,
                     "max": null,
@@ -846,7 +852,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": "",
+                "datasource": null,
                 "description": "The IOPS panel displays IOPS for a brick  over a period of time.  IOPS is based on brick level read and write operations.",
                 "fill": 1,
                 "id": 19,
@@ -855,7 +861,7 @@
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": true,
+                    "show": false,
                     "total": false,
                     "values": false
                 },
@@ -874,11 +880,7 @@
                 "steppedLine": false,
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_ops.read, 10, 0), '.disk_ops.', '-')",
-                    "textEditor": false
-                }, {
-                    "refId": "B",
-                    "target": "aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_ops.write, 10, 0), '.disk_ops.', '-')",
+                    "target": "alias(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.disk_ops.*), 'IOPS')",
                     "textEditor": false
                 }],
                 "thresholds": [],
@@ -900,7 +902,7 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
+                    "format": "iops",
                     "label": null,
                     "logBase": 1,
                     "max": null,
@@ -928,7 +930,7 @@
                     "current": false,
                     "max": false,
                     "min": false,
-                    "show": true,
+                    "show": false,
                     "total": false,
                     "values": false
                 },
@@ -973,7 +975,7 @@
                     "values": []
                 },
                 "yaxes": [{
-                    "format": "short",
+                    "format": "ms",
                     "label": null,
                     "logBase": 1,
                     "max": null,
@@ -1180,4 +1182,3 @@
         "version": 10
     }
 }
-
