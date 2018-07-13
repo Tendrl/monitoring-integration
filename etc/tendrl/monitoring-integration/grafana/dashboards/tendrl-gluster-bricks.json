@@ -568,7 +568,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The IOPS panel displays the sum of IOPS (read + write) for a given brick path.",
+                "description": "The IOPS panel displays aggregated read and write operations collected when the brick is part of a volume that has volume profiling enabled. No data will be shown if the volume that the brick is a member of does not have volume profiling enabled.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
