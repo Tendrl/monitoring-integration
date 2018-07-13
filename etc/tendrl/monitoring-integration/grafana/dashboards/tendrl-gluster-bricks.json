@@ -152,7 +152,7 @@
                     "target": "tendrl.names.$cluster_id.nodes.$host_name.bricks.$brick_path.utilization.percent-percent_bytes",
                     "textEditor": false
                 }],
-                "thresholds": "80, 90",
+                "thresholds": "75, 90",
                 "title": "Capacity Utilization",
                 "transparent": false,
                 "type": "singlestat",
@@ -206,7 +206,13 @@
                     "fill": true,
                     "line": true,
                     "op": "gt",
-                    "value": 80
+                    "value": 75
+                }, {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 90
                 }],
                 "timeFrom": null,
                 "timeShift": null,
