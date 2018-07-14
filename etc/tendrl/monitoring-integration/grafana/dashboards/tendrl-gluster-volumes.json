@@ -683,7 +683,7 @@
                     "target": "tendrl.names.$cluster_id.volumes.$volume_name.pcnt_used",
                     "textEditor": true
                 }],
-                "thresholds": "80,90",
+                "thresholds": "75,90",
                 "title": "Capacity Utilization",
                 "transparent": false,
                 "type": "singlestat",
@@ -1005,7 +1005,13 @@
                     "fill": true,
                     "line": true,
                     "op": "gt",
-                    "value": 80
+                    "value": 75
+                }, {
+                    "colorMode": "critical",
+                    "fill": true,
+                    "line": true,
+                    "op": "gt",
+                    "value": 90
                 }],
                 "timeFrom": null,
                 "timeShift": null,
@@ -1055,7 +1061,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The IOPS panel displays volume IOPS based on brick-level read and write operations fetched using “gluster volume profile\".",
+                "description": "The IOPS panel displays aggregated brick level read and write operations collected using “gluster volume profile info” over a period of time. The IOPS value shown only reflects metrics from volumes that have volume profiling enabled. No data will be shown if volume profiling is not enabled on at least 1 volume.",
                 "fill": 1,
                 "id": 42,
                 "legend": {
@@ -1683,4 +1689,3 @@
         "version": 10
     }
 }
-

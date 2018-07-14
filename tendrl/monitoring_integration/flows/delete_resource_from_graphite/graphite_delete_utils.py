@@ -1,5 +1,6 @@
 import datetime
 import os
+import shutil
 
 from tendrl.monitoring_integration.graphite.graphite_utils import \
     archive
@@ -85,6 +86,21 @@ def delete_brick_details(
             resource_name,
             resource_type
         )
+    # check all bricks are removed under node
+    try:
+        dir_path = os.path.join(
+            whisper_path,
+            "clusters",
+            str(integration_id),
+            "nodes",
+            str(host_name),
+            "bricks"
+        )
+        if os.path.exists(dir_path):
+            if os.listdir(dir_path) == []:
+                shutil.rmtree(dir_path)
+    except OSError:
+        pass
 
     # Remove brick details under volumes from graphite
     archive_path = os.path.join(
@@ -129,6 +145,24 @@ def delete_brick_details(
             resource_name,
             resource_type
         )
+    # check all bricks are from node under volume
+    try:
+        dir_path = os.path.join(
+            whisper_path,
+            "clusters",
+            str(integration_id),
+            "volumes",
+            str(vol_name),
+            "nodes",
+            str(host_name)
+        )
+        brick_dir = os.path.join(dir_path, "bricks")
+        if os.path.exists(brick_dir):
+            if os.listdir(brick_dir) == []:
+                # remove node under particular volume
+                shutil.rmtree(dir_path)
+    except OSError:
+        pass
 
 
 def delete_volume_details(

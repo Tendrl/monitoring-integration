@@ -817,7 +817,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The Connections panel displays the total number of client connections and Gluster services connected to the bricks in the volumes of a given cluster over a period of time.",
                 "fill": 1,
                 "id": 23,
@@ -886,7 +886,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The IOPS panel displays aggregated brick level read and write operations collected using “gluster volume profile info” over a period of time.",
+                "description": "The IOPS panel displays aggregated brick level read and write operations collected using “gluster volume profile info” over a period of time. The IOPS value shown only reflects metrics from volumes that have volume profiling enabled. No data will be shown if volume profiling is not enabled on at least 1 volume.",
                 "fill": 1,
                 "id": 49,
                 "legend": {
@@ -1417,7 +1417,7 @@
                     "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [
-                        "80",
+                        "75",
                         " 90"
                     ],
                     "type": "number",
@@ -1475,7 +1475,7 @@
                     "decimals": 1,
                     "pattern": "Current",
                     "thresholds": [
-                        "80",
+                        "75",
                         "90"
                     ],
                     "type": "number",
