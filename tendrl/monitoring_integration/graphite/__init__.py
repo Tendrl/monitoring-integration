@@ -326,7 +326,7 @@ class GraphitePlugin(object):
             }
             for volume in cluster["Volume"]:
                 try:
-                    for key, value in volume["geo_rep_session"].items():
+                    for key, value in volume["GeoReplicationSession"].items():
                         try:
                             geo_rep_mapper[key] = geo_rep_mapper[key] + value
                         except (AttributeError, KeyError) as ex:
