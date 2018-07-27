@@ -88,6 +88,8 @@ def _add_metrics(objects, obj_name, metric, resource):
                     try:
                         if key == "details":
                             continue
+                        if obj == "GeoReplicationSession":
+                            obj = "geo_rep_session"
                         new_metric = local_metric + "." + str(
                             obj) + "." + str(key)
                         metric_value = str(value)
