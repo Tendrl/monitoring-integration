@@ -378,33 +378,29 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max')",
+                    "target": "summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d'), '1d', 'avg')",
                     "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max')",
+                    "target": "summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '24h'), '1d', 'avg')",
                     "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d')), 'max'))",
+                    "targetFull": "diffSeries(summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '24h'), '1d', 'avg'), summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used, '7d'), '1d', 'avg'))",
                     "textEditor": true
                 }],
                 "thresholds": "",
                 "title": "Weekly Growth Rate",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "80%",
+                "valueFontSize": "70%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
                     "value": "null"
-                }, {
-                    "op": "=",
-                    "text": "0",
-                    "value": "-99999"
                 }],
                 "valueName": "current"
             }, {
@@ -417,7 +413,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
-                "decimals": null,
+                "decimals": 0,
                 "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till brick reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
                 "gauge": {
@@ -448,11 +444,15 @@
                 "rangeMaps": [{
                     "from": "520",
                     "text": "Insufficient data collected for forecast",
-                    "to": "1000000"
+                    "to": "1000000000000000000"
                 }, {
                     "from": "null",
                     "text": "N/A",
                     "to": "null"
+                }, {
+                    "from": "-999999999999999999",
+                    "text": "Growth rate is negative",
+                    "to": "0"
                 }],
                 "span": 2,
                 "sparkline": {
@@ -465,61 +465,57 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max')",
-                    "textEditor": true
+                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d'), '1d', 'avg')",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max')",
-                    "textEditor": true
+                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '24h'), '1d', 'avg')",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "C",
                     "target": "keepLastValue(diffSeries(#B, #A))",
-                    "targetFull": "keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max')))",
-                    "textEditor": true
+                    "targetFull": "keepLastValue(diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d'), '1d', 'avg')))",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "D",
                     "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "E",
                     "target": "tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "F",
                     "target": "diffSeries(#D, #E)",
                     "targetFull": "diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "H",
                     "target": "consolidateBy(minSeries(#F), \"min\")",
                     "targetFull": "consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)), \"min\")",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "G",
                     "target": "divideSeries(#H, #C)",
-                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)), \"min\"), keepLastValue(diffSeries(consolidateBy(sumSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '1d')), 'max'), consolidateBy(maxSeries(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d')), 'max'))))",
+                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-total, tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used)), \"min\"), keepLastValue(diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.utilization.gauge-used), '7d'), '1d', 'avg'))))",
                     "textEditor": false
                 }],
                 "thresholds": "",
                 "title": "Weeks Remaining",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "70%",
+                "valueFontSize": "50%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
                     "value": "null"
-                }, {
-                    "op": "=",
-                    "text": "0",
-                    "value": "-99999"
                 }],
                 "valueName": "current"
             }, {
@@ -852,7 +848,7 @@
                 "bars": false,
                 "dashLength": 10,
                 "dashes": false,
-                "datasource": null,
+                "datasource": "",
                 "description": "The IOPS panel displays IOPS for a brick  over a period of time.  IOPS is based on brick level read and write operations.",
                 "fill": 1,
                 "id": 19,

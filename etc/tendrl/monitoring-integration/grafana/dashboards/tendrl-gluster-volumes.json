@@ -823,18 +823,18 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
-                    "textEditor": true
-                }, {
-                    "hide": false,
-                    "refId": "B",
-                    "target": "consolidateBy(sumSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
-                    "textEditor": true
+                    "target": "summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d'), '1d', 'avg')",
+                    "textEditor": false
                 }, {
                     "hide": true,
+                    "refId": "B",
+                    "target": "summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '24h'), '1d', 'avg')",
+                    "textEditor": false
+                }, {
+                    "hide": false,
                     "refId": "C",
                     "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(consolidateBy(sumSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))"
+                    "targetFull": "diffSeries(summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '24h'), '1d', 'avg'), summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d'), '1d', 'avg'))"
                 }],
                 "thresholds": "",
                 "title": "Weekly Growth Rate",
@@ -845,10 +845,6 @@
                     "op": "=",
                     "text": "N/A",
                     "value": "null"
-                }, {
-                    "op": "=",
-                    "text": "0",
-                    "value": "-99999"
                 }],
                 "valueName": "current"
             }, {
@@ -861,6 +857,7 @@
                     "rgba(50, 172, 45, 0.97)"
                 ],
                 "datasource": "",
+                "decimals": 0,
                 "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till volume reaches full capacity based on the forecasted Weekly Growth Rate.",
                 "format": "none",
                 "gauge": {
@@ -891,11 +888,15 @@
                 "rangeMaps": [{
                     "from": "520",
                     "text": "Insufficient data collected for forecast",
-                    "to": "10000000"
+                    "to": "1000000000000000000"
                 }, {
                     "from": "null",
                     "text": "N/A",
                     "to": "null"
+                }, {
+                    "from": "-999999999999999999",
+                    "text": "Growth rate is negative",
+                    "to": "0"
                 }],
                 "span": 2,
                 "sparkline": {
@@ -908,53 +909,53 @@
                 "targets": [{
                     "hide": true,
                     "refId": "A",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')",
-                    "textEditor": true
+                    "target": "summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d'), '1d', 'avg')",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "B",
-                    "target": "consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max')",
-                    "textEditor": true
+                    "target": "summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '24h'), '1d', 'avg')",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "C",
                     "target": "keepLastValue(diffSeries(#B, #A))",
-                    "targetFull": "keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max')))",
-                    "textEditor": true
+                    "targetFull": "keepLastValue(diffSeries(summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '24h'), '1d', 'avg'), summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d'), '1d', 'avg')))",
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "D",
                     "target": "tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "E",
                     "target": "tendrl.names.$cluster_id.volumes.$volume_name.used_capacity",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "F",
                     "target": "diffSeries(#D, #E)",
                     "targetFull": "diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": true,
                     "refId": "G",
                     "target": "consolidateBy(minSeries(#F), \"min\")",
                     "targetFull": "consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)), \"min\")",
-                    "textEditor": true
+                    "textEditor": false
                 }, {
                     "hide": false,
                     "refId": "H",
                     "target": "divideSeries(#G, #C)",
-                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)), \"min\"), keepLastValue(diffSeries(consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '1d')), 'max'), consolidateBy(maxSeries(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d')), 'max'))))",
-                    "textEditor": true
+                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(tendrl.names.$cluster_id.volumes.$volume_name.usable_capacity, tendrl.names.$cluster_id.volumes.$volume_name.used_capacity)), \"min\"), keepLastValue(diffSeries(summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '24h'), '1d', 'avg'), summarize(timeShift(tendrl.names.$cluster_id.volumes.$volume_name.used_capacity, '7d'), '1d', 'avg'))))",
+                    "textEditor": false
                 }],
                 "thresholds": "",
                 "title": "Weeks Remaining",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "70%",
+                "valueFontSize": "50%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
