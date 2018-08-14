@@ -1078,13 +1078,13 @@
                     "text": "Insufficient data collected for forecast",
                     "to": "100000000000000000000"
                 }, {
-                    "from": "-999999999999999999",
-                    "text": "Growth rate is negative",
-                    "to": "0"
-                }, {
                     "from": "null",
                     "text": "N/A",
                     "to": "null"
+                }, {
+                    "from": "-999999999999999999",
+                    "text": "Growth rate is negative",
+                    "to": "0"
                 }],
                 "span": 2,
                 "sparkline": {
