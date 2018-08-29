@@ -257,7 +257,7 @@
                 ],
                 "datasource": "",
                 "decimals": 1,
-                "description": "The Capacity Available panel displays the available capacity for a given volume.",
+                "description": "The Capacity Available panel displays the available capacity for a given brick.",
                 "format": "bytes",
                 "gauge": {
                     "maxValue": 100,
