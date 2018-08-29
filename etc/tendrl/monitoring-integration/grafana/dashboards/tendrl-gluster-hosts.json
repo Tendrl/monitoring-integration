@@ -134,15 +134,15 @@
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
-                    "alias": "Up",
+                    "alias": "Started",
                     "displayType": "Regular",
                     "refId": "B",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.nodes.$host_name.brick_count.up), \"max\")),\"Up\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.nodes.$host_name.brick_count.up), \"max\")),\"Started\")",
                     "textEditor": true,
                     "valueHandler": "Text Only"
                 }, {
                     "aggregation": "Last",
-                    "alias": "Down",
+                    "alias": "Stopped",
                     "crit": 1,
                     "decimals": 0,
                     "display": true,
@@ -150,7 +150,7 @@
                     "displayType": "Regular",
                     "displayValueWithAlias": "When Alias Displayed",
                     "refId": "C",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Down\")",
+                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.nodes.$host_name.brick_count.down), \"max\")),\"Stopped\")",
                     "textEditor": true,
                     "units": "none",
                     "valueHandler": "Number Threshold",
