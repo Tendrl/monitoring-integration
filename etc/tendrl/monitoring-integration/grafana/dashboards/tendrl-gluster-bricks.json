@@ -31,7 +31,7 @@
                     "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
-                "description": "The Status panel displays the status for a given brick.",
+                "description": "The Status panel displays the status of a given brick, which is either Started or Stopped.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
