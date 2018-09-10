@@ -1062,7 +1062,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The IOPS panel displays aggregated brick level read and write operations collected using “gluster volume profile info” over a period of time. The IOPS value shown only reflects metrics from volumes that have volume profiling enabled. No data will be shown if volume profiling is not enabled on at least 1 volume.",
+                "description": "The IOPS panel displays aggregated brick level read and write operations collected using “gluster volume profile info” over a period of time. The IOPS value shown only reflects metrics from volumes that have volume profiling enabled. No data will be shown if volume profiling is disabled for the selected volume.",
                 "fill": 1,
                 "id": 42,
                 "legend": {
