@@ -529,7 +529,7 @@
                 },
                 "cornerRadius": 0,
                 "datasource": "",
-                "description": "The Healing panel displays healing information for a given brick based on healinfo.  See https://gluster.readthedocs.io/en/latest/Troubleshooting/heal-info-and-split-brain-resolution/  \nfor how to troubleshoot healing and split brain issues",
+                "description": "The Healing panel displays healing information for a given brick based on Healinfo, i.e. statistics of entries pending heal and split-brain.",
                 "displayName": "Healing",
                 "flipCard": false,
                 "flipTime": 5,
