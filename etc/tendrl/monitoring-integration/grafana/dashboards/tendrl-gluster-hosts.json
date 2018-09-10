@@ -1326,7 +1326,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk Throughput panel shows the host’s aggregated read and writes from/to disks over a period of time.",
+                "description": "The Disk Throughput panel shows the host’s aggregated read and writes from/to disks for all the block devices of the machine over a period of time.",
                 "fill": 1,
                 "id": 23,
                 "legend": {
@@ -1397,7 +1397,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk IOPS panel shows the host’s aggregated read and writes disk IOPS over a period of time.",
+                "description": "The Disk IOPS panel shows the host’s aggregated read and writes disk IOPS for all the block devices of the machine over a period of time.",
                 "fill": 1,
                 "id": 24,
                 "legend": {
@@ -1465,7 +1465,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The Disk IO Latency panel shows the host’s aggregated I/O time over a period of time.",
+                "description": "The Disk IO Latency panel shows the host’s aggregated I/O time for all the block devices of the machine over a period of time.",
                 "fill": 1,
                 "id": 25,
                 "legend": {
