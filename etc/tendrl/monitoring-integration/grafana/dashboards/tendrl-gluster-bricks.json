@@ -597,7 +597,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "IOPS",
+                "title": "Brick IOPS",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -849,7 +849,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The IOPS panel displays IOPS for a brick  over a period of time.  IOPS is based on brick level read and write operations.",
+                "description": "The Disk IOPS panel displays the aggregated IOPS of the underlying devices a brick is mounted on.",
                 "fill": 1,
                 "id": 19,
                 "legend": {
@@ -882,7 +882,7 @@
                 "thresholds": [],
                 "timeFrom": null,
                 "timeShift": null,
-                "title": "IOPS",
+                "title": "Disk IOPS",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
