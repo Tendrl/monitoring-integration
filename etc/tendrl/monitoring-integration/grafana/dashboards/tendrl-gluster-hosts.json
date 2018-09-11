@@ -301,7 +301,7 @@
                 "dashes": false,
                 "datasource": "",
                 "decimals": null,
-                "description": "The Memory Utilization panel displays memory utilization percentage for a given host that includes buffers and caches used by the kernel over a period of time. \n \nBuffered:  Amount of memory used for buffering, mostly for I/O operations.  \nCached:  Memory used for caching disk data for reads, memory-mapped files or tmpfs data.  \nSlab Rec:  Amount of reclaimable memory used for slab kernel allocations.  \nSlab Unrecl:  Amount of unreclaimable memory used for slab kernel allocations.  \nUsed:  Amount of memory used, calculated as Total - Free (Unused Memory) - Buffered - Cache  \nTotal:  Total memory used  \n\nThe memory utilization threshold is set to 80%. Reaching or exceeding this value displays an orange horizontal line indicating high memory usage.",
+                "description": "The Memory Utilization panel displays memory utilization percentage for a given host that includes buffers and caches used by the kernel over a period of time. \n \nBuffered:  Amount of memory used for buffering, mostly for I/O operations.  \nCached:  Memory used for caching disk data for reads, memory-mapped files or tmpfs data.  \nSlab Rec:  Amount of reclaimable memory used for slab kernel allocations.  \nSlab Unrecl:  Amount of unreclaimable memory used for slab kernel allocations.  \nUsed:  Amount of memory used, calculated as Total - Free (Unused Memory) - Buffered - Cache  \n\nThe memory utilization threshold is set to 80%. Reaching or exceeding this value displays an orange horizontal line indicating high memory usage.",
                 "fill": 1,
                 "id": 2,
                 "legend": {
