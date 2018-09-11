@@ -992,7 +992,7 @@
                     "text": "N/A",
                     "to": "null"
                 }],
-                "span": 1,
+                "span": 2,
                 "sparkline": {
                     "fillColor": "rgba(31, 118, 189, 0.18)",
                     "full": false,
@@ -1068,7 +1068,7 @@
                     "text": "N/A",
                     "to": "null"
                 }],
-                "span": 1,
+                "span": 2,
                 "sparkline": {
                     "fillColor": "rgba(31, 118, 189, 0.18)",
                     "full": false,
@@ -1094,200 +1094,7 @@
                 "title": "Capacity Available",
                 "transparent": false,
                 "type": "singlestat",
-                "valueFontSize": "70%",
-                "valueMaps": [{
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }],
-                "valueName": "current"
-            }, {
-                "cacheTimeout": null,
-                "colorBackground": false,
-                "colorValue": false,
-                "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
-                ],
-                "datasource": "",
-                "decimals": 1,
-                "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
-                "format": "kbytes",
-                "gauge": {
-                    "maxValue": 100,
-                    "minValue": 0,
-                    "show": false,
-                    "thresholdLabels": false,
-                    "thresholdMarkers": true
-                },
-                "id": 30,
-                "interval": null,
-                "links": [],
-                "mappingType": 1,
-                "mappingTypes": [{
-                    "name": "value to text",
-                    "value": 1
-                }, {
-                    "name": "range to text",
-                    "value": 2
-                }],
-                "maxDataPoints": 100,
-                "nullPointMode": "connected",
-                "nullText": null,
-                "postfix": "",
-                "postfixFontSize": "50%",
-                "prefix": "",
-                "prefixFontSize": "50%",
-                "rangeMaps": [{
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }],
-                "span": 1,
-                "sparkline": {
-                    "fillColor": "rgba(31, 118, 189, 0.18)",
-                    "full": false,
-                    "lineColor": "rgb(31, 120, 193)",
-                    "show": false
-                },
-                "tableColumn": "",
-                "targets": [{
-                    "hide": true,
-                    "refId": "A",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '7d'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '24h'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": false,
-                    "refId": "C",
-                    "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '7d'), '1d', 'avg'))",
-                    "textEditor": true
-                }],
-                "thresholds": "",
-                "title": "Weekly Growth Rate",
-                "transparent": false,
-                "type": "singlestat",
-                "valueFontSize": "70%",
-                "valueMaps": [{
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }],
-                "valueName": "current"
-            }, {
-                "cacheTimeout": null,
-                "colorBackground": false,
-                "colorValue": false,
-                "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
-                ],
-                "datasource": "",
-                "decimals": 0,
-                "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till volumes reach full capacity based on the forecasted Weekly Growth Rate.",
-                "format": "none",
-                "gauge": {
-                    "maxValue": 100,
-                    "minValue": 0,
-                    "show": false,
-                    "thresholdLabels": false,
-                    "thresholdMarkers": true
-                },
-                "id": 31,
-                "interval": null,
-                "links": [],
-                "mappingType": 2,
-                "mappingTypes": [{
-                    "name": "value to text",
-                    "value": 1
-                }, {
-                    "name": "range to text",
-                    "value": 2
-                }],
-                "maxDataPoints": 100,
-                "nullPointMode": "connected",
-                "nullText": null,
-                "postfix": "",
-                "postfixFontSize": "50%",
-                "prefix": "",
-                "prefixFontSize": "50%",
-                "rangeMaps": [{
-                    "from": "520",
-                    "text": "Insufficient data collected for forecast",
-                    "to": "1000000000000000000"
-                }, {
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }, {
-                    "from": "-999999999999999999",
-                    "text": "Growth rate is negative",
-                    "to": "-1"
-                }],
-                "span": 1,
-                "sparkline": {
-                    "fillColor": "rgba(31, 118, 189, 0.18)",
-                    "full": false,
-                    "lineColor": "rgb(31, 120, 193)",
-                    "show": false
-                },
-                "tableColumn": "",
-                "targets": [{
-                    "hide": true,
-                    "refId": "A",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '7d'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '24h'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "C",
-                    "target": "keepLastValue(diffSeries(#B, #A))",
-                    "targetFull": "keepLastValue(diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '7d'), '1d', 'avg')))",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "D",
-                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.*.usable_capacity)",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "E",
-                    "target": "sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity)",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "F",
-                    "target": "diffSeries(#D, #E)",
-                    "targetFull": "diffSeries(sumSeries(tendrl.names.$cluster_id.volumes.*.usable_capacity), sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity))",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "G",
-                    "target": "consolidateBy(minSeries(#F), \"min\")",
-                    "targetFull": "consolidateBy(minSeries(diffSeries(sumSeries(tendrl.names.$cluster_id.volumes.*.usable_capacity), sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity))), \"min\")",
-                    "textEditor": false
-                }, {
-                    "refId": "H",
-                    "target": "divideSeries(#G, #C)",
-                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(sumSeries(tendrl.names.$cluster_id.volumes.*.usable_capacity), sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity))), \"min\"), keepLastValue(diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.volumes.*.used_capacity), '7d'), '1d', 'avg'))))",
-                    "textEditor": false
-                }],
-                "thresholds": "",
-                "title": "Weeks Remaining",
-                "transparent": false,
-                "type": "singlestat",
-                "valueFontSize": "50%",
+                "valueFontSize": "80%",
                 "valueMaps": [{
                     "op": "=",
                     "text": "N/A",
@@ -1941,6 +1748,6 @@
         },
         "timezone": "browser",
         "title": "Cluster dashboard",
-        "version": 10
+        "version": 11
     }
 }

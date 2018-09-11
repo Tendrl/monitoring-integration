@@ -745,7 +745,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 4,
+                "span": 2,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -957,200 +957,6 @@
                 }],
                 "valueName": "current"
             }, {
-                "cacheTimeout": null,
-                "colorBackground": false,
-                "colorValue": false,
-                "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
-                ],
-                "datasource": "",
-                "decimals": 1,
-                "description": "The Weekly Growth Rate panel displays the forecasted weekly growth rate for capacity utilization computed based on daily capacity utilization.",
-                "format": "bytes",
-                "gauge": {
-                    "maxValue": 100,
-                    "minValue": 0,
-                    "show": false,
-                    "thresholdLabels": false,
-                    "thresholdMarkers": true
-                },
-                "id": 22,
-                "interval": null,
-                "links": [],
-                "mappingType": 1,
-                "mappingTypes": [{
-                    "name": "value to text",
-                    "value": 1
-                }, {
-                    "name": "range to text",
-                    "value": 2
-                }],
-                "maxDataPoints": 100,
-                "nullPointMode": "connected",
-                "nullText": null,
-                "postfix": "",
-                "postfixFontSize": "50%",
-                "prefix": "",
-                "prefixFontSize": "50%",
-                "rangeMaps": [{
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }],
-                "span": 2,
-                "sparkline": {
-                    "fillColor": "rgba(31, 118, 189, 0.18)",
-                    "full": false,
-                    "lineColor": "rgb(31, 120, 193)",
-                    "show": false
-                },
-                "tableColumn": "",
-                "targets": [{
-                    "hide": true,
-                    "refId": "A",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '24h'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": false,
-                    "refId": "C",
-                    "target": "diffSeries(#B, #A)",
-                    "targetFull": "diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d'), '1d', 'avg'))",
-                    "textEditor": true
-                }],
-                "thresholds": "",
-                "title": "Weekly Growth Rate",
-                "transparent": false,
-                "type": "singlestat",
-                "valueFontSize": "70%",
-                "valueMaps": [{
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }],
-                "valueName": "current"
-            }, {
-                "cacheTimeout": null,
-                "colorBackground": false,
-                "colorValue": false,
-                "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
-                ],
-                "datasource": "",
-                "decimals": 0,
-                "description": "The Weeks Remaining panel displays the estimated time remaining in weeks till host capacity reaches full capacity based on the forecasted Weekly Growth Rate.",
-                "format": "none",
-                "gauge": {
-                    "maxValue": 100,
-                    "minValue": 0,
-                    "show": false,
-                    "thresholdLabels": false,
-                    "thresholdMarkers": true
-                },
-                "id": 21,
-                "interval": null,
-                "links": [],
-                "mappingType": 2,
-                "mappingTypes": [{
-                    "name": "value to text",
-                    "value": 1
-                }, {
-                    "name": "range to text",
-                    "value": 2
-                }],
-                "maxDataPoints": 100,
-                "nullPointMode": "connected",
-                "nullText": null,
-                "postfix": "",
-                "postfixFontSize": "50%",
-                "prefix": "",
-                "prefixFontSize": "50%",
-                "rangeMaps": [{
-                    "from": "520",
-                    "text": "Insufficient data collected for forecast",
-                    "to": "100000000000000000000"
-                }, {
-                    "from": "null",
-                    "text": "N/A",
-                    "to": "null"
-                }, {
-                    "from": "-999999999999999999",
-                    "text": "Growth rate is negative",
-                    "to": "-1"
-                }],
-                "span": 2,
-                "sparkline": {
-                    "fillColor": "rgba(31, 118, 189, 0.18)",
-                    "full": false,
-                    "lineColor": "rgb(31, 120, 193)",
-                    "show": false
-                },
-                "tableColumn": "",
-                "targets": [{
-                    "hide": true,
-                    "refId": "A",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "B",
-                    "target": "summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '24h'), '1d', 'avg')",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "C",
-                    "target": "keepLastValue(diffSeries(#B, #A))",
-                    "targetFull": "keepLastValue(diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d'), '1d', 'avg')))",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "D",
-                    "target": "sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total)",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "E",
-                    "target": "sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used)",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "F",
-                    "target": "diffSeries(#D, #E)",
-                    "targetFull": "diffSeries(sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))",
-                    "textEditor": false
-                }, {
-                    "hide": true,
-                    "refId": "G",
-                    "target": "consolidateBy(minSeries(#F), \"min\")",
-                    "targetFull": "consolidateBy(minSeries(diffSeries(sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\")",
-                    "textEditor": false
-                }, {
-                    "hide": false,
-                    "refId": "H",
-                    "target": "divideSeries(#G, #C)",
-                    "targetFull": "divideSeries(consolidateBy(minSeries(diffSeries(sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total), sum(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used))), \"min\"), keepLastValue(diffSeries(summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '24h'), '1d', 'avg'), summarize(timeShift(sumSeries(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used), '7d'), '1d', 'avg'))))",
-                    "textEditor": false
-                }],
-                "thresholds": "",
-                "title": "Weeks Remaining",
-                "transparent": false,
-                "type": "singlestat",
-                "valueFontSize": "50%",
-                "valueMaps": [{
-                    "op": "=",
-                    "text": "N/A",
-                    "value": "null"
-                }],
-                "valueName": "current"
-            }, {
                 "columns": [{
                     "text": "Current",
                     "value": "current"
@@ -1166,7 +972,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 4,
+                "span": 3,
                 "styles": [{
                     "alias": "Utilization",
                     "colorMode": "row",
@@ -1224,7 +1030,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 4,
+                "span": 3,
                 "styles": [{
                     "alias": "Capacity",
                     "colorMode": null,
@@ -1280,7 +1086,7 @@
                     "col": 1,
                     "desc": true
                 },
-                "span": 4,
+                "span": 3,
                 "styles": [{
                     "alias": "Capacity",
                     "colorMode": null,
@@ -1348,7 +1154,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 4,
+                "span": 3,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -1419,7 +1225,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 4,
+                "span": 3,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -1487,7 +1293,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 4,
+                "span": 3,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -1844,6 +1650,6 @@
         },
         "timezone": "browser",
         "title": "Host Dashboard",
-        "version": 10
+        "version": 11
     }
 }
