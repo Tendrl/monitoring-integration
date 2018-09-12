@@ -1542,7 +1542,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The File Operations for Entry Operations panel displays the number of requests for Entry Operations over a period of time.  The entry operations pertains to creation, renaming, and removal of files/directories.",
+                "description": "The File Operations for Entry Operations panel displays the number of requests for Entry Operations over a period of time.  The entry operations pertain to creation, renaming, and removal of files/directories.",
                 "fill": 1,
                 "id": 33,
                 "legend": {
