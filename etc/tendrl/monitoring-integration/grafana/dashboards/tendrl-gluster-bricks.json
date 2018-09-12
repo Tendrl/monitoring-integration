@@ -798,7 +798,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 3,
+                "span": 4,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -871,7 +871,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 3,
+                "span": 4,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -940,7 +940,7 @@
                 "renderer": "flot",
                 "seriesOverrides": [],
                 "spaceLength": 10,
-                "span": 3,
+                "span": 4,
                 "stack": false,
                 "steppedLine": false,
                 "targets": [{
@@ -972,75 +972,6 @@
                 },
                 "yaxes": [{
                     "format": "ms",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": "0",
-                    "show": true
-                }, {
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                }]
-            }, {
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": "",
-                "description": "The Mount Point Utilization for a given brick over a period of time.",
-                "fill": 1,
-                "id": 21,
-                "legend": {
-                    "avg": false,
-                    "current": false,
-                    "max": false,
-                    "min": false,
-                    "show": true,
-                    "total": false,
-                    "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "links": [],
-                "nullPointMode": "connected",
-                "percentage": false,
-                "pointradius": 5,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "span": 3,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [{
-                    "refId": "A",
-                    "target": "groupByNode(tendrl.names.$cluster_id.volumes.$volume_name.nodes.$host_name.bricks.$brick_path.device.*.mount_utilization.percent_used, 10, 'maxSeries')",
-                    "textEditor": false
-                }],
-                "thresholds": [],
-                "timeFrom": null,
-                "timeShift": null,
-                "title": "Mount Point Utilization",
-                "tooltip": {
-                    "shared": true,
-                    "sort": 0,
-                    "value_type": "individual"
-                },
-                "transparent": false,
-                "type": "graph",
-                "xaxis": {
-                    "buckets": null,
-                    "mode": "time",
-                    "name": null,
-                    "show": true,
-                    "values": []
-                },
-                "yaxes": [{
-                    "format": "percent",
                     "label": null,
                     "logBase": 1,
                     "max": null,
