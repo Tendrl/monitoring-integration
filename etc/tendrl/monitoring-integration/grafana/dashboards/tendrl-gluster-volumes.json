@@ -238,38 +238,6 @@
                 "transform": "timeseries_aggregations",
                 "type": "table"
             }, {
-                "clusterName": "Subvolume",
-                "colorMode": "Metric",
-                "colors": {
-                    "crit": "rgba(245, 54, 54, 0.9)",
-                    "disable": "rgba(128, 128, 128, 0.9)",
-                    "ok": "rgba(50, 128, 45, 0.9)",
-                    "warn": "rgba(237, 129, 40, 0.9)"
-                },
-                "cornerRadius": 0,
-                "datasource": "",
-                "description": "The Subvolumes panel displays subvolume status information for a given volume.",
-                "displayName": "Subvolume",
-                "flipCard": false,
-                "flipTime": 5,
-                "id": 36,
-                "isGrayOnNoData": true,
-                "isHideAlertsOnDisable": false,
-                "isIgnoreOKColors": false,
-                "links": [],
-                "span": 1,
-                "targets": [{
-                    "aggregation": "Last",
-                    "alias": "Total",
-                    "displayType": "Regular",
-                    "refId": "A",
-                    "target": "alias(keepLastValue(consolidateBy(maxSeries(tendrl.names.$cluster_id.volumes.$volume_name.subvol_count), \"max\")),\"Total\")",
-                    "textEditor": true,
-                    "valueHandler": "Text Only"
-                }],
-                "title": "",
-                "type": "vonage-status-panel"
-            }, {
                 "clusterName": "Geo-Replication Sessions",
                 "colorMode": "Metric",
                 "colors": {
@@ -403,7 +371,7 @@
                 "isHideAlertsOnDisable": false,
                 "isIgnoreOKColors": false,
                 "links": [],
-                "span": 1,
+                "span": 2,
                 "targets": [{
                     "aggregation": "Last",
                     "alias": "Rebalanced Files",
