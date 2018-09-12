@@ -1304,7 +1304,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The File Operations for Locks panel displays the average latency, maximum latency, call rate for each FOP for Locks over a period of time.",
+                "description": "The File Operations for Locks panel displays the number of requests for Locks over a period of time.",
                 "fill": 1,
                 "id": 30,
                 "legend": {
@@ -1373,7 +1373,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The File Operations for Read/Write panel displays the average latency, maximum latency, call rate for each FOP for Read/Write Operations over a period of time.",
+                "description": "The File Operations for Read/Write panel displays the number of requests for Read/Write over a period of time.",
                 "fill": 1,
                 "id": 31,
                 "legend": {
@@ -1441,7 +1441,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The File Operations for Inode Operations panel displays the average latency, maximum latency, call rate for each FOP for Inode Operations over a period of time.",
+                "description": "The File Operations for Inode Operations panel displays the number of requests for Inode Operations over a period of time.",
                 "fill": 1,
                 "id": 32,
                 "legend": {
@@ -1510,7 +1510,7 @@
                 "dashLength": 10,
                 "dashes": false,
                 "datasource": "",
-                "description": "The File Operations for Entry Operations panel displays the average latency, maximum latency, call rate for each FOP for Entry Operations over a period of time.",
+                "description": "The File Operations for Entry Operations panel displays the number of requests for Entry Operations over a period of time.  The entry operations pertain to creation, renaming, and removal of files/directories.",
                 "fill": 1,
                 "id": 33,
                 "legend": {
