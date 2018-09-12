@@ -32,7 +32,7 @@
                 ],
                 "datasource": "",
                 "decimals": 0,
-                "description": "The Health panel displays the overall health for a given volume.",
+                "description": "The Health panel displays the overall health of a given volume, which is either Up, Down, Up(Degraded), Up(Partial) or Unknown.",
                 "format": "short",
                 "gauge": {
                     "maxValue": 100,
