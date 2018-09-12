@@ -31,7 +31,7 @@
                     "rgba(245, 54, 54, 0.9)"
                 ],
                 "datasource": "",
-                "description": "The Health panel displays the overall health for a given host.",
+                "description": "The Health panel displays the overall health of a given host, which is either Up or Down.",
                 "format": "none",
                 "gauge": {
                     "maxValue": 100,
