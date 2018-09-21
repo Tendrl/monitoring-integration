@@ -114,8 +114,6 @@ setup(
         'console_scripts': [
             'tendrl-monitoring-integration = \
             tendrl.monitoring_integration.manager:main',
-            'tendrl-upgrade = \
-            tendrl.monitoring_integration.upgrades.delete_dashboards:main',
         ],
     },
     url="http://www.redhat.com",

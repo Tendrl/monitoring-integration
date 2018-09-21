@@ -30,15 +30,21 @@ def upload_default_dashboards():
     datasource.create()
     dashboards = dashboard_utils.get_all_dashboards()
     for dashboard_json in dashboards:
-        title.append(dashboard_json["uri"].split('/')[1])
-
-    for dashboard_json in NS.config.data["dashboards"]:
-        if dashboard_json in title:
-            msg = '\n' + "Dashboard " + str(dashboard_json) + \
-                  " already exists" + '\n'
+        dashboard = dashboard_json["uri"].split('/')[1]
+        title.append(dashboard)
+        # Deleting already existing dashboards if present
+        response = dashboard_utils.delete_dashboard(dashboard)
+        if 'title' in response:
+            msg = "\n Already existing %s deleted. \n" % dashboard
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
-            continue
+        else:
+            msg = "\n%s delete failed with error: %s \n" % (dashboard,
+                                                            str(response))
+            logger.log("debug", NS.get("publisher_id", None),
+                       {'message': msg})
+
+    for dashboard_json in NS.config.data["dashboards"]:
         response = dashboard_utils.create_dashboard(dashboard_json)
 
         if response.status_code == 200:
