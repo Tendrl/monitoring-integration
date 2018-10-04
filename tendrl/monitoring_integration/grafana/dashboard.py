@@ -61,8 +61,6 @@ def upload_default_dashboards():
         if 'dashboard' in dashboard_json:
             dashboard_id = dashboard_json.get('dashboard').get('id')
             response = dashboard_utils.set_home_dashboard(dashboard_id)
-
-            response = dashboard_utils.set_home_dashboard(dashboard_id)
             if response.status_code == 200:
                 msg = '\n' + "Dashboard " + \
                       str(NS.config.data["home_dashboard"]) + \

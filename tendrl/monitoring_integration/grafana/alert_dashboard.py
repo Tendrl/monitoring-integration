@@ -140,8 +140,8 @@ def create_resource_dashboard(resource_name, resource):
                           "repeat": None,
                           "repeatIteration": None,
                           "repeatRowId": None,
-                          "showTitle": False,
-                          "title": "Dashboard Row",
+                          "showTitle": True,
+                          "title": resource["resource_name"],
                           "titleSize": "h6"
                           }
             new_resource_panels = get_panels(resource_rows)
@@ -315,6 +315,7 @@ def add_gluster_resource_panel(
         resource_type = "nodes"
     panel_count = most_recent_panel_id
     for alert_row in alert_rows:
+        alert_row["title"] = resource_name
         panel_count += 1
         for panel in alert_row["panels"]:
             targets = panel["targets"]
