@@ -15,7 +15,7 @@ def delete_dashboards(server_ip, user, password):
     headers = {'content-type': 'application/json'}
 
     for dashboard in dashboards:
-        url = "http://%s:3000/api/dashboards/db/%s" % (server_ip, dashboard)
+        url = "http://%s/grafana/api/dashboards/db/%s" % (server_ip, dashboard)
         print (url)
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
@@ -26,7 +26,7 @@ def delete_dashboards(server_ip, user, password):
 
 
     # Deleting the alerts dashboards
-    url = "http://%s:3000/api/orgs/name/Alert_dashboard" \
+    url = "http://%s/grafana/api/orgs/name/Alert_dashboard" \
           % server_ip
     print "Getting alerts organization id\n",url,"\n"
     response = requests.get(url, headers=headers,
@@ -35,7 +35,7 @@ def delete_dashboards(server_ip, user, password):
 
     if 'id' in resp:
         id = resp['id']
-        url = "http://%s:3000/api/orgs/%s" % (server_ip, id)
+        url = "http://%s/grafana/api/orgs/%s" % (server_ip, id)
         print "Deleting alerts organization\n", url
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
