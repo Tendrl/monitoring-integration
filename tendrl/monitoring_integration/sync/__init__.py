@@ -42,8 +42,8 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                             "error",
                             NS.get("publisher_id", None),
                             {
-                                'message': "Unable to parse tendrl-gluster-" +
-                                "integration config 'sync_interval'"
+                                'message': "Unable to parse tendrl-gluster-"
+                                           "integration config 'sync_interval'"
                             }
                         )
                         raise ex

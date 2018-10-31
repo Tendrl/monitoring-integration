@@ -401,8 +401,9 @@ class GraphitePlugin(object):
                     down = 0
                     for brick in cluster["Brick"]:
                         if(
-                            brick["host_name"] ==
-                                node["fqdn"].replace(".", "_")
+                            brick["host_name"] == node["fqdn"].replace(
+                                ".", "_"
+                            )
                         ):
                             if brick["status"] == 0 or brick["status"] == 1:
                                 total = total + 1

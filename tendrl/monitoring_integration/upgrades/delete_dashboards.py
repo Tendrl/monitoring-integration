@@ -20,15 +20,14 @@ def delete_dashboards(server_ip, user, password):
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
         if response.status_code == 200:
-            print "Deleted", dashboard, "\n "
+            print ("Deleted %s \n" % dashboard)
         else:
-            print "Failed to delete", dashboard, response.json(), "\n"
-
+            print ("Failed to delete %s %s \n" % (dashboard, response.json()))
 
     # Deleting the alerts dashboards
     url = "http://%s/grafana/api/orgs/name/Alert_dashboard" \
           % server_ip
-    print "Getting alerts organization id\n",url,"\n"
+    print ("Getting alerts organization id\n %s \n" % url)
     response = requests.get(url, headers=headers,
                             auth=HTTPBasicAuth(user, password))
     resp = response.json()
@@ -36,18 +35,18 @@ def delete_dashboards(server_ip, user, password):
     if 'id' in resp:
         id = resp['id']
         url = "http://%s/grafana/api/orgs/%s" % (server_ip, id)
-        print "Deleting alerts organization\n", url
+        print ("Deleting alerts organization\n %s" % url)
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
         resp = response.json()
         if resp == {u'message': u'Organization deleted'}:
-            print "Deleted Alert dashboards"
+            print ("Deleted Alert dashboards")
         else:
-            print "Failed to delete Alert dashboards ", resp
+            print ("Failed to delete Alert dashboards %s" % resp)
 
     else:
-        print "Failed to delete Alert dashboards."
-        print "Organization id not found", resp
+        print ("Failed to delete Alert dashboards.")
+        print ("Organization id not found %s" % resp)
 
 
 def main():
@@ -69,13 +68,14 @@ def main():
         if args.password:
             password = args.password
 
-        print "\n Clearing grafana dashboards \n"
+        print ("\n Clearing grafana dashboards \n")
         delete_dashboards(server_ip=default_ip, user=username,
                           password=password)
-        print "\n Complete -- Please start tendrl-monitoring-integration service"
+        print ("\n Complete -- Please start tendrl-monitoring-integration "
+               "service")
 
     except Exception as e:
-        print "Failed in deleting dashboards with error: %s" % e
+        print ("Failed in deleting dashboards with error: %s" % e)
 
 
 if __name__ == '__main__':

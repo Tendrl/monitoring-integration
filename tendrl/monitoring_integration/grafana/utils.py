@@ -49,8 +49,8 @@ def get_resource_keys(key, resource_name):
             "debug",
             NS.get("publisher_id", None),
             {
-                'message': "Error while fetching " +
-                str(resource_name).split('/')[0] + str(ex)
+                'message': "Error while fetching " + str(
+                    resource_name).split('/')[0] + str(ex)
             }
         )
     return resource_list
