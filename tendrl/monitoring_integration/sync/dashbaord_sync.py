@@ -13,12 +13,9 @@ from tendrl.monitoring_integration.grafana import exceptions
 
 class SyncAlertDashboard(object):
     def refresh_dashboard(
-        self, all_cluster_details, prev_cluster_details
+        self, all_cluster_details
     ):
         cluster_details = {}
-        change_in_clusters_details = {"hosts": False,
-                                      "volumes": False,
-                                      "bricks": False}
         try:
             # check alert organization is exist
             if NS.config.data["org_id"]:
@@ -27,47 +24,29 @@ class SyncAlertDashboard(object):
                         cluster_details['hosts'] = []
                         cluster_details['volumes'] = []
                         cluster_details['bricks'] = []
-                        node_details, changed = self.get_node_details(
+                        node_details = self.get_node_details(
                             all_cluster_details[integration_id]["hosts"],
-                            integration_id,
-                            prev_cluster_details
+                            integration_id
                         )
                         cluster_details['hosts'].extend(
                             node_details
                         )
-                        if changed:
-                            change_in_clusters_details["hosts"] = True
-                        volume_details, changed = self.get_volume_details(
+                        volume_details = self.get_volume_details(
                             all_cluster_details[integration_id]["volumes"],
-                            integration_id,
-                            prev_cluster_details
+                            integration_id
                         )
                         cluster_details['volumes'].extend(
                             volume_details
                         )
-                        if changed:
-                            change_in_clusters_details["volumes"] = True
-                        brick_details, changed = self.get_brick_details(
+                        brick_details = self.get_brick_details(
                             all_cluster_details[integration_id]["bricks"],
-                            integration_id,
-                            prev_cluster_details
+                            integration_id
                         )
                         cluster_details['bricks'].extend(
                             brick_details
                         )
-                        if changed:
-                            change_in_clusters_details["bricks"] = True
-                    if len(prev_cluster_details.get("hosts", [])) != len(
-                            cluster_details.get("hosts", [])):
-                        change_in_clusters_details["hosts"] = True
-                    if len(prev_cluster_details.get("volumes", [])) != len(
-                            cluster_details.get("volumes", [])):
-                        change_in_clusters_details["volumes"] = True
-                    if len(prev_cluster_details.get("bricks", [])) != len(
-                            cluster_details.get("bricks", [])):
-                        change_in_clusters_details["bricks"] = True
                     self.create_alert_dashboard(
-                        cluster_details, change_in_clusters_details
+                        cluster_details
                     )
                 else:
                     # no cluster is managed
@@ -90,14 +69,11 @@ class SyncAlertDashboard(object):
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': "Failed to update cluster "
                        "dashboard.err: %s" % str(ex)})
-        return cluster_details
 
     def create_alert_dashboard(
-        self, cluster_details, change_in_cluster_details
+        self, cluster_details
     ):
         for dashboard_name in cluster_details:
-            if not change_in_cluster_details.get(dashboard_name, False):
-                continue
             no_changes_in_dashboard = False
             # check alert dashboard exist
             resource_json = alert_utils.get_alert_dashboard(
@@ -204,9 +180,8 @@ class SyncAlertDashboard(object):
             no_changes_in_dashboard = True
         return alert_dashboard_json, no_changes_in_dashboard
 
-    def get_node_details(self, nodes, integration_id, prev_cluster_details):
+    def get_node_details(self, nodes, integration_id):
         node_details = []
-        change_in_node_details = False
         for node in nodes:
             node_detail = (
                 {"fqdn": node.fqdn,
@@ -216,15 +191,12 @@ class SyncAlertDashboard(object):
                  }
             )
             node_details.append(node_detail)
-            if node_detail not in prev_cluster_details.get("hosts", []):
-                change_in_node_details = True
-        return node_details, change_in_node_details
+        return node_details
 
     def get_volume_details(
-        self, volumes, integration_id, prev_cluster_details
+        self, volumes, integration_id
     ):
         volume_details = []
-        change_in_volume_details = False
         for volume in volumes:
             volume_detail = (
                 {"name": volume.name,
@@ -235,13 +207,10 @@ class SyncAlertDashboard(object):
                  }
             )
             volume_details.append(volume_detail)
-            if volume_detail not in prev_cluster_details.get("volumes", []):
-                change_in_volume_details = True
-        return volume_details, change_in_volume_details
+        return volume_details
 
-    def get_brick_details(self, bricks, integration_id, prev_cluster_details):
+    def get_brick_details(self, bricks, integration_id):
         brick_details = []
-        change_in_brick_details = False
         for brick in bricks:
             brick_detail = (
                 {"hostname": brick.fqdn,
@@ -259,9 +228,7 @@ class SyncAlertDashboard(object):
                  }
             )
             brick_details.append(brick_detail)
-            if brick_detail not in prev_cluster_details.get("bricks", []):
-                change_in_brick_details = True
-        return brick_details, change_in_brick_details
+        return brick_details
 
     def log_message(self, response, resource_type):
         try:

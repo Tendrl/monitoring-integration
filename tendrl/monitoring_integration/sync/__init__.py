@@ -29,7 +29,6 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
         aggregate_gluster_objects = NS.monitoring.definitions.\
             get_parsed_defs()["namespace.monitoring"]["graphite_data"]
         _sleep = 0
-        prev_cluster_details = {}
         while not self._complete.is_set():
             if self.sync_interval is None:
                 try:
@@ -78,11 +77,9 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
                 self.plugin_obj.push_metrics(metric_list)
                 # Creating or refreshing alert dashboard
                 if _sleep > 5:
-                    prev_cluster_details = \
-                        SyncAlertDashboard().refresh_dashboard(
-                            all_cluster_details,
-                            prev_cluster_details
-                        )
+                    SyncAlertDashboard().refresh_dashboard(
+                        all_cluster_details
+                    )
                 time.sleep(_sleep)
             except (etcd.EtcdKeyNotFound, AttributeError, KeyError) as ex:
                 logger.log("error", NS.get("publisher_id", None),
