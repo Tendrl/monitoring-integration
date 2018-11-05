@@ -47,7 +47,7 @@ def upload_default_dashboards():
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
         else:
-            msg = ("Dashboard {0} upload failed. Error code: {1} ," +
+            msg = ("Dashboard {0} upload failed. Error code: {1} ,"
                    "Error message: " + "{2} ").format(
                        str(dashboard_json),
                        str(response.status_code),

@@ -21,14 +21,8 @@ def test_alert_organization():
             'key': '/_NS/monitoring/alert_organization/org_name',
             'value': '',
             'dir': False
-        },
-        {
-            'key': '/_NS/monitoring/alert_organization/hash',
-            'value': 'dbe23ea17c68ff20e8b8b678997531a4',
-            'name': 'hash',
-            'dir': False
         }
     ]
-    for atrr in obj.render():
-        if atrr not in result:
+    for attr in obj.render():
+        if "hash" not in attr['key']and attr not in result:
             raise AssertionError()

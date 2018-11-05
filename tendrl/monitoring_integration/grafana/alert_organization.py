@@ -64,7 +64,7 @@ def create_organization():
     resp = json.loads(resp)
     if "id" in resp:
         org_id = resp['id']
-        msg = ("alert organization with name %s " +
+        msg = ("alert organization with name %s "
                "is already exist") % constants.ALERT_ORG
         logger.log("debug", NS.get("publisher_id", None),
                    {'message': msg})
@@ -72,7 +72,7 @@ def create_organization():
             "Organization not found":
         # Create alert organization
         org_id = grafana_org_utils.create_org(constants.ALERT_ORG)
-        msg = ("alert organization %s created " +
+        msg = ("alert organization %s created "
                "successfully") % constants.ALERT_ORG
         logger.log("debug", NS.get("publisher_id", None),
                    {'message': msg})
@@ -99,20 +99,20 @@ def create_auth_key():
             key = grafana_org_utils.create_api_token(
                 GRAFANA_AUTH_KEY, GRAFANA_USER
             )
-            msg = ("Grafana authentication key for user %s " +
+            msg = ("Grafana authentication key for user %s "
                    "is created successfully") % GRAFANA_USER
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
         else:
             alert_org = NS.monitoring.objects.AlertOrganization().load()
             key = alert_org.auth_key
-            msg = ("Grafana authentication key for user %s " +
+            msg = ("Grafana authentication key for user %s "
                    "is already exist") % GRAFANA_USER
             logger.log("debug", NS.get("publisher_id", None),
                        {'message': msg})
     else:
-        msg = ("Unable to create grafana authentication key " +
-               "for user %s") % GRAFANA_USER
+        msg = ("Unable to create grafana authentication key "
+               "for user %s" % GRAFANA_USER)
         logger.log("debug", NS.get("publisher_id", None),
                    {'message': msg})
         key = None
