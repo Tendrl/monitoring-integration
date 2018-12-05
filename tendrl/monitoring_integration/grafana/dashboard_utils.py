@@ -115,7 +115,7 @@ def get_alert(alert_id):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get(
-            "http://{0}/grafana/api/alerts/{2}".format(
+            "http://{0}/grafana/api/alerts/{1}".format(
                 config["grafana_host"],
                 alert_id
             ),
