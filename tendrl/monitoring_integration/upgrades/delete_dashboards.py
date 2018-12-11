@@ -2,6 +2,7 @@
 
 import argparse
 import ConfigParser
+import os
 import requests
 
 from requests.auth import HTTPBasicAuth
@@ -51,6 +52,19 @@ def delete_dashboards(server_ip, user, password):
 
 def main():
     try:
+        print ("\n Migrating graphite data \n")
+        os.system(
+            "PYTHONPATH=$GRAPHITE_ROOT/webapp/ "
+            "django-admin migrate --fake dashboard "
+            "--settings=graphite.settings "
+            "--run-syncdb"
+        )
+        os.system(
+            "PYTHONPATH=$GRAPHITE_ROOT/webapp/ "
+            "django-admin migrate --fake-initial "
+            "--settings=graphite.settings "
+            "--run-syncdb"
+        )
         parser = argparse.ArgumentParser()
         parser.add_argument("--username", help="grafana admin_user username")
         parser.add_argument("--password", help="grafana admin_user password")
