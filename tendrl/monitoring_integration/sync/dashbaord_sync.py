@@ -58,6 +58,7 @@ class SyncAlertDashboard(object):
                 AttributeError,
                 req_excep.ConnectionError,
                 TypeError,
+                ValueError,
                 req_excep.RequestException,
                 exceptions.ConnectionFailedException,
                 exceptions.AlertOrganizationNotFound) as ex:

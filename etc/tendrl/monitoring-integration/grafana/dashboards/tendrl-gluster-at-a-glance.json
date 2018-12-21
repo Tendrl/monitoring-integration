@@ -1238,7 +1238,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(aliasSub(substr(limit(sortByMaxima(tendrl.names.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes), 5), 4, -2), '(\\.bricks\\.)', ':'), '\\|', '/')"
+                    "target": "aliasSub(aliasSub(substr(limit(sortByMaxima(tendrl.names.$cluster_id.nodes.*.bricks.*.utilization.percent-percent_bytes), 5), 4, -2), '\\:', '/'), '(\\.bricks\\.)', ':')"
                 }],
                 "title": "Top 5 Utilization by Bricks",
                 "transform": "timeseries_aggregations",
@@ -1675,7 +1675,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(aliasSub(substr(tendrl.names.$cluster_id.nodes.*.bricks.*.status, 4, -1), '(\\.bricks\\.)', ':'), '\\|', '/')",
+                    "target": "aliasSub(aliasSub(substr(tendrl.names.$cluster_id.nodes.*.bricks.*.status, 4, -1), '\\:', '/'), '(\\.bricks\\.)', ':')",
                     "textEditor": false
                 }],
                 "title": "Brick Status",

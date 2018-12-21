@@ -52,15 +52,20 @@ def delete_dashboards(server_ip, user, password):
 
 def main():
     try:
+        print ("\n Modifying brick path separator \n")
+        # Modifying brick path separator | to :
+        os.system(
+            "find /var/lib/carbon/whisper/tendrl/ -depth  "
+            "-type d -name '*|*' -execdir bash -c "
+            "'mv \"$1\" \"${1//|/:}\"' bash {} ';'"
+        )
         print ("\n Migrating graphite data \n")
         os.system(
-            "PYTHONPATH=$GRAPHITE_ROOT/webapp/ "
             "django-admin migrate --fake dashboard "
             "--settings=graphite.settings "
             "--run-syncdb"
         )
         os.system(
-            "PYTHONPATH=$GRAPHITE_ROOT/webapp/ "
             "django-admin migrate --fake-initial "
             "--settings=graphite.settings "
             "--run-syncdb"

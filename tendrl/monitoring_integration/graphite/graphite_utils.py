@@ -3,6 +3,7 @@ import copy
 import os
 import shutil
 
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.commons.utils import log_utils as logger
 
 
@@ -319,7 +320,10 @@ def volume_wise_brick_status(cluster_detail):
                 "$node_name", brick["host_name"])
             local_metric = local_metric.replace(
                 "$brick_name",
-                brick["brick_name"].replace("/", "|"))
+                brick["brick_name"].replace(
+                    "/", constants.BRICK_REPLACE_PATH
+                )
+            )
             local_metric = local_metric.replace(
                 local_metric.rsplit(".", 1)[1],
                 str(brick[str(local_metric.rsplit(
@@ -352,7 +356,10 @@ def node_wise_brick_status(cluster_detail):
             )
             local_metric = local_metric.replace(
                 "$brick_name",
-                brick["brick_name"].replace("/", "|")
+                brick["brick_name"].replace(
+                    "/",
+                    constants.BRICK_REPLACE_PATH
+                )
             )
             local_metric = local_metric.replace(
                 local_metric.rsplit(".", 1)[1],

@@ -66,9 +66,7 @@ def get_brick_path(brick_info, integration_id):
         fqdn=brick_info.split(":")[0],
         brick_dir=brick_info.split(":_")[-1]
     ).load()
-    return _brick.brick_path.split(":")[1].replace(
-        "/", "|"
-    )
+    return _brick.brick_path.split(":")[1]
 
 
 def get_brick_details(volumes, integration_id):
@@ -90,7 +88,7 @@ def get_brick_details(volumes, integration_id):
                     brick["resource_name"] = "%s|%s:%s" % (
                         str(brick["vol_name"]),
                         brick["hostname"],
-                        brick["brick_path"].replace("|", "/")
+                        brick["brick_path"]
                     )
                     brick_details.append(brick)
     except (KeyError, etcd.EtcdKeyNotFound) as ex:

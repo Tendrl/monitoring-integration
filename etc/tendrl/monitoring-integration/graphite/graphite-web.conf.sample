@@ -15,8 +15,12 @@ Listen 10080
 
     WSGIScriptAlias / /usr/share/graphite/graphite-web.wsgi
     WSGIImportScript /usr/share/graphite/graphite-web.wsgi process-group=%{GLOBAL} application-group=%{GLOBAL}
-
-    <Location "/content/">
+    # For graphite-web UI
+    Alias /static/ "/usr/share/graphite/webapp/content/"
+    <Location "/static/">
+        Order deny,allow
+        Allow from all
+        Require all granted
         SetHandler None
     </Location>
 
