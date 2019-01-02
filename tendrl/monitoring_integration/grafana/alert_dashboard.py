@@ -109,7 +109,8 @@ def set_gluster_target(target, integration_id, resource, resource_name):
             str(resource["hostname"].replace(".", "_")))
         target["target"] = target["target"].replace(
             '$brick_path',
-            str(resource["brick_path"]).replace("/", constants.BRICK_REPLACE_PATH))
+            str(resource["brick_path"]).replace(
+                "/", constants.BRICK_PATH_SEPARATOR))
         target["target"] = target["target"].replace('$volume_name',
                                                     str(resource["vol_name"]))
         new_title = str(resource["vol_name"] + "-" + resource[
@@ -272,7 +273,8 @@ def check_duplicate(
                         hostname = resource_name.split(":")[0].split(
                             "|")[1].replace(".", "_")
                         brick_path = resource_name.split(
-                            ":", 1)[1].replace("/", constants.BRICK_REPLACE_PATH)
+                            ":", 1)[1].replace(
+                                "/", constants.BRICK_PATH_SEPARATOR)
                         if result['integration_id'] == integration_id and \
                                 hostname == result["host_name"] and \
                                 brick_path == result["brick_path"]:
@@ -343,7 +345,8 @@ def add_gluster_resource_panel(
                             target["target"] = target["target"].replace(
                                 old_resource_name,
                                 str(resource_name.split("|", 1)[1].split(
-                                    ":", 1)[1].replace("/", constants.BRICK_REPLACE_PATH)))
+                                    ":", 1)[1].replace(
+                                        "/", constants.BRICK_PATH_SEPARATOR)))
                     else:
                         panel_target = target["target"].split(".")
                         old_integration_id = panel_target[

@@ -11,7 +11,9 @@ from tendrl.monitoring_integration.alert.handlers import AlertHandler
 
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert import utils
-from tendrl.monitoring_integration.grafana import constants as grafana_constants
+from tendrl.monitoring_integration.grafana import constants as \
+    grafana_constants
+
 
 class BrickHandler(AlertHandler):
 
@@ -43,7 +45,7 @@ class BrickHandler(AlertHandler):
                 alert['tags']['integration_id'],
                 alert['tags']['fqdn'].replace('_', '.'),
                 alert['tags']['brick_path'].strip(":").replace(
-                    grafana_constants.BRICK_REPLACE_PATH, '_'
+                    grafana_constants.BRICK_PATH_SEPARATOR, '_'
                 )
             )
             if alert_json['State'] == constants.GRAFANA_ALERT:
@@ -59,7 +61,7 @@ class BrickHandler(AlertHandler):
                     "at %s %% and nearing full capacity" % (
                         alert['tags']['fqdn'],
                         alert['tags']['brick_path'].replace(
-                           grafana_constants.BRICK_REPLACE_PATH, "/"
+                            grafana_constants.BRICK_PATH_SEPARATOR, "/"
                         ),
                         alert["tags"]["volume_name"],
                         alert['current_value']
@@ -80,7 +82,7 @@ class BrickHandler(AlertHandler):
                     "back to normal" % (
                         alert['tags']['fqdn'],
                         alert['tags']['brick_path'].replace(
-                            grafana_constants.BRICK_REPLACE_PATH, "/"
+                            grafana_constants.BRICK_PATH_SEPARATOR, "/"
                         ),
                         alert["tags"]["volume_name"]
                     )
@@ -154,7 +156,7 @@ class BrickHandler(AlertHandler):
             alert_json['Settings']['conditions'])
         # For alert backward compatibility
         alert['tags']['plugin_instance'] = target.replace(
-            grafana_constants.BRICK_REPLACE_PATH, "|"
+            grafana_constants.BRICK_PATH_SEPARATOR, "|"
         )
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])

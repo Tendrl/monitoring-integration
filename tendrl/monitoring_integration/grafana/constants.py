@@ -15,4 +15,4 @@ BRICK_TEMPLATE = "tendrl[.]clusters[.]{integration_id}[.]nodes[.]" \
     "{host_name}[.]bricks[.]{brick_path}[.]"
 VOLUME_TEMPLATE = "tendrl[.]clusters[.]{integration_id}[.]volumes[.]" \
     "{volume_name}[.]"
-BRICK_REPLACE_PATH = ":"
+BRICK_PATH_SEPARATOR = ":"

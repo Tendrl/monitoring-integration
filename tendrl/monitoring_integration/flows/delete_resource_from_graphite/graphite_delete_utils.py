@@ -42,7 +42,7 @@ def delete_brick_details(
     host_name = resource_name.split(
         "|", 1)[1].split(":", 1)[0].replace(".", "_")
     brick_name = resource_name.split("|", 1)[1].split(
-        ":", 1)[1].replace("/", constants.BRICK_REPLACE_PATH)
+        ":", 1)[1].replace("/", constants.BRICK_PATH_SEPARATOR)
     vol_name = resource_name.split("|", 1)[0]
     archive_base_path = os.path.join(
         whisper_path,

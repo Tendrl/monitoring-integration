@@ -3,8 +3,8 @@ import copy
 import os
 import shutil
 
-from tendrl.monitoring_integration.grafana import constants
 from tendrl.commons.utils import log_utils as logger
+from tendrl.monitoring_integration.grafana import constants
 
 
 def archive(
@@ -321,7 +321,7 @@ def volume_wise_brick_status(cluster_detail):
             local_metric = local_metric.replace(
                 "$brick_name",
                 brick["brick_name"].replace(
-                    "/", constants.BRICK_REPLACE_PATH
+                    "/", constants.BRICK_PATH_SEPARATOR
                 )
             )
             local_metric = local_metric.replace(
@@ -358,7 +358,7 @@ def node_wise_brick_status(cluster_detail):
                 "$brick_name",
                 brick["brick_name"].replace(
                     "/",
-                    constants.BRICK_REPLACE_PATH
+                    constants.BRICK_PATH_SEPARATOR
                 )
             )
             local_metric = local_metric.replace(
