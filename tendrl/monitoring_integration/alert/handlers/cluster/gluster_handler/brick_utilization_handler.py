@@ -11,6 +11,8 @@ from tendrl.monitoring_integration.alert.handlers import AlertHandler
 
 from tendrl.monitoring_integration.alert import constants
 from tendrl.monitoring_integration.alert import utils
+from tendrl.monitoring_integration.grafana import constants as \
+    grafana_constants
 
 
 class BrickHandler(AlertHandler):
@@ -42,7 +44,9 @@ class BrickHandler(AlertHandler):
             alert["tags"]["volume_name"] = utils.find_volume_name(
                 alert['tags']['integration_id'],
                 alert['tags']['fqdn'].replace('_', '.'),
-                alert['tags']['brick_path'].strip("|").replace('|', '_')
+                alert['tags']['brick_path'].strip(":").replace(
+                    grafana_constants.BRICK_PATH_SEPARATOR, '_'
+                )
             )
             if alert_json['State'] == constants.GRAFANA_ALERT:
                 if "critical" in alert_json['Name'].lower():
@@ -51,11 +55,14 @@ class BrickHandler(AlertHandler):
                 else:
                     alert['severity'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
+                # Modify brick path symbol to slash(/) in alert message
                 alert['tags']['message'] = (
                     "Brick utilization on %s:%s in %s "
                     "at %s %% and nearing full capacity" % (
                         alert['tags']['fqdn'],
-                        alert['tags']['brick_path'],
+                        alert['tags']['brick_path'].replace(
+                            grafana_constants.BRICK_PATH_SEPARATOR, "/"
+                        ),
                         alert["tags"]["volume_name"],
                         alert['current_value']
                     )
@@ -69,11 +76,14 @@ class BrickHandler(AlertHandler):
                     alert['tags']['clear_alert'] = \
                         constants.TENDRL_SEVERITY_MAP['warning']
                 alert['severity'] = constants.TENDRL_SEVERITY_MAP['info']
+                # Modify brick path symbol to slash(/) in alert message
                 alert['tags']['message'] = (
                     "Brick utilization of %s:%s in %s "
                     "back to normal" % (
                         alert['tags']['fqdn'],
-                        alert['tags']['brick_path'],
+                        alert['tags']['brick_path'].replace(
+                            grafana_constants.BRICK_PATH_SEPARATOR, "/"
+                        ),
                         alert["tags"]["volume_name"]
                     )
                 )
@@ -144,7 +154,10 @@ class BrickHandler(AlertHandler):
             alert_json['EvalData'])
         target = utils.find_alert_target(
             alert_json['Settings']['conditions'])
-        alert['tags']['plugin_instance'] = target
+        # For alert backward compatibility
+        alert['tags']['plugin_instance'] = target.replace(
+            grafana_constants.BRICK_PATH_SEPARATOR, "|"
+        )
         alert['tags']['warning_max'] = utils.find_warning_max(
             alert_json['Settings']['conditions'][0]['evaluator']['params'])
         result = utils.parse_target(target, self.template)

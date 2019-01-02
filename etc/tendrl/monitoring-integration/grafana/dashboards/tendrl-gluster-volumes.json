@@ -230,7 +230,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.status, 6, -1), '(\\.bricks\\.)', ':'), '\\|', '/')"
+                    "target": "aliasSub(aliasSub(substr(tendrl.names.$cluster_id.volumes.$volume_name.nodes.*.bricks.*.status, 6, -1), '\\:', '/'), '(\\.bricks\\.)', ':')"
                 }],
                 "timeFrom": null,
                 "timeShift": null,

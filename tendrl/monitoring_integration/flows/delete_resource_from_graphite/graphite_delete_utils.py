@@ -2,6 +2,7 @@ import datetime
 import os
 import shutil
 
+from tendrl.monitoring_integration.grafana import constants
 from tendrl.monitoring_integration.graphite.graphite_utils import \
     archive
 from tendrl.monitoring_integration.graphite.graphite_utils import \
@@ -41,7 +42,7 @@ def delete_brick_details(
     host_name = resource_name.split(
         "|", 1)[1].split(":", 1)[0].replace(".", "_")
     brick_name = resource_name.split("|", 1)[1].split(
-        ":", 1)[1].replace("/", "|")
+        ":", 1)[1].replace("/", constants.BRICK_PATH_SEPARATOR)
     vol_name = resource_name.split("|", 1)[0]
     archive_base_path = os.path.join(
         whisper_path,

@@ -90,7 +90,7 @@ def remove_row(alert_dashboard, integration_id, resource_type, resource_name):
                 hostname = resource_name.split(":")[0].split(
                     "|")[1].replace(".", "_")
                 brick_path = resource_name.split(
-                    ":", 1)[1].replace("/", "|")
+                    ":", 1)[1].replace("/", constants.BRICK_PATH_SEPARATOR)
                 if result['integration_id'] == integration_id and \
                         hostname == result["host_name"] and \
                         brick_path == result["brick_path"]:

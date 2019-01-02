@@ -18,6 +18,8 @@ def set_alert(panel, thresholds, severity, resource_name, title):
              "value": thresholds[severity]
              }
         ]
+        # Always better to keep different frequency value for
+        # critical and warning alert panles
         panel["alert"] = ({"conditions": [
             {"evaluator": {"params": [thresholds[severity]], "type": "gt"},
              "operator": {"type": "and"},
@@ -26,7 +28,7 @@ def set_alert(panel, thresholds, severity, resource_name, title):
              "type": "query"
              }],
             "executionErrorState": "keep_state",
-            "frequency": "60s", "handler": 1,
+            "frequency": "75s", "handler": 1,
             "name": str(resource_name) + " " + str(title) + " Alert",
             "noDataState": "keep_state",
             "notifications": []}
@@ -107,7 +109,8 @@ def set_gluster_target(target, integration_id, resource, resource_name):
             str(resource["hostname"].replace(".", "_")))
         target["target"] = target["target"].replace(
             '$brick_path',
-            str(resource["brick_path"]))
+            str(resource["brick_path"]).replace(
+                "/", constants.BRICK_PATH_SEPARATOR))
         target["target"] = target["target"].replace('$volume_name',
                                                     str(resource["vol_name"]))
         new_title = str(resource["vol_name"] + "-" + resource[
@@ -270,7 +273,8 @@ def check_duplicate(
                         hostname = resource_name.split(":")[0].split(
                             "|")[1].replace(".", "_")
                         brick_path = resource_name.split(
-                            ":", 1)[1].replace("/", "|")
+                            ":", 1)[1].replace(
+                                "/", constants.BRICK_PATH_SEPARATOR)
                         if result['integration_id'] == integration_id and \
                                 hostname == result["host_name"] and \
                                 brick_path == result["brick_path"]:
@@ -341,7 +345,8 @@ def add_gluster_resource_panel(
                             target["target"] = target["target"].replace(
                                 old_resource_name,
                                 str(resource_name.split("|", 1)[1].split(
-                                    ":", 1)[1].replace("/", "|")))
+                                    ":", 1)[1].replace(
+                                        "/", constants.BRICK_PATH_SEPARATOR)))
                     else:
                         panel_target = target["target"].split(".")
                         old_integration_id = panel_target[
@@ -362,7 +367,7 @@ def add_gluster_resource_panel(
                 host_name = resource_name.split("|", 1)[1].split(
                     ":", 1)[0].replace(".", "_")
                 brick_name = resource_name.split("|", 1)[1].split(
-                    ":", 1)[1].replace("/", "|")
+                    ":", 1)[1]
                 volume_name = resource_name.split("|", 1)[0]
                 new_title = volume_name + "|" + host_name + ":" + brick_name
             panel["title"] = panel["title"].split(

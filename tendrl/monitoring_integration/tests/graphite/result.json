@@ -189,40 +189,40 @@
     "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volume_count.degraded": "0"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-234.bricks.|gluster|brick1.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-234.bricks.:gluster:brick1.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-234.bricks.|gluster|brick2.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-234.bricks.:gluster:brick2.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-3.bricks.|gluster|brick1.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-3.bricks.:gluster:brick1.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-3.bricks.|gluster|brick2.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-3.bricks.:gluster:brick2.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-137.bricks.|gluster|brick1.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V1.nodes.dhcp122-137.bricks.:gluster:brick1.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-137.bricks.|gluster|brick2.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.volumes.V2.nodes.dhcp122-137.bricks.:gluster:brick2.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.bricks.|gluster|brick1.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.bricks.:gluster:brick1.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.bricks.|gluster|brick2.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-234.bricks.:gluster:brick2.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.bricks.|gluster|brick1.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.bricks.:gluster:brick1.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.bricks.|gluster|brick2.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-3.bricks.:gluster:brick2.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.bricks.|gluster|brick1.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.bricks.:gluster:brick1.status": "1"
   },
   {
-    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.bricks.|gluster|brick2.status": "1"
+    "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.nodes.dhcp122-137.bricks.:gluster:brick2.status": "1"
   },
   {
     "clusters.f3a74e36-0462-4fb0-9a92-3ee9d244f8a2.status": "0"

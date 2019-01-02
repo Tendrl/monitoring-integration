@@ -212,7 +212,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.status, 6, 'maxSeries'), '\\|', '/')"
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.status, 6, 'maxSeries'), '\\:', '/')"
                 }],
                 "title": "Brick Status",
                 "transform": "timeseries_aggregations",
@@ -1008,7 +1008,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.percent-percent_bytes, 6, 'maxSeries'), '\\|', '/')"
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.percent-percent_bytes, 6, 'maxSeries'), '\\:', '/')"
                 }],
                 "title": "Top Bricks by Capacity Percent Utilized",
                 "transform": "timeseries_aggregations",
@@ -1063,7 +1063,7 @@
                 }],
                 "targets": [{
                     "refId": "A",
-                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total, 6, 'maxSeries'), '\\|', '/')",
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-total, 6, 'maxSeries'), '\\:', '/')",
                     "textEditor": false
                 }],
                 "title": "Top Bricks by Total Capacity",
@@ -1119,7 +1119,7 @@
                 "targets": [{
                     "hide": false,
                     "refId": "B",
-                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used, 6, 'maxSeries'), '\\|', '/')",
+                    "target": "aliasSub(groupByNode(tendrl.names.$cluster_id.nodes.$host_name.bricks.*.utilization.gauge-used, 6, 'maxSeries'), '\\:', '/')",
                     "textEditor": false
                 }],
                 "title": "Top Bricks by Capacity Utilized",

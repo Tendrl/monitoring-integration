@@ -427,7 +427,7 @@ class GraphitePlugin(object):
             for brick in cluster["Brick"]:
                 try:
                     brick["brick_name"] = brick["brick_path"].split(":")[1]
-                except (AttributeError, KeyError) as ex:
+                except (AttributeError, KeyError, IndexError) as ex:
                     logger.log(
                         "debug",
                         NS.get("publisher_id", None),
