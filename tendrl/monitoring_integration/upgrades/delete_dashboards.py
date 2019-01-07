@@ -51,6 +51,11 @@ def delete_dashboards(server_ip, user, password):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--username", help="grafana admin_user username")
+    parser.add_argument("--password", help="grafana admin_user password")
+    args = parser.parse_args()
+
     try:
         print ("\n Modifying brick path separator \n")
         # Modifying brick path separator | to :
@@ -70,9 +75,6 @@ def main():
             "--settings=graphite.settings "
             "--run-syncdb"
         )
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--username", help="grafana admin_user username")
-        parser.add_argument("--password", help="grafana admin_user password")
 
         # getting grafana admin_username and password
         config = ConfigParser.ConfigParser()
@@ -81,7 +83,6 @@ def main():
         password = config.get('security', 'admin_password')
         default_ip = "127.0.0.1"
 
-        args = parser.parse_args()
         if args.username:
             username = args.username
         if args.password:
