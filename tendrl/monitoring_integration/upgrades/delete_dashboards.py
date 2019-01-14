@@ -79,11 +79,13 @@ def main():
         print ("\n Allow apache to access graphite.db file \n")
         utils.change_owner(
             "/var/lib/graphite-web/graphite.db",
+            "apache",
             "apache"
         )
         print ("\n Allow apache to log messages in graphite-web \n")
         utils.change_owner(
             "/var/log/graphite-web",
+            "apache",
             "apache",
             True
         )
