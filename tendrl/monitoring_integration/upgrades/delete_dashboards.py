@@ -17,20 +17,18 @@ def delete_dashboards(server_ip, user, password):
 
     for dashboard in dashboards:
         url = "http://%s/grafana/api/dashboards/db/%s" % (server_ip, dashboard)
-        utils.print_message(url)
+        print (url)
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
         if response.status_code == 200:
-            utils.print_message("Deleted %s" % dashboard)
+            print ("Deleted %s \n" % dashboard)
         else:
-            utils.print_message(
-                "Failed to delete %s %s" % (dashboard, response.json())
-            )
+            print ("Failed to delete %s %s \n" % (dashboard, response.json()))
 
     # Deleting the alerts dashboards
     url = "http://%s/grafana/api/orgs/name/Alert_dashboard" \
           % server_ip
-    utils.print_message("Getting alerts organization id\n %s" % url)
+    print ("Getting alerts organization id\n %s \n" % url)
     response = requests.get(url, headers=headers,
                             auth=HTTPBasicAuth(user, password))
     resp = response.json()
@@ -38,22 +36,18 @@ def delete_dashboards(server_ip, user, password):
     if 'id' in resp:
         id = resp['id']
         url = "http://%s/grafana/api/orgs/%s" % (server_ip, id)
-        utils.print_message("Deleting alerts organization\n %s" % url)
+        print ("Deleting alerts organization\n %s" % url)
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
         resp = response.json()
         if resp == {u'message': u'Organization deleted'}:
-            utils.print_message("Deleted Alert dashboards")
+            print ("Deleted Alert dashboards")
         else:
-            utils.print_message(
-                "Failed to delete Alert dashboards %s" % resp
-            )
+            print ("Failed to delete Alert dashboards %s" % resp)
 
     else:
-        utils.print_message(
-            "Failed to delete Alert dashboards."
-            "Organization id not found %s" % resp
-        )
+        print ("Failed to delete Alert dashboards.")
+        print ("Organization id not found %s" % resp)
 
 
 def main():
@@ -61,27 +55,41 @@ def main():
     parser.add_argument("--username", help="grafana admin_user username")
     parser.add_argument("--password", help="grafana admin_user password")
     args = parser.parse_args()
+
     try:
-        utils.print_message("Stopping carbon-cache service")
+        print ("\n Stopping carbon-cache service \n")
         utils.stop_service("carbon-cache")
-        utils.print_message("Stopping httpd service")
+        print ("\n Stopping httpd service \n")
         utils.stop_service("httpd")
-        utils.print_message("Modifying brick path separator")
-        # Modifying brick path separator from | to :
+        print ("\n Modifying brick path separator \n")
+        # Modifying brick path separator | to :
         utils.command_exec(
             "find /var/lib/carbon/whisper/tendrl/ -depth  "
             "-type d -name '*|*' -execdir bash -c "
             "'mv \"$1\" \"${1//|/:}\"' bash {} ';'"
         )
-        utils.print_message("Removing graphite DB")
+        print ("\n Removing graphite DB \n")
         utils.remove_file("/var/lib/graphite-web/graphite.db")
-        utils.print_message("Initializing graphite DB")
+        print ("\n Initializing graphite DB \n")
         utils.command_exec(
             "django-admin migrate "
             "--settings=graphite.settings "
             "--run-syncdb"
         )
-        utils.print_message("Starting httpd service")
+        print ("\n Allow apache to access graphite.db file \n")
+        utils.change_owner(
+            "/var/lib/graphite-web/graphite.db",
+            "apache"
+        )
+        print ("\n Allow apache to log messages in graphite-web \n")
+        utils.change_owner(
+            "/var/log/graphite-web",
+            "apache",
+            True
+        )
+        print ("\n Starting carbon-cache service \n")
+        utils.start_service("carbon-cache")
+        print ("\n Starting httpd service \n")
         utils.start_service("httpd")
         # getting grafana admin_username and password
         config = ConfigParser.ConfigParser()
@@ -95,18 +103,14 @@ def main():
         if args.password:
             password = args.password
 
-        utils.print_message("Clearing grafana dashboards")
+        print ("\n Clearing grafana dashboards \n")
         delete_dashboards(server_ip=default_ip, user=username,
                           password=password)
-        utils.print_message(
-            "Complete -- Please start tendrl-monitoring-integration "
-            "service"
-        )
+        print ("\n Complete -- Please start tendrl-monitoring-integration "
+               "service")
 
     except Exception as e:
-        utils.print_message(
-            "Failed in deleting dashboards with error: %s" % e
-        )
+        print ("Failed in deleting dashboards with error: %s" % e)
 
 
 if __name__ == '__main__':
