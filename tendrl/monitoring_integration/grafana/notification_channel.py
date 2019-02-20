@@ -25,8 +25,8 @@ def create_notification_channel():
 
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post("http://{}/grafana/api/alert-notifications"
-                        .format(config.grafana_host),
+        response = post("http://{}:{}/api/alert-notifications"
+                        .format(config.grafana_host, config.grafana_port),
                         headers=constants.HEADERS,
                         auth=config.credentials,
                         data=channel_details)

@@ -15,8 +15,9 @@ def create_org(org_name):
     upload_str = {"name": org_name}
     if utils.port_open(config.grafana_port, config.grafana_host):
         response = post(
-            "http://{}/grafana/api/orgs".format(
-                config.grafana_host
+            "http://{}:{}/api/orgs".format(
+                config.grafana_host,
+                config.grafana_port
             ),
             headers=constants.HEADERS,
             auth=config.credentials,
@@ -35,8 +36,9 @@ def get_org_id(org_name):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get(
-            "http://{}/grafana/api/orgs/name/{}".format(
+            "http://{}:{}/api/orgs/name/{}".format(
                 config.grafana_host,
+                config.grafana_port,
                 org_name
             ),
             auth=config.credentials
@@ -53,8 +55,9 @@ def get_current_org_name():
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get(
-            "http://{}/grafana/api/org/".format(
-                config.grafana_host
+            "http://{}:{}/api/org/".format(
+                config.grafana_host,
+                config.grafana_port
             ),
             auth=config.credentials
         )
@@ -70,8 +73,9 @@ def switch_context(org_id):
     config = maps.NamedDict(NS.config.data)
     upload_str = ''
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post("http://{}/grafana/api/user/using"
+        response = post("http://{}:{}/api/user/using"
                         "/{}".format(config.grafana_host,
+                                     config.grafana_port,
                                      org_id),
                         headers=constants.HEADERS,
                         auth=config.credentials,
@@ -91,8 +95,8 @@ def create_api_token(key_name, role):
     config = maps.NamedDict(NS.config.data)
     request_body = {"name": key_name, "role": role}
     if utils.port_open(config.grafana_port, config.grafana_host):
-        response = post("http://{}/grafana/api/auth/"
-                        "keys".format(config.grafana_host),
+        response = post("http://{}:{}/api/auth/"
+                        "keys".format(config.grafana_host, config.grafana_port),
                         headers=constants.HEADERS,
                         auth=config.credentials,
                         data=json.dumps(request_body))
@@ -106,8 +110,9 @@ def get_auth_keys():
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         response = get(
-            "http://{}/grafana/api/auth/keys".format(
-                config.grafana_host
+            "http://{}:{}/api/auth/keys".format(
+                config.grafana_host,
+                config.grafana_port
             ),
             auth=config.credentials
         )

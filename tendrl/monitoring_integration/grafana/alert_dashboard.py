@@ -250,7 +250,7 @@ def check_duplicate(
         new_resource_flag = True
         integration_id = str(resource["integration_id"])
         for row in dashboard_json["dashboard"]["rows"]:
-            if "panels" in row:
+            if "panels" in row and new_resource_flag:
                 for target in row["panels"][0]["targets"]:
                     resource_name = resource.get("resource_name", None)
                     if resource_type == "volumes":

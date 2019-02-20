@@ -8,7 +8,7 @@ from requests.auth import HTTPBasicAuth
 from tendrl.monitoring_integration.upgrades import utils
 
 
-def delete_dashboards(server_ip, user, password):
+def delete_dashboards(server_ip, port, user, password):
 
     dashboards = ["cluster-dashboard", "brick-dashboard", "host-dashboard",
                   "volume-dashboard"]
@@ -16,7 +16,7 @@ def delete_dashboards(server_ip, user, password):
     headers = {'content-type': 'application/json'}
 
     for dashboard in dashboards:
-        url = "http://%s/grafana/api/dashboards/db/%s" % (server_ip, dashboard)
+        url = "http://%s:%s/api/dashboards/db/%s" % (server_ip, port, dashboard)
         print (url)
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
@@ -26,8 +26,8 @@ def delete_dashboards(server_ip, user, password):
             print ("Failed to delete %s %s \n" % (dashboard, response.json()))
 
     # Deleting the alerts dashboards
-    url = "http://%s/grafana/api/orgs/name/Alert_dashboard" \
-          % server_ip
+    url = "http://%s:%s/api/orgs/name/Alert_dashboard" \
+          % (server_ip, port)
     print ("Getting alerts organization id\n %s \n" % url)
     response = requests.get(url, headers=headers,
                             auth=HTTPBasicAuth(user, password))
@@ -35,7 +35,7 @@ def delete_dashboards(server_ip, user, password):
 
     if 'id' in resp:
         id = resp['id']
-        url = "http://%s/grafana/api/orgs/%s" % (server_ip, id)
+        url = "http://%s:%s/api/orgs/%s" % (server_ip, port, id)
         print ("Deleting alerts organization\n %s" % url)
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
@@ -99,15 +99,19 @@ def main():
         username = config.get('security', 'admin_user')
         password = config.get('security', 'admin_password')
         default_ip = "127.0.0.1"
-
+        default_port = 3000
         if args.username:
             username = args.username
         if args.password:
             password = args.password
 
         print ("\n Clearing grafana dashboards \n")
-        delete_dashboards(server_ip=default_ip, user=username,
-                          password=password)
+        delete_dashboards(
+            server_ip=default_ip,
+            port=default_port,
+            user=username,
+            password=password
+        )
         print ("\n Complete -- Please start tendrl-monitoring-integration "
                "service")
 
