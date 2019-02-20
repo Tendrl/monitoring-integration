@@ -252,15 +252,15 @@ def node_count(cluster_detail):
                     ".", 1)[1].replace("$", ""))]))
             metrics.append(copy.deepcopy(local_metric))
         except (AttributeError, KeyError) as ex:
-                logger.log(
-                    "debug",
-                    NS.get("publisher_id", None),
-                    {
-                        'message': "Failed to create cluster metric {0} "
-                        "for cluster {1}".format(metric, str(
-                            cluster_detail["integration_id"])) + str(ex)
-                    }
-                )
+            logger.log(
+                "debug",
+                NS.get("publisher_id", None),
+                {
+                    'message': "Failed to create cluster metric {0} "
+                    "for cluster {1}".format(metric, str(
+                        cluster_detail["integration_id"])) + str(ex)
+                }
+            )
     return metrics
 
 

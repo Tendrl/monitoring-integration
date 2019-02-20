@@ -21,12 +21,18 @@ def _post_dashboard(dashboard_json, authorization_key=None):
             new_header = constants.HEADERS
             new_header["Authorization"] = "Bearer " + str(authorization_key)
             response = post("http://{}:{}/api/dashboards/"
-                            "db".format(config.grafana_host, config.grafana_port),
+                            "db".format(
+                                config.grafana_host,
+                                config.grafana_port
+                            ),
                             headers=new_header,
                             data=upload_str)
         else:
             response = post("http://{}:{}/api/dashboards/"
-                            "db".format(config.grafana_host, config.grafana_port),
+                            "db".format(
+                                config.grafana_host,
+                                config.grafana_port
+                            ),
                             headers=constants.HEADERS,
                             auth=config.credentials,
                             data=upload_str)
@@ -79,7 +85,10 @@ def set_home_dashboard(dash_id):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = put('http://{}:{}/api/org/'
-                   'preferences'.format(config.grafana_host, config.grafana_port),
+                   'preferences'.format(
+                       config.grafana_host,
+                       config.grafana_port
+                   ),
                    headers=constants.HEADERS,
                    auth=config.credentials,
                    data=json.dumps({"name": constants.MAIN_ORG,

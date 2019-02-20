@@ -16,7 +16,9 @@ def delete_dashboards(server_ip, port, user, password):
     headers = {'content-type': 'application/json'}
 
     for dashboard in dashboards:
-        url = "http://%s:%s/api/dashboards/db/%s" % (server_ip, port, dashboard)
+        url = "http://%s:%s/api/dashboards/db/%s" % (
+            server_ip, port, dashboard
+        )
         print (url)
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))

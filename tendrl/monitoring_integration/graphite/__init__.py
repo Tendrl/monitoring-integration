@@ -339,14 +339,14 @@ class GraphitePlugin(object):
                                 }
                             )
                 except (AttributeError, KeyError) as ex:
-                        logger.log(
-                            "debug",
-                            NS.get("publisher_id", None),
-                            {
-                                'message': "Failed to extract georep details "
-                                "for volume" + str(ex)
-                            }
-                        )
+                    logger.log(
+                        "debug",
+                        NS.get("publisher_id", None),
+                        {
+                            'message': "Failed to extract georep details "
+                            "for volume" + str(ex)
+                        }
+                    )
             cluster["geo_rep"] = {
                 "total": geo_rep_mapper["total"],
                 "up": geo_rep_mapper["up"],
