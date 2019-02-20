@@ -17,8 +17,9 @@ def _post_datasource(datasource_json):
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = post(
-            "http://{}/grafana/api/datasources".format(
-                config.grafana_host
+            "http://{}:{}/api/datasources".format(
+                config.grafana_host,
+                config.grafana_port
             ),
             headers=constants.HEADERS,
             auth=config.credentials,
@@ -63,8 +64,9 @@ def get_data_source():
     config = maps.NamedDict(NS.config.data)
     if utils.port_open(config.grafana_port, config.grafana_host):
         resp = get(
-            "http://{}/grafana/api/datasources/id/{}".format(
+            "http://{}:{}/api/datasources/id/{}".format(
                 config.grafana_host,
+                config.grafana_port,
                 config.datasource_name
             ),
             auth=config.credentials
@@ -83,8 +85,9 @@ def update_datasource(datasource_id):
         datasource_str = json.dumps(datasource_json)
         if utils.port_open(config.grafana_port, config.grafana_host):
             response = put(
-                "http://{}/grafana/api/datasources/{}".format(
+                "http://{}:{}/api/datasources/{}".format(
                     config.grafana_host,
+                    config.grafana_port,
                     datasource_id
                 ),
                 headers=constants.HEADERS,
