@@ -96,7 +96,10 @@ def create_api_token(key_name, role):
     request_body = {"name": key_name, "role": role}
     if utils.port_open(config.grafana_port, config.grafana_host):
         response = post("http://{}:{}/api/auth/"
-                        "keys".format(config.grafana_host, config.grafana_port),
+                        "keys".format(
+                            config.grafana_host,
+                            config.grafana_port
+                        ),
                         headers=constants.HEADERS,
                         auth=config.credentials,
                         data=json.dumps(request_body))
