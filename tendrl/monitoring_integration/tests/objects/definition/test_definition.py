@@ -11,7 +11,7 @@ def test_config(resource_str, safe_load):
     resource_str.return_value = "test_monitoring"
     safe_load.return_value = {}
     obj = definition.Definition()
-    if obj.data is not "test_monitoring":
+    if obj.data != "test_monitoring":
         raise AssertionError()
     if not obj.get_parsed_defs() == {}:
         raise AssertionError()
