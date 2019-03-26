@@ -28,6 +28,13 @@ class MonitoringIntegrationSdsSyncThread(sds_sync.StateSyncThread):
             get_parsed_defs()["namespace.monitoring"]["graphite_data"]
         _sleep = 0
         while not self._complete.is_set():
+            # update monitoring tag in each sync
+            NS.node_context = NS.node_context.load()
+            current_tags = list(NS.node_context.tags)
+            if "tendrl/integration/monitoring" not in current_tags:
+                current_tags += ["tendrl/integration/monitoring"]
+                NS.node_context.tags = list(set(current_tags))
+                NS.node_context.save()
             if self.sync_interval is None:
                 try:
                     config_data = json.loads(etcd_utils.read(
