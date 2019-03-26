@@ -70,11 +70,6 @@ def main():
     monitoring_integration_manager = MonitoringIntegrationManager()
     monitoring_integration_manager.start()
     complete = threading.Event()
-    NS.node_context = NS.node_context.load()
-    current_tags = list(NS.node_context.tags)
-    current_tags += ["tendrl/integration/monitoring"]
-    NS.node_context.tags = list(set(current_tags))
-    NS.node_context.save()
 
     def shutdown(signum, frame):
         complete.set()
