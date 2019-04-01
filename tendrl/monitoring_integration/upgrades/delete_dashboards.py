@@ -5,6 +5,7 @@ import ConfigParser
 import requests
 
 from requests.auth import HTTPBasicAuth
+from tendrl.monitoring_integration.graphite import graphite_utils
 from tendrl.monitoring_integration.upgrades import utils
 
 
@@ -79,13 +80,13 @@ def main():
             "--run-syncdb"
         )
         print ("\n Allow apache to access graphite.db file \n")
-        utils.change_owner(
+        graphite_utils.change_owner(
             "/var/lib/graphite-web/graphite.db",
             "apache",
             "apache"
         )
         print ("\n Allow apache to log messages in graphite-web \n")
-        utils.change_owner(
+        graphite_utils.change_owner(
             "/var/log/graphite-web",
             "apache",
             "apache",
