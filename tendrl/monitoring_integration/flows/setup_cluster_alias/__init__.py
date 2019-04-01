@@ -31,6 +31,13 @@ class SetupClusterAlias(flows.BaseFlow):
             ),
             "%s/%s" % (alias_dir_path, short_name)
         )
+        # Assign permission for carbon user
+        graphite_utils.change_owner(
+            graphite_utils.get_data_dir_path(),
+            "carbon",
+            "carbon",
+            recursive=True
+        )
         logger.log(
             "debug",
             NS.publisher_id,
