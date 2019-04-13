@@ -136,6 +136,8 @@ def remove_cluster_rows(integration_id, dashboard_name):
         if flag:
             new_rows.append(row)
         flag = True
+    if "dashboard" not in alert_dashboard:
+        alert_dashboard["dashboard"] = {}
     alert_dashboard["dashboard"]["rows"] = new_rows
     return alert_dashboard
 
