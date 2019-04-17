@@ -10,15 +10,9 @@ from tendrl.monitoring_integration.grafana import constants
 
 
 def change_owner(path, uname, gname, recursive=False):
-    try:
-        uid = pwd.getpwnam(uname).pw_uid
-        gid = grp.getgrnam(gname).gr_gid
-        _chown(path, uid, gid, recursive)
-    except KeyError as ex:
-        print (
-            "\n Unable to modify ownership of file/directory. "
-            "Error: %s \n" % ex
-        )
+    uid = pwd.getpwnam(uname).pw_uid
+    gid = grp.getgrnam(gname).gr_gid
+    _chown(path, uid, gid, recursive)
 
 
 def _chown(path, uid, gid, recursive):
@@ -89,15 +83,21 @@ def create_cluster_alias(cluster_details):
 
 
 def get_data_dir_path():
+    whisper_path = get_graphite_path("cache", "local_data_dir")
+    if whisper_path:
+        whisper_path = os.path.join(whisper_path, "tendrl/")
+    return whisper_path
+
+
+def get_graphite_path(classname, configuration_var):
     carbon_path = "/etc/tendrl/monitoring-integration/carbon.conf"
     if not os.path.exists(carbon_path):
         return None
     carbon_config = ConfigParser.ConfigParser()
     carbon_config.read(carbon_path)
     try:
-        whisper_path = str(carbon_config.get("cache", "local_data_dir"))
-        whisper_path = os.path.join(whisper_path, "tendrl/")
-        return whisper_path
+        dir_path = str(carbon_config.get(classname, configuration_var))
+        return dir_path
     except KeyError:
         return None
 
