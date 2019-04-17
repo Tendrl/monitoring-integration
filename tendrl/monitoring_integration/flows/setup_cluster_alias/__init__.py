@@ -32,12 +32,20 @@ class SetupClusterAlias(flows.BaseFlow):
             "%s/%s" % (alias_dir_path, short_name)
         )
         # Assign permission for carbon user
-        graphite_utils.change_owner(
-            graphite_utils.get_data_dir_path(),
-            "carbon",
-            "carbon",
-            recursive=True
-        )
+        try:
+            storage_dir_path = graphite_utils.get_graphite_path(
+                "cache", "storage_dir"
+            )
+            graphite_utils.change_owner(
+                storage_dir_path,
+                "carbon",
+                "carbon",
+                recursive=True
+            )
+        except (KeyError, OSError, TypeError) as ex:
+            raise FlowExecutionFailedError(
+                "Unable to modify the ownership of %s" % storage_dir_path
+            )
         logger.log(
             "debug",
             NS.publisher_id,
