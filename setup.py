@@ -6,7 +6,7 @@ import subprocess
 
 try:
     # Python 2 backwards compat
-    from __builtin__ import raw_input as input
+    from builtins import input
 except ImportError:
     pass
 

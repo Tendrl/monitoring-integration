@@ -30,22 +30,22 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                  'alert_type': 'UTILIZATION',
                  'node_id': '1',
                  'resource': 'brick_utilization',
-                 'time_stamp': u'2018-02-07T17:24:16+05:30',
+                 'time_stamp': '2018-02-07T17:24:16+05:30',
                  'alert_id': None,
                  'current_value': None,
-                 'tags': {'plugin_instance': u'tendrl.clusters.'
+                 'tags': {'plugin_instance': 'tendrl.clusters.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'nodes.dhcp122-234.bricks.|gluster|brick1'
                           '.utilization.percent-percent_bytes',
-                          'fqdn': u'dhcp122-234',
-                          'brick_path': u'|gluster|brick1',
+                          'fqdn': 'dhcp122-234',
+                          'brick_path': '|gluster|brick1',
                           'cluster_name': 'c1',
-                          'integration_id': u'7616f2a4-6502-4222-85bb'
+                          'integration_id': '7616f2a4-6502-4222-85bb'
                           '-c5aff4eef15d',
                           'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d',
                           'warning_max': 75,
-                          'message': u'Brick utilization of dhcp122-234'
+                          'message': 'Brick utilization of dhcp122-234'
                           ':|gluster|brick1 in vol1 '
                           'back to normal',
                           'volume_name': 'vol1'
@@ -67,21 +67,21 @@ def test_brick_handler(vol_name, cluster_name, pid, node_id, s_name):
                  'significance': 'HIGH',
                  'alert_type': 'UTILIZATION',
                  'alert_id': None,
-                 'time_stamp': u'2018-02-12T13:13:03+05:30',
-                 'tags': {'plugin_instance': u'tendrl.clusters.7616f2a4'
+                 'time_stamp': '2018-02-12T13:13:03+05:30',
+                 'tags': {'plugin_instance': 'tendrl.clusters.7616f2a4'
                           '-6502-4222-85bb-c5aff4eef15d.nodes.dhcp122-'
                           '234.bricks.|gluster|brick1'
                           '.utilization.percent-percent_bytes',
-                          'fqdn': u'dhcp122-234',
-                          'message': u'Brick utilization on dhcp122-234:|'
+                          'fqdn': 'dhcp122-234',
+                          'message': 'Brick utilization on dhcp122-234:|'
                           'gluster|brick1 in vol1 '
                           'at 20.75 % and nearing full capacity',
-                          'integration_id': u'7616f2a4-6502-4222-85bb-'
+                          'integration_id': '7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d',
                           'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d',
                           'cluster_name': 'c1',
-                          'brick_path': u'|gluster|brick1',
+                          'brick_path': '|gluster|brick1',
                           'warning_max': 17,
                           'volume_name': 'vol1'
                           },

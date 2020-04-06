@@ -379,7 +379,7 @@ def fetch_rows(dashboard_json):
 
     rows = dashboard_json["dashboard"]["rows"]
     if len(rows) > 1:
-        for count in xrange(1, len(rows)):
+        for count in range(1, len(rows)):
             if rows[0]["panels"][0]["title"].split("-", 1)[0] == \
                     rows[count]["panels"][0]["title"].split("-", 1)[0]:
                 alert_row = copy.deepcopy(

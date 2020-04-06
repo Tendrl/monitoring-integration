@@ -24,8 +24,8 @@ def test_memory_handler(pid, node_id, short_name):
     result['time_stamp'] = '2018-02-07T17:29:01+05:30'
     condition = {'pid': '123',
                  'tags': {'warning_max': 80,
-                          'fqdn': u'dhcp122-234',
-                          'message': u'Memory utilization on '
+                          'fqdn': 'dhcp122-234',
+                          'message': 'Memory utilization on '
                           'node dhcp122-234 in 7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d back to normal',
                           'integration_id': '7616f2a4-6502-4222-85bb-'
@@ -37,7 +37,7 @@ def test_memory_handler(pid, node_id, short_name):
                  'source': 'GRAFANA',
                  'alert_id': None,
                  'alert_type': 'UTILIZATION',
-                 'time_stamp': u'2018-02-07T17:29:01+05:30',
+                 'time_stamp': '2018-02-07T17:29:01+05:30',
                  'significance': 'HIGH',
                  'node_id': '1',
                  'resource': 'memory_utilization',
@@ -57,8 +57,8 @@ def test_memory_handler(pid, node_id, short_name):
                  'severity': 'WARNING',
                  'current_value': '29.47',
                  'node_id': '1',
-                 'tags': {'fqdn': u'dhcp122-234',
-                          'message': u'Memory utilization on '
+                 'tags': {'fqdn': 'dhcp122-234',
+                          'message': 'Memory utilization on '
                           'node dhcp122-234 in '
                           '7616f2a4-6502-4222-85bb-'
                           'c5aff4eef15d '
@@ -69,7 +69,7 @@ def test_memory_handler(pid, node_id, short_name):
                           'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d'
                           },
-                 'time_stamp': u'2018-02-12T11:30:19+05:30',
+                 'time_stamp': '2018-02-12T11:30:19+05:30',
                  'alert_id': None,
                  'pid': '123'
                  }

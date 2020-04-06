@@ -21,7 +21,7 @@ def test_cpu_handler(pid, node_id, short_name):
                         "cpu_alert_info.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
-    result['time_stamp'] = u'2018-02-07T17:28:05+05:30'
+    result['time_stamp'] = '2018-02-07T17:28:05+05:30'
     condition = {'alert_id': None,
                  'alert_type': 'UTILIZATION',
                  'severity': 'INFO',
@@ -31,10 +31,10 @@ def test_cpu_handler(pid, node_id, short_name):
                  'source': 'GRAFANA',
                  'resource': 'cpu_utilization',
                  'pid': '123',
-                 'time_stamp': u'2018-02-07T17:28:05+05:30',
+                 'time_stamp': '2018-02-07T17:28:05+05:30',
                  'tags': {'warning_max': 80,
-                          'fqdn': u'dhcp122-234',
-                          'message': u'Cpu utilization on node '
+                          'fqdn': 'dhcp122-234',
+                          'message': 'Cpu utilization on node '
                           'dhcp122-234 in '
                           '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d back to normal',
@@ -50,11 +50,11 @@ def test_cpu_handler(pid, node_id, short_name):
                         "cpu_alert_error.json")
     alert = json.load(open(path))
     result = obj.format_alert(alert)
-    result['time_stamp'] = u'2018-02-12T10:53:03+05:30'
+    result['time_stamp'] = '2018-02-12T10:53:03+05:30'
     condition = {'pid': '123',
-                 'tags': {'fqdn': u'dhcp122-234',
+                 'tags': {'fqdn': 'dhcp122-234',
                           'warning_max': 1,
-                          'message': u'Cpu utilization on node '
+                          'message': 'Cpu utilization on node '
                           'dhcp122-234 in 7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d at 2.61 % and '
                           'running out of cpu',
@@ -67,7 +67,7 @@ def test_cpu_handler(pid, node_id, short_name):
                  'source': 'GRAFANA',
                  'current_value': '2.61',
                  'significance': 'HIGH',
-                 'time_stamp': u'2018-02-12T10:53:03+05:30',
+                 'time_stamp': '2018-02-12T10:53:03+05:30',
                  'node_id': '1',
                  'alert_type': 'UTILIZATION',
                  'severity': 'WARNING',

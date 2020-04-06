@@ -25,7 +25,7 @@ def test_volume_handler(cluster_name, pid, short_name):
     condition = {'severity': 'INFO',
                  'source': 'GRAFANA',
                  'pid': '123',
-                 'time_stamp': u'2018-02-07T17:30:08+05:30',
+                 'time_stamp': '2018-02-07T17:30:08+05:30',
                  'alert_id': None,
                  'resource': 'volume_utilization',
                  'significance': 'HIGH',
@@ -33,16 +33,16 @@ def test_volume_handler(cluster_name, pid, short_name):
                  'node_id': None,
                  'alert_type': 'UTILIZATION',
                  'tags': {'cluster_name': 'c1',
-                          'message': u'Volume utilization on '
+                          'message': 'Volume utilization on '
                           'V1 in 7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d back to normal',
                           'warning_max': 75,
-                          'volume_name': u'V1',
-                          'integration_id': u'7616f2a4-6502-4222'
+                          'volume_name': 'V1',
+                          'integration_id': '7616f2a4-6502-4222'
                           '-85bb-c5aff4eef15d',
                           'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d',
-                          'plugin_instance': u'tendrl.clusters.'
+                          'plugin_instance': 'tendrl.clusters.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'volumes.V1.pcnt_used'
                           }
@@ -54,7 +54,7 @@ def test_volume_handler(cluster_name, pid, short_name):
     alert = json.load(open(path))
     result = obj.format_alert(alert)
     result['time_stamp'] = '2018-02-12T13:36:25+05:30'
-    condition = {'time_stamp': u'2018-02-12T13:36:25+05:30',
+    condition = {'time_stamp': '2018-02-12T13:36:25+05:30',
                  'significance': 'HIGH',
                  'alert_type': 'UTILIZATION',
                  'node_id': None,
@@ -62,16 +62,16 @@ def test_volume_handler(cluster_name, pid, short_name):
                  'resource': 'volume_utilization',
                  'pid': '123',
                  'tags': {'cluster_name': 'c1',
-                          'volume_name': u'V1',
+                          'volume_name': 'V1',
                           'cluster_short_name': '7616f2a4-6502-4222-'
                           '85bb-c5aff4eef15d',
-                          'plugin_instance': u'tendrl.clusters.'
+                          'plugin_instance': 'tendrl.clusters.'
                           '7616f2a4-6502-4222-85bb-c5aff4eef15d.'
                           'volumes.V1.pcnt_used',
                           'warning_max': 14,
-                          'integration_id': u'7616f2a4-6502-4222'
+                          'integration_id': '7616f2a4-6502-4222'
                           '-85bb-c5aff4eef15d',
-                          'message': u'Volume utilization on V1 in'
+                          'message': 'Volume utilization on V1 in'
                           ' 7616f2a4-6502-4222-85bb-c5aff4eef1'
                           '5d at 20.86 % and nearing full capacity'
                           },
