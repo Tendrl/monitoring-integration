@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 import copy
 import grp
 import os
@@ -93,7 +93,7 @@ def get_graphite_path(classname, configuration_var):
     carbon_path = "/etc/tendrl/monitoring-integration/carbon.conf"
     if not os.path.exists(carbon_path):
         return None
-    carbon_config = ConfigParser.ConfigParser()
+    carbon_config = configparser.ConfigParser()
     carbon_config.read(carbon_path)
     try:
         dir_path = str(carbon_config.get(classname, configuration_var))

@@ -1,6 +1,6 @@
 Name: tendrl-monitoring-integration
 Version: 1.6.3
-Release: 11%{?dist}
+Release: 12%{?dist}
 BuildArch: noarch
 Summary: Module for Tendrl Monitoring Integration
 Source0: %{name}-%{version}.tar.gz
@@ -11,18 +11,18 @@ URL: https://github.com/Tendrl/monitoring-integration
 Requires: tendrl-commons
 Requires: grafana < 5.0.0
 Requires: graphite-web
-Requires: python-carbon
-Requires: python-whisper
-Requires: python-requests
-Requires: python-setuptools
-Requires: python-urllib3
+Requires: python3-carbon
+Requires: python3-whisper
+Requires: python3-requests
+Requires: python3-setuptools
+Requires: python3-urllib3
 Requires: tendrl-grafana-plugins
-Requires: python-werkzeug
-Requires: python-flask
-Requires: python-cherrypy
-Requires: python-paste
+Requires: python3-werkzeug
+Requires: python3-flask
+Requires: python3-cherrypy
+Requires: python3-paste
 
-BuildRequires: python-setuptools
+BuildRequires: python3-setuptools
 BuildRequires: systemd
 
 %description
@@ -44,7 +44,7 @@ mv -f Vonage* Vonage-Grafana_Status_panel
 rm -rf %{name}.egg-info
 
 %build
-%{__python} setup.py build
+%{__python3} setup.py build
 
 # Support light mode better
 sed -i -e 's/green/rgb(1,167,1)/g' Vonage-Grafana_Status_panel/dist/css/status_panel.css
@@ -53,7 +53,7 @@ sed -i -e 's/green/rgb(1,167,1)/g' Vonage-Grafana_Status_panel/dist/css/status_p
 rm -rf html/.{doctrees,buildinfo}
 
 %install
-%{__python} setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+%{__python3} setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana
 install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/tendrl/monitoring-integration/grafana/dashboards
@@ -116,6 +116,9 @@ py.test -v tendrl/monitoring_integration/tests || :
 
 
 %changelog
+* Mon Mar 06 2020 Timothy Asir Jeyasingh <tjeyasing@redhat.com> - 1.6.3-12
+- Add python3 support
+
 * Thu Aug 23 2018 Shubhendu Tripathi <shtripat@redhat.com> - 1.6.3-11
 - https://github.com/Tendrl/monitoring-integration/milestone/11
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-import ConfigParser
+import configparser
 import requests
 
 from requests.auth import HTTPBasicAuth
@@ -43,7 +43,7 @@ def delete_dashboards(server_ip, port, user, password):
         response = requests.delete(url, headers=headers,
                                    auth=HTTPBasicAuth(user, password))
         resp = response.json()
-        if resp == {u'message': u'Organization deleted'}:
+        if resp == {'message': 'Organization deleted'}:
             print ("Deleted Alert dashboards")
         else:
             print ("Failed to delete Alert dashboards %s" % resp)
@@ -97,7 +97,7 @@ def main():
         print ("\n Starting httpd service \n")
         utils.start_service("httpd")
         # getting grafana admin_username and password
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read('/etc/tendrl/monitoring-integration/grafana/grafana.ini')
         username = config.get('security', 'admin_user')
         password = config.get('security', 'admin_password')
